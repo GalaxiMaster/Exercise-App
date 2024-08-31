@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WorkoutList extends StatefulWidget {
   WorkoutList({super.key});
@@ -242,12 +243,14 @@ class _WorkoutListState extends State<WorkoutList> {
     "Shoulder Stretch"
   ];
 
+
   String query = '';
 
   @override
   Widget build(BuildContext context) {
     var filteredExercises = exercises
-        .where((exercise) => exercise.toLowerCase().contains(query.toLowerCase()))
+        .where((exercise) =>
+            exercise.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
     return Scaffold(
@@ -265,8 +268,32 @@ class _WorkoutListState extends State<WorkoutList> {
             child: ListView.builder(
               itemCount: filteredExercises.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(filteredExercises[index]),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context, filteredExercises[index]);
+                  },
+                  child: Container(
+                    height: 60,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: SvgPicture.asset(
+                            "Assets/profile.svg",
+                            height: 50,
+                            width: 50,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(filteredExercises[index]),
+                            const Text("Muscle")
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),

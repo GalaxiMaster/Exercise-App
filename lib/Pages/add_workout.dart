@@ -1,57 +1,57 @@
-import 'package:exercise_app/Pages/workout_list.dart';
-import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'workout_list.dart'; // Make sure the path to your WorkoutList file is correct
 
-// ignore: must_be_immutable
-class Addworkout extends StatelessWidget {
-  Addworkout({super.key});
-  var chosenExercises = [];
-  
+class Addworkout extends StatefulWidget {
+  @override
+  _AddworkoutState createState() => _AddworkoutState();
+}
+
+class _AddworkoutState extends State<Addworkout> {
+  String selectedExercise = '';
+  var selectedExercises = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
-      body:  Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
+      appBar: AppBar(
+        title: Text('Previous Page'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Display the selected exercise or a default message
+            Text(
+              selectedExercise.isEmpty
+                  ? 'No exercise selected'
+                  : 'Selected Exercise: $selectedExercise',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                // Navigate to WorkoutList and wait for the result
+                final result = await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => 
-                    WorkoutList()
+                  MaterialPageRoute(
+                    builder: (context) => WorkoutList(),
                   ),
                 );
+
+                // If an exercise was selected, update the state with the selected exercise
+                if (result != null) {
+                  setState(() {
+                    selectedExercise = result;
+                    selectedExercises.add(result);
+                  });
+                }
               },
-              child: const Text(
-                'Add Exercises',
-                style: TextStyle(
-                  fontSize: 18, 
-                  fontWeight: 
-                  FontWeight.bold
-                ),
-              ),
-              ),
+              child: Text('Select Exercise'),
             ),
-        ]
+          ],
+        ),
       ),
     );
   }
 }
 
-AppBar appBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text(
-        'Exercises',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      centerTitle: true,
-    );
-  }
