@@ -8,7 +8,24 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-    );
+      
+      body: const Column(
+        children: [
+          SizedBox(height: 20,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: MyTextButton(
+              text: "Start Workout", 
+              pressedColor: Colors.blue, 
+              color: Colors.green, 
+              borderRadius: 40, 
+              width: 400, 
+              height: 50,
+            )
+           ),
+          ],
+          ),
+      );
   }
 }
 
@@ -24,9 +41,10 @@ AppBar appBar() {
         ),
       ),
       centerTitle: true,
-      leading: Center(
+      actions: const [
+        Center(
           child: MyIconButton(
-            filepath: 'Assets/Arrow - Left 2.svg',
+            filepath: 'Assets/profile.svg',
             width: 37,
             height: 37,
             borderRadius: 10,
@@ -34,17 +52,6 @@ AppBar appBar() {
             color: Color.fromARGB(255, 245, 241, 241),
             iconHeight: 20,
             iconWidth: 20,
-            ),
-        ),
-      actions: [
-        Center(
-          child: MyIconButton(
-            filepath: 'Assets/dots.svg',
-            width: 37,
-            height: 37,
-            borderRadius: 10,
-            pressedColor: Color.fromRGBO(163, 163, 163, .7),
-            color: Color.fromARGB(255, 245, 241, 241),
             ),
         )
       ],

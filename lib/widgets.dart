@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -70,6 +71,7 @@ class MyTextButton extends StatefulWidget {
   final double borderRadius;
   final double width;
   final double height;
+  final String path;
 
   const MyTextButton({
     super.key,
@@ -78,7 +80,8 @@ class MyTextButton extends StatefulWidget {
     required this.color,
     required this.borderRadius,
     required this.width,
-    required this.height,
+    required this.height, 
+    this.path = "",
   });
 
   @override
@@ -111,10 +114,17 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
     _controller.forward();
   }
 
+
   void _onTapUp(TapUpDetails details) {
     setState(() {
       buttonDown = false;
     });
+            Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => 
+            Addworkout()
+          ),
+        );
     _controller.reverse();
   }
 
