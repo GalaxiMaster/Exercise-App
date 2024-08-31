@@ -7,7 +7,6 @@ class Addworkout extends StatefulWidget {
 }
 
 class _AddworkoutState extends State<Addworkout> {
-  String selectedExercise = '';
   var selectedExercises = [];
 
   @override
@@ -18,14 +17,25 @@ class _AddworkoutState extends State<Addworkout> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Display the selected exercise or a default message
-            Text(
-              selectedExercise.isEmpty
-                  ? 'No exercise selected'
-                  : 'Selected Exercise: $selectedExercise',
-              style: TextStyle(fontSize: 20),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: selectedExercises.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 30,
+                  child:Column(
+                    children: [
+                      Text(
+                        selectedExercises[index],
+                      )
+                    ],
+                  )
+                );
+              }
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -38,11 +48,12 @@ class _AddworkoutState extends State<Addworkout> {
                   ),
                 );
 
-                // If an exercise was selected, update the state with the selected exercise
                 if (result != null) {
                   setState(() {
-                    selectedExercise = result;
-                    selectedExercises.add(result);
+                    // if (!selectedExercises.contains(result)){
+                      selectedExercises.add(result);
+                    // }
+                    debugPrint(selectedExercises.toString());
                   });
                 }
               },
