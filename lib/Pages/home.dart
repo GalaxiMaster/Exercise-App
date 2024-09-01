@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,11 +13,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: appBar(),
       
-      body: const Column(
+      body: Column(
         children: [
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: MyTextButton(
               text: "Start Workout", 
               pressedColor: Colors.blue, 
@@ -21,6 +25,28 @@ class HomePage extends StatelessWidget {
               borderRadius: 40, 
               width: 400, 
               height: 50,
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => 
+                    const Addworkout()
+                  ),
+                );
+              }
+            )
+           ),   
+          const SizedBox(height: 20,),
+       
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: MyTextButton(
+              text: "Reset CSV", 
+              pressedColor: Colors.blue, 
+              color: Colors.green, 
+              borderRadius: 40, 
+              width: 400, 
+              height: 50,
+              onTap: resetCsv,
             )
            ),
           ],
@@ -41,7 +67,7 @@ AppBar appBar() {
         ),
       ),
       centerTitle: true,
-      actions: [
+      actions: const [
         Center(
           child: MyIconButton(
             filepath: 'Assets/profile.svg',
@@ -57,3 +83,21 @@ AppBar appBar() {
       ],
     );
   }
+
+Future<void> resetCsv() async {
+  try {
+    // Ensure the CSV string ends with a newline
+
+    final dir = await getExternalStorageDirectory();
+    final path = '${dir?.path}/output.csv';
+    final file = File(path);
+    // Write or append the CSV data
+    await file.writeAsString(
+      '',
+    );
+
+    debugPrint('CSV reset at: $path');
+  } catch (e) {
+    debugPrint('Error saving CSV file: $e');
+  }
+}

@@ -1,4 +1,3 @@
-import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,7 +12,7 @@ class MyIconButton extends StatefulWidget {
   final double iconWidth;
   final VoidCallback? onTap;
 
-  MyIconButton({
+  const MyIconButton({
     super.key,
     required this.filepath,
     required this.pressedColor,
@@ -75,6 +74,7 @@ class MyTextButton extends StatefulWidget {
   final double width;
   final double height;
   final String path;
+  final VoidCallback? onTap;
 
   const MyTextButton({
     super.key,
@@ -85,9 +85,11 @@ class MyTextButton extends StatefulWidget {
     required this.width,
     required this.height, 
     this.path = "",
+    this.onTap,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyTextButtonState createState() => _MyTextButtonState();
 }
 
@@ -122,12 +124,7 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
     setState(() {
       buttonDown = false;
     });
-            Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => 
-            Addworkout()
-          ),
-        );
+    widget.onTap!();
     _controller.reverse();
   }
 

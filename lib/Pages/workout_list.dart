@@ -1,11 +1,11 @@
-import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class WorkoutList extends StatefulWidget {
-  WorkoutList({super.key});
+  const WorkoutList({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _WorkoutListState createState() => _WorkoutListState();
 }
 
@@ -256,7 +256,7 @@ class _WorkoutListState extends State<WorkoutList> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exercise List'),
+        title: const Text('Exercise List'),
       ),
       body: Column(
         children: [
@@ -273,7 +273,7 @@ class _WorkoutListState extends State<WorkoutList> {
                   onTap: () {
                     Navigator.pop(context, filteredExercises[index]);
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 60,
                     child: Row(
                       children: [
@@ -308,15 +308,15 @@ class _WorkoutListState extends State<WorkoutList> {
 class SearchBar extends StatelessWidget {
   final Function(String) onQueryChanged;
 
-  SearchBar({required this.onQueryChanged});
+  const SearchBar({super.key, required this.onQueryChanged});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: TextField(
         onChanged: onQueryChanged,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'Search',
           border: OutlineInputBorder(),
           prefixIcon: Icon(Icons.search),
