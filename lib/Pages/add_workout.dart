@@ -120,12 +120,17 @@ class _AddworkoutState extends State<Addworkout> {
                                   initialValue: sets[exercise]![i]['weight'],
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle( // Add this property
+                                    fontSize: 20,
+                                  ),
                                   decoration: InputDecoration(
-                                    hintText: '${getPrevious(exercise, i+1, 'Weight').toString()}',
+                                    hintText: getPrevious(exercise, i+1, 'Weight'),
                                     border: InputBorder.none,
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 20,
                                     )
+                                    
                                   ),
                                   onChanged: (value) {
                                     sets[exercise]![i]['weight'] = value;
@@ -138,11 +143,15 @@ class _AddworkoutState extends State<Addworkout> {
                                   initialValue: sets[exercise]![i]['reps'],
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle( // Add this property
+                                    fontSize: 20,
+                                  ),
                                   decoration: InputDecoration(
-                                    hintText: '${getPrevious(exercise, i+1, 'Reps')}',
+                                    hintText: getPrevious(exercise, i+1, 'Reps'),
                                     border: InputBorder.none,
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 20,
                                     )
                                   ),
                                   onChanged: (value) {
