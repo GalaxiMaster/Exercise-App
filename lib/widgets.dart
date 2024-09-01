@@ -11,8 +11,9 @@ class MyIconButton extends StatefulWidget {
   final double height;
   final double iconHeight;
   final double iconWidth;
+  final VoidCallback? onTap;
 
-  const MyIconButton({
+  MyIconButton({
     super.key,
     required this.filepath,
     required this.pressedColor,
@@ -21,7 +22,8 @@ class MyIconButton extends StatefulWidget {
     required this.width,
     required this.height,
     this.iconWidth = 5,
-    this.iconHeight = 5
+    this.iconHeight = 5,
+    this.onTap,
   });
 
   @override
@@ -39,13 +41,14 @@ class _MyIconButtonState extends State<MyIconButton> {
         setState(() {
           buttonDown = true;
         });
-
       },
       onTapUp: (details) {
         setState(() {
           buttonDown = false;
         });
+        widget.onTap!();
       },
+      
       child: Container(
         margin: const EdgeInsets.all(10),
         width: widget.width,

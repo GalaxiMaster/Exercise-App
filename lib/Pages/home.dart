@@ -41,7 +41,7 @@ AppBar appBar() {
         ),
       ),
       centerTitle: true,
-      actions: const [
+      actions: [
         Center(
           child: MyIconButton(
             filepath: 'Assets/profile.svg',

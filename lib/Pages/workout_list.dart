@@ -1,3 +1,4 @@
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -255,7 +256,7 @@ class _WorkoutListState extends State<WorkoutList> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workout List'),
+        title: Text('Exercise List'),
       ),
       body: Column(
         children: [
