@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:exercise_app/Pages/add_workout.dart';
+import 'package:exercise_app/Pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,8 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
-      
+      appBar: appBar(context), // Pass context to appBar
       body: Column(
         children: [
           const SizedBox(height: 20,),
@@ -25,7 +24,7 @@ class HomePage extends StatelessWidget {
               borderRadius: 40, 
               width: 400, 
               height: 50,
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => 
@@ -34,9 +33,8 @@ class HomePage extends StatelessWidget {
                 );
               }
             )
-           ),   
+          ),   
           const SizedBox(height: 20,),
-       
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: MyTextButton(
@@ -46,20 +44,19 @@ class HomePage extends StatelessWidget {
               borderRadius: 40, 
               width: 400, 
               height: 50,
-              onTap: resetCsv,
+              onTap: resetCsv, // Assuming resetCsv is a static method or function
             )
-           ),
-          ],
           ),
-      );
+        ],
+      ),
+    );
   }
-}
 
-AppBar appBar() {
+  AppBar appBar(BuildContext context) { // Accept context as a parameter
     return AppBar(
       backgroundColor: Colors.white,
       title: const Text(
-        'Breakfast',
+        'Workout',
         style: TextStyle(
           color: Colors.black,
           fontSize: 18,
@@ -67,22 +64,33 @@ AppBar appBar() {
         ),
       ),
       centerTitle: true,
-      actions: const [
+      actions: [
         Center(
           child: MyIconButton(
             filepath: 'Assets/profile.svg',
             width: 37,
             height: 37,
             borderRadius: 10,
-            pressedColor: Color.fromRGBO(163, 163, 163, .7),
-            color: Color.fromARGB(255, 245, 241, 241),
+            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
+            color: const Color.fromARGB(255, 245, 241, 241),
             iconHeight: 20,
             iconWidth: 20,
-            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => 
+                  const Profile()
+                ),
+              );
+            }
+          ),
         )
       ],
     );
   }
+}
+
+
 
 Future<void> resetCsv() async {
   try {

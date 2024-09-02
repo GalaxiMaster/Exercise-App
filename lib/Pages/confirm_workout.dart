@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,7 +12,7 @@ class ConfirmWorkout extends StatelessWidget {
   });
   Map getStats(){
     Map stats = {"Volume" : 0, "Sets" : 0, "Exercises" : 0};
-
+    
     for (var exercise in sets.keys){
       stats['Exercises'] += 1;
       for (var set in sets[exercise]){
@@ -27,6 +26,7 @@ class ConfirmWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map stats = getStats();
+    List<String> messages = ['Weight lifted:', 'Sets Done:', 'Exercises Done:'];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Confirm Workout'),
@@ -34,14 +34,50 @@ class ConfirmWorkout extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: stats.keys.length,
-              itemBuilder: (context, index) {
-                return Text(
-                  '${stats.keys.elementAt(index)}: ${stats.values.elementAt(index)}'
-                );
-              }
+            SizedBox(
+              width: 400,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 2.0, // Adjust to fit your needs
+                ),
+                shrinkWrap: true,
+                padding: EdgeInsets.zero, // Remove padding around the GridView
+                physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                itemCount: stats.keys.length,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: Container(
+                      width: 190,
+                      padding: const EdgeInsets.all(8.0),
+                      margin: EdgeInsets.zero, // Remove margin
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.blueAccent, // Border color
+                          width: 2.0, // Border width
+                        ),
+                        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min, // Keeps the column compact
+                        mainAxisAlignment: MainAxisAlignment.center, // Center content vertically
+                        children: [
+                          Text(
+                            messages[index],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            stats.keys.elementAt(index) != 'Volume' ? '${stats.values.elementAt(index)}' : '${stats.values.elementAt(index)}kg',
+                            style: const TextStyle(
+                              fontSize: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             //stats
             ElevatedButton( //confirm 
