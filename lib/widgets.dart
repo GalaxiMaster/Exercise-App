@@ -45,7 +45,7 @@ class _MyIconButtonState extends State<MyIconButton> {
         setState(() {
           buttonDown = false;
         });
-        widget.onTap!();
+        widget.onTap?.call();
       },
       
       child: Container(

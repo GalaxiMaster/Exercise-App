@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'workout_list.dart'; // Ensure the path to your WorkoutList file is correct
@@ -17,15 +18,15 @@ class Addworkout extends StatefulWidget {
 class _AddworkoutState extends State<Addworkout> {
   var selectedExercises = [];
   Map<String, List<Map<String, dynamic>>> sets = {};
-  var pre_csvData = [];
+  var preCsvData = [];
   @override
   void initState() {
     super.initState();
     loadDataFromCsv(); // Load CSV data once during initialization
   }
   Future<void> loadDataFromCsv() async {
-    pre_csvData = await readFromCsv();
-    debugPrint(pre_csvData.toString());
+    preCsvData = await readFromCsv();
+    debugPrint(preCsvData.toString());
     debugPrint("##############");
     setState(() {}); // Update UI after loading data
   }
@@ -46,7 +47,7 @@ class _AddworkoutState extends State<Addworkout> {
               iconHeight: 20,
               iconWidth: 20,
               onTap: () {
-                saveExercises(sets);
+                confirmExercises(sets);
               },
             ),
           )
@@ -206,7 +207,7 @@ class _AddworkoutState extends State<Addworkout> {
     );
   }
   String getPrevious(String exercise, int setNum, String target){
-    for (var set in pre_csvData){
+    for (var set in preCsvData){
       if (set[0].toString() == exercise && set[1].toString() == setNum.toString()){
         if (target == 'Reps'){
           return set[3].toString();
@@ -224,7 +225,7 @@ class _AddworkoutState extends State<Addworkout> {
       if (sets[exercise]![j]['type'] != 'Warmup') {
         normalSetCount++;
       }
-    }
+    }     
 
     return normalSetCount;
   }
@@ -276,6 +277,48 @@ class _AddworkoutState extends State<Addworkout> {
       sets[exercise]?.add({'weight': '', 'reps': '', 'type': 'Normal'});
     });
   }
+void confirmExercises(var sets){
+  bool isNull = checkNulls(sets);
+  if (isNull){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfirmWorkout(sets: sets),
+      ),
+    );
+  } else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Invalid Input'),
+          content: const Text('No empty inputs accepted. Please complete all fields.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+bool checkNulls(var sets){ // could even put this in the save function maybe
+  for (String exercise in sets.keys){
+    for (var set in sets[exercise]!) {
+      if (num.tryParse(set['reps']) ==  null){
+        return false;
+      } else if(num.tryParse(set['weight']) ==  null){
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 void saveExercises(var exerciseList) async {
   debugPrint(exerciseList.toString());
