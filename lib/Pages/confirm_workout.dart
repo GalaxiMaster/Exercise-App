@@ -3,6 +3,7 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:intl/intl.dart';
 
 class ConfirmWorkout extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -11,6 +12,7 @@ class ConfirmWorkout extends StatelessWidget {
     super.key,
     required this.sets,
   });
+
   Map getStats(){
     Map stats = {"Volume" : 0, "Sets" : 0, "Exercises" : 0};
     
@@ -27,6 +29,7 @@ class ConfirmWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map stats = getStats();
+    String startTime = '';
     List<String> messages = ['Weight lifted:', 'Sets Done:', 'Exercises Done:'];
     return Scaffold(
       appBar: AppBar(
@@ -98,13 +101,14 @@ class ConfirmWorkout extends StatelessWidget {
   void saveExercises(var exerciseList) async {
     debugPrint(exerciseList.toString());
     List<List<dynamic>> rows = [];
-
+    String startTime = '';
+    String endTime = DateFormat('YY-MM-dd; HH:mm').format(DateTime.now()).toString();
     // Populate the rows list with exercise data
     for (var exercise in exerciseList.keys) {
       exerciseList[exercise].asMap().forEach((i, set) {
         rows.add([
-          '',
-          '',
+          startTime,
+          endTime,
           exercise,
           '', //notes
           i + 1,
@@ -126,7 +130,6 @@ class ConfirmWorkout extends StatelessWidget {
     try {
       final directory = await getExternalStorageDirectory();
       final path = '${directory?.path}/output.csv';
-      // debugPrint(path);
 
       // Only share the file after ensuring it has been written
       final file = File(path);

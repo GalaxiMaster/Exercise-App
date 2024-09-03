@@ -1,11 +1,11 @@
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'choose_exercise.dart'; // Ensure the path to your WorkoutList file is correct
 import 'package:exercise_app/widgets.dart';
 import 'package:csv/csv.dart';
 import 'dart:io';
-import 'package:share_plus/share_plus.dart';
 
 class Addworkout extends StatefulWidget {
   const Addworkout({super.key});
@@ -17,19 +17,62 @@ class Addworkout extends StatefulWidget {
 
 class _AddworkoutState extends State<Addworkout> {
   var selectedExercises = [];
-  Map<String, List<Map<String, dynamic>>> sets = {};
   var preCsvData = [];
+  Map<String, List<Map<String, dynamic>>> sets = {};
+  String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   @override
-  void initState() {
+  void initState() {        
     super.initState();
-    loadDataFromCsv(); // Load CSV data once during initialization
+    getPreviousWorkout().then((workout) {
+    setState(() {
+      sets = workout;
+    });    debugPrint('tessst sets ${sets.toString()}');
+});
+    updateExercises(); //grab from save file to see if a workout is already in progress
+    loadDataFromCsv(); // Load CSV data once during initialization    
   }
   Future<void> loadDataFromCsv() async {
     preCsvData = await readFromCsv();
     debugPrint(preCsvData.toString());
-    debugPrint("##############");
     setState(() {}); // Update UI after loading data
   }
+  Future<Map<String, List<Map<String, dynamic>>>> getPreviousWorkout() async {
+    Map<String, List<Map<String, dynamic>>> workout = {};
+    List data = await readFromCsv(csv: 'currentWorkout');
+      // grab the data and return it to sets
+    if (data.isNotEmpty){
+    startTime = data[0][0];
+    for (var row in data){
+      debugPrint(row[1].toString());
+      if (workout[row[1].toString()] == null || workout[row[1]]!.isEmpty){
+        workout[row[1].toString()] = [{'weight': row[4], 'reps': row[5], 'type': row[3]}];
+      } else {
+        workout[row[1]]!.add({'weight': row[4], 'reps': row[5], 'type': row[3]});
+      }
+    }
+    
+      }  // sets = sets;
+    return workout;
+  }
+  void updateExercises() async{
+    debugPrint('writing');
+    debugPrint('sets : ${sets.toString()}');
+    List<List<dynamic>> rows = [];
+    for (var exercise in sets.keys) {
+      sets[exercise]?.asMap().forEach((i, set) {
+        rows.add([
+          startTime,
+          exercise,
+          i + 1,
+          set['type'],
+          set['weight'].toString(),
+          set['reps'].toString(),
+        ]);
+      });
+    }
+    writeToCurrentCsv(const ListToCsvConverter().convert(rows));
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +104,9 @@ class _AddworkoutState extends State<Addworkout> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
-                itemCount: selectedExercises.length,
+                itemCount: sets.keys.length,
                 itemBuilder: (context, index) {
-                  String exercise = selectedExercises[index];
+                  String exercise = sets.keys.toList()[index];
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
                     children: [
@@ -118,7 +161,7 @@ class _AddworkoutState extends State<Addworkout> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
-                                  initialValue: sets[exercise]![i]['weight'],
+                                  initialValue: sets[exercise]![i]['weight'].toString(),
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle( // Add this property
@@ -135,13 +178,14 @@ class _AddworkoutState extends State<Addworkout> {
                                   ),
                                   onChanged: (value) {
                                     sets[exercise]![i]['weight'] = value;
+                                    updateExercises();
                                   },
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
-                                  initialValue: sets[exercise]![i]['reps'],
+                                  initialValue: sets[exercise]![i]['reps'].toString(),
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle( // Add this property
@@ -157,6 +201,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   ),
                                   onChanged: (value) {
                                     sets[exercise]![i]['reps'] = value;
+                                    updateExercises();
                                   },
                                 ),
                               ),
@@ -206,6 +251,7 @@ class _AddworkoutState extends State<Addworkout> {
       ),
     );
   }
+  
   String getPrevious(String exercise, int setNum, String target){
     for (var set in preCsvData){
       if (set[0].toString() == exercise && set[1].toString() == setNum.toString()){
@@ -218,6 +264,7 @@ class _AddworkoutState extends State<Addworkout> {
     }
     return '0';
   }
+  
   int _getNormalSetNumber(String exercise, int currentIndex) {
     int normalSetCount = 0;
     
@@ -277,150 +324,102 @@ class _AddworkoutState extends State<Addworkout> {
       sets[exercise]?.add({'weight': '', 'reps': '', 'type': 'Normal'});
     });
   }
-void confirmExercises(var sets){
-  bool isNull = checkNulls(sets);
-  if (isNull){
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ConfirmWorkout(sets: sets),
-      ),
-    );
-  } else {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Invalid Input'),
-          content: const Text('No empty inputs accepted. Please complete all fields.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-bool checkNulls(var sets){ // could even put this in the save function maybe
-  for (String exercise in sets.keys){
-    for (var set in sets[exercise]!) {
-      if (num.tryParse(set['reps']) ==  null){
-        return false;
-      } else if(num.tryParse(set['weight']) ==  null){
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-void saveExercises(var exerciseList) async {
-  debugPrint(exerciseList.toString());
-  List<List<dynamic>> rows = [];
-
-  // Populate the rows list with exercise data
-  for (var exercise in exerciseList.keys) {
-    exerciseList[exercise].asMap().forEach((i, set) {
-      rows.add([
-        exercise,
-        i + 1,
-        set['weight'].toString(),
-        set['reps'].toString(),
-        (num.tryParse(set['weight'])! * num.tryParse(set['reps'])!).toString()
-      ]);
-    });
-  }
-
-  // Convert rows to CSV format
-  String csv = const ListToCsvConverter().convert(rows);
-
-  // Append to CSV only if there's data
-  writeToCsv(csv);
-
-  readFromCsv();
-
-  try {
-    final directory = await getExternalStorageDirectory();
-    final path = '${directory?.path}/output.csv';
-    // debugPrint(path);
-
-    // Only share the file after ensuring it has been written
-    final file = File(path);
-    if (await file.exists()) {
-      await Share.shareXFiles(
-        [XFile(path)],
-        text: 'Check out this CSV file!',
+  
+  void confirmExercises(var sets){
+    bool isNull = checkNulls(sets);
+    if (isNull){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ConfirmWorkout(sets: sets),
+        ),
       );
     } else {
-      debugPrint('Error: CSV file does not exist for sharing');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Invalid Input'),
+            content: const Text('No empty inputs accepted. Please complete all fields.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
-  } catch (e) {
-    debugPrint('Error sharing CSV file: $e');
   }
-}
 
-Future<void> writeToCsv(String csv) async {
-  try {
-    final dir = await getExternalStorageDirectory();
-    final path = '${dir?.path}/output.csv';
-    final file = File(path);
-
-    // Read existing content if it exists
-    String existingContent = '';
-    if (await file.exists()) {
-      existingContent = await file.readAsString();
+  bool checkNulls(var sets){ // could even put this in the save function maybe
+    for (String exercise in sets.keys){
+      for (var set in sets[exercise]!) {
+        if (num.tryParse(set['reps']) ==  null){
+          return false;
+        } else if(num.tryParse(set['weight']) ==  null){
+          return false;
+        }
+      }
     }
-    // Write new content and then append existing content
-    await file.writeAsString(
-      '$csv\n$existingContent',
-      mode: FileMode.write, // Overwrite mode
-    );
-
-    debugPrint('CSV file saved at: $path');
-  } catch (e) {
-    debugPrint('Error saving CSV file: $e');
+    return true;
   }
-}
 
-
-Future<List<List<dynamic>>> readFromCsv() async {
-  List<List<dynamic>> csvData = [];
-  debugPrint('****************************************************************************************');
-  try {
-    final dir = await getExternalStorageDirectory();
-    if (dir != null) {
-      final path = '${dir.path}/output.csv';
+  Future<void> writeToCurrentCsv(String csv) async {
+    try {
+      final dir = await getExternalStorageDirectory();
+      final path = '${dir?.path}/currentWorkout.csv';
       final file = File(path);
 
-      // Check if the file exists before attempting to read it
-      if (await file.exists()) {
-        final csvString = await file.readAsString();
-        const converter = CsvToListConverter(
-          fieldDelimiter: ',', // Default
-          eol: '\n',           // End-of-line character
-        );
+      // Read existing content if it exists
+      // String existingContent = '';
+      // if (await file.exists()) {
+      //   existingContent = await file.readAsString();
+      // }
+      // Write new content and then append existing content
+      await file.writeAsString(
+        '$csv\n',
+        mode: FileMode.write, // Overwrite mode
+      );
 
-        List<List<dynamic>> csvData = converter.convert(csvString);
-        debugPrint('CSV Data: $csvData');
-        return csvData;
-      } else {
-        debugPrint('Error: CSV file does not exist');
-      }
-    } else {
-      debugPrint('Error: External storage directory is null');
+      debugPrint('CSV file saved at: $path');
+    } catch (e) {
+      debugPrint('Error saving CSV file: $e');
     }
-  } catch (e) {
-    debugPrint('Error reading CSV file: $e');
   }
-  debugPrint("balls");
-  return csvData;
-}
 
+  Future<List<List<dynamic>>> readFromCsv({String csv = 'output'}) async {
+    List<List<dynamic>> csvData = [];
+    try {
+      final dir = await getExternalStorageDirectory();
+      if (dir != null) {
+        final path = '${dir.path}/$csv.csv';
+        final file = File(path);
 
+        // Check if the file exists before attempting to read it
+        if (await file.exists()) {
+          final csvString = await file.readAsString();
+          const converter = CsvToListConverter(
+            fieldDelimiter: ',', // Default
+            eol: '\n',           // End-of-line character
+          );
+
+          List<List<dynamic>> csvData = converter.convert(csvString);
+          debugPrint('CSV Data: $csvData');
+          return csvData;
+        } else {
+          debugPrint('Error: CSV file does not exist');
+        }
+      } else {
+        debugPrint('Error: External storage directory is null');
+      }
+    } catch (e) {
+      debugPrint('Error reading CSV file: $e');
+    }
+    debugPrint("balls");
+    return csvData;
+  }
 }

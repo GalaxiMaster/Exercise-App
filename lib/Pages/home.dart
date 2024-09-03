@@ -108,4 +108,19 @@ Future<void> resetCsv() async {
   } catch (e) {
     debugPrint('Error saving CSV file: $e');
   }
+    try {
+    // Ensure the CSV string ends with a newline
+
+    final dir = await getExternalStorageDirectory();
+    final path = '${dir?.path}/currentWorkout.csv';
+    final file = File(path);
+    // Write or append the CSV data
+    await file.writeAsString(
+      '',
+    );
+
+    debugPrint('CSV reset at: $path');
+  } catch (e) {
+    debugPrint('Error saving CSV file: $e');
+  }
 }
