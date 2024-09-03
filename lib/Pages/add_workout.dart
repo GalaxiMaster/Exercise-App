@@ -41,38 +41,42 @@ class _AddworkoutState extends State<Addworkout> {
     List data = await readFromCsv(csv: 'currentWorkout');
       // grab the data and return it to sets
     if (data.isNotEmpty){
-    startTime = data[0][0];
-    for (var row in data){
-      debugPrint(row[1].toString());
-      if (workout[row[1].toString()] == null || workout[row[1]]!.isEmpty){
-        workout[row[1].toString()] = [{'weight': row[4], 'reps': row[5], 'type': row[3]}];
-      } else {
-        workout[row[1]]!.add({'weight': row[4], 'reps': row[5], 'type': row[3]});
+      startTime = data[0][0];
+      for (var row in data){
+        debugPrint(row[1].toString());
+        if (workout[row[1].toString()] == null || workout[row[1]]!.isEmpty){
+          workout[row[1].toString()] = [{'weight': row[4], 'reps': row[5], 'type': row[3]}];
+        } else {
+          workout[row[1]]!.add({'weight': row[4], 'reps': row[5], 'type': row[3]});
+        }
       }
     }
-    
-      }  // sets = sets;
     return workout;
   }
   void updateExercises() async{
-    debugPrint('writing');
-    debugPrint('sets : ${sets.toString()}');
-    List<List<dynamic>> rows = [];
-    for (var exercise in sets.keys) {
-      sets[exercise]?.asMap().forEach((i, set) {
-        rows.add([
-          startTime,
-          exercise,
-          i + 1,
-          set['type'],
-          set['weight'].toString(),
-          set['reps'].toString(),
-        ]);
-      });
-    }
-    writeToCurrentCsv(const ListToCsvConverter().convert(rows));
+    //grab exercises from file
+    List data = await readFromCsv(csv: 'currentWorkout');
+    debugPrint("$data\n\n\n");
+
+      // write current set data to file
+      debugPrint('writing');
+      debugPrint('sets : ${sets.toString()}');
+      List<List<dynamic>> rows = [];
+      for (var exercise in sets.keys) {
+        sets[exercise]?.asMap().forEach((i, set) {
+          rows.add([
+            startTime,
+            exercise,
+            i + 1,
+            set['type'],
+            set['weight'].toString(),
+            set['reps'].toString(),
+          ]);
+        });
+      }
+      writeToCurrentCsv(const ListToCsvConverter().convert(rows));
+
   }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +181,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     
                                   ),
                                   onChanged: (value) {
-                                    sets[exercise]![i]['weight'] = value;
+                                    sets[exercise]![i]['weight'] = int.tryParse(value) ?? '';
                                     updateExercises();
                                   },
                                 ),
@@ -200,7 +204,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     )
                                   ),
                                   onChanged: (value) {
-                                    sets[exercise]![i]['reps'] = value;
+                                    sets[exercise]![i]['reps'] = int.tryParse(value) ?? '';  // Safely convert String to int;
                                     updateExercises();
                                   },
                                 ),
@@ -331,7 +335,7 @@ class _AddworkoutState extends State<Addworkout> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ConfirmWorkout(sets: sets),
+          builder: (context) => ConfirmWorkout(sets: sets, startTime: startTime),
         ),
       );
     } else {
@@ -358,9 +362,10 @@ class _AddworkoutState extends State<Addworkout> {
   bool checkNulls(var sets){ // could even put this in the save function maybe
     for (String exercise in sets.keys){
       for (var set in sets[exercise]!) {
-        if (num.tryParse(set['reps']) ==  null){
+        debugPrint(set.toString());
+        if (set['reps'] == ''){
           return false;
-        } else if(num.tryParse(set['weight']) ==  null){
+        } else if(set['weight'] == ''){
           return false;
         }
       }

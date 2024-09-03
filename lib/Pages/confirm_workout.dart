@@ -8,29 +8,36 @@ import 'package:intl/intl.dart';
 class ConfirmWorkout extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final sets;
+  final String startTime; 
   const ConfirmWorkout({
     super.key,
     required this.sets,
+    required this.startTime,
   });
 
   Map getStats(){
-    Map stats = {"Volume" : 0, "Sets" : 0, "Exercises" : 0};
+    Map stats = {"Volume" : 0, "Sets" : 0, "Exercises" : 0, "WorkoutTime": ''};
     
     for (var exercise in sets.keys){
       stats['Exercises'] += 1;
       for (var set in sets[exercise]){
         stats['Sets'] += 1;
-        stats['Volume'] += (num.tryParse(set['weight'])! * num.tryParse(set['reps'])!);
+        stats['Volume'] += (set['weight'] * set['reps']);
       }
     }
+    Duration difference = DateTime.now().difference(DateTime.parse(startTime)); // Calculate the difference
+
+    int hours = difference.inHours;
+    int minutes = difference.inMinutes.remainder(60);
+
+    stats['WorkoutTime'] = "${hours}h ${minutes}m";
     return stats;
   }
   
   @override
   Widget build(BuildContext context) {
     Map stats = getStats();
-    String startTime = '';
-    List<String> messages = ['Weight lifted:', 'Sets Done:', 'Exercises Done:'];
+    List<String> messages = ['Weight lifted:', 'Sets Done:', 'Exercises Done:', 'Workout Time'];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Confirm Workout'),
@@ -48,7 +55,7 @@ class ConfirmWorkout extends StatelessWidget {
                 shrinkWrap: true,
                 padding: EdgeInsets.zero, // Remove padding around the GridView
                 physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                itemCount: stats.keys.length,
+                itemCount: messages.length,
                 itemBuilder: (context, index) {
                   return Center(
                     child: Container(
@@ -86,7 +93,7 @@ class ConfirmWorkout extends StatelessWidget {
             //stats
             ElevatedButton( //confirm 
               onPressed: (){
-                saveExercises(sets);
+                saveExercises(sets, startTime);
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
@@ -98,10 +105,9 @@ class ConfirmWorkout extends StatelessWidget {
     );
   }
 
-  void saveExercises(var exerciseList) async {
+  void saveExercises(var exerciseList, String startTime) async {
     debugPrint(exerciseList.toString());
     List<List<dynamic>> rows = [];
-    String startTime = '';
     String endTime = DateFormat('YY-MM-dd; HH:mm').format(DateTime.now()).toString();
     // Populate the rows list with exercise data
     for (var exercise in exerciseList.keys) {
@@ -126,24 +132,38 @@ class ConfirmWorkout extends StatelessWidget {
     writeToCsv(csv);
 
     readFromCsv();
+    try {// reset current workout
+    // Ensure the CSV string ends with a newline
 
-    try {
-      final directory = await getExternalStorageDirectory();
-      final path = '${directory?.path}/output.csv';
+    final dir = await getExternalStorageDirectory();
+    final path = '${dir?.path}/currentWorkout.csv';
+    final file = File(path);
+    // Write or append the CSV data
+    await file.writeAsString(
+      '',
+    );
 
-      // Only share the file after ensuring it has been written
-      final file = File(path);
-      if (await file.exists()) {
-        await Share.shareXFiles(
-          [XFile(path)],
-          text: 'Check out this CSV file!',
-        );
-      } else {
-        debugPrint('Error: CSV file does not exist for sharing');
-      }
-    } catch (e) {
-      debugPrint('Error sharing CSV file: $e');
-    }
+    debugPrint('CSV reset at: $path');
+  } catch (e) {
+    debugPrint('Error saving CSV file: $e');
+  }
+    // try {
+    //   final directory = await getExternalStorageDirectory();
+    //   final path = '${directory?.path}/output.csv';
+
+    //   // Only share the file after ensuring it has been written
+    //   final file = File(path);
+    //   if (await file.exists()) {
+    //     await Share.shareXFiles(
+    //       [XFile(path)],
+    //       text: 'Check out this CSV file!',
+    //     );
+    //   } else {
+    //     debugPrint('Error: CSV file does not exist for sharing');
+    //   }
+    // } catch (e) {
+    //   debugPrint('Error sharing CSV file: $e');
+    // }
   }
 
 Future<void> writeToCsv(String csv) async {
