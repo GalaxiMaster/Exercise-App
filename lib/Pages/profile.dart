@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:exercise_app/Pages/Calender.dart';
+import 'package:exercise_app/Pages/exercise_list.dart';
+import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/Pages/settings.dart';
+import 'package:exercise_app/Pages/stats.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,9 +12,9 @@ import 'package:path_provider/path_provider.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
-
   @override
   Widget build(BuildContext context) {
+    List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
     return Scaffold(
       appBar: appBar(context),
       body: SizedBox(
@@ -18,36 +22,55 @@ class Profile extends StatelessWidget {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 2.0, // Adjust to fit your needs
+                  childAspectRatio: 3.2, // Adjust to fit your needs
                 ),
                 shrinkWrap: true,
                 padding: EdgeInsets.zero, // Remove padding around the GridView
                 physics: const NeverScrollableScrollPhysics(), // Disable scrolling
                 itemCount: 4,
                 itemBuilder: (context, index) {
-                  return Center(
-                    child: Container(
-                      width: 190,
-                      padding: const EdgeInsets.all(8.0),
-                      margin: EdgeInsets.zero, // Remove margin
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.blueAccent, // Border color
-                          width: 2.0, // Border width
-                        ),
-                        borderRadius: BorderRadius.circular(8.0), // Rounded corners
-                      ),
-                      child: const Column(
-                        mainAxisSize: MainAxisSize.min, // Keeps the column compact
-                        mainAxisAlignment: MainAxisAlignment.center, // Center content vertically
-                        children: [
-                          Text(
-                            'test',
-                            style: TextStyle(
-                              fontSize: 30,
-                            ),
+                  return GestureDetector(
+                    onTap: (){
+                      Widget destination;
+                      if (index == 0) {
+                        destination = Calender();
+                      } else if (index == 1) {
+                        destination = ExerciseList();
+                      } else if (index == 2){
+                        destination = MuscleData();
+                      } else {
+                        destination = Stats();
+                      }
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => destination)
+                      );
+                    },
+                    child: Center(
+                      child: Container(
+                        width: 190,
+                        padding: const EdgeInsets.all(8.0),
+                        margin: EdgeInsets.zero, // Remove margin
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueAccent, // Border color
+                            width: 2.0, // Border width
                           ),
-                        ],
+                          borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min, // Keeps the column compact
+                          mainAxisAlignment: MainAxisAlignment.center, // Center content vertically
+                          children: [
+                            Text(
+                              messages[index],
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

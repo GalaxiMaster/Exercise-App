@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ConfirmWorkout extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final sets;
   const ConfirmWorkout({
     super.key,
