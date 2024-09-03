@@ -29,3 +29,6 @@ AppBar appBar(BuildContext context, String exercise) {
     );
   }
 
+Map getStats(){
+  return {};
+}

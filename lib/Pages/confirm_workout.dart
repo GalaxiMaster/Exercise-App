@@ -103,11 +103,14 @@ class ConfirmWorkout extends StatelessWidget {
     for (var exercise in exerciseList.keys) {
       exerciseList[exercise].asMap().forEach((i, set) {
         rows.add([
+          '',
+          '',
           exercise,
+          '', //notes
           i + 1,
+          set['type'],
           set['weight'].toString(),
           set['reps'].toString(),
-          (num.tryParse(set['weight'])! * num.tryParse(set['reps'])!).toString()
         ]);
       });
     }

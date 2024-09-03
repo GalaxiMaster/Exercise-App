@@ -33,7 +33,7 @@ class Profile extends StatelessWidget {
                     onTap: (){
                       Widget destination;
                       if (index == 0) {
-                        destination = Calender();
+                        destination = CalenderScreen();
                       } else if (index == 1) {
                         destination = ExerciseList();
                       } else if (index == 2){
