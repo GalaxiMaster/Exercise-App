@@ -39,8 +39,7 @@ class _AddworkoutState extends State<Addworkout> {
   Future<Map<String, List<Map<String, dynamic>>>> getPreviousWorkout() async {
     Map<String, List<Map<String, dynamic>>> workout = {};
     List data = await readFromCsv(csv: 'currentWorkout');
-      // grab the data and return it to sets
-    if (data.isNotEmpty){
+    if (data.isNotEmpty && data[0][0] != ""){
       startTime = data[0][0];
       for (var row in data){
         debugPrint(row[1].toString());
@@ -71,6 +70,7 @@ class _AddworkoutState extends State<Addworkout> {
             set['type'],
             set['weight'].toString(),
             set['reps'].toString(),
+            'end',
           ]);
         });
       }
@@ -114,7 +114,21 @@ class _AddworkoutState extends State<Addworkout> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
                     children: [
-                      Text(exercise),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(exercise),
+                          GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                sets.remove(exercise);
+                                updateExercises();
+                              });
+                            },
+                            child: const Icon(Icons.delete, color: Colors.red)
+                          ),
+                        ],
+                      ),
                       Table(
                         border: TableBorder.all(),
                         columnWidths: const {
@@ -181,7 +195,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     
                                   ),
                                   onChanged: (value) {
-                                    sets[exercise]![i]['weight'] = int.tryParse(value) ?? '';
+                                    sets[exercise]![i]['weight'] = int.tryParse(value) ?? double.tryParse(value) ?? '';
                                     updateExercises();
                                   },
                                 ),
@@ -204,7 +218,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     )
                                   ),
                                   onChanged: (value) {
-                                    sets[exercise]![i]['reps'] = int.tryParse(value) ?? '';  // Safely convert String to int;
+                                    sets[exercise]![i]['reps'] = int.tryParse(value) ?? double.tryParse(value) ?? '';  // Safely convert String to int;
                                     updateExercises();
                                   },
                                 ),
@@ -240,11 +254,10 @@ class _AddworkoutState extends State<Addworkout> {
 
                 if (result != null) {
                   setState(() {
-                    selectedExercises.add(result);
                     sets[result] = [
                       {'weight': '', 'reps': '', 'type': 'Normal'}
                     ]; // Initialize sets list for the new exercise
-                    // debugPrint(selectedExercises.toString());
+                    updateExercises();
                   });
                 }
               },
@@ -298,7 +311,12 @@ class _AddworkoutState extends State<Addworkout> {
                 title: const Text('Remove Set', style: TextStyle(color: Colors.red)),
                 onTap: () {
                   setState(() {
-                    sets[exercise]?.removeAt(setIndex);
+                    if(setIndex == 0){
+                      sets.remove(exercise);
+                    } else {
+                      sets[exercise]?.removeAt(setIndex);
+                    }
+                    updateExercises();
                   });
                   Navigator.pop(context);
                 },

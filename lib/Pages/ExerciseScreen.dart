@@ -17,6 +17,8 @@ class ExerciseScreen extends StatefulWidget {
 
 class _ExerciseScreenState extends State<ExerciseScreen> {
   List exerciseData = [];
+  List<double> heaviestWeight = [];
+  List<double> heaviestVolume = [];
 
   @override
   void initState() {
@@ -26,8 +28,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   Future<void> _loadHighlightedDays() async {
     var data = await getStats(widget.exercise);
+    debugPrint(data.toString());
     setState(() {
-      exerciseData = data;
+      exerciseData = data[0];
+      heaviestWeight = [data[1][6], data[1][7]];
+      heaviestVolume = [data[2][6], data[2][7]];
     });
   }
 
@@ -107,6 +112,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    Text('Most weight : ${heaviestWeight[0]}kg x ${heaviestWeight[1]}'),
+                    Text('Most volume : ${heaviestVolume[0]}kg x ${heaviestVolume[1]}'),
                   ],
                 ),
             )
@@ -133,12 +141,25 @@ AppBar appBar(BuildContext context, String exercise) {
 Future<List> getStats(String target) async{
   List data = await readFromCsv();
   List targetData = [];
+  List heaviestWeight = [];
+  List heaviestVolume = [];
   for (var set in data){
     if(set[2].toString() == target){
       targetData.add(set);
+      if (heaviestVolume.isEmpty){
+        heaviestVolume = set;
+      }else if(set[6] * set[7] > heaviestVolume[6] * heaviestVolume[7]){
+        heaviestVolume = set;
+      }
+      debugPrint("yeah"  + heaviestWeight.toString());
+      if (heaviestWeight.isEmpty){
+        heaviestWeight = set;
+      }else if(set[6] > heaviestWeight[6]){
+        heaviestWeight = set;
+      }
     }
   }
-  return targetData;
+  return [targetData, heaviestWeight, heaviestVolume];
 }
 
 Future<List<List<dynamic>>> readFromCsv() async {
