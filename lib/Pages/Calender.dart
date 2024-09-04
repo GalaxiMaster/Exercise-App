@@ -63,60 +63,190 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
   Future<void> _loadHighlightedDays() async {
     var data = await gatherData();
-    setState(() {
-      exerciseData = data;
-      highlightedDays = data.keys.map((x) => DateTime.parse(x)).toList();
-    });
+    
+    if (mounted) { // Check if the widget is still mounted
+      setState(() {
+        exerciseData = data;
+        highlightedDays = data.keys.map((x) => DateTime.parse(x)).toList();
+      });
+    }
   }
-  @override
-  Widget build(BuildContext context) {
-    return PagedVerticalCalendar(
-      minDate: DateTime(2024, 1, 1), // startdate
-      maxDate: DateTime(2024, 12, 31), /// year from now
-      dayBuilder: (context, date) {
-        bool isHighlighted = highlightedDays.any((highlightedDay) =>
-            date.year == highlightedDay.year &&
-            date.month == highlightedDay.month &&
-            date.day == highlightedDay.day);
+@override
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      if (exerciseData.isNotEmpty) 
+        StreakRestRow(exerciseData: exerciseData), // Render only when exerciseData is not empty
+      Expanded(
+        child: PagedVerticalCalendar(
+          minDate: DateTime(2024, 1, 1), // start date
+          maxDate: DateTime(2024, 12, 31), // year from now
+          dayBuilder: (context, date) {
+            bool isHighlighted = highlightedDays.any((highlightedDay) =>
+                date.year == highlightedDay.year &&
+                date.month == highlightedDay.month &&
+                date.day == highlightedDay.day);
 
-        return GestureDetector(
-          onTap: () {
-            if (highlightedDays.any((highlightedDay) =>
-              date.year == highlightedDay.year &&
-              date.month == highlightedDay.month &&
-              date.day == highlightedDay.day))
-              {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DayScreen(date: date, day: exerciseData[DateFormat('yyyy-MM-dd').format(date).toString()]),
+            return GestureDetector(
+              onTap: () {
+                if (highlightedDays.any((highlightedDay) =>
+                    date.year == highlightedDay.year &&
+                    date.month == highlightedDay.month &&
+                    date.day == highlightedDay.day)) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DayScreen(
+                          date: date,
+                          day: exerciseData[DateFormat('yyyy-MM-dd')
+                              .format(date)
+                              .toString()]),
+                    ),
+                  );
+                }
+              },
+              child: Transform.scale(
+                scale: 0.8,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color:
+                        isHighlighted ? Colors.blue : Colors.transparent,
+                    shape: BoxShape.circle,
                   ),
-                );
-            }   
-          },
-          child: Transform.scale(
-            scale: 0.8,
-            child: Container(
-              decoration: BoxDecoration(
-                color: isHighlighted ? Colors.blue : Colors.transparent,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  '${date.day}',
-                  style: TextStyle(
-                    color: isHighlighted ? Colors.white : Colors.black,
-                    fontSize: 19
+                  child: Center(
+                    child: Text(
+                      '${date.day}',
+                      style: TextStyle(
+                          color: isHighlighted ? Colors.white : Colors.black,
+                          fontSize: 19),
+                    ),
                   ),
                 ),
               ),
+            );
+          },
+        ),
+      ),
+    ],
+  );
+}
+
+}
+
+class StreakRestRow extends StatefulWidget {
+  final Map exerciseData;
+
+  const StreakRestRow({super.key, required this.exerciseData});
+
+  @override
+  _StreakRestRowState createState() => _StreakRestRowState();
+}
+
+class _StreakRestRowState extends State<StreakRestRow> {
+  late List stats;
+
+  @override
+  void initState() {
+    super.initState();
+    stats = getStats();
+  }
+  @override
+  void didUpdateWidget(covariant StreakRestRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.exerciseData != widget.exerciseData) {
+      stats = getStats();
+    }
+  }
+  List getStats() {
+    if (widget.exerciseData.keys.isEmpty) {
+      return [0, 0];
+    }
+    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList()[0])).inDays;
+    int streaks = 0;
+    int week = weekNumber(DateTime.now());
+    for (var day in widget.exerciseData.keys) {
+      debugPrint(day);
+      int weekNum = weekNumber(DateTime.parse(day));
+      debugPrint('${week - weekNum}  $week  $weekNum');
+      if (week - weekNum == 1) {
+        streaks++;
+        week = weekNum;
+      } else if (week - weekNum == 0){
+        continue;
+      }else {
+        break;
+      }
+    }
+    return [streaks, rest];
+  }
+
+  int weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    int weekNumber = ((dayOfYear - date.weekday + 10) / 7).floor();
+    return weekNumber;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildStreakRestBox(
+            icon: Icons.local_fire_department,
+            label: '${stats[0]} weeks',
+            subLabel: 'Streak',
+            color: Colors.orange,
+          ),
+          _buildStreakRestBox(
+            icon: Icons.nights_stay,
+            label: '${stats[1]} days',
+            subLabel: 'Rest',
+            color: Colors.blue,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStreakRestBox({
+    required IconData icon,
+    required String label,
+    required String subLabel,
+    required Color color,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 150,
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: Row(
+              children: [
+                Icon(icon, color: color),
+                const SizedBox(width: 8.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+                    Text(subLabel, style: const TextStyle(color: Colors.grey)),
+                  ],
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }
+
 
 class DayScreen extends StatelessWidget {
   final DateTime date;
@@ -125,7 +255,6 @@ class DayScreen extends StatelessWidget {
 
   @override
 build(BuildContext context) {
-  debugPrint(day.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text('Workout for ${date.day}/${date.month}/${date.year}'),
@@ -247,46 +376,28 @@ build(BuildContext context) {
                       // Center(
                       //   child: ElevatedButton(
                       //     onPressed: () {
-                      //       addNewSet(exercise);
+                      //       setState(() {
+                      //         sets[exercise]!.add(
+                      //           {'type': 'Normal', 'weight': 0, 'reps': 0},
+                      //         );
+                      //       });
                       //     },
                       //     child: const Text('Add Set'),
                       //   ),
-                      // ),
+                      // )
                     ],
                   );
                 },
               ),
             ),
-            const SizedBox(height: 20),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     // Navigate to WorkoutList and wait for the result
-            //     final result = await Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => const WorkoutList(),
-            //       ),
-            //     );
-
-            //     if (result != null) {
-            //       setState(() {
-            //         selectedExercises.add(result);
-            //         sets[result] = [
-            //           {'weight': '', 'reps': '', 'type': 'Normal'}
-            //         ]; // Initialize sets list for the new exercise
-            //         // debugPrint(selectedExercises.toString());
-            //       });
-            //     }
-            //   },
-            //   child: const Text('Select Exercise'),
-            // ),
           ],
         ),
       ),
     );
   }
 }
-  int _getNormalSetNumber(var day, String exercise, int currentIndex) {
+
+int _getNormalSetNumber(var day, String exercise, int currentIndex) {
     int normalSetCount = 0;
     
     for (int j = 0; j <= currentIndex; j++) {
