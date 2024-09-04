@@ -245,7 +245,6 @@ class _ExerciseListState extends State<ExerciseList> {
     "Shoulder Stretch"
   ];
 
-
   String query = '';
 
   @override

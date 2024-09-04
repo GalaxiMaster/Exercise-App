@@ -107,7 +107,7 @@ class ConfirmWorkout extends StatelessWidget {
   void saveExercises(var exerciseList, String startTime) async {
     debugPrint(exerciseList.toString());
     List<List<dynamic>> rows = [];
-    String endTime = DateFormat('YY-MM-dd; HH:mm').format(DateTime.now()).toString();
+    String endTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
     // Populate the rows list with exercise data
     for (var exercise in exerciseList.keys) {
       exerciseList[exercise].asMap().forEach((i, set) {
