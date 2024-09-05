@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
-import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -34,19 +32,6 @@ class HomePage extends StatelessWidget {
               }
             )
           ),   
-          const SizedBox(height: 20,),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: MyTextButton(
-              text: "Reset CSV", 
-              pressedColor: Colors.blue, 
-              color: Colors.green, 
-              borderRadius: 40, 
-              width: 400, 
-              height: 50,
-              onTap: resetCsv, // Assuming resetCsv is a static method or function
-            )
-          ),
         ],
       ),
     );
@@ -92,35 +77,3 @@ class HomePage extends StatelessWidget {
 
 
 
-Future<void> resetCsv() async {
-  try {
-    // Ensure the CSV string ends with a newline
-
-    final dir = await getExternalStorageDirectory();
-    final path = '${dir?.path}/output.csv';
-    final file = File(path);
-    // Write or append the CSV data
-    await file.writeAsString(
-      '',
-    );
-
-    debugPrint('CSV reset at: $path');
-  } catch (e) {
-    debugPrint('Error saving CSV file: $e');
-  }
-    try {
-    // Ensure the CSV string ends with a newline
-
-    final dir = await getExternalStorageDirectory();
-    final path = '${dir?.path}/currentWorkout.csv';
-    final file = File(path);
-    // Write or append the CSV data
-    await file.writeAsString(
-      '',
-    );
-
-    debugPrint('CSV reset at: $path');
-  } catch (e) {
-    debugPrint('Error saving CSV file: $e');
-  }
-}
