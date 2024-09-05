@@ -6,9 +6,14 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      // appBar: AppBar(),
-      body: Center(),
+    List<String> settingsOptions = ['export data', 'days per week goal', 'reset data'];
+    return Scaffold(
+      appBar: AppBar(title: Text('Settings'),),
+      body: Column(
+        children: [
+
+        ],
+      )
     );
   }
 }

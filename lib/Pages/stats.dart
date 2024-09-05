@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:csv/csv.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class Stats extends StatefulWidget {
 
 class _StatsState extends State<Stats> {
   Map exerciseData = {};
-  Map stats = {'volume' : 0};
+  Map stats = {'volume' : [], 'time' : [], 'sets' : 0, 'exercises' : 0};
   @override
   initState(){
     super.initState();
@@ -23,24 +22,50 @@ class _StatsState extends State<Stats> {
   }
   Future<void> _loadHighlightedDays() async {
     var data = await gatherData();
-    double totalVolume = 0;
+    debugPrint(data.toString());
+    Map totalVolume = {};
+    List<int> totalTime = [];
+    int sets = 0;
+    int exercises = 0;
     for (var day in data.keys) {
-      for (var exercise in data[day].keys){
-        for (var set in data[day][exercise]){
-          totalVolume += set['Weight'] * set['Reps'];
+      debugPrint("taeet");
+      totalTime.add((DateTime.parse(data[day]['stats']['endTime']).difference(DateTime.parse(data[day]['stats']['startTime'])).inMinutes));
+      for (var exercise in data[day]['sets'].keys){
+        exercises++;
+        for (var set in data[day]['sets'][exercise]){
+          sets++;
+          if (totalVolume.containsKey(day)){
+            totalVolume[day] += (double.parse(set['Weight'].toString()) * double.parse(set['Reps'].toString()));
+          } else{
+            totalVolume[day] = (double.parse(set['Weight'].toString()) * double.parse(set['Reps'].toString()));
+          }
+
         }
       }
     }
     setState(() {
-      stats = {'volume' : totalVolume};
+      stats = {'volume' : totalVolume.values.toList(), 'time' : totalTime, 'sets' : sets, 'exercises' : exercises};
       exerciseData = data;
     });
   }
   @override
   Widget build(BuildContext context) {
+    debugPrint("$stats****************************************");
     return Scaffold(
       appBar: appBar(context),
-      body: Text(stats['volume'].toString()),
+      body: Center(
+        child: Column(
+          children: [
+            Text('${exerciseData.keys.length} days gone'),
+            Text('${stats['sets']} sets done'),
+            Text('${stats['exercises']} exercise done'),
+            Text('Total volume : ${stats['volume'].fold(0, (p, c) => p + c).toString()}'),
+            Text('Average volume : ${(stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)}'),
+            Text('Total time : ${stats['time'].fold(0, (p, c) => p + c).toString()} mins'),
+            Text('Average time : ${(stats['time'].fold(0, (p, c) => p + c)/nonZeroLen(stats['time'])).toStringAsFixed(1)} mins'),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -85,13 +110,13 @@ Future<Map> gatherData() async {
   List data = await readFromCsv();
   for (var set in data){
     String day = set[0].split(' ')[0];
-    if (exerciseData.containsKey(day) && exerciseData[day].containsKey(set[2])){
-      exerciseData[day][set[2]].add({'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]});
+    if (exerciseData.containsKey(day) && exerciseData[day]['sets'].containsKey(set[2])){
+      exerciseData[day]['sets'][set[2]].add({'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]});
     } else if(exerciseData.containsKey(day)){
-      exerciseData[day][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
+      exerciseData[day]['sets'][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
     } else{
-      exerciseData[day] = {};
-      exerciseData[day][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
+      exerciseData[day] = {'stats' : {'startTime' : set[0], 'endTime' : set[1]}, 'sets' : {}};
+      exerciseData[day]['sets'][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
     }
   }
   return exerciseData;
@@ -125,4 +150,13 @@ Future<List<List<dynamic>>> readFromCsv() async {
     debugPrint('Error reading CSV file: $e');
   }
   return csvData;
+}
+int nonZeroLen(List list){
+  int len = 0;
+  for (var i in list){
+    if (i != 0){
+      len++;
+    }
+  }
+  return len;
 }

@@ -31,8 +31,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     debugPrint(data.toString());
     setState(() {
       exerciseData = data[0];
-      heaviestWeight = [data[1][6], data[1][7]];
-      heaviestVolume = [data[2][6], data[2][7]];
+      if (data[0].isNotEmpty){
+        heaviestWeight = [double.parse(data[1][6].toString()), double.parse(data[1][7].toString())];
+        heaviestVolume = [double.parse(data[2][6].toString()), double.parse(data[2][7].toString())];
+      }
     });
   }
 
