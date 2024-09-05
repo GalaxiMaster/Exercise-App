@@ -31,7 +31,29 @@ class HomePage extends StatelessWidget {
                 );
               }
             )
-          ),   
+          ),  
+          Text("Routines") ,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: MyTextButton(
+              text: "New routine", 
+              pressedColor: Colors.blue, 
+              color: Colors.green, 
+              borderRadius: 40, 
+              width: 400, 
+              height: 50,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => 
+                    const Addworkout()
+                  ),
+                );
+              }
+            )
+          ),
+          const SizedBox(height: 20),
+          _buildStreakRestBox(label: 'tESSSZT', exercises: 'bench press, cable fly')
         ],
       ),
     );
@@ -74,6 +96,34 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+Widget _buildStreakRestBox({
+    required String label,
+    required String exercises,
+  }) {
+    Color color = Colors.blue;
+    return Column(
+      children: [
+        Container(
+          width: 365,
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
+           children: [
+             Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+             Text(exercises, style: const TextStyle(color: Colors.grey)),
+             const SizedBox(height: 15,),
+             MyTextButton(text: 'Start routine', pressedColor: Colors.black, color: color, borderRadius: 12.5, width: double.infinity, height: 40)
+           ],
+          ),
+        ),
+      ],
+    );
+  }
 
 
 
