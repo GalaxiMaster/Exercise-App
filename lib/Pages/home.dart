@@ -10,17 +10,28 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context), // Pass context to appBar
-      body: Column(
-        children: [
-          const SizedBox(height: 20,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: MyTextButton(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20,),
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: Text(
+                "Blank",
+                style: TextStyle(
+                  fontSize: 18
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            MyTextButton(
               text: "Start Workout", 
               pressedColor: Colors.blue, 
               color: Colors.green, 
-              borderRadius: 40, 
-              width: 400, 
+              borderRadius: 15, 
+              width: double.infinity, 
               height: 50,
               onTap: () {
                 Navigator.push(
@@ -30,17 +41,24 @@ class HomePage extends StatelessWidget {
                   ),
                 );
               }
-            )
-          ),  
-          Text("Routines") ,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: MyTextButton(
+            ),  
+            SizedBox(height: 20,),
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: Text(
+                "Routines",
+                style: TextStyle(
+                  fontSize: 18
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            MyTextButton(
               text: "New routine", 
               pressedColor: Colors.blue, 
               color: Colors.green, 
-              borderRadius: 40, 
-              width: 400, 
+              borderRadius: 15, 
+              width: double.infinity, 
               height: 50,
               onTap: () {
                 Navigator.push(
@@ -50,11 +68,11 @@ class HomePage extends StatelessWidget {
                   ),
                 );
               }
-            )
-          ),
-          const SizedBox(height: 20),
-          _buildStreakRestBox(label: 'tESSSZT', exercises: 'bench press, cable fly')
-        ],
+            ),
+            const SizedBox(height: 20),
+            _buildStreakRestBox(label: 'tESSSZT', exercises: 'bench press, cable fly')
+          ],
+        ),
       ),
     );
   }
@@ -98,32 +116,63 @@ class HomePage extends StatelessWidget {
 }
 
 Widget _buildStreakRestBox({
-    required String label,
-    required String exercises,
-  }) {
-    Color color = Colors.blue;
-    return Column(
-      children: [
-        Container(
-          width: 365,
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Column(
-           crossAxisAlignment: CrossAxisAlignment.start,
-           children: [
-             Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
-             Text(exercises, style: const TextStyle(color: Colors.grey)),
-             const SizedBox(height: 15,),
-             MyTextButton(text: 'Start routine', pressedColor: Colors.black, color: color, borderRadius: 12.5, width: double.infinity, height: 40)
-           ],
-          ),
+  required String label,
+  required String exercises,
+}) {
+  Color color = Colors.blue;
+  return Column(
+    children: [
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10.0),
         ),
-      ],
-    );
-  }
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,  // Ensure the whole column aligns to the left
+          children: [
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,  // Align the text to the left within this column
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(color: color, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      exercises,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.all(4.0),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.more_vert, color: color),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            MyTextButton(
+              text: 'Start routine',
+              pressedColor: Colors.black,
+              color: color,
+              borderRadius: 12.5,
+              width: double.infinity,
+              height: 40,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
 
 
 
