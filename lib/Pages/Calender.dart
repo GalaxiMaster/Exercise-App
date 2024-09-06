@@ -49,6 +49,8 @@ AppBar appBar(BuildContext context) {
 }
 
 class CalendarWidget extends StatefulWidget {
+  const CalendarWidget({super.key});
+
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }

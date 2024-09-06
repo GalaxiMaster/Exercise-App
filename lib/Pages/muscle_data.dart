@@ -8,7 +8,7 @@ class MuscleData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context),
-      body: Center()
+      body: const Center()
     );
   }
 }

@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 class ExerciseScreen extends StatefulWidget {
   final String exercise;
 
-  const ExerciseScreen({Key? key, required this.exercise}) : super(key: key);
+  const ExerciseScreen({super.key, required this.exercise});
 
   @override
   _ExerciseScreenState createState() => _ExerciseScreenState();
@@ -153,7 +153,7 @@ Future<List> getStats(String target) async{
       }else if(set[6] * set[7] > heaviestVolume[6] * heaviestVolume[7]){
         heaviestVolume = set;
       }
-      debugPrint("yeah"  + heaviestWeight.toString());
+      debugPrint("yeah$heaviestWeight");
       if (heaviestWeight.isEmpty){
         heaviestWeight = set;
       }else if(set[6] > heaviestWeight[6]){

@@ -37,7 +37,7 @@ class Settings extends StatelessWidget {
           _buildSettingsBox(
             icon: Icons.refresh,
             label: 'Reset data',
-            function: resetCsv,
+            function: resetData,
           ),
         ],
       ),
@@ -94,25 +94,25 @@ Widget _buildSettingsBox({
   );
 }
 
-Future<void> resetCsv() async {
+Future<void> resetData() async {
   try {
-    final dir = await getExternalStorageDirectory();
-    final path = '${dir?.path}/output.csv';
+    final dir = await getApplicationDocumentsDirectory();
+    final path = '${dir.path}/output.json';
     final file = File(path);
     await file.writeAsString('');
-    debugPrint('CSV reset at: $path');
+    debugPrint('json reset at: $path');
   } catch (e) {
-    debugPrint('Error saving CSV file: $e');
+    debugPrint('Error saving json file: $e');
   }
   
   try {
-    final dir = await getExternalStorageDirectory();
-    final path = '${dir?.path}/currentWorkout.csv';
+    final dir = await getApplicationDocumentsDirectory();
+    final path = '${dir.path}/current.json';
     final file = File(path);
     await file.writeAsString('');
-    debugPrint('CSV reset at: $path');
+    debugPrint('json reset at: $path');
   } catch (e) {
-    debugPrint('Error saving CSV file: $e');
+    debugPrint('Error saving json file: $e');
   }
 }
 
@@ -137,6 +137,8 @@ void exportCsv() async{
 }
 
 class RestTimerOptions extends StatefulWidget {
+  const RestTimerOptions({super.key});
+
   @override
   _RestTimerOptionsState createState() => _RestTimerOptionsState();
 }
@@ -151,15 +153,15 @@ class _RestTimerOptionsState extends State<RestTimerOptions> {
   Widget build(BuildContext context) {
     return Container(
       height: 250, // Adjusted height to display more items
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Text(
+          const Text(
             'Rest Timer',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Text('Default Rest Timer Setting'),
-          SizedBox(height: 20),
+          const Text('Default Rest Timer Setting'),
+          const SizedBox(height: 20),
           Expanded(
             child: Center(
               child: ListWheelScrollView.useDelegate(
@@ -169,7 +171,7 @@ class _RestTimerOptionsState extends State<RestTimerOptions> {
                     _selectedIndex = index;
                   });
                 },
-                physics: FixedExtentScrollPhysics(),
+                physics: const FixedExtentScrollPhysics(),
                 perspective: 0.005,  // Slight perspective to make it more visible
                 diameterRatio: 1.5,  // Adjust this to control how many items show
                 childDelegate: ListWheelChildBuilderDelegate(
@@ -204,7 +206,7 @@ class _RestTimerOptionsState extends State<RestTimerOptions> {
             onPressed: () {
               Navigator.pop(context, _options[_selectedIndex]); // Return selected option
             },
-            child: Text('Done'),
+            child: const Text('Done'),
           ),
         ],
       ),

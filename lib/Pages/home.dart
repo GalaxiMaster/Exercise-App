@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
 
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
                 );
               }
             ),  
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             const Padding(
               padding: EdgeInsets.only(left: 5),
               child: Text(
@@ -61,12 +62,7 @@ class HomePage extends StatelessWidget {
               width: double.infinity, 
               height: 50,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => 
-                    const Addworkout()
-                  ),
-                );
+                readData(path: 'current');
               }
             ),
             const SizedBox(height: 20),

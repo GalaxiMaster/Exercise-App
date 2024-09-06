@@ -33,13 +33,13 @@ class Profile extends StatelessWidget {
                     onTap: (){
                       Widget destination;
                       if (index == 0) {
-                        destination = CalenderScreen();
+                        destination = const CalenderScreen();
                       } else if (index == 1) {
-                        destination = ExerciseList();
+                        destination = const ExerciseList();
                       } else if (index == 2){
-                        destination = MuscleData();
+                        destination = const MuscleData();
                       } else {
-                        destination = Stats();
+                        destination = const Stats();
                       }
 
                       Navigator.push(
