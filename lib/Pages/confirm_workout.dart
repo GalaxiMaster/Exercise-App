@@ -103,8 +103,16 @@ class ConfirmWorkout extends StatelessWidget {
 
   void saveExercises(var exerciseList, String startTime) async {
     String endTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
+    String day = startTime.split(' ')[0];
+    Map daata = await readData();
+    int num = 1; // find workouts done that day
+    for (int i = 0; i < daata.keys.length; i++){
+      if (daata.keys.toList()[i]?.split(' ')[0] == day){
+        num++;
+      }
+    }
     Map data = {
-      startTime.split(' ')[0] : {
+      '$day $num' : {
       'stats' : {
         'startTime' : startTime,
         'endTime' : endTime,
@@ -112,7 +120,7 @@ class ConfirmWorkout extends StatelessWidget {
       'sets' : exerciseList
       }
     };
-    writeData(data);
+    writeData(data, append: true, appendPos: day);
     resetData(false, true);
   }
 }

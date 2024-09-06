@@ -1,11 +1,8 @@
-import 'dart:io';
-
-import 'package:csv/csv.dart';
+import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CalenderScreen extends StatelessWidget {
   const CalenderScreen({super.key});
@@ -64,12 +61,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     _loadHighlightedDays();
   }
   Future<void> _loadHighlightedDays() async {
-    var data = await gatherData();
+    var data = await readData();
     
     if (mounted) { // Check if the widget is still mounted
       setState(() {
         exerciseData = data;
-        highlightedDays = data.keys.map((x) => DateTime.parse(x)).toList();
+        highlightedDays = data.keys.map((x) => DateTime.parse(x.split(' ')[0])).toList();
       });
     }
   }
@@ -94,16 +91,17 @@ Widget build(BuildContext context) {
                 if (highlightedDays.any((highlightedDay) =>
                     date.year == highlightedDay.year &&
                     date.month == highlightedDay.month &&
-                    date.day == highlightedDay.day)) {
+                    date.day == highlightedDay.day)) 
+                  {
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => DayScreen(
                           date: date,
-                          day: exerciseData[DateFormat('yyyy-MM-dd')
-                              .format(date)
-                              .toString()]),
+                          day: combineDays(exerciseData)[DateFormat('yyyy-MM-dd').format(date)]['sets'],
                     ),
+                  )
                   );
                 }
               },
@@ -163,12 +161,12 @@ class _StreakRestRowState extends State<StreakRestRow> {
     if (widget.exerciseData.keys.isEmpty) {
       return [0, 0];
     }
-    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList()[0])).inDays;
+    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList()[0].split(' ')[0])).inDays;
     int streaks = 0;
     int week = weekNumber(DateTime.now());
     for (var day in widget.exerciseData.keys) {
       debugPrint(day);
-      int weekNum = weekNumber(DateTime.parse(day));
+      int weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
       debugPrint('${week - weekNum}  $week  $weekNum');
       if (week - weekNum == 1) {
         streaks++;
@@ -257,6 +255,7 @@ class DayScreen extends StatelessWidget {
 
   @override
 build(BuildContext context) {
+  debugPrint(day.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text('Workout for ${date.day}/${date.month}/${date.year}'),
@@ -326,7 +325,7 @@ build(BuildContext context) {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
-                                  initialValue: day[exercise]![i]['Weight'].toString(),
+                                  initialValue: day[exercise]![i]['weight'].toString(),
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle( // Add this property
@@ -350,7 +349,7 @@ build(BuildContext context) {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
-                                  initialValue: day[exercise]![i]['Reps'].toString(),
+                                  initialValue: day[exercise]![i]['reps'].toString(),
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle( // Add this property
@@ -411,50 +410,36 @@ int _getNormalSetNumber(var day, String exercise, int currentIndex) {
     return normalSetCount;
   }
 
-Future<Map> gatherData()async {
-  Map exerciseData = {};
-  List data = await readFromCsv();
-  for (var set in data){
-    String day = set[0].split(' ')[0];
-    if (exerciseData.containsKey(day) && exerciseData[day].containsKey(set[2])){
-      exerciseData[day][set[2]].add({'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]});
-    } else if(exerciseData.containsKey(day)){
-      exerciseData[day][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
-    } else{
-      exerciseData[day] = {};
-      exerciseData[day][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
-    }
-  }
-  return exerciseData;
-}
+Map combineDays(Map data) {
+  Map combinedData = {};
 
-Future<List<List<dynamic>>> readFromCsv() async {
-  List<List<dynamic>> csvData = [];
-  try {
-    final dir = await getExternalStorageDirectory();
-    if (dir != null) {
-      final path = '${dir.path}/output.csv';
-      final file = File(path);
+  data.forEach((key, value) {
+    // Extract the date part by splitting and taking the first part (ignoring the number)
+    String date = key.split(' ')[0];
 
-      // Check if the file exists before attempting to read it
-      if (await file.exists()) {
-        final csvString = await file.readAsString();
-        const converter = CsvToListConverter(
-          fieldDelimiter: ',', // Default
-          eol: '\n',           // End-of-line character
-        );
-
-        List<List<dynamic>> csvData = converter.convert(csvString);
-        debugPrint('CSV Data: $csvData');
-        return csvData;
-      } else {
-        debugPrint('Error: CSV file does not exist');
-      }
+    // If this date already exists in combinedData, merge the 'sets'
+    if (combinedData.containsKey(date)) {
+      value['sets'].forEach((exercise, sets) {
+        // Check if the exercise already exists
+        if (combinedData[date]['sets'].containsKey(exercise)) {
+          // Create a copy of the existing list to avoid concurrent modification
+          List updatedSets = List.from(combinedData[date]['sets'][exercise]);
+          updatedSets.addAll(sets);
+          combinedData[date]['sets'][exercise] = updatedSets;
+        } else {
+          // If the exercise doesn't exist, just add the new sets
+          combinedData[date]['sets'][exercise] = List.from(sets);
+        }
+      });
     } else {
-      debugPrint('Error: External storage directory is null');
+      // If the date doesn't exist, just add the entry
+      combinedData[date] = {
+        'stats': value['stats'],
+        'sets': Map.from(value['sets'])  // Copy the sets to avoid reference issues
+      };
     }
-  } catch (e) {
-    debugPrint('Error reading CSV file: $e');
-  }
-  return csvData;
+  });
+
+  return combinedData;
 }
+

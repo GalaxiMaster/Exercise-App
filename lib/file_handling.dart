@@ -21,10 +21,14 @@ Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
   return jsonData;
 }
 
-void writeData(Map newData, {String path = 'output', bool append = true}) async {
+void writeData(Map newData, {String path = 'output', bool append = true, String appendPos = ''}) async {
   if (append){
-    Map data = await readData();
-    newData.addAll(data);
+    if (appendPos != ''){
+      Map data = await readData();
+      newData.addAll(data);
+    } else {
+      debugPrint("Need a position to append data to");
+    }
   }
   debugPrint('${newData}daaattaa ${path}' );
   String jsonString = jsonEncode(newData);
