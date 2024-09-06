@@ -244,16 +244,18 @@ class _AddworkoutState extends State<Addworkout> {
   }
   
   String getPrevious(String tExercise, int setNum, String target){
+    if (preCsvData.isNotEmpty){
     for (var day in preCsvData.keys.toList().reversed){
-      for (var exercise in preCsvData[day]){
-        if (exercise == tExercise){
-          for (var i = 0; i < preCsvData[exercise].length; i++) {
-            var set = preCsvData[exercise][i];
-            if (i == setNum && set['target'] == target) {
-              if (target == 'Weight') {
-                return set['weight'];
-              } else if (target == 'Reps') {
-                return set['reps'];
+        for (var exercise in preCsvData[day]['sets'].keys){
+          if (exercise == tExercise){
+            for (var i = 0; i < preCsvData[day]['sets'][exercise].length; i++) {
+              var set = preCsvData[day]['sets'][exercise][i];
+              if (i == setNum-1) {
+                if (target == 'Weight') {
+                  return set['weight'];
+                } else if (target == 'Reps') {
+                  return set['reps'];
+                }
               }
             }
           }

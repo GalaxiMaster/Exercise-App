@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
-  Map<dynamic, dynamic> jsonData= {};
+  Map jsonData= {};
   final dir = await getApplicationDocumentsDirectory();
   String filepath = '${dir.path}/$path.json';
   debugPrint(filepath);
@@ -21,16 +21,45 @@ Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
   return jsonData;
 }
 
-void writeData(Map data, {String path = 'output', bool append = true}) async {
-  debugPrint('${data}daaattaa ${path}' );
-  String jsonString = jsonEncode(data);
+void writeData(Map newData, {String path = 'output', bool append = true}) async {
+  if (append){
+    Map data = await readData();
+    newData.addAll(data);
+  }
+  debugPrint('${newData}daaattaa ${path}' );
+  String jsonString = jsonEncode(newData);
   debugPrint(jsonString);
   final dir = await getApplicationDocumentsDirectory();
   String  filepath = '${dir.path}/$path.json';
   debugPrint(filepath);
   File file = File(filepath);
 
-  await file.writeAsString(jsonString, mode: append ? FileMode.append : FileMode.write);
+  await file.writeAsString(jsonString);
   readData(path: 'current');
   debugPrint('JSON data has been written to the file.');
 } 
+
+Future<void> resetData(bool output, bool current) async {
+  if (output){
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final path = '${dir.path}/output.json';
+      final file = File(path);
+      await file.writeAsString('');
+      debugPrint('json reset at: $path');
+    } catch (e) {
+      debugPrint('Error saving json file: $e');
+    }
+  }
+  if (current){
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final path = '${dir.path}/current.json';
+      final file = File(path);
+      await file.writeAsString('');
+      debugPrint('json reset at: $path');
+    } catch (e) {
+      debugPrint('Error saving json file: $e');
+    }
+  }
+}

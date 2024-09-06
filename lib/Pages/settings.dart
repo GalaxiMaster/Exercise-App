@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -37,7 +38,7 @@ class Settings extends StatelessWidget {
           _buildSettingsBox(
             icon: Icons.refresh,
             label: 'Reset data',
-            function: resetData,
+            function: (){resetData(true, false);},
           ),
         ],
       ),
@@ -92,28 +93,6 @@ Widget _buildSettingsBox({
       ),
     ),
   );
-}
-
-Future<void> resetData() async {
-  try {
-    final dir = await getApplicationDocumentsDirectory();
-    final path = '${dir.path}/output.json';
-    final file = File(path);
-    await file.writeAsString('');
-    debugPrint('json reset at: $path');
-  } catch (e) {
-    debugPrint('Error saving json file: $e');
-  }
-  
-  try {
-    final dir = await getApplicationDocumentsDirectory();
-    final path = '${dir.path}/current.json';
-    final file = File(path);
-    await file.writeAsString('');
-    debugPrint('json reset at: $path');
-  } catch (e) {
-    debugPrint('Error saving json file: $e');
-  }
 }
 
 void exportCsv() async{

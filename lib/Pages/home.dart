@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
               width: double.infinity, 
               height: 50,
               onTap: () {
-                readData(path: 'current');
+                readData(path: 'output');
               }
             ),
             const SizedBox(height: 20),
