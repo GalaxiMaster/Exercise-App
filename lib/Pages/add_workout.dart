@@ -2,13 +2,15 @@ import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'choose_exercise.dart'; // Ensure the path to your WorkoutList file is correct
+import 'choose_exercise.dart';
 import 'package:exercise_app/widgets.dart';
 
+// ignore: must_be_immutable
 class Addworkout extends StatefulWidget {
-  const Addworkout({super.key});
-
-  @override
+  Map sets;
+  Addworkout({super.key, sets}) 
+    : sets = sets ?? {};
+    @override
   // ignore: library_private_types_in_public_api
   _AddworkoutState createState() => _AddworkoutState();
 }
@@ -16,37 +18,42 @@ class Addworkout extends StatefulWidget {
 class _AddworkoutState extends State<Addworkout> {
   var selectedExercises = [];
   var preCsvData = {};
-  Map<dynamic, dynamic> sets = {};
+  Map sets = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   @override
   void initState() {        
     super.initState();
-    getPreviousWorkout().then((data) {
-      setState(() {
-        sets = data;
-      });    
-      debugPrint('tessst sets ${sets.toString()}');
-    });
-    // updateExercises(); //grab from save file to see if a workout is already in progress
+    if(widget.sets.isEmpty){
+      getPreviousWorkout().then((data) {
+        setState(() {
+          sets = data;
+        });    
+        debugPrint('tessst sets ${sets.toString()}');
+      });
+    }else {
+      sets = widget.sets['sets'];
+    }
     loadDataFromCsv(); // Load CSV data once during initialization    
   }
+
   Future<void> loadDataFromCsv() async {
     preCsvData = await readData();
     debugPrint(preCsvData.toString());
     setState(() {}); // Update UI after loading data
   }
+
   Future<Map> getPreviousWorkout() async {
     Map data = {};
     data = await readData(path: 'current');
     debugPrint("${data}data");
     return data;
   }
+
   void updateExercises() async{
     debugPrint('writing');
     debugPrint('sets : ${sets.toString()}');
     debugPrint("${sets}kljdfkljdljgkljdsl");
     writeData(sets, path: 'current', append: false);
-    Map _ = await getPreviousWorkout();
   }
 
   @override

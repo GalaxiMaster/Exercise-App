@@ -97,8 +97,8 @@ Widget _buildSettingsBox({
 
 void exportCsv() async{
     try {
-      final directory = await getExternalStorageDirectory();
-      final path = '${directory?.path}/output.csv';
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/output.json';
 
       // Only share the file after ensuring it has been written
       final file = File(path);

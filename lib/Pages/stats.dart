@@ -1,8 +1,6 @@
-import 'dart:io';
-import 'package:csv/csv.dart';
+import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Stats extends StatefulWidget {
   const Stats({super.key});
@@ -35,9 +33,9 @@ class _StatsState extends State<Stats> {
         for (var set in data[day]['sets'][exercise]){
           sets++;
           if (totalVolume.containsKey(day)){
-            totalVolume[day] += (double.parse(set['Weight'].toString()) * double.parse(set['Reps'].toString()));
+            totalVolume[day] += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
           } else{
-            totalVolume[day] = (double.parse(set['Weight'].toString()) * double.parse(set['Reps'].toString()));
+            totalVolume[day] = (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
           }
 
         }
@@ -62,7 +60,7 @@ class _StatsState extends State<Stats> {
             Text('Total volume : ${stats['volume'].fold(0, (p, c) => p + c).toString()}'),
             Text('Average volume : ${(stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)}'),
             Text('Total time : ${stats['time'].fold(0, (p, c) => p + c).toString()} mins'),
-            Text('Average time : ${(stats['time'].fold(0, (p, c) => p + c)/nonZeroLen(stats['time'])).toStringAsFixed(1)} mins'),
+            Text('Average time : ${(stats['time'].fold(0, (p, c) => p + c)/stats['time'].length).toStringAsFixed(1)} mins'),
           ],
         ),
       ),
@@ -106,51 +104,10 @@ AppBar appBar(BuildContext context) {
     );
   }
 Future<Map> gatherData() async {
-  Map exerciseData = {};
-  List data = await readFromCsv();
-  for (var set in data){
-    String day = set[0].split(' ')[0];
-    if (exerciseData.containsKey(day) && exerciseData[day]['sets'].containsKey(set[2])){
-      exerciseData[day]['sets'][set[2]].add({'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]});
-    } else if(exerciseData.containsKey(day)){
-      exerciseData[day]['sets'][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
-    } else{
-      exerciseData[day] = {'stats' : {'startTime' : set[0], 'endTime' : set[1]}, 'sets' : {}};
-      exerciseData[day]['sets'][set[2]] = [{'Weight' : set[6], 'Reps' : set[7], 'Type' : set[5]}];
-    }
-  }
+  Map exerciseData = await readData();
   return exerciseData;
 }
-Future<List<List<dynamic>>> readFromCsv() async {
-  List<List<dynamic>> csvData = [];
-  try {
-    final dir = await getExternalStorageDirectory();
-    if (dir != null) {
-      final path = '${dir.path}/output.csv';
-      final file = File(path);
 
-      // Check if the file exists before attempting to read it
-      if (await file.exists()) {
-        final csvString = await file.readAsString();
-        const converter = CsvToListConverter(
-          fieldDelimiter: ',', // Default
-          eol: '\n',           // End-of-line character
-        );
-
-        List<List<dynamic>> csvData = converter.convert(csvString);
-        debugPrint('CSV Data: $csvData');
-        return csvData;
-      } else {
-        debugPrint('Error: CSV file does not exist');
-      }
-    } else {
-      debugPrint('Error: External storage directory is null');
-    }
-  } catch (e) {
-    debugPrint('Error reading CSV file: $e');
-  }
-  return csvData;
-}
 int nonZeroLen(List list){
   int len = 0;
   for (var i in list){

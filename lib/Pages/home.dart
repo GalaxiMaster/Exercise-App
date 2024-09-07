@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => 
-                    const Addworkout()
+                    Addworkout()
                   ),
                 );
               }
@@ -240,6 +240,14 @@ class _HomePageState extends State<HomePage> {
               borderRadius: 12.5,
               width: double.infinity,
               height: 40,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => 
+                    Addworkout(sets: data)
+                  ),
+                );
+              },
             ),
           ],
         ),
