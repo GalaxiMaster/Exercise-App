@@ -29,7 +29,7 @@ class Settings extends StatelessWidget {
               showModalBottomSheet(
                 context: context,
                 builder: (context) {
-                  return RestTimerOptions();
+                  return const RestTimerOptions();
                 },
               );
             },

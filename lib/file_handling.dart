@@ -44,7 +44,7 @@ void writeData(Map newData, {String path = 'output', bool append = true}) async 
   File file = File(filepath);
 
   await file.writeAsString(jsonString);
-  readData(path: 'current');
+  readData(path: 'routines/test');
   debugPrint('JSON data has been written to the file.');
 } 
 
@@ -70,5 +70,14 @@ Future<void> resetData(bool output, bool current) async {
     } catch (e) {
       debugPrint('Error saving json file: $e');
     }
+  }
+}
+
+void deleteFile(String fileName) async{
+  final dir = await getApplicationDocumentsDirectory();
+  final path = '${dir.path}/$fileName.json';
+  final file = File(path);
+  if (await file.exists()) {
+    await file.delete();   
   }
 }

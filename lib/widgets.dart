@@ -183,3 +183,44 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
     );
   }
 }
+
+class CustomPopupMenuButton extends StatelessWidget {
+  final Function(String) onSelected;
+
+  const CustomPopupMenuButton({super.key, required this.onSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        final RenderBox button = context.findRenderObject() as RenderBox;
+        final RenderBox overlay =
+            Overlay.of(context).context.findRenderObject() as RenderBox;
+        final RelativeRect position = RelativeRect.fromRect(
+          Rect.fromPoints(
+            button.localToGlobal(Offset.zero, ancestor: overlay),
+            button.localToGlobal(Offset.zero, ancestor: overlay),
+          ),
+          Offset.zero & overlay.size,
+        );
+
+        showMenu<String>(
+          context: context,
+          position: position,
+          items: [
+            const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+            const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+            const PopupMenuItem(value: 'Share', child: Text('Share')),
+          ],
+          elevation: 8.0,
+          useRootNavigator: true,
+        ).then((value) {
+          if (value != null) {
+            onSelected(value);
+          }
+        });
+      },
+      child: const Icon(Icons.more_vert),
+    );
+  }
+}

@@ -11,7 +11,7 @@ class CalenderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context),
-      body: CalendarWidget(),
+      body: const CalendarWidget(),
     );
   }
 }

@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadRoutines() async {
     List loadedRoutines = await getAllRoutines();
+    debugPrint("${loadedRoutines}identify");
     setState(() {
       routines = loadedRoutines;
     });
@@ -103,10 +104,7 @@ class _HomePageState extends State<HomePage> {
                     itemCount: routines.length,
                     itemBuilder: (context, index) {
                       var routine = routines[index];
-                      return _buildStreakRestBox(
-                        label: routine['data']?['name'] ?? 'Unknown Routine', 
-                        exercises: routine['sets'].keys?.join('\n') ?? 'No exercises'
-                      );
+                      return _buildStreakRestBox(data: routine);
                     },
                   ),
                 )
@@ -153,13 +151,23 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-}
 
-Widget _buildStreakRestBox({
-  required String label,
-  required String exercises,
+  void deleteRoutine(String name) async{
+    final dir = await getApplicationDocumentsDirectory();
+    String  filepath = '${dir.path}/routines/$name.json';
+    debugPrint(filepath);
+    final File file = File(filepath);
+    if (await file.exists()) {
+      await file.delete();   
+      _loadRoutines();
+    }
+  }
+  Widget _buildStreakRestBox({
+  required Map data,
 }) {
   Color color = Colors.blue;
+  String label =  data['data']?['name'] ?? 'Unknown Routine';
+  String exercises =  data['sets'].keys?.join('\n') ?? 'No exercises';
   return Column(
     children: [
       Container(
@@ -179,7 +187,7 @@ Widget _buildStreakRestBox({
                   children: [
                     Text(
                       label,
-                      style: TextStyle(color: color, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 17),
                     ),
                     Text(
                       exercises,
@@ -188,13 +196,40 @@ Widget _buildStreakRestBox({
                   ],
                 ),
                 const Spacer(),
-                Container(
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: PopupMenuButton<String>(
+                    onSelected: (value) {
+                      switch(value){
+                        case 'Edit':
+                          debugPrint('edit');
+                                          Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => 
+                    AddRoutine(onRoutineSaved: () {
+                      Navigator.pop(context); // Go back to the previous page
+                      _loadRoutines(); // Reload routines when we come back
+                    }, sets: data,o_name: label,)
                   ),
-                  child: Icon(Icons.more_vert, color: color),
-                ),
+                );
+                        case 'Share':
+                          debugPrint('share');
+                        case 'Delete':
+                          deleteRoutine(label);
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                        const PopupMenuItem(value: 'Share', child: Text('Share')),                        
+                        const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                      ];
+                    },
+                    elevation: 2, // Adjust the shadow depth here (default is 8.0)
+                    icon: Icon(Icons.more_vert, color: color,),
+                  ),
+                )
               ],
             ),
             const SizedBox(height: 15),
@@ -213,6 +248,7 @@ Widget _buildStreakRestBox({
     ],
   );
 }
+}
 
 Future<List> getAllRoutines() async {
   List routines = [];
@@ -224,8 +260,8 @@ Future<List> getAllRoutines() async {
     await for (var entity in directory.list()) {
       if (entity is File) {
         String contents = await entity.readAsString();
-        entity.delete();
-        debugPrint('File: ${entity.path}');
+        // entity.delete();
+        debugPrint('File: ${entity.path} identify');
         Map jsonData = jsonDecode(contents);
         routines.add(jsonData);
       } else if (entity is Directory) {
@@ -238,5 +274,4 @@ Future<List> getAllRoutines() async {
   debugPrint(routines.toString());
   return routines;
 }
-
 

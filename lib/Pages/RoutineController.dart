@@ -3,18 +3,29 @@ import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class AddRoutine extends StatefulWidget {
   final Function() onRoutineSaved;
-  const AddRoutine({super.key, required this.onRoutineSaved});
+  final String o_name;
+  late Map sets;
 
+  AddRoutine({super.key, required this.onRoutineSaved, sets, o_name}) 
+    : sets = sets ?? {}, 
+      o_name = o_name ?? '';
   @override
-  // ignore: library_private_types_in_public_api
   _AddRoutineState createState() => _AddRoutineState();
-}
+  }
 
 class _AddRoutineState extends State<AddRoutine> {
-  Map<dynamic, dynamic> sets = {};
-  TextEditingController routineNameController = TextEditingController(); // Initial text for the name
+  late TextEditingController _routineNameController;
+  Map sets = {};
+  @override
+  void initState() {
+    super.initState();
+    _routineNameController = TextEditingController(text: widget.o_name);
+    sets = widget.sets.isNotEmpty ? widget.sets['sets'] : {};
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +33,10 @@ class _AddRoutineState extends State<AddRoutine> {
       appBar: AppBar(
         title: Center(
           child: SizedBox(
-            width: 200, // Adjust width as per your needs
+            width: 200,
             child: TextField(
-              controller: routineNameController,
-              textAlign: TextAlign.center, // Center the text inside the text field
+              controller: _routineNameController,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 18,
@@ -52,7 +63,7 @@ class _AddRoutineState extends State<AddRoutine> {
               iconHeight: 20,
               iconWidth: 20,
               onTap: () {
-                createRoutine(routineNameController.text); // Pass the routine name
+                createRoutine(_routineNameController.text); // Pass the routine name
               },
             ),
           ),
@@ -134,11 +145,11 @@ class _AddRoutineState extends State<AddRoutine> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
                               ),
                             ],
                           )
@@ -248,14 +259,18 @@ class _AddRoutineState extends State<AddRoutine> {
   }
   
   void createRoutine(String name) {
+    debugPrint(name + widget.o_name);
     if (name != ''){
-      sets = {
+      if (widget.o_name != '' && name != widget.o_name){
+        deleteFile('routines/${widget.o_name}');
+      }
+      Map newData = {
         'data' : {
           'name' : name
         },
         'sets' : sets
       };
-      writeData(sets, path: 'routines/$name', append: false);
+      writeData(newData, path: 'routines/$name', append: false);
       widget.onRoutineSaved();          
     }
   }

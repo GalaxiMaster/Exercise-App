@@ -38,13 +38,13 @@ class _AddworkoutState extends State<Addworkout> {
   Future<Map> getPreviousWorkout() async {
     Map data = {};
     data = await readData(path: 'current');
-    debugPrint(data.toString() + "data");
+    debugPrint("${data}data");
     return data;
   }
   void updateExercises() async{
     debugPrint('writing');
     debugPrint('sets : ${sets.toString()}');
-    debugPrint(sets.toString() + "kljdfkljdljgkljdsl");
+    debugPrint("${sets}kljdfkljdljgkljdsl");
     writeData(sets, path: 'current', append: false);
     Map _ = await getPreviousWorkout();
   }
