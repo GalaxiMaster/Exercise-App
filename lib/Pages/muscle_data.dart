@@ -1,4 +1,3 @@
-import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 
 class MuscleData extends StatelessWidget {
@@ -24,28 +23,6 @@ AppBar appBar(BuildContext context) {
         ),
       ),
       centerTitle: true,
-      actions: [
-        Center(
-          child: MyIconButton(
-            filepath: 'Assets/settings.svg',
-            width: 37,
-            height: 37,
-            borderRadius: 10,
-            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-            color: const Color.fromARGB(255, 245, 241, 241),
-            iconHeight: 20,
-            iconWidth: 20,
-            onTap: (){
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => 
-              //     const Settings()
-              //   )
-              // );
-            },
-            ),
-        )
-      ],
     );
   }
 

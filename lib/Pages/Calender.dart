@@ -1,5 +1,4 @@
 import 'package:exercise_app/file_handling.dart';
-import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
@@ -28,20 +27,6 @@ AppBar appBar(BuildContext context) {
       ),
     ),
     centerTitle: true,
-    actions: const [
-      Center(
-        child: MyIconButton(
-          filepath: 'Assets/settings.svg',
-          width: 37,
-          height: 37,
-          borderRadius: 10,
-          pressedColor: Color.fromRGBO(163, 163, 163, .7),
-          color: Color.fromARGB(255, 245, 241, 241),
-          iconHeight: 20,
-          iconWidth: 20,
-        ),
-      )
-    ],
   );
 }
 

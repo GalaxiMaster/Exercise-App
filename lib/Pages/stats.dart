@@ -1,5 +1,4 @@
 import 'package:exercise_app/file_handling.dart';
-import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Stats extends StatefulWidget {
@@ -12,7 +11,7 @@ class Stats extends StatefulWidget {
 
 class _StatsState extends State<Stats> {
   Map exerciseData = {};
-  Map stats = {'volume' : [], 'time' : [], 'sets' : 0, 'exercises' : 0};
+  Map stats = {'days' : [], 'volume' : [], 'time' : [], 'sets' : 0, 'exercises' : 0};
   @override
   initState(){
     super.initState();
@@ -23,10 +22,13 @@ class _StatsState extends State<Stats> {
     debugPrint(data.toString());
     Map totalVolume = {};
     List<int> totalTime = [];
+    List days = [];
     int sets = 0;
     int exercises = 0;
     for (var day in data.keys) {
-      debugPrint("taeet");
+      if (!days.contains(day.split(' ')[0])){
+        days.add(day.split(' ')[0]);
+      }
       totalTime.add((DateTime.parse(data[day]['stats']['endTime']).difference(DateTime.parse(data[day]['stats']['startTime'])).inMinutes));
       for (var exercise in data[day]['sets'].keys){
         exercises++;
@@ -42,7 +44,7 @@ class _StatsState extends State<Stats> {
       }
     }
     setState(() {
-      stats = {'volume' : totalVolume.values.toList(), 'time' : totalTime, 'sets' : sets, 'exercises' : exercises};
+      stats = {'days' : days, 'volume' : totalVolume.values.toList(), 'time' : totalTime, 'sets' : sets, 'exercises' : exercises};
       exerciseData = data;
     });
   }
@@ -54,7 +56,7 @@ class _StatsState extends State<Stats> {
       body: Center(
         child: Column(
           children: [
-            Text('${exerciseData.keys.length} days gone'),
+            Text('${stats['days'].length} days gone'),
             Text('${stats['sets']} sets done'),
             Text('${stats['exercises']} exercise done'),
             Text('Total volume : ${stats['volume'].fold(0, (p, c) => p + c).toString()}'),
@@ -79,28 +81,6 @@ AppBar appBar(BuildContext context) {
         ),
       ),
       centerTitle: true,
-      actions: [
-        Center(
-          child: MyIconButton(
-            filepath: 'Assets/settings.svg',
-            width: 37,
-            height: 37,
-            borderRadius: 10,
-            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-            color: const Color.fromARGB(255, 245, 241, 241),
-            iconHeight: 20,
-            iconWidth: 20,
-            onTap: (){
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => 
-              //     const Settings()
-              //   )
-              // );
-            },
-            ),
-        )
-      ],
     );
   }
 Future<Map> gatherData() async {
