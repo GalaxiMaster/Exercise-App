@@ -1,12 +1,35 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:exercise_app/Pages/RoutineController.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List routines = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRoutines();
+  }
+
+  Future<void> _loadRoutines() async {
+    List loadedRoutines = await getAllRoutines();
+    setState(() {
+      routines = loadedRoutines;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,11 +85,32 @@ class HomePage extends StatelessWidget {
               width: double.infinity, 
               height: 50,
               onTap: () {
-                readData(path: 'output');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => 
+                    AddRoutine(onRoutineSaved: () {
+                      Navigator.pop(context); // Go back to the previous page
+                      _loadRoutines(); // Reload routines when we come back
+                    })
+                  ),
+                );
               }
             ),
             const SizedBox(height: 20),
-            _buildStreakRestBox(label: 'tESSSZT', exercises: 'bench press, cable fly')
+            routines.isNotEmpty
+              ? Expanded(
+                  child: ListView.builder(
+                    itemCount: routines.length,
+                    itemBuilder: (context, index) {
+                      var routine = routines[index];
+                      return _buildStreakRestBox(
+                        label: routine['data']?['name'] ?? 'Unknown Routine', 
+                        exercises: routine['sets'].keys?.join('\n') ?? 'No exercises'
+                      );
+                    },
+                  ),
+                )
+              : const Text("No routines available"),
           ],
         ),
       ),
@@ -126,9 +170,9 @@ Widget _buildStreakRestBox({
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,  // Ensure the whole column aligns to the left
           children: [
-            Row(
+            Row(                
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,  // Align the text to the left within this column
@@ -165,10 +209,34 @@ Widget _buildStreakRestBox({
           ],
         ),
       ),
+      const SizedBox(height: 15)
     ],
   );
 }
 
+Future<List> getAllRoutines() async {
+  List routines = [];
+  final dir = await getApplicationDocumentsDirectory();
+  String  filepath = '${dir.path}/routines';
+  final directory = Directory(filepath);
 
+  if (await directory.exists()) {
+    await for (var entity in directory.list()) {
+      if (entity is File) {
+        String contents = await entity.readAsString();
+        entity.delete();
+        debugPrint('File: ${entity.path}');
+        Map jsonData = jsonDecode(contents);
+        routines.add(jsonData);
+      } else if (entity is Directory) {
+        debugPrint('Directory: ${entity.path}');
+      }
+    }
+  } else {
+    debugPrint("Directory does not exist");
+  }
+  debugPrint(routines.toString());
+  return routines;
+}
 
 

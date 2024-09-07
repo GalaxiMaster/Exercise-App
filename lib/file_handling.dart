@@ -21,19 +21,24 @@ Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
   return jsonData;
 }
 
-void writeData(Map newData, {String path = 'output', bool append = true, String appendPos = ''}) async {
+void writeData(Map newData, {String path = 'output', bool append = true}) async {  
+  final dir = await getApplicationDocumentsDirectory();
   if (append){
-    if (appendPos != ''){
-      Map data = await readData();
-      newData.addAll(data);
-    } else {
-      debugPrint("Need a position to append data to");
+    Map data = await readData();
+    newData.addAll(data);
+  }
+
+  if (path.split('/').length > 1){
+    String directoryPath = '${dir.path}/${(path.split('/').sublist(0, path.split('/').length - 1)).join('/')}';
+    // Create the directory if it doesn't exist
+    Directory routineDir = Directory(directoryPath);
+    if (!routineDir.existsSync()) {
+      await routineDir.create(recursive: true);  // Create directory recursively
     }
   }
-  debugPrint('${newData}daaattaa ${path}' );
+
   String jsonString = jsonEncode(newData);
-  debugPrint(jsonString);
-  final dir = await getApplicationDocumentsDirectory();
+  // debugPrint(jsonString);
   String  filepath = '${dir.path}/$path.json';
   debugPrint(filepath);
   File file = File(filepath);

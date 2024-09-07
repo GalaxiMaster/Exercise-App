@@ -120,7 +120,7 @@ class ConfirmWorkout extends StatelessWidget {
       'sets' : exerciseList
       }
     };
-    writeData(data, append: true, appendPos: day);
+    writeData(data, append: true);
     resetData(false, true);
   }
 }
