@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/ExerciseScreen.dart';
+import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -294,7 +295,7 @@ class _ExerciseListState extends State<ExerciseList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(filteredExercises[index]),
-                            const Text("Muscle")
+                            Text(getMuscles(filteredExercises[index]))
                           ],
                         ),
                       ],
@@ -329,4 +330,9 @@ class SearchBar extends StatelessWidget {
       ),
     );
   }
+}
+
+String getMuscles(String exercise){
+  String muscle = exerciseMuscles[exercise]!['Primary']!.keys.toList()[0];
+  return muscle != 'null' ? muscle : 'No muscle';
 }

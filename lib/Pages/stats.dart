@@ -14,7 +14,7 @@ class _StatsState extends State<Stats> {
   Map stats = {'days' : [], 'volume' : [], 'time' : [], 'sets' : 0, 'exercises' : 0};
   @override
   initState(){
-    super.initState();
+    super.initState();  
     _loadHighlightedDays();
   }
   Future<void> _loadHighlightedDays() async {

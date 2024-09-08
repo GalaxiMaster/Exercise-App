@@ -109,6 +109,7 @@ class DataBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(data.toString());
     return SizedBox(
       height: 200,
       child: Padding(
@@ -149,22 +150,14 @@ class DataBarChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (double value, TitleMeta meta) {
-                    switch (value.toInt()) {
-                      case 0:
-                        return const Text('Jun 17', style: TextStyle(color: Colors.black, fontSize: 12));
-                      case 1:
-                        return const Text('Jul 1', style: TextStyle(color: Colors.black, fontSize: 12));
-                      case 2:
-                        return const Text('Jul 15', style: TextStyle(color: Colors.black, fontSize: 12));
-                      case 3:
-                        return const Text('Jul 29', style: TextStyle(color: Colors.black, fontSize: 12));
-                      case 4:
-                        return const Text('Aug 12', style: TextStyle(color: Colors.black, fontSize: 12));
-                      case 5:
-                        return const Text('Aug 26', style: TextStyle(color: Colors.black, fontSize: 12));
-                      default:
-                        return const Text('', style: TextStyle(color: Colors.black, fontSize: 12));
+                    int index = value.toInt();
+                    if (index >= 0 && index < data.keys.length) {
+                      return Text(
+                        data.keys.toList()[index], // Correctly show each week's label
+                        style: const TextStyle(color: Colors.black, fontSize: 12),
+                      );
                     }
+                    return const Text('', style: TextStyle(color: Colors.black, fontSize: 12));
                   },
                   reservedSize: 38,
                 ),
@@ -180,14 +173,23 @@ class DataBarChart extends StatelessWidget {
             gridData: const FlGridData(
               show: false, // Remove grid lines in the center
             ),
-            barGroups: data.entries.map((entry) {
-              return BarChartGroupData(
-                x: 0,
-                barRods: [
-                  BarChartRodData(toY: double.parse(entry.value.toString()), color: Colors.blue, width: 20, borderRadius: BorderRadius.zero,)
-                ],
-              );
-            }).toList(),
+            barGroups: List.generate(
+              data.length,
+              (index) {
+                String key = data.keys.toList()[index];
+                return BarChartGroupData(
+                  x: index, // Assign a unique x value for each bar
+                  barRods: [
+                    BarChartRodData(
+                      toY: double.parse(data[key].toString()), // Set bar height based on value
+                      color: Colors.blue,
+                      width: 20,
+                      borderRadius: BorderRadius.zero,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -232,25 +234,40 @@ AppBar appBar(BuildContext context) {
     );
   }
 
-Future<Map> getData() async{
+Future<Map> getData() async {
   Map data = await readData();
-  int week = weekNumber(DateTime.now());
   Map weeks = {};
+
+  // Preload the last 8 Mondays
+  DateTime today = DateTime.now();
+  DateTime currentMonday = findMonday(today);
+  List last8Mondays = [];
+
+  for (int i = 0; i < 7; i++) {
+    DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
+    String day = DateFormat('MMM dd').format(monday);
+    weeks[day] = 0;
+    last8Mondays.add(day); // Store these Mondays to check against later
+  }
+  
+  // Process data
   for (var day in data.keys) {
-    int weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
-    if (week - weekNum <= 7){
-      if (weeks[weekNum] != null){
-        weeks[weekNum] += 1;
-      } else{
-        weeks[weekNum] = 1;
-      }
+    DateTime date = DateTime.parse(day.split(' ')[0]);
+    DateTime monday = findMonday(date); // Get the Monday of that week
+    String newDay = DateFormat('MMM dd').format(monday);
+
+    // Only process if the Monday is within the last 8 weeks
+    if (last8Mondays.contains(newDay)) {
+      weeks[newDay] = (weeks[newDay] ?? 0) + 1;
     }
   }
-  return weeks;
+
+  return Map.fromEntries(weeks.entries.toList().reversed);
+;
 }
 
-  int weekNumber(DateTime date) {
-    int dayOfYear = int.parse(DateFormat("D").format(date));
-    int weekNumber = ((dayOfYear - date.weekday + 10) / 7).floor();
-    return weekNumber;
-  }
+DateTime findMonday(DateTime date) {
+  int daysToSubtract = (date.weekday - DateTime.monday) % 7;
+  return date.subtract(Duration(days: daysToSubtract));
+}
+
