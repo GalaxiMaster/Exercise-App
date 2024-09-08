@@ -108,6 +108,17 @@ class _AddworkoutState extends State<Addworkout> {
                           ),
                         ],
                       ),
+                      TextFormField(
+                        // initialValue: 'Enter your notes here....',
+                        decoration: const InputDecoration(
+                          hintText: 'Enter your notes here...',
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                          )
+                        ),
+                      ),
                       Table(
                         border: TableBorder.all(),
                         columnWidths: const {

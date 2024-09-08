@@ -43,7 +43,7 @@ class _AddRoutineState extends State<AddRoutine> {
               ),
               decoration: const InputDecoration(
                 border: InputBorder.none, // Remove default border
-                hintText: 'Enter workout name',
+                hintText: 'Enter routine name',
                 hintStyle: TextStyle(
                   color: Colors.black45
                 )

@@ -18,7 +18,7 @@ class Profile extends StatelessWidget {
     return Scaffold(
       appBar: appBar(context),
       body: SizedBox(
-              width: 400,
+              width: double.infinity,
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -37,7 +37,7 @@ class Profile extends StatelessWidget {
                       } else if (index == 1) {
                         destination = const ExerciseList();
                       } else if (index == 2){
-                        destination = const MuscleData();
+                        destination = MuscleData();
                       } else {
                         destination = const Stats();
                       }
