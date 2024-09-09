@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
   Map jsonData= {};
+  debugPrint(path + "id");
   final dir = await getApplicationDocumentsDirectory();
   String filepath = '${dir.path}/$path.json';
   debugPrint(filepath);
@@ -44,7 +45,7 @@ void writeData(Map newData, {String path = 'output', bool append = true}) async 
   File file = File(filepath);
 
   await file.writeAsString(jsonString);
-  readData(path: 'routines/test');
+  readData(path: path );
   debugPrint('JSON data has been written to the file.');
 } 
 
