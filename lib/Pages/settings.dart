@@ -228,6 +228,7 @@ class _GoalOptionsState extends State<GoalOptions> {
   void updateSettings(String option, String value) async{
     Map data = await readData(path: 'settings');
     data[option] = value;
+    debugPrint(data.toString());
     writeData(data, path: 'settings', append: false);
   }
 
@@ -239,7 +240,7 @@ class _GoalOptionsState extends State<GoalOptions> {
     Map data = await readData(path: 'settings');
     if (data.isEmpty){
       Map settings = {
-        'Day Goal' : '5'
+        'Day Goal' : '1'
       };
       writeData(settings, path: 'settings',append: false);
     }
