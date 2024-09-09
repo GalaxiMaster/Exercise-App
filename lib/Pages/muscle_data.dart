@@ -1,22 +1,61 @@
+import 'package:exercise_app/Pages/data_charts.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/file_handling.dart';
 
-class MuscleData extends StatefulWidget {
+class MuscleData extends StatelessWidget {
   const MuscleData({super.key});
 
-  @override
-  _MuscleDataState createState() => _MuscleDataState();
-}
-
-class _MuscleDataState extends State<MuscleData> {
-  Future<Map>? futureData;
-
-  @override
-  void initState() {
-    super.initState();
-    futureData = getStuff(); // Fetch the data asynchronously
+  Future<List> getStuff(String target) async {
+    Map muscleData = {};
+    Map data = await readData();
+    for (var day in data.keys){
+      for (var exercise in data[day]['sets'].keys){
+        if (exerciseMuscles.containsKey(exercise)){
+          for (var set in data[day]['sets'][exercise]){
+            double selector = 0;
+            switch(target){
+              case 'Volume': selector = double.parse(set['weight'])*double.parse(set['reps']);
+              case 'Sets' : selector = 1;
+            }
+            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Primary']![muscle]/100);
+              } else{
+                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Primary']![muscle]/100);
+              }
+            }
+            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Secondary']![muscle]/100);
+              } else{
+                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Secondary']![muscle]/100);
+              }
+            }
+          }
+        } else{
+          debugPrint('Unknown exercise: $exercise');
+        }
+      }
+    }
+    debugPrint(muscleData.toString());
+    // Scale results to 100
+    double total = muscleData.values.fold(0.0, (p, c) => p + c);
+    debugPrint(total.toString());
+    Map scaledMuscleData = {};
+    for (String muscle in muscleData.keys){
+      scaledMuscleData[muscle] = ((muscleData[muscle] / total * 100.0) * 100).roundToDouble() / 100;
+    }
+    List<MapEntry> entries = muscleData.entries.toList();
+    entries.sort((a, b) => a.value.compareTo(b.value));
+    muscleData = Map.fromEntries(entries);
+    debugPrint(muscleData.toString());
+    entries = scaledMuscleData.entries.toList();
+    entries.sort((a, b) => a.value.compareTo(b.value));
+    scaledMuscleData = Map.fromEntries(entries);
+    debugPrint(scaledMuscleData.toString());
+    return [scaledMuscleData, muscleData].toList();
   }
 
   @override
@@ -27,15 +66,18 @@ class _MuscleDataState extends State<MuscleData> {
       appBar: AppBar(
         title: const Text('Workout'),
       ),
-      body: FutureBuilder<Map>(
-        future: futureData,
+      body: FutureBuilder<List>(
+        future: getStuff('Sets'),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
-            List<PieChartSectionData> sections = snapshot.data!.entries.map((entry) {
+            final Map<String, double> scaledMuscleData = Map<String, double>.from(snapshot.data![0]);
+            final Map<String, double> unscaledMuscleData = Map<String, double>.from(snapshot.data![1]);
+
+            List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
               return PieChartSectionData(
                 color: getColor(entry.key),
                 value: entry.value,
@@ -52,12 +94,22 @@ class _MuscleDataState extends State<MuscleData> {
                   SizedBox(
                     width: double.infinity,
                     height: 270,
-                    child: PieChart(
-                      PieChartData(
-                        sections: sections,
-                        centerSpaceRadius: 10,
-                        sectionsSpace: 2,
-                        startDegreeOffset: -87, 
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DataCharts(exerciseData: [scaledMuscleData, unscaledMuscleData]),
+                          ),
+                        );
+                      },
+                      child: PieChart(
+                        PieChartData(
+                          sections: sections,
+                          centerSpaceRadius: 10,
+                          sectionsSpace: 2,
+                          startDegreeOffset: -87,
+                        ),
                       ),
                     ),
                   ),
@@ -79,8 +131,8 @@ class _MuscleDataState extends State<MuscleData> {
                       ),
                     ),
                   ),
-                  box('', 'Label', 'lorum ipson flkjsd lkfjdslf jdslkjfk ldjlfdkls fjkljslf jdskf lksdjkf jkldsjfkljsd klfjlkd fjlkdjf kdjfkl dl')
-                ], 
+                  box('', 'Label', 'This could be a description of the unscaled data'),
+                ],
               ),
             );
           } else {
@@ -92,7 +144,6 @@ class _MuscleDataState extends State<MuscleData> {
   }
 
   Color getColor(String key) {
-    // Define colors for different muscles
     var colors = {
       'Pectorals': Colors.red,
       'Triceps': Colors.orange,
@@ -113,94 +164,53 @@ class _MuscleDataState extends State<MuscleData> {
       'Obliques': Colors.blueGrey,
     };
 
-    return colors[key] ?? Colors.grey; // Default color if muscle not found
+    return colors[key] ?? Colors.grey;
   }
 
-  Future<Map> getStuff() async {
-    Map muscleData = {};
-    Map data = await readData();
-    for (var day in data.keys){
-      for (var exercise in data[day]['sets'].keys){
-        if (exerciseMuscles.containsKey(exercise)){
-          for (var set in data[day]['sets'][exercise]){
-            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
-              if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += double.parse(set['weight'])*double.parse(set['reps'])*exerciseMuscles[exercise]!['Primary']![muscle];
-              } else{
-                muscleData[muscle] = double.parse(set['weight'])*double.parse(set['reps'])*exerciseMuscles[exercise]!['Primary']![muscle];
-              }
-            }
-            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
-              if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += double.parse(set['weight'])*double.parse(set['reps'])*exerciseMuscles[exercise]!['Secondary']![muscle];
-              } else{
-                muscleData[muscle] = double.parse(set['weight'])*double.parse(set['reps'])*exerciseMuscles[exercise]!['Secondary']![muscle];
-              }
-            }
-          }
-        } else{
-          debugPrint('Unknown exercise: ' + exercise);
-        }
-      }
-    }
-    debugPrint(muscleData.toString());
-    // Scale results to 100
-    double total = muscleData.values.fold(0.0, (p, c) => p + c);
-    debugPrint(total.toString());
-    for (String muscle in muscleData.keys){
-      muscleData[muscle] = ((muscleData[muscle] / total * 100.0) * 100).roundToDouble() / 100;
-    }
-    List<MapEntry> entries = muscleData.entries.toList();
-    entries.sort((a, b) => a.value.compareTo(b.value));
-    muscleData = Map.fromEntries(entries);
-    debugPrint(muscleData.toString());
-
-    return muscleData;
-  }
-
-Widget box(String icon, String label, String description) {
-  return Container(
-    width: double.infinity,
-    height: 75,
-    decoration: const BoxDecoration(color: Colors.grey),
-    child: Row(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(12.0),
-          child: Icon(Icons.pie_chart),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(fontWeight: FontWeight.bold), 
-                ),
-                Text(
-                  description,
-                  softWrap: true,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+  Widget box(String icon, String label, String description) {
+    return Container(
+      width: double.infinity,
+      height: 75,
+      decoration: const BoxDecoration(color: Colors.grey),
+      child: Row(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Icon(Icons.pie_chart),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    description,
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        // Instead of Spacer, provide fixed padding for the arrow
-        const Padding(
-          padding: EdgeInsets.all(12.0),
-          child: Icon(Icons.arrow_forward_ios),
-        ),
-      ],
-    ),
-  );
+          const Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Icon(Icons.arrow_forward_ios),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 
-}
+
+
 
 
 

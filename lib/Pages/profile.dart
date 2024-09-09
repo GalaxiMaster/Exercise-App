@@ -129,6 +129,45 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+  AppBar appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: const Text(
+        'Profile',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+          fontWeight: FontWeight.bold
+        ),
+      ),
+      centerTitle: true,
+      actions: [
+        Center(
+          child: MyIconButton(
+            filepath: 'Assets/settings.svg',
+            width: 37,
+            height: 37,
+            borderRadius: 10,
+            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
+            color: const Color.fromARGB(255, 245, 241, 241),
+            iconHeight: 20,
+            iconWidth: 20,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Settings()),
+              ).then((value) {
+                setState(() { //TODO could possibly make it only reload if the settings is different
+                  _loadData();
+                });
+              });
+            },
+
+            ),
+        )
+      ],
+    );
+  }
 }
 
 
@@ -261,45 +300,6 @@ class DataBarChart extends StatelessWidget {
     );
   }
 }
-
-
-
-AppBar appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text(
-        'Profile',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        Center(
-          child: MyIconButton(
-            filepath: 'Assets/settings.svg',
-            width: 37,
-            height: 37,
-            borderRadius: 10,
-            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-            color: const Color.fromARGB(255, 245, 241, 241),
-            iconHeight: 20,
-            iconWidth: 20,
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => 
-                  const Settings()
-                )
-              );
-            },
-            ),
-        )
-      ],
-    );
-  }
 
 Future<Map> getData() async {
   Map data = await readData();
