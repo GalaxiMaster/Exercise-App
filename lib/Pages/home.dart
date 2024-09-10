@@ -204,15 +204,15 @@ class _HomePageState extends State<HomePage> {
                       switch(value){
                         case 'Edit':
                           debugPrint('edit');
-                                          Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => 
-                    AddRoutine(onRoutineSaved: () {
-                      Navigator.pop(context); // Go back to the previous page
-                      _loadRoutines(); // Reload routines when we come back
-                    }, sets: data,o_name: label,)
-                  ),
-                );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => 
+                              AddRoutine(onRoutineSaved: () {
+                                Navigator.pop(context); // Go back to the previous page
+                                _loadRoutines(); // Reload routines when we come back
+                              }, sets: data,o_name: label,)
+                            ),
+                          );
                         case 'Share':
                           debugPrint('share');
                         case 'Delete':

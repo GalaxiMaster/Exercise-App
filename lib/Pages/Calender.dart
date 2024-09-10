@@ -244,6 +244,29 @@ build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Workout for ${date.day}/${date.month}/${date.year}'),
+              actions: [
+        Center(
+          child: PopupMenuButton<String>(
+            onSelected: (value) {
+              switch(value){
+                case 'Edit':
+                  debugPrint('edit');
+                case 'Share':
+                case 'Delete':
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                const PopupMenuItem(value: 'Share', child: Text('Share')),                        
+                const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+              ];
+            },
+            elevation: 2, // Adjust the shadow depth here (default is 8.0)
+            icon: Icon(Icons.more_vert),
+          ),
+        )
+      ],
       ),
       body: SingleChildScrollView(
         child: Column(

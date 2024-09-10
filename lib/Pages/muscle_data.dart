@@ -99,7 +99,7 @@ class MuscleData extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DataCharts(exerciseData: [scaledMuscleData, unscaledMuscleData]),
+                            builder: (context) => DataCharts(scaledData: scaledMuscleData, unscaledData: unscaledMuscleData),
                           ),
                         );
                       },
