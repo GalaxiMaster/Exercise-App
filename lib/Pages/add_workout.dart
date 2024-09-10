@@ -18,6 +18,7 @@ class Addworkout extends StatefulWidget {
 class _AddworkoutState extends State<Addworkout> {
   var selectedExercises = [];
   var preCsvData = {};
+  Map records = {};
   Map sets = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   @override
@@ -26,19 +27,21 @@ class _AddworkoutState extends State<Addworkout> {
     if(widget.sets.isEmpty){
       getPreviousWorkout().then((data) {
         setState(() {
-          sets = data;
-        });    
+          sets = data['sets'] ?? {};
+          if (sets.isNotEmpty){
+            startTime = data['stats']['startTime'];
+          }
+        });
         debugPrint('tessst sets ${sets.toString()}');
       });
     }else {
       sets = widget.sets['sets'];
     }
-    loadDataFromCsv(); // Load CSV data once during initialization    
+    preLoad();
   }
-
-  Future<void> loadDataFromCsv() async {
+  void preLoad() async{
+    records = await readData(path: 'records');
     preCsvData = await readData();
-    debugPrint(preCsvData.toString());
     setState(() {}); // Update UI after loading data
   }
 
@@ -50,10 +53,7 @@ class _AddworkoutState extends State<Addworkout> {
   }
 
   void updateExercises() async{
-    debugPrint('writing');
-    debugPrint('sets : ${sets.toString()}');
-    debugPrint("${sets}kljdfkljdljgkljdsl");
-    writeData(sets, path: 'current', append: false);
+    writeData({'stats': {'startTime': startTime}, 'sets': sets}, path: 'current', append: false);
   }
 
   @override
@@ -187,6 +187,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   onChanged: (value) {
                                     value = (int.tryParse(value) ?? double.tryParse(value)).toString();
                                     sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                                    isRecord(exercise, [sets[exercise]![i]['weight'], sets[exercise]![i]['reps']]);
                                     updateExercises();
                                   },
                                 ),
@@ -211,6 +212,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   onChanged: (value) {
                                     value = (int.tryParse(value) ?? double.tryParse(value)).toString();
                                     sets[exercise]![i]['reps'] = value != 'null' ? value : '';  // Safely convert String to int;
+                                    isRecord(exercise, [sets[exercise]![i]['weight'], sets[exercise]![i]['reps']]);
                                     updateExercises();
                                   },
                                 ),
@@ -379,7 +381,7 @@ class _AddworkoutState extends State<Addworkout> {
   }
 
   bool checkNulls(var sets){ // could even put this in the save function maybe
-    for (String exercise in sets.keys){
+    for (String exercise in sets?.keys){
       for (var set in sets[exercise]!) {
         debugPrint(set.toString());
         if (set['reps'] == ''){
@@ -390,5 +392,21 @@ class _AddworkoutState extends State<Addworkout> {
       }
     }
     return true;
+  }
+  bool isRecord(String exercise, List candidate) { // TODO rename candidate
+    if (records.containsKey(exercise)){
+      if (candidate[0] > records[exercise]['weight'] || candidate[0] == records[exercise]['weight'] && candidate[1] > records[exercise]['reps']){
+        records[exercise]['weight'] = candidate[0];
+        records[exercise]['reps'] = candidate[1];
+        writeData(records, append: false, path: 'records');
+        return true;
+      }
+    } else{
+      records[exercise]['weight'] = candidate[0];
+      records[exercise]['reps'] = candidate[1];
+      writeData(records, append: false, path: 'records');
+      return true;
+    }
+    return false;
   }
 }

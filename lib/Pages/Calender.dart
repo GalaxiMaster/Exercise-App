@@ -78,13 +78,18 @@ Widget build(BuildContext context) {
                     date.month == highlightedDay.month &&
                     date.day == highlightedDay.day)) 
                   {
-
+                  Map daysData = {};
+                  for (var day in exerciseData.keys){
+                    if (day.split(' ')[0] == DateFormat('yyy-MM-dd').format(date)){
+                      daysData.addAll({day : exerciseData[day]});
+                    }
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => DayScreen(
                           date: date,
-                          day: combineDays(exerciseData)[DateFormat('yyyy-MM-dd').format(date)]['sets'],
+                          day: daysData,
                     ),
                   )
                   );
@@ -244,168 +249,185 @@ build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Workout for ${date.day}/${date.month}/${date.year}'),
-              actions: [
-        Center(
-          child: PopupMenuButton<String>(
-            onSelected: (value) {
-              switch(value){
-                case 'Edit':
-                  debugPrint('edit');
-                case 'Share':
-                case 'Delete':
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem(value: 'Edit', child: Text('Edit')),
-                const PopupMenuItem(value: 'Share', child: Text('Share')),                        
-                const PopupMenuItem(value: 'Delete', child: Text('Delete')),
-              ];
-            },
-            elevation: 2, // Adjust the shadow depth here (default is 8.0)
-            icon: Icon(Icons.more_vert),
-          ),
-        )
-      ],
       ),
-      body: SingleChildScrollView(
+      body: Column(
+        children: [
+          Flexible(
+            child: ListView.builder(
+              itemCount: day.keys.length,
+              itemBuilder: (context, index){
+                return dayBox(day[day.keys.toList()[index]]);
+              }
+            ),
+          )
+        ],
+      )
+    );
+  }
+  Widget dayBox(Map day){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(10)
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 10),
+                  child: Text(
+                    DateFormat('EEEE, MMM d, yyyy').format(DateTime.parse(day['stats']['startTime'])),
+                    style: const TextStyle(
+                      fontSize: 18
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: PopupMenuButton<String>(
+                    onSelected: (value) {
+                      switch(value){
+                        case 'Edit':
+                          debugPrint('edit');
+                        case 'Share':
+                          debugPrint('share');
+                        case 'Delete':
+                          debugPrint('delete');
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                        const PopupMenuItem(value: 'Share', child: Text('Share')),                        
+                        const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                      ];
+                    },
+                    elevation: 2, // Adjust the shadow depth here (default is 8.0)
+                    icon: const Icon(Icons.more_vert),
+                  ),
+                )
+              ],
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
-                itemCount: day.keys.length,
-                itemBuilder: (context, index) {
-                  String exercise = day.keys.toList()[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
-                    children: [
-                      Text(exercise),
-                      Table(
-                        border: TableBorder.all(),
-                        columnWidths: const {
-                          0: FlexColumnWidth(1),
-                          1: FlexColumnWidth(2),
-                          2: FlexColumnWidth(2),
-                        },
-                        children: [
-                          const TableRow(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Set'),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Weight'),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Reps'),
-                              ),
-                            ],
-                          ),
-                          for (int i = 0; i < (day[exercise]?.length ?? 0); i++)
-                          TableRow(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // _showSetTypeMenu(exercise, i);
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(vertical: 16), // Adjust vertical padding to increase hitbox
-                                    child: Text(
-                                      day[exercise]![i]['type'] == 'Warmup'
-                                          ? 'W'
-                                          : day[exercise]![i]['type'] == 'Failure'
-                                              ? 'F'
-                                              : '${_getNormalSetNumber(day, exercise, i)}', // Display correct set number
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  initialValue: day[exercise]![i]['weight'].toString(),
-                                  keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle( // Add this property
-                                    fontSize: 20,
-                                  ),
-                                  decoration: const InputDecoration(
-                                    hintText: '',//getPrevious(exercise, i+1, 'Weight'),
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 20,
-                                    )
-                                    
-                                  ),
-                                  onChanged: (value) {
-                                    // sets[exercise]![i]['weight'] = int.tryParse(value) ?? '';
-                                    // updateExercises();
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  initialValue: day[exercise]![i]['reps'].toString(),
-                                  keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle( // Add this property
-                                    fontSize: 20,
-                                  ),
-                                  decoration: const InputDecoration(
-                                    hintText: '',//getPrevious(exercise, i+1, 'Reps')
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 20,
-                                    )
-                                  ),
-                                  onChanged: (value) {
-                                    // sets[exercise]![i]['reps'] = int.tryParse(value) ?? '';  // Safely convert String to int;
-                                    // updateExercises();
-                                  },
-                                ),
-                              ),
-                            ],
-                          )
-
-                        ],
-                      ),
-                      // Center(
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       setState(() {
-                      //         sets[exercise]!.add(
-                      //           {'type': 'Normal', 'weight': 0, 'reps': 0},
-                      //         );
-                      //       });
-                      //     },
-                      //     child: const Text('Add Set'),
-                      //   ),
-                      // )
-                    ],
-                  );
-                },
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                '${day['stats']['startTime'].split(' ')[1]}-${day['stats']['endTime'].split(' ')[1]}',
+                style: const TextStyle(
+                  fontSize: 15
+                ),
               ),
             ),
+            WorkoutStats(workout: day,),
+            const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10, top: 5),
+                  child: Text('Exercises: '),
+                ),
+                Spacer(),
+                Padding(
+                  padding: EdgeInsets.only(right: 10, top: 5),
+                  child: Text('Best set: '),
+                ),
+              ],
+            ),
+            for (int i = 0; i < (day['sets']?.length ?? 0); i++)
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
+                  child: Text(
+                    day['sets'].keys.toList()[i]
+                  ),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
+                  child: Text(getBestSet(day['sets'][day['sets'].keys.toList()[i]])),
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
     );
   }
+
 }
 
+class WorkoutStats extends StatelessWidget {
+  final Map workout;
+  const WorkoutStats({
+    super.key,
+    required this.workout,
+  });
+  List workoutData(){
+    double volume = 0;
+    Duration difference = DateTime.parse(workout['stats']['endTime']).difference(DateTime.parse(workout['stats']['startTime'])); // Calculate the difference
+    String time = '${difference.inHours != 0 ? '${difference.inHours}h' : ''} ${difference.inMinutes.remainder(60)}m';
+    for (var exercise in workout['sets'].keys){
+      for (var set in workout['sets'][exercise]){
+        volume += double.parse(set['weight']) * double.parse(set['reps']);
+      }
+    }
+    String s_volume = '';
+    debugPrint(volume.toString());
+    if (volume % 1 == 0) {
+      s_volume = volume.toStringAsFixed(0);
+    } else {
+      s_volume = volume.toStringAsFixed(2);
+    }
+    return [s_volume, time];
+  }
+  @override
+  Widget build(BuildContext context) {
+    List data = workoutData();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(data[1].toString()),
+          ),
+          const Icon(Icons.access_time),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('${data[0]}kg'),
+          ),
+          const Icon(Icons.fitness_center),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Text('1 PRs'),
+          ),
+          const Icon(Icons.emoji_events),
+        ]
+      ),
+    );
+  }
+}
+
+String getBestSet(List exercise){
+  List bestSet = [];
+  for (var set in exercise){
+    double weight = double.parse(set['weight']);
+    double reps = double.parse(set['reps']);
+    if (bestSet.isEmpty){
+      bestSet = [weight, reps];
+    }else if (weight > bestSet[0] ||  weight > bestSet[0] && reps > bestSet[1]){
+      bestSet = [weight, reps];
+    }
+  }    
+  return '${bestSet[0]}kg x ${bestSet[1]}';
+}
 int _getNormalSetNumber(var day, String exercise, int currentIndex) {
     int normalSetCount = 0;
     
@@ -451,3 +473,137 @@ Map combineDays(Map data) {
   return combinedData;
 }
 
+//SingleChildScrollView(
+      //   child: Column(
+      //     children: [
+      //       Padding(
+      //         padding: const EdgeInsets.symmetric(horizontal: 16),
+      //         child: ListView.builder(
+      //           shrinkWrap: true,
+      //           physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
+      //           itemCount: day.keys.length,
+      //           itemBuilder: (context, index) {
+      //             String exercise = day.keys.toList()[index];
+      //             return Column(
+      //               crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
+      //               children: [
+      //                 Text(exercise),
+      //                 Table(
+      //                   border: TableBorder.all(),
+      //                   columnWidths: const {
+      //                     0: FlexColumnWidth(1),
+      //                     1: FlexColumnWidth(2),
+      //                     2: FlexColumnWidth(2),
+      //                   },
+      //                   children: [
+      //                     const TableRow(
+      //                       children: [
+      //                         Padding(
+      //                           padding: EdgeInsets.all(8.0),
+      //                           child: Text('Set'),
+      //                         ),
+      //                         Padding(
+      //                           padding: EdgeInsets.all(8.0),
+      //                           child: Text('Weight'),
+      //                         ),
+      //                         Padding(
+      //                           padding: EdgeInsets.all(8.0),
+      //                           child: Text('Reps'),
+      //                         ),
+      //                       ],
+      //                     ),
+      //                     for (int i = 0; i < (day[exercise]?.length ?? 0); i++)
+      //                     TableRow(
+      //                       children: [
+      //                         Padding(
+      //                           padding: const EdgeInsets.all(8.0),
+      //                           child: GestureDetector(
+      //                             onTap: () {
+      //                               // _showSetTypeMenu(exercise, i);
+      //                             },
+      //                             child: Container(
+      //                               alignment: Alignment.center,
+      //                               padding: const EdgeInsets.symmetric(vertical: 16), // Adjust vertical padding to increase hitbox
+      //                               child: Text(
+      //                                 day[exercise]![i]['type'] == 'Warmup'
+      //                                     ? 'W'
+      //                                     : day[exercise]![i]['type'] == 'Failure'
+      //                                         ? 'F'
+      //                                         : '${_getNormalSetNumber(day, exercise, i)}', // Display correct set number
+      //                                 textAlign: TextAlign.center,
+      //                               ),
+      //                             ),
+      //                           ),
+      //                         ),
+      //                         Padding(
+      //                           padding: const EdgeInsets.all(8.0),
+      //                           child: TextFormField(
+      //                             initialValue: day[exercise]![i]['weight'].toString(),
+      //                             keyboardType: TextInputType.number,
+      //                             textAlign: TextAlign.center,
+      //                             style: const TextStyle( // Add this property
+      //                               fontSize: 20,
+      //                             ),
+      //                             decoration: const InputDecoration(
+      //                               hintText: '',//getPrevious(exercise, i+1, 'Weight'),
+      //                               border: InputBorder.none,
+      //                               hintStyle: TextStyle(
+      //                                 color: Colors.grey,
+      //                                 fontSize: 20,
+      //                               )
+                                    
+      //                             ),
+      //                             onChanged: (value) {
+      //                               // sets[exercise]![i]['weight'] = int.tryParse(value) ?? '';
+      //                               // updateExercises();
+      //                             },
+      //                           ),
+      //                         ),
+      //                         Padding(
+      //                           padding: const EdgeInsets.all(8.0),
+      //                           child: TextFormField(
+      //                             initialValue: day[exercise]![i]['reps'].toString(),
+      //                             keyboardType: TextInputType.number,
+      //                             textAlign: TextAlign.center,
+      //                             style: const TextStyle( // Add this property
+      //                               fontSize: 20,
+      //                             ),
+      //                             decoration: const InputDecoration(
+      //                               hintText: '',//getPrevious(exercise, i+1, 'Reps')
+      //                               border: InputBorder.none,
+      //                               hintStyle: TextStyle(
+      //                                 color: Colors.grey,
+      //                                 fontSize: 20,
+      //                               )
+      //                             ),
+      //                             onChanged: (value) {
+      //                               // sets[exercise]![i]['reps'] = int.tryParse(value) ?? '';  // Safely convert String to int;
+      //                               // updateExercises();
+      //                             },
+      //                           ),
+      //                         ),
+      //                       ],
+      //                     )
+
+      //                   ],
+      //                 ),
+      //                 // Center(
+      //                 //   child: ElevatedButton(
+      //                 //     onPressed: () {
+      //                 //       setState(() {
+      //                 //         sets[exercise]!.add(
+      //                 //           {'type': 'Normal', 'weight': 0, 'reps': 0},
+      //                 //         );
+      //                 //       });
+      //                 //     },
+      //                 //     child: const Text('Add Set'),
+      //                 //   ),
+      //                 // )
+      //               ],
+      //             );
+      //           },
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
