@@ -251,8 +251,7 @@ class _WorkoutListState extends State<WorkoutList> {
   @override
   Widget build(BuildContext context) {
     var filteredExercises = exercises
-        .where((exercise) =>
-            exercise.toLowerCase().contains(query.toLowerCase()))
+        .where((exercise) => containsAllCharacters(exercise, query))
         .toList();
 
     return Scaffold(
@@ -330,5 +329,20 @@ class SearchBar extends StatelessWidget {
 String getMuscles(String exercise){
   var muscle = exerciseMuscles[exercise]?['Primary']?.keys.toList()[0];
   return muscle ?? 'No muscle';
+}
 
+bool containsAllCharacters(String exercise, String query) {
+  int queryIndex = 0;
+  if (query.isEmpty){
+    return true;
+  }
+  for (int i = 0; i < exercise.length; i++) {
+    if (exercise[i].toLowerCase() == query[queryIndex].toLowerCase()) {
+      queryIndex++;
+    }
+    if (queryIndex == query.length) {
+      return true;
+    }
+  }
+  return false;
 }
