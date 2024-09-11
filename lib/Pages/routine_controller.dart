@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class AddRoutine extends StatefulWidget {
   final Function() onRoutineSaved;
+  // ignore: non_constant_identifier_names
   final String o_name;
   late Map sets;
 
+  // ignore: non_constant_identifier_names
   AddRoutine({super.key, required this.onRoutineSaved, sets, o_name}) 
     : sets = sets ?? {}, 
       o_name = o_name ?? '';
   @override
+  // ignore: library_private_types_in_public_api
   _AddRoutineState createState() => _AddRoutineState();
   }
 

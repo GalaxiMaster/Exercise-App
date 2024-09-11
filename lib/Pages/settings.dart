@@ -30,7 +30,7 @@
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return GoalOptions();
+                    return const GoalOptions();
                   },
                 );
               },
@@ -39,7 +39,7 @@
             _buildSettingsBox(
               icon: Icons.refresh,
               label: 'Reset data',
-              function: (){resetData(true, false);},
+              function: (){resetData(true, false, true);},
             ),
           ],
         ),
@@ -121,6 +121,7 @@ class GoalOptions extends StatefulWidget {
   const GoalOptions({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _GoalOptionsState createState() => _GoalOptionsState();
 }
 

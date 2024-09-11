@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:exercise_app/Pages/RoutineController.dart';
+import 'package:exercise_app/Pages/routine_controller.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 

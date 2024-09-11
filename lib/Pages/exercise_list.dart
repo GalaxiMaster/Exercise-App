@@ -1,4 +1,4 @@
-import 'package:exercise_app/Pages/ExerciseScreen.dart';
+import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

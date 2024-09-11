@@ -9,6 +9,7 @@ class ExerciseScreen extends StatefulWidget {
   const ExerciseScreen({super.key, required this.exercise});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ExerciseScreenState createState() => _ExerciseScreenState();
 }
 

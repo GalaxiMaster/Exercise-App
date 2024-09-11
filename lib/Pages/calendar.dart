@@ -34,6 +34,7 @@ class CalendarWidget extends StatefulWidget {
   const CalendarWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }
 
@@ -47,13 +48,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
   Future<void> _loadHighlightedDays() async {
     var data = await readData();
-    
-    if (mounted) { // Check if the widget is still mounted
-      setState(() {
-        exerciseData = data;
-        highlightedDays = data.keys.map((x) => DateTime.parse(x.split(' ')[0])).toList();
-      });
-    }
+    setState(() {
+      exerciseData = data;
+      highlightedDays = data.keys.map((x) => DateTime.parse(x.split(' ')[0])).toList();
+    });
   }
 @override
 Widget build(BuildContext context) {
@@ -89,7 +87,8 @@ Widget build(BuildContext context) {
                     MaterialPageRoute(
                       builder: (context) => DayScreen(
                           date: date,
-                          day: daysData,
+                          dayData: daysData,
+                          reload: _loadHighlightedDays,
                     ),
                   )
                   );
@@ -129,6 +128,7 @@ class StreakRestRow extends StatefulWidget {
   const StreakRestRow({super.key, required this.exerciseData});
 
   @override
+  // ignore: library_private_types_in_public_api
   _StreakRestRowState createState() => _StreakRestRowState();
 }
 
@@ -238,14 +238,22 @@ class _StreakRestRowState extends State<StreakRestRow> {
 }
 
 
-class DayScreen extends StatelessWidget {
+class DayScreen extends StatefulWidget {
   final DateTime date;
-  final Map day;
-  const DayScreen({super.key, required this.date, required this.day});
-
+  final Map dayData;
+  final Function reload;
+  const DayScreen({super.key, required this.date, required this.dayData, required this.reload});
   @override
-build(BuildContext context) {
-  debugPrint(day.toString());
+  // ignore: library_private_types_in_public_api
+  _DayScreenState createState() => _DayScreenState();
+}
+
+class _DayScreenState extends State<DayScreen> {
+  @override
+  build(BuildContext context) {
+    Map dayData = widget.dayData;
+    DateTime date = widget.date;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Workout for ${date.day}/${date.month}/${date.year}'),
@@ -254,9 +262,9 @@ build(BuildContext context) {
         children: [
           Flexible(
             child: ListView.builder(
-              itemCount: day.keys.length,
+              itemCount: dayData.keys.length,
               itemBuilder: (context, index){
-                return dayBox(day[day.keys.toList()[index]]);
+                return dayBox(dayData[dayData.keys.toList()[index]]);
               }
             ),
           )
@@ -291,14 +299,26 @@ build(BuildContext context) {
                   height: 40,
                   width: 40,
                   child: PopupMenuButton<String>(
-                    onSelected: (value) {
+                    onSelected: (value) async{
                       switch(value){
                         case 'Edit':
                           debugPrint('edit');
+                          // push context of add exercise screen
                         case 'Share':
                           debugPrint('share');
+                          // share day
                         case 'Delete':
                           debugPrint('delete');
+                          String keyToRemove = '';
+                          widget.dayData.forEach((key, value) {
+                            if (value == day) {
+                              keyToRemove = key;
+                            }
+                          });                                    
+                          await deleteDay(day);
+                          widget.dayData.remove(keyToRemove);
+                          widget.reload();
+                          setState(() {});// TODO maybe include the index somewhere later                       
                       }
                     },
                     itemBuilder: (BuildContext context) {
@@ -323,7 +343,7 @@ build(BuildContext context) {
                 ),
               ),
             ),
-            WorkoutStats(workout: day,),
+            WorkoutStats(workout: day),
             const Row(
               children: [
                 Padding(
@@ -359,7 +379,19 @@ build(BuildContext context) {
       ),
     );
   }
-
+  Future<bool> deleteDay(Map day) async{
+    String dayKey = '';
+    widget.dayData.forEach((key, value) {
+      if (value == day) {
+        dayKey = key;
+      }
+    });
+    if (dayKey == ''){return false;}
+    Map data = await readData();
+    data.remove(dayKey);
+    writeData(data, append: false);
+    return true;
+  }
 }
 
 class WorkoutStats extends StatelessWidget {
@@ -372,19 +404,23 @@ class WorkoutStats extends StatelessWidget {
     double volume = 0;
     Duration difference = DateTime.parse(workout['stats']['endTime']).difference(DateTime.parse(workout['stats']['startTime'])); // Calculate the difference
     String time = '${difference.inHours != 0 ? '${difference.inHours}h' : ''} ${difference.inMinutes.remainder(60)}m';
+    int prs = 0;
     for (var exercise in workout['sets'].keys){
       for (var set in workout['sets'][exercise]){
+        if (set['PR'] == 'yes'){
+          prs++;
+        }
         volume += double.parse(set['weight']) * double.parse(set['reps']);
       }
     }
-    String s_volume = '';
+    String sVolume = '';
     debugPrint(volume.toString());
     if (volume % 1 == 0) {
-      s_volume = volume.toStringAsFixed(0);
+      sVolume = volume.toStringAsFixed(0);
     } else {
-      s_volume = volume.toStringAsFixed(2);
+      sVolume = volume.toStringAsFixed(2);
     }
-    return [s_volume, time];
+    return [sVolume, time, prs];
   }
   @override
   Widget build(BuildContext context) {
@@ -404,9 +440,9 @@ class WorkoutStats extends StatelessWidget {
             child: Text('${data[0]}kg'),
           ),
           const Icon(Icons.fitness_center),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Text('1 PRs'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: data[2] == 1 ? const Text('1 PR') : Text('${data[2]} PRs') ,
           ),
           const Icon(Icons.emoji_events),
         ]
@@ -428,17 +464,6 @@ String getBestSet(List exercise){
   }    
   return '${bestSet[0]}kg x ${bestSet[1]}';
 }
-int _getNormalSetNumber(var day, String exercise, int currentIndex) {
-    int normalSetCount = 0;
-    
-    for (int j = 0; j <= currentIndex; j++) {
-      if (day[exercise]![j]['type'] != 'Warmup') {
-        normalSetCount++;
-      }
-    }     
-
-    return normalSetCount;
-  }
 
 Map combineDays(Map data) {
   Map combinedData = {};

@@ -91,6 +91,7 @@ class _DataChartsState extends State<DataCharts> {
     );
   }
   
+  // ignore: non_constant_identifier_names
   Widget SelectorBox(String text){
     return GestureDetector(
       onTap: () async{

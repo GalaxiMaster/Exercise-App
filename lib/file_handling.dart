@@ -5,12 +5,13 @@ import 'package:path_provider/path_provider.dart';
 
 Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
   Map jsonData= {};
-  debugPrint(path + "id");
+  debugPrint("${path}id");
   final dir = await getApplicationDocumentsDirectory();
   String filepath = '${dir.path}/$path.json';
   debugPrint(filepath);
   var file = File(filepath);
-
+  var exists = await file.exists();
+  debugPrint(exists.toString());
   // Read the file as a string
   if (await file.exists()) {
     String contents = await file.readAsString();
@@ -25,7 +26,7 @@ Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
 void writeData(Map newData, {String path = 'output', bool append = true}) async {  
   final dir = await getApplicationDocumentsDirectory();
   if (append){
-    Map data = await readData();
+    Map data = await readData(path: path);
     newData.addAll(data);
   }
 
@@ -49,7 +50,7 @@ void writeData(Map newData, {String path = 'output', bool append = true}) async 
   debugPrint('JSON data has been written to the file.');
 } 
 
-Future<void> resetData(bool output, bool current) async {
+Future<void> resetData(bool output, bool current, bool records) async {
   if (output){
     try {
       final dir = await getApplicationDocumentsDirectory();
@@ -65,6 +66,17 @@ Future<void> resetData(bool output, bool current) async {
     try {
       final dir = await getApplicationDocumentsDirectory();
       final path = '${dir.path}/current.json';
+      final file = File(path);
+      await file.writeAsString('');
+      debugPrint('json reset at: $path');
+    } catch (e) {
+      debugPrint('Error saving json file: $e');
+    }
+  }
+  if (records){
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final path = '${dir.path}/records.json';
       final file = File(path);
       await file.writeAsString('');
       debugPrint('json reset at: $path');

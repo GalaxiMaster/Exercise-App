@@ -1,4 +1,4 @@
-import 'package:exercise_app/Pages/Calender.dart';
+import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/exercise_list.dart';
 import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/Pages/settings.dart';

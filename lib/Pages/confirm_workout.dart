@@ -120,20 +120,20 @@ class ConfirmWorkout extends StatelessWidget {
       'sets' : exerciseList
       }
     };
-    writeData(await getRecords(exerciseList), path: 'records');
+    writeData(await getRecords(exerciseList), path: 'records', append: false);
     writeData(data, append: true);
-    resetData(false, true);
+    resetData(false, true, false);
   }
   Future<Map> getRecords(Map exercises) async{
     Map records = await readData(path: 'records');
     for (var exercise in exercises.keys){
       for (var set in exercises[exercise]){
-        if (set['PR'] != null){
+        if (set['PR'] == 'yes'){       
           if (records[exercise] == null){
             records[exercise] = set;
           }
-          if (set['weight'] > records[exercise]['weight']){
-
+          else if (double.parse(set['weight']) > double.parse(records[exercise]['weight']) || (double.parse(set['weight']) == double.parse(records[exercise]['weight']) && double.parse(set['reps']) > double.parse(records[exercise]['reps']))){
+            records[exercise] = set;
           }
         }
       }

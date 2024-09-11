@@ -174,7 +174,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle( // Add this property
                                     fontSize: 20,
-                                    color: sets[exercise][i]['PR'] == null? Colors.black : Colors.blue,
+                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null? Colors.black : Colors.blue,
                                   ),
                                   decoration: InputDecoration(
                                     hintText: getPrevious(exercise, i+1, 'Weight'),
@@ -201,7 +201,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle( // Add this property
                                     fontSize: 20,
-                                    color: sets[exercise][i]['PR'] == null? Colors.black : Colors.blue,
+                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null? Colors.black : Colors.blue,
                                   ),
                                   decoration: InputDecoration(
                                     hintText: getPrevious(exercise, i+1, 'Reps'),
@@ -395,15 +395,23 @@ class _AddworkoutState extends State<Addworkout> {
     }
     return true;
   }
+
   bool isRecord(String exercise, int index) {
-    if (sets[exercise][index]['reps'] == '' || sets[exercise][index]['weight'] == ''){
+    if (sets[exercise][index]['reps'] == '' || sets[exercise][index]['weight'] == ''){ // TODO check if the heaviest set is pr on change
+      if (sets[exercise][index]['PR'] == 'yes'){
+        setState(() {
+          sets[exercise][index]['PR'] = 'no';
+        });
+      }
       return false;
     }
     List best = [];
     int topindex = -1;
     for (int i = 0; i < sets[exercise].length; i++) {
       var record = sets[exercise][i];
-      if (best.isEmpty){
+      if (record['reps'] == '' || record['weight'] == '') {
+      }
+      else if (best.isEmpty){
         best = [double.parse(record['weight']), double.parse(record['reps'])];
         topindex = i;
       }
@@ -411,24 +419,50 @@ class _AddworkoutState extends State<Addworkout> {
         best = [double.parse(record['weight']), double.parse(record['reps'])];
         topindex = i;
       }
+      else {
+        if (sets[exercise][index]['PR'] == 'yes'){
+          setState(() {
+            sets[exercise][index]['PR'] = 'no';
+          });
+        }
+      }
     }
-    if (index != topindex || topindex == -1){
+    if (index == topindex){
+      printRecords();
+      List candidate = [sets[exercise]![index]['weight'], sets[exercise]![index]['reps']]; // TODO move the pr to the most recent set, or highlight both
+      if (records.containsKey(exercise)){
+        if (double.parse(candidate[0]) > double.parse(records[exercise]['weight']) || double.parse(candidate[0]) == double.parse(records[exercise]['weight']) && double.parse(candidate[1]) > double.parse(records[exercise]['reps'])){
+          setState(() {
+            sets[exercise][index]['PR'] = 'yes';
+          });
+          return true;
+        }else {
+          if (sets[exercise][index]['PR'] == 'yes'){
+            setState(() {
+              sets[exercise][index]['PR'] = 'no';
+            });
+          }
+        }
+      } else{
+          setState(() {
+            sets[exercise][index]['PR'] = 'yes';
+          });
+          return true;
+      }
+      return false;
+    }else{
+      setState(() {
+        if (sets[exercise][index]['PR'] == 'yes'){
+          setState(() {
+            sets[exercise][index]['PR'] = 'no';
+          });
+        }
+      });
       return false;
     }
-    List candidate = [sets[exercise]![index]['weight'], sets[exercise]![index]['reps']];
-    if (records.containsKey(exercise)){
-      if (candidate[0] > records[exercise]['weight'] || candidate[0] == records[exercise]['weight'] && candidate[1] > records[exercise]['reps']){
-        setState(() {
-          sets[exercise][index]['PR'] = 'yes';
-        });
-        return true;
-      }
-    } else{
-        setState(() {
-          sets[exercise][index]['PR'] = 'yes';
-        });      
-        return true;
-    }
-    return false;
+  }
+  void printRecords() async{
+    var data = await readData(path: 'records');
+    debugPrint(data.toString());
   }
 }
