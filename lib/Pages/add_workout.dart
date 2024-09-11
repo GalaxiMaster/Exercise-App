@@ -135,7 +135,7 @@ class _AddworkoutState extends State<Addworkout> {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text('Weight'),
+                                child: Text('Weight (kg)'),
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8.0),
@@ -172,8 +172,9 @@ class _AddworkoutState extends State<Addworkout> {
                                   initialValue: sets[exercise]![i]['weight'].toString(),
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle( // Add this property
+                                  style: TextStyle( // Add this property
                                     fontSize: 20,
+                                    color: sets[exercise][i]['PR'] == null? Colors.black : Colors.blue,
                                   ),
                                   decoration: InputDecoration(
                                     hintText: getPrevious(exercise, i+1, 'Weight'),
@@ -187,7 +188,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   onChanged: (value) {
                                     value = (int.tryParse(value) ?? double.tryParse(value)).toString();
                                     sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                                    isRecord(exercise, [sets[exercise]![i]['weight'], sets[exercise]![i]['reps']]);
+                                    isRecord(exercise, i);
                                     updateExercises();
                                   },
                                 ),
@@ -198,8 +199,9 @@ class _AddworkoutState extends State<Addworkout> {
                                   initialValue: sets[exercise]![i]['reps'].toString(),
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle( // Add this property
+                                  style: TextStyle( // Add this property
                                     fontSize: 20,
+                                    color: sets[exercise][i]['PR'] == null? Colors.black : Colors.blue,
                                   ),
                                   decoration: InputDecoration(
                                     hintText: getPrevious(exercise, i+1, 'Reps'),
@@ -212,7 +214,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   onChanged: (value) {
                                     value = (int.tryParse(value) ?? double.tryParse(value)).toString();
                                     sets[exercise]![i]['reps'] = value != 'null' ? value : '';  // Safely convert String to int;
-                                    isRecord(exercise, [sets[exercise]![i]['weight'], sets[exercise]![i]['reps']]);
+                                    isRecord(exercise, i);
                                     updateExercises();
                                   },
                                 ),
@@ -393,19 +395,39 @@ class _AddworkoutState extends State<Addworkout> {
     }
     return true;
   }
-  bool isRecord(String exercise, List candidate) { // TODO rename candidate
+  bool isRecord(String exercise, int index) {
+    if (sets[exercise][index]['reps'] == '' || sets[exercise][index]['weight'] == ''){
+      return false;
+    }
+    List best = [];
+    int topindex = -1;
+    for (int i = 0; i < sets[exercise].length; i++) {
+      var record = sets[exercise][i];
+      if (best.isEmpty){
+        best = [double.parse(record['weight']), double.parse(record['reps'])];
+        topindex = i;
+      }
+      else if (double.parse(record['weight']) > best[0] || double.parse(record['weight']) == best[0] && double.parse(record['reps']) > best[1]){
+        best = [double.parse(record['weight']), double.parse(record['reps'])];
+        topindex = i;
+      }
+    }
+    if (index != topindex || topindex == -1){
+      return false;
+    }
+    List candidate = [sets[exercise]![index]['weight'], sets[exercise]![index]['reps']];
     if (records.containsKey(exercise)){
       if (candidate[0] > records[exercise]['weight'] || candidate[0] == records[exercise]['weight'] && candidate[1] > records[exercise]['reps']){
-        records[exercise]['weight'] = candidate[0];
-        records[exercise]['reps'] = candidate[1];
-        writeData(records, append: false, path: 'records');
+        setState(() {
+          sets[exercise][index]['PR'] = 'yes';
+        });
         return true;
       }
     } else{
-      records[exercise]['weight'] = candidate[0];
-      records[exercise]['reps'] = candidate[1];
-      writeData(records, append: false, path: 'records');
-      return true;
+        setState(() {
+          sets[exercise][index]['PR'] = 'yes';
+        });      
+        return true;
     }
     return false;
   }

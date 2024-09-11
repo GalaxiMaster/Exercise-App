@@ -248,7 +248,7 @@ class DataBarChart extends StatelessWidget {
               drawHorizontalLine: true,
               getDrawingHorizontalLine: (value) {
                 if (value == goal) {
-                  return FlLine(
+                  return const FlLine(
                     color: Colors.red, // Goal line color
                     strokeWidth: 2,
                     dashArray: [5, 5], // Optional: dashed line
