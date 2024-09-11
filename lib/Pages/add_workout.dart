@@ -8,7 +8,8 @@ import 'package:exercise_app/widgets.dart';
 // ignore: must_be_immutable
 class Addworkout extends StatefulWidget {
   Map sets;
-  Addworkout({super.key, sets}) 
+  final bool confirm;
+  Addworkout({super.key, sets, this.confirm = false}) 
     : sets = sets ?? {};
     @override
   // ignore: library_private_types_in_public_api
@@ -53,7 +54,9 @@ class _AddworkoutState extends State<Addworkout> {
   }
 
   void updateExercises() async{
-    writeData({'stats': {'startTime': startTime}, 'sets': sets}, path: 'current', append: false);
+    if (!widget.confirm){
+      writeData({'stats': {'startTime': startTime}, 'sets': sets}, path: 'current', append: false);
+    }
   }
 
   @override
@@ -73,7 +76,11 @@ class _AddworkoutState extends State<Addworkout> {
               iconHeight: 20,
               iconWidth: 20,
               onTap: () {
-                confirmExercises(sets);
+                if (!widget.confirm){
+                  confirmExercises(sets);
+                } else{
+                  Navigator.pop(context, sets);
+                }
               },
             ),
           )

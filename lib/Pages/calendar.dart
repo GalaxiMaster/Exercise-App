@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -303,7 +304,16 @@ class _DayScreenState extends State<DayScreen> {
                       switch(value){
                         case 'Edit':
                           debugPrint('edit');
-                          // push context of add exercise screen
+                          final result = await Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => Addworkout(sets: day, confirm: true),
+                            ),
+                          );
+                          if (result != null){
+                            day['sets'] = result;
+                            setState(() {});
+                          }
                         case 'Share':
                           debugPrint('share');
                           // share day
