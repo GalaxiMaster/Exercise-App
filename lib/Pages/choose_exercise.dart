@@ -269,7 +269,7 @@ class _WorkoutListState extends State<WorkoutList> {
             child: ListView.builder(
               itemCount: filteredExercises.length,
               itemBuilder: (context, index) {
-                return GestureDetector(
+                return InkWell(
                   onTap: () {
                     Navigator.pop(context, filteredExercises[index]);
                   },
