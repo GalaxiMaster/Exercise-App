@@ -78,7 +78,7 @@ class _WorkoutListState extends State<WorkoutList> {
         );
       }
     } else {
-      return CircularProgressIndicator(); // or some other loading indicator
+      return const CircularProgressIndicator(); // or some other loading indicator
     }
   },
 )
