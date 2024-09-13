@@ -127,111 +127,112 @@ class _AddworkoutState extends State<Addworkout> {
                         ),
                       ),
                       Table(
-                        border: TableBorder.all(),
-                        columnWidths: const {
-                          0: FlexColumnWidth(1),
-                          1: FlexColumnWidth(2),
-                          2: FlexColumnWidth(2),
-                        },
-                        children: [
-                          const TableRow(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Set'),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Weight (kg)'),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Reps'),
-                              ),
-                            ],
-                          ),
-                          for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
-                          TableRow(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  _showSetTypeMenu(exercise, i);
-                                },
-                                child: Center( // Centers the child horizontally and vertically
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(vertical: 8), // Reduced vertical padding
-                                    child: Text(
-                                      sets[exercise]![i]['type'] == 'Warmup'
-                                          ? 'W'
-                                          : sets[exercise]![i]['type'] == 'Failure'
-                                              ? 'F'
-                                              : '${_getNormalSetNumber(exercise, i)}',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), // Reduced vertical padding
-                                child: Center( // Center the TextFormField content horizontally and vertically
-                                  child: TextFormField(
-                                    initialValue: sets[exercise]![i]['weight'].toString(),
-                                    keyboardType: TextInputType.number,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
-                                    ),
-                                    decoration: InputDecoration(
-                                      hintText: getPrevious(exercise, i+1, 'Weight'),
-                                      border: InputBorder.none,
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    onChanged: (value) {
-                                      value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                      sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                                      isRecord(exercise, i);
-                                      updateExercises();
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), // Reduced vertical padding
-                                child: Center( // Center the TextFormField content horizontally and vertically
-                                  child: TextFormField(
-                                    initialValue: sets[exercise]![i]['reps'].toString(),
-                                    keyboardType: TextInputType.number,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
-                                    ),
-                                    decoration: InputDecoration(
-                                      hintText: getPrevious(exercise, i+1, 'Reps'),
-                                      border: InputBorder.none,
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    onChanged: (value) {
-                                      value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                      sets[exercise]![i]['reps'] = value != 'null' ? value : '';
-                                      isRecord(exercise, i);
-                                      updateExercises();
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+  border: TableBorder.all(),
+  columnWidths: const {
+    0: FlexColumnWidth(1),
+    1: FlexColumnWidth(2),
+    2: FlexColumnWidth(2),
+  },
+  children: [
+    const TableRow(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(4.0), // Reduce padding
+          child: Text('Set'),
+        ),
+        Padding(
+          padding: EdgeInsets.all(4.0), // Reduce padding
+          child: Text('Weight (kg)'),
+        ),
+        Padding(
+          padding: EdgeInsets.all(4.0), // Reduce padding
+          child: Text('Reps'),
+        ),
+      ],
+    ),
+    for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
+    TableRow(
+      children: [
+        InkWell(
+          onTap: () {
+            _showSetTypeMenu(exercise, i);
+          },
+          child: Center(
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 2.0), // Reduce vertical padding
+              child: Text(
+                sets[exercise]![i]['type'] == 'Warmup'
+                    ? 'W'
+                    : sets[exercise]![i]['type'] == 'Failure'
+                        ? 'F'
+                        : '${_getNormalSetNumber(exercise, i)}',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
+          child: Center(
+            child: TextFormField(
+              initialValue: sets[exercise]![i]['weight'].toString(),
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
+              ),
+              decoration: InputDecoration(
+                hintText: getPrevious(exercise, i+1, 'Weight'),
+                border: InputBorder.none,
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16, // Adjust hint text size
+                ),
+              ),
+              onChanged: (value) {
+                value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                isRecord(exercise, i);
+                updateExercises();
+              },
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
+          child: Center(
+            child: TextFormField(
+              initialValue: sets[exercise]![i]['reps'].toString(),
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
+              ),
+              decoration: InputDecoration(
+                hintText: getPrevious(exercise, i+1, 'Reps'),
+                border: InputBorder.none,
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16, // Adjust hint text size
+                ),
+              ),
+              onChanged: (value) {
+                value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                sets[exercise]![i]['reps'] = value != 'null' ? value : '';
+                isRecord(exercise, i);
+                updateExercises();
+              },
+            ),
+          ),
+        ),
+      ],
+    )
+  ],
+),
+
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
@@ -252,7 +253,7 @@ class _AddworkoutState extends State<Addworkout> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const WorkoutList(),
+                    builder: (context) => const WorkoutList(setting: 'choose',),
                   ),
                 );
 

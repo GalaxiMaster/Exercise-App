@@ -1,5 +1,5 @@
 import 'package:exercise_app/Pages/calendar.dart';
-import 'package:exercise_app/Pages/exercise_list.dart';
+import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Pages/stats.dart';
@@ -73,7 +73,7 @@ class _ProfileState extends State<Profile> {
                           if (index == 0) {
                             destination = const CalenderScreen();
                           } else if (index == 1) {
-                            destination = const ExerciseList();
+                            destination = const WorkoutList(setting: 'info',);
                           } else if (index == 2) {
                             destination = const MuscleData();
                           } else {

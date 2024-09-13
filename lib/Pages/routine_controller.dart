@@ -179,7 +179,7 @@ class _AddRoutineState extends State<AddRoutine> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const WorkoutList(),
+                    builder: (context) => const WorkoutList(setting: 'choose',),
                   ),
                 );
 

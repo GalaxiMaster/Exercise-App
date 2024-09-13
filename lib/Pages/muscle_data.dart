@@ -21,16 +21,16 @@ class MuscleData extends StatelessWidget {
             }
             for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
               if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Primary']![muscle]/100);
+                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
               } else{
-                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Primary']![muscle]/100);
+                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
               }
             }
             for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
               if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Secondary']![muscle]/100);
+                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
               } else{
-                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Secondary']![muscle]/100);
+                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
               }
             }
           }
