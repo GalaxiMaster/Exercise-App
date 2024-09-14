@@ -132,7 +132,7 @@ class MuscleData extends StatelessWidget {
                     ),
                   ),
                   box(Icons.track_changes, 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
-                  box(Icons.fitness_center, 'Main exercises', 'See what exercises you do the most', context, MainExercisesPage(sets: unscaledMuscleData)),
+                  box(Icons.fitness_center, 'Main exercises', 'See what exercises you do the most', context, MainExercisesPage()),
                 ],
               ),
             );
