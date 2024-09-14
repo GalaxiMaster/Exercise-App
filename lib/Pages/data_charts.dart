@@ -48,8 +48,8 @@ class _DataChartsState extends State<DataCharts> {
           ),
           Row(
             children: [
-              SelectorBox('Sets'),
-              SelectorBox('Volume'),
+              SelectorBox('Sets', units == 'Sets'),
+              SelectorBox('Volume', units == 'kg'),
             ],
           ),
           const SizedBox(height: 10),
@@ -92,7 +92,7 @@ class _DataChartsState extends State<DataCharts> {
   }
   
   // ignore: non_constant_identifier_names
-  Widget SelectorBox(String text){
+  Widget SelectorBox(String text, bool selected){
     return GestureDetector(
       onTap: () async{
         List data = await getStuff(text);
@@ -110,7 +110,7 @@ class _DataChartsState extends State<DataCharts> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.grey,
+            color: selected ? Colors.blue : Colors.grey,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
