@@ -6,6 +6,7 @@ import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MuscleData extends StatelessWidget {
   const MuscleData({super.key});
@@ -131,8 +132,9 @@ class MuscleData extends StatelessWidget {
                       ),
                     ),
                   ),
-                  box(Icons.track_changes, 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
-                  box(Icons.fitness_center, 'Main exercises', 'See what exercises you do the most', context, MainExercisesPage()),
+                  box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
+                  box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, MainExercisesPage()),
+                  box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MainExercisesPage()),
                 ],
               ),
             );
@@ -168,7 +170,7 @@ class MuscleData extends StatelessWidget {
     return colors[key] ?? Colors.grey;
   }
 
-  Widget box(IconData icon, String label, String description, var context, var path) {
+  Widget box(String iconPath, String label, String description, var context, var path) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: (){
@@ -183,7 +185,12 @@ class MuscleData extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Icon(icon, color: colorScheme.primary,),
+                child: SvgPicture.asset(
+                  'Assets/$iconPath.svg',
+                  height: 30,
+                  width: 30,
+                  colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
+                ),     
               ),
               Expanded(
                 child: Padding(

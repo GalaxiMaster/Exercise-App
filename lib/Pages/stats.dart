@@ -1,6 +1,7 @@
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 class Stats extends StatefulWidget {
   const Stats({super.key});
@@ -27,9 +28,7 @@ class _StatsState extends State<Stats> {
     int sets = 0;
     int exercises = 0;
     for (var day in data.keys) {
-      if (!days.contains(day.split(' ')[0])){
-        days.add(day.split(' ')[0]);
-      }
+      days.add(day);
       totalTime.add((DateTime.parse(data[day]['stats']['endTime']).difference(DateTime.parse(data[day]['stats']['startTime'])).inMinutes));
       for (var exercise in data[day]['sets'].keys){
         exercises++;
@@ -51,19 +50,63 @@ class _StatsState extends State<Stats> {
   }
   @override
   Widget build(BuildContext context) {
-    debugPrint("$stats****************************************");
     return Scaffold(
       appBar: myAppBar(context, 'Stats'),
       body: Center(
         child: Column(
           children: [
-            Text('${stats['days'].length} days gone'),
-            Text('${stats['sets']} sets done'),
-            Text('${stats['exercises']} exercise done'),
-            Text('Total volume : ${stats['volume'].fold(0, (p, c) => p + c).toString()}'),
-            Text('Average volume : ${(stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)}'),
-            Text('Total time : ${stats['time'].fold(0, (p, c) => p + c).toString()} mins'),
-            Text('Average time : ${(stats['time'].fold(0, (p, c) => p + c)/stats['time'].length).toStringAsFixed(1)} mins'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                statBox('Sessions done', stats['days'].length.toString(), 3),
+                statBox('Sets done', stats['sets'].toString(), 3),            
+                statBox('Exercises done', stats['exercises'].toString(), 3),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                statBox('Avg sessions', '/TODO', 3),
+                statBox('Sets/Session', (stats['sets']/stats['days'].length).toStringAsFixed(1), 3),            
+                statBox('exercises/session', (stats['exercises']/stats['days'].length).toStringAsFixed(1), 3),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                statBox('Total volume', '${stats['volume'].fold(0, (p, c) => p + c).toString()}Kg', 2),
+                statBox('Average volume ', "${(stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)}Kg", 2),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                statBox('Total time', "${stats['time'].fold(0, (p, c) => p + c).toString()} mins", 2),
+                statBox('Average time', "${(stats['time'].fold(0, (p, c) => p + c)/stats['time'].length).toStringAsFixed(1)} mins", 2),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget statBox(String message, String stat, int rowItems){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: 360/rowItems,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: const GradientBoxBorder(
+            gradient: LinearGradient(colors: [Color.fromARGB(255, 157, 206, 255), Color.fromARGB(186, 60, 87, 224)]),
+            width: 1,
+          )
+        ),
+        child: Column(
+          children: [
+            Text(message),
+            Text(stat)
           ],
         ),
       ),
