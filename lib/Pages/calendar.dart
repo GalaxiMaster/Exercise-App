@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
@@ -10,25 +11,10 @@ class CalenderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
+      appBar: myAppBar(context, 'Calendar'),
       body: const CalendarWidget(),
     );
   }
-}
-
-AppBar appBar(BuildContext context) {
-  return AppBar(
-    backgroundColor: Colors.white,
-    title: const Text(
-      'Profile',
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    centerTitle: true,
-  );
 }
 
 class CalendarWidget extends StatefulWidget {
@@ -69,7 +55,9 @@ Widget build(BuildContext context) {
                 date.year == highlightedDay.year &&
                 date.month == highlightedDay.month &&
                 date.day == highlightedDay.day);
-
+            bool isToday = date.year == DateTime.now().year &&
+                date.month == DateTime.now().month &&
+                date.day == DateTime.now().day;
             return GestureDetector(
               onTap: () {
                 if (highlightedDays.any((highlightedDay) =>
@@ -99,6 +87,10 @@ Widget build(BuildContext context) {
                 scale: 0.8,
                 child: Container(
                   decoration: BoxDecoration(
+                    border: isToday ? Border.all(
+                      color: Colors.blue,
+                      width: 2,
+                    ) : null,
                     color:
                         isHighlighted ? Colors.blue : Colors.transparent,
                     shape: BoxShape.circle,
@@ -106,9 +98,9 @@ Widget build(BuildContext context) {
                   child: Center(
                     child: Text(
                       '${date.day}',
-                      style: TextStyle(
-                          color: isHighlighted ? Colors.white : Colors.black,
-                          fontSize: 19),
+                      style: const TextStyle(
+                          fontSize: 19
+                      ),
                     ),
                   ),
                 ),

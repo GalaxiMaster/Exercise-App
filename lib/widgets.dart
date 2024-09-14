@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class MyIconButton extends StatefulWidget {
-  final String filepath;
+  final IconData icon;
   final Color pressedColor;
   final Color color;
   final double borderRadius;
@@ -14,9 +13,9 @@ class MyIconButton extends StatefulWidget {
 
   const MyIconButton({
     super.key,
-    required this.filepath,
-    required this.pressedColor,
-    required this.color,
+    required this.icon,
+    this.pressedColor = Colors.transparent,
+    this.color = Colors.transparent,
     required this.borderRadius,
     required this.width,
     required this.height,
@@ -56,10 +55,9 @@ class _MyIconButtonState extends State<MyIconButton> {
           color: buttonDown ? widget.pressedColor : widget.color,
           borderRadius: BorderRadius.circular(widget.borderRadius),
         ),
-        child: SvgPicture.asset(
-          widget.filepath,
-          height: widget.iconHeight,
-          width: widget.iconWidth,
+        child: Icon(
+          widget.icon,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
@@ -223,4 +221,14 @@ class CustomPopupMenuButton extends StatelessWidget {
       child: const Icon(Icons.more_vert),
     );
   }
+}
+
+AppBar myAppBar(BuildContext context, String title, {Widget? button}) {
+  return AppBar(
+    title: Text(title),
+    centerTitle: true,
+    actions: [
+      if (button != null) button,
+    ],
+  );
 }

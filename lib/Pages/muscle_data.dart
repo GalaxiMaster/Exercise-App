@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/data_charts.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -63,9 +64,7 @@ class MuscleData extends StatelessWidget {
     double radius = 125;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workout'),
-      ),
+      appBar: myAppBar(context, 'Muscle data'),
       body: FutureBuilder<List>(
         future: getStuff('Sets'),
         builder: (context, snapshot) {
@@ -115,23 +114,23 @@ class MuscleData extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    height: 30,
+                    height: 40,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Theme.of(context).colorScheme.surfaceContainer,
                     ),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Text(
-                        'Advanced stats',
+                        'Fancy stats',
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
+                          fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-                  box('', 'Label', 'This could be a description of the unscaled data'),
+                  box(Icons.track_changes, 'Radar chart', 'Look at your data in a radar chart', Theme.of(context).colorScheme),
+                  box(Icons.fitness_center, 'Main exercises', 'See what exercises you do the most', Theme.of(context).colorScheme),
                 ],
               ),
             );
@@ -167,43 +166,48 @@ class MuscleData extends StatelessWidget {
     return colors[key] ?? Colors.grey;
   }
 
-  Widget box(String icon, String label, String description) {
-    return Container(
-      width: double.infinity,
-      height: 75,
-      decoration: const BoxDecoration(color: Colors.grey),
-      child: Row(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(12.0),
-            child: Icon(Icons.pie_chart),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    description,
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+  Widget box(IconData icon, String label, String description, ColorScheme colorScheme) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Icon(icon, color: colorScheme.primary,),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    Text(
+                      description,
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(12.0),
-            child: Icon(Icons.arrow_forward_ios),
-          ),
-        ],
+            const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Icon(Icons.arrow_forward_ios),
+            ),
+          ],
+        ),
+                          const Divider(
+        thickness: 1,
+        color: Colors.grey,
+        height: 1,
       ),
+      ],
     );
   }
 }

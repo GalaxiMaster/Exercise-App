@@ -41,14 +41,14 @@ class _AddRoutineState extends State<AddRoutine> {
               controller: _routineNameController,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontSize: 18,
               ),
               decoration: const InputDecoration(
                 border: InputBorder.none, // Remove default border
                 hintText: 'Enter routine name',
                 hintStyle: TextStyle(
-                  color: Colors.black45
+                  color: Colors.white54
                 )
               ),
             ),
@@ -57,12 +57,10 @@ class _AddRoutineState extends State<AddRoutine> {
         actions: [
           Center(
             child: MyIconButton(
-              filepath: 'Assets/tick.svg',
+              icon: Icons.check,
               width: 37,
               height: 37,
               borderRadius: 10,
-              pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-              color: const Color.fromARGB(255, 245, 241, 241),
               iconHeight: 20,
               iconWidth: 20,
               onTap: () {
@@ -71,7 +69,6 @@ class _AddRoutineState extends State<AddRoutine> {
             ),
           ),
         ],
-        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Column(

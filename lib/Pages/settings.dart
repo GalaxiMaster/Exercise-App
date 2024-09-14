@@ -1,5 +1,6 @@
   import 'dart:io';
   import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/widgets.dart';
   import 'package:flutter/material.dart';
   import 'package:path_provider/path_provider.dart';
   import 'package:share_plus/share_plus.dart';
@@ -11,9 +12,7 @@
     Widget build(BuildContext context) {
       createSettings();
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
+        appBar: myAppBar(context, 'Settings'),
         body: Column(
           children: [
             _buildSettingsBox(
@@ -58,7 +57,6 @@
     required String label,
     required VoidCallback? function,
   }) {
-    Color color = Colors.black;
     return GestureDetector(
       onTap: function,
       child: Container(
@@ -72,13 +70,12 @@
           padding: const EdgeInsets.only(left: 8),
           child: Row(
             children: [
-              Icon(icon, color: color),
+              Icon(icon),
               const SizedBox(width: 8.0),
               Text(
                 label,
                 style: TextStyle(
-                  color: color,
-                  fontSize: 23,
+                   fontSize: 23,
                 ),
               ),
               const Spacer(),
@@ -87,7 +84,7 @@
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.arrow_forward_ios, color: color),
+                child: Icon(Icons.arrow_forward_ios),
               ),
             ],
           ),

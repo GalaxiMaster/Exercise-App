@@ -40,7 +40,26 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
     return Scaffold(
-      appBar: appBar(context),
+      appBar: myAppBar(context, 'Profile', 
+        button: MyIconButton(
+          icon: Icons.settings,
+          width: 37,
+          height: 37,
+          borderRadius: 10,
+          iconHeight: 20,
+          iconWidth: 20,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Settings()),
+            ).then((value) {
+              setState(() { //TODO could possibly make it only reload if the settings is different
+                _loadData();
+              });
+            });
+          },
+        ),
+      ),
       body: FutureBuilder<List<dynamic>>(
         future: _futureData,
         builder: (context, snapshot) {
@@ -129,45 +148,6 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text(
-        'Profile',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        Center(
-          child: MyIconButton(
-            filepath: 'Assets/settings.svg',
-            width: 37,
-            height: 37,
-            borderRadius: 10,
-            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-            color: const Color.fromARGB(255, 245, 241, 241),
-            iconHeight: 20,
-            iconWidth: 20,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Settings()),
-              ).then((value) {
-                setState(() { //TODO could possibly make it only reload if the settings is different
-                  _loadData();
-                });
-              });
-            },
-
-            ),
-        )
-      ],
-    );
-  }
 }
 
 
@@ -212,7 +192,7 @@ class DataBarChart extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${value.toInt()} days',
-                          style: const TextStyle(color: Colors.black, fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                         ),
                       ),
                     );
@@ -227,10 +207,10 @@ class DataBarChart extends StatelessWidget {
                     if (index >= 0 && index < data.keys.length) {
                       return Text(
                         data.keys.toList()[index], // Correctly show each week's label
-                        style: const TextStyle(color: Colors.black, fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       );
                     }
-                    return const Text('', style: TextStyle(color: Colors.black, fontSize: 12));
+                    return const Text('', style: TextStyle(fontSize: 12));
                   },
                   reservedSize: 38,
                 ),
@@ -238,9 +218,9 @@ class DataBarChart extends StatelessWidget {
             ),
             borderData: FlBorderData(
               show: true,
-              border: const Border(
-                left: BorderSide(color: Colors.black, width: 2),
-                bottom: BorderSide(color: Colors.black, width: 2),
+              border: Border(
+                left: BorderSide(color: Theme.of(context).colorScheme.onSurface, width: 2),
+                bottom: BorderSide(color: Theme.of(context).colorScheme.onSurface, width: 2),
               ),
             ),
             gridData: FlGridData(

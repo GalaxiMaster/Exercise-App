@@ -59,30 +59,30 @@ class _WorkoutListState extends State<WorkoutList> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: FutureBuilder<bool>(
-  future: fileExists("Assets/Exercises/${filteredExercises[index]}.png"),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const CircularProgressIndicator(); // Loading state
-    } else if (snapshot.hasError) {
-      return const Icon(Icons.error); // Show error icon if something went wrong
-    } else if (snapshot.hasData && snapshot.data!) {
-      return Image.asset(
-        "Assets/Exercises/${filteredExercises[index]}.png",
-        height: 50,
-        width: 50,
-      );
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(8),
-        child: SvgPicture.asset(
-          "Assets/profile.svg",
-          height: 35,
-          width: 35,
-        ),
-      );
-    }
-  },
-),
+                          future: fileExists("Assets/Exercises/${filteredExercises[index]}.png"),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator(); // Loading state
+                            } else if (snapshot.hasError) {
+                              return const Icon(Icons.error); // Show error icon if something went wrong
+                            } else if (snapshot.hasData && snapshot.data!) {
+                              return Image.asset(
+                                "Assets/Exercises/${filteredExercises[index]}.png",
+                                height: 50,
+                                width: 50,
+                              );
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: SvgPicture.asset(
+                                  "Assets/profile.svg",
+                                  height: 35,
+                                  width: 35,
+                                ),
+                              );
+                            }
+                          },
+                        ),
 
                         ),
                         Column(

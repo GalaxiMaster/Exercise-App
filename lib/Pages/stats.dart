@@ -1,4 +1,5 @@
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Stats extends StatefulWidget {
@@ -52,7 +53,7 @@ class _StatsState extends State<Stats> {
   Widget build(BuildContext context) {
     debugPrint("$stats****************************************");
     return Scaffold(
-      appBar: appBar(context),
+      appBar: myAppBar(context, 'Stats'),
       body: Center(
         child: Column(
           children: [
@@ -69,20 +70,7 @@ class _StatsState extends State<Stats> {
     );
   }
 }
-AppBar appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text(
-        'Stats',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      centerTitle: true,
-    );
-  }
+
 Future<Map> gatherData() async {
   Map exerciseData = await readData();
   return exerciseData;

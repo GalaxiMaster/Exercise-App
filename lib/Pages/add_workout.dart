@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
@@ -62,48 +63,46 @@ class _AddworkoutState extends State<Addworkout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workout'),
-        actions: [
-          Center(
-            child: MyIconButton(
-              filepath: 'Assets/tick.svg',
-              width: 37,
-              height: 37,
-              borderRadius: 10,
-              pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-              color: const Color.fromARGB(255, 245, 241, 241),
-              iconHeight: 20,
-              iconWidth: 20,
-              onTap: () {
-                if (!widget.confirm){
-                  confirmExercises(sets);
-                } else{
-                  Navigator.pop(context, sets);
-                }
-              },
-            ),
-          )
-        ],
+      appBar: myAppBar(context, 'Workout', 
+        button: MyIconButton(
+          icon: Icons.check,
+          width: 37,
+          height: 37,
+          borderRadius: 10,
+          iconHeight: 20,
+          iconWidth: 20,
+          onTap: () {
+            if (!widget.confirm){
+              confirmExercises(sets);
+            } else{
+              Navigator.pop(context, sets);
+            }
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
-                itemCount: sets.keys.length,
-                itemBuilder: (context, index) {
-                  String exercise = sets.keys.toList()[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
-                    children: [
-                      Row(
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
+              itemCount: sets.keys.length,
+              itemBuilder: (context, index) {
+                String exercise = sets.keys.toList()[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(exercise),
+                          Text(
+                            exercise,
+                            style: const TextStyle(
+                              fontSize: 18
+                            ),
+                          ),
                           GestureDetector(
                             onTap: (){
                               setState(() {
@@ -115,7 +114,10 @@ class _AddworkoutState extends State<Addworkout> {
                           ),
                         ],
                       ),
-                      TextFormField(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: TextFormField(
                         // initialValue: 'Enter your notes here....',
                         decoration: const InputDecoration(
                           hintText: 'Enter your notes here...',
@@ -126,125 +128,131 @@ class _AddworkoutState extends State<Addworkout> {
                           )
                         ),
                       ),
-                      Table(
-  border: TableBorder.all(),
-  columnWidths: const {
-    0: FlexColumnWidth(1),
-    1: FlexColumnWidth(2),
-    2: FlexColumnWidth(2),
-  },
-  children: [
-    const TableRow(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(4.0), // Reduce padding
-          child: Text('Set'),
-        ),
-        Padding(
-          padding: EdgeInsets.all(4.0), // Reduce padding
-          child: Text('Weight (kg)'),
-        ),
-        Padding(
-          padding: EdgeInsets.all(4.0), // Reduce padding
-          child: Text('Reps'),
-        ),
-      ],
-    ),
-    for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
-    TableRow(
-      children: [
-        InkWell(
-          onTap: () {
-            _showSetTypeMenu(exercise, i);
-          },
-          child: Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 2.0), // Reduce vertical padding
-              child: Text(
-                sets[exercise]![i]['type'] == 'Warmup'
-                    ? 'W'
-                    : sets[exercise]![i]['type'] == 'Failure'
-                        ? 'F'
-                        : '${_getNormalSetNumber(exercise, i)}',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
-          child: Center(
-            child: TextFormField(
-              initialValue: sets[exercise]![i]['weight'].toString(),
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
-              ),
-              decoration: InputDecoration(
-                hintText: getPrevious(exercise, i+1, 'Weight'),
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16, // Adjust hint text size
-                ),
-              ),
-              onChanged: (value) {
-                value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                isRecord(exercise, i);
-                updateExercises();
-              },
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
-          child: Center(
-            child: TextFormField(
-              initialValue: sets[exercise]![i]['reps'].toString(),
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
-              ),
-              decoration: InputDecoration(
-                hintText: getPrevious(exercise, i+1, 'Reps'),
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16, // Adjust hint text size
-                ),
-              ),
-              onChanged: (value) {
-                value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                sets[exercise]![i]['reps'] = value != 'null' ? value : '';
-                isRecord(exercise, i);
-                updateExercises();
-              },
-            ),
-          ),
-        ),
-      ],
-    )
-  ],
-),
-
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            addNewSet(exercise);
-                          },
-                          child: const Text('Add Set'),
+                    ),
+                    Table(
+                      border: const TableBorder.symmetric(inside: BorderSide.none),
+                      columnWidths: const {
+                        0: FlexColumnWidth(1),
+                        1: FlexColumnWidth(2),
+                        2: FlexColumnWidth(2),
+                      },
+                      children: [
+                        const TableRow(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
+                                child: Text('Set'),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
+                                child: Text('Weight (kg)')
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
+                                child: Text('Reps')
+                              ),
+                            ),
+                          ],
                         ),
+                        for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
+                        TableRow(
+                          decoration: BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                _showSetTypeMenu(exercise, i);
+                              },
+                              child: SizedBox(
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    sets[exercise]![i]['type'] == 'Warmup'
+                                        ? 'W'
+                                        : sets[exercise]![i]['type'] == 'Failure'
+                                            ? 'F'
+                                            : '${_getNormalSetNumber(exercise, i)}',
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
+                              child: Center(
+                                child: TextFormField(
+                                  initialValue: sets[exercise]![i]['weight'].toString(),
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: getPrevious(exercise, i+1, 'Weight'),
+                                    border: InputBorder.none,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16, // Adjust hint text size
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                                    sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                                    isRecord(exercise, i);
+                                    updateExercises();
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
+                              child: Center(
+                                child: TextFormField(
+                                  initialValue: sets[exercise]![i]['reps'].toString(),
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: getPrevious(exercise, i+1, 'Reps'),
+                                    border: InputBorder.none,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16, // Adjust hint text size
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                                    sets[exercise]![i]['reps'] = value != 'null' ? value : '';
+                                    isRecord(exercise, i);
+                                    updateExercises();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+            
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          addNewSet(exercise);
+                        },
+                        child: const Text('Add Set'),
                       ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(

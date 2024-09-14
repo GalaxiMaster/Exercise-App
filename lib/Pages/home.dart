@@ -34,7 +34,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context), // Pass context to appBar
+      appBar: myAppBar(context, 'Workout', 
+        button: MyIconButton(
+          icon: Icons.person,
+          width: 37,
+          height: 37,
+          borderRadius: 10,
+          iconHeight: 20,
+          iconWidth: 20,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => 
+                const Profile()
+              ),
+            );
+          }
+        ),
+      ), // Pass context to appBar
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -54,7 +71,7 @@ class _HomePageState extends State<HomePage> {
             MyTextButton(
               text: "Start Workout", 
               pressedColor: Colors.blue, 
-              color: Colors.green, 
+              color: const Color.fromARGB(255, 0, 0, 0), 
               borderRadius: 15, 
               width: double.infinity, 
               height: 50,
@@ -81,7 +98,7 @@ class _HomePageState extends State<HomePage> {
             MyTextButton(
               text: "New routine", 
               pressedColor: Colors.blue, 
-              color: Colors.green, 
+              color: const Color.fromARGB(255, 0, 0, 0), 
               borderRadius: 15, 
               width: double.infinity, 
               height: 50,
@@ -112,43 +129,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  AppBar appBar(BuildContext context) { // Accept context as a parameter
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text(
-        'Workout',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        Center(
-          child: MyIconButton(
-            filepath: 'Assets/profile.svg',
-            width: 37,
-            height: 37,
-            borderRadius: 10,
-            pressedColor: const Color.fromRGBO(163, 163, 163, .7),
-            color: const Color.fromARGB(255, 245, 241, 241),
-            iconHeight: 20,
-            iconWidth: 20,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => 
-                  const Profile()
-                ),
-              );
-            }
-          ),
-        )
-      ],
     );
   }
 
@@ -235,8 +215,8 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 15),
             MyTextButton(
               text: 'Start routine',
-              pressedColor: Colors.black,
-              color: color,
+              pressedColor: Colors.blue,
+              color: Colors.black,
               borderRadius: 12.5,
               width: double.infinity,
               height: 40,

@@ -383,11 +383,6 @@ var exerciseMuscles = {
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
-'3 4 Sit up': {
-    'Primary': {'Rectus Abdominis': 80},
-    'Secondary': {'Hip Flexors': 20}
-},
-
 'Reverse Crunch m': {
     'Primary': {'Lower Abdominals': 70},
     'Secondary': {'Obliques': 30}

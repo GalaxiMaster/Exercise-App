@@ -10,10 +10,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(fontFamily: 'Poppins'),
-      home: HomePage(),
+      home: const HomePage(),
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
+        colorScheme: const ColorScheme.dark(
+          primary: Colors.blue,
+          surfaceContainer: Color.fromRGBO(32, 32, 32, 1),      
+        )
+      )
     );
   }
 }
