@@ -1,0 +1,362 @@
+import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/widgets.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
+class MuscleTracking extends StatelessWidget {
+  final Map setData;
+  const MuscleTracking({super.key, required this.setData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: myAppBar(context, 'Muscle Tracking'),
+      body: FutureBuilder<List>(
+        future: getSetAmounts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error loading data'));
+          } else if (snapshot.hasData) {
+            return FlexibleMuscleLayout(data: snapshot.data![0], normalData: snapshot.data![1]);
+          } else {
+            return const Text('No data available');
+          }
+        }
+      )
+    );
+  }
+}
+
+class FlexibleMuscleLayout extends StatefulWidget {
+  final Map data;
+  final Map normalData;
+  const FlexibleMuscleLayout({super.key, required this.data, required this.normalData});
+
+  @override
+  _FlexibleMuscleLayoutState createState() => _FlexibleMuscleLayoutState();
+}
+
+class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
+  String? expandedMuscle;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children: widget.data.entries.map((entry) {
+            final muscle = entry.key;
+            final value = entry.value;
+            final isExpanded = muscle == expandedMuscle;
+
+            if (isExpanded) {
+              return ExpandedSetProgressTile(
+                muscle: muscle,
+                value: value,
+                goal: 30,
+                onTap: () => setState(() => expandedMuscle = null),
+                data: widget.normalData,
+              );
+            } else {
+              return SetProgressTile(
+                muscle: muscle,
+                value: value,
+                goal: 30,
+                onTap: () => setState(() => expandedMuscle = muscle),
+              );
+            }
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class SetProgressTile extends StatelessWidget {
+  final String muscle;
+  final double value;
+  final double goal;
+  final VoidCallback onTap;
+
+  const SetProgressTile({
+    super.key,
+    required this.muscle,
+    required this.value,
+    required this.goal,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: (MediaQuery.of(context).size.width - 24) / 2, // Subtracting padding and calculating half width
+        child: Card(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  muscle,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 150,
+                  child: CaloriesSpeedometer(calories: value, maxCalories: goal),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ExpandedSetProgressTile extends StatelessWidget {
+  final String muscle;
+  final double value;
+  final double goal;
+  final Map data;
+  final VoidCallback onTap;
+
+  const ExpandedSetProgressTile({
+    super.key,
+    required this.muscle,
+    required this.value,
+    required this.goal,
+    required this.onTap, required this.data,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> desiredKeys = ['Hip Flexors', 'Obliques', 'Rectus Abdominis']; // replace with your list of keys
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: double.infinity,
+        child: Card(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  muscle,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 150,
+                        child: PieChart(
+                          PieChartData(
+                            centerSpaceRadius: 60,
+                            sections: data.entries.map((entry) {
+                              return PieChartSectionData(
+                                color: Colors.red,
+                                value: entry.value,
+                                title: '${entry.key}\n${entry.value}%',
+                                radius: 20,
+                                titleStyle: const TextStyle(color: Colors.transparent),
+                              );
+                            }).where((section) => desiredKeys.contains(section.title.split('\n').first)).toList()
+                          )
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildWeeklyProgressChart(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeeklyProgressChart() {
+    // Placeholder for the weekly progress chart
+    return SizedBox(
+      height: 150,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: List.generate(7, (index) {
+          double height = (index + 1) * 15.0;
+          return Container(
+            width: 20,
+            height: height,
+            color: Colors.green.withOpacity(0.5 + (index * 0.07)),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+// ... CaloriesSpeedometer and SpeedometerPainter classes remain the same
+
+  Future<List> getSetAmounts() async {
+  Map data = {};
+  Map muscleData = {};
+    Map sets = await readData();
+    for (var day in sets.keys){
+      for (var exercise in sets[day]['sets'].keys){
+        if (exerciseMuscles.containsKey(exercise)){
+          // ignore: unused_local_variable
+          for (var set in sets[day]['sets'][exercise]){
+            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
+              } else{
+                muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
+              }
+            }
+            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
+              } else{
+                muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
+              }
+            }
+          }
+        } else{
+          debugPrint('Unknown exercise: $exercise');
+        }
+      }
+    }
+    sets = muscleData;
+    data['Back'] = (sets['Lats'] ?? 0) + (sets['Erector Spinae'] ?? 0) + (sets['Rhomboids'] ?? 0) + (sets['Lower Back'] ?? 0).roundToDouble(); // Back
+    data['Chest'] = (sets['Pectorals'] ?? 0) + (sets['Pectorals (Upper)'] ?? 0) + (sets['Pectorals (Lower)'] ?? 0).roundToDouble(); // Chest
+    data['Shoulders'] = (sets['Front Delts'] ?? 0) + (sets['Side Delts'] ?? 0) + (sets['Posterior Delts'] ?? 0) + (sets['Trapezius'] ?? 0).roundToDouble(); // Shoulders
+    data['Arms'] = (sets['Biceps'] ?? 0) + (sets['Triceps'] ?? 0) + (sets['Forearms'] ?? 0) + (sets['Brachialis'] ?? 0).roundToDouble(); // Arms
+    data['Legs'] = (sets['Quadriceps'] ?? 0) + (sets['Hamstrings'] ?? 0) + (sets['Glutes'] ?? 0) + (sets['Calves'] ?? 0).roundToDouble();// Legs
+    data['Core'] = (sets['Rectus Abdominis'] ?? 0) + (sets['Obliques'] ?? 0) + (sets['Core'] ?? 0) + (sets['Hip Flexors'] ?? 0).roundToDouble(); // Core
+    List<MapEntry> entries = data.entries.toList();
+    entries.sort((a, b) => b.value.compareTo(a.value));
+    data = Map.fromEntries(entries);
+    return [data,  sets];
+
+  }
+
+class CaloriesSpeedometer extends StatelessWidget {
+  final double calories;
+  final double maxCalories;
+
+  const CaloriesSpeedometer({
+    super.key,
+    required this.calories,
+    required this.maxCalories,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(  // Center the Stack within the Container
+      child: Stack(
+        children: [
+          Center(
+            child: CustomPaint(
+              size: const Size(130, 30),
+              painter: SpeedometerPainter(
+                progress: calories / maxCalories,
+                backgroundColor: const Color(0xFF3F51B5).withOpacity(0.3),
+                progressColor: const Color(0xFF4CAF50),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '$calories of',
+                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '$maxCalories sets',
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class SpeedometerPainter extends CustomPainter {
+  final double progress;
+  final Color backgroundColor;
+  final Color progressColor;
+
+  SpeedometerPainter({
+    required this.progress,
+    required this.backgroundColor,
+    required this.progressColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height - 10);  // Moved center down slightly
+    final radius = size.width / 2;
+    const startAngle = 130 * math.pi / 180;  // Start at 210 degrees
+    const sweepAngle = 280 * math.pi / 180;  // Sweep 300 degrees
+    const strokeWidth = 20.0;
+
+    final backgroundPaint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    final progressPaint = Paint()
+      ..color = progressColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    // Draw background arc
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      startAngle,
+      sweepAngle,
+      false,
+      backgroundPaint,
+    );
+
+    // Draw progress arc
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      startAngle,
+      sweepAngle * math.min(progress, 1.0),
+      false,
+      progressPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}

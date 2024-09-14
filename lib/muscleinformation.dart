@@ -79,7 +79,7 @@ var exerciseMuscles = {
 
 'Barbell Incline Shoulder Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Dumbbell One Arm Reverse Preacher Curl': {
@@ -399,7 +399,7 @@ var exerciseMuscles = {
 },
 
 'Dumbbell Full Can Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
@@ -566,7 +566,7 @@ var exerciseMuscles = {
 
 'Dumbbell Seated Front Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Barbell Standing Rocking Leg Calf Raise': {
@@ -653,7 +653,7 @@ var exerciseMuscles = {
 },
 
 'Dumbbell Seated Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
@@ -844,12 +844,12 @@ var exerciseMuscles = {
 },
 
 'Cable Lying Upright Row': {
-    'Primary': {'Trapezius': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Trapezius': 50, 'Side Delts': 40},
     'Secondary': {'Biceps': 10}
 },
 
 'Cable Upright Row': {
-    'Primary': {'Trapezius': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Trapezius': 50, 'Side Delts': 40},
     'Secondary': {'Biceps': 10}
 },
 
@@ -1451,7 +1451,7 @@ var exerciseMuscles = {
 },
 
 'Dumbbell One Arm Lateral Raise_1': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
@@ -1497,7 +1497,7 @@ var exerciseMuscles = {
 
 'Dumbbell Incline Shoulder Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Lever Horizontal One leg Press': {
@@ -1555,7 +1555,7 @@ var exerciseMuscles = {
 },
 
 'Band Lateral Raise (Version 2)': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
@@ -1585,7 +1585,7 @@ var exerciseMuscles = {
 },
 
 'Cable Bent Over One Arm Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Core': 10}
 },
 
@@ -1720,7 +1720,7 @@ var exerciseMuscles = {
 
 'Cable Lying Cross Lateral Raise': {
     'Primary': {'Posterior Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Dumbbell Reverse Fly': {
@@ -1759,7 +1759,7 @@ var exerciseMuscles = {
 },
 
 'Dumbbell Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
@@ -2021,7 +2021,7 @@ var exerciseMuscles = {
 },
 
 'Barbell Wide Grip Upright Row': {
-    'Primary': {'Trapezius': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Trapezius': 50, 'Side Delts': 40},
     'Secondary': {'Biceps': 10}
 },
 
@@ -2047,7 +2047,7 @@ var exerciseMuscles = {
 
 'Barbell Standing Front Raise Over Head': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Barbell Lying Row on Rack': {
@@ -2196,7 +2196,7 @@ var exerciseMuscles = {
 },
 
 'Dumbbell Incline T Raise': {
-    'Primary': {'Posterior Deltoids': 60, 'Lateral Deltoids': 30},
+    'Primary': {'Posterior Deltoids': 60, 'Side Delts': 30},
     'Secondary': {'Trapezius': 10}
 },
 
@@ -2465,7 +2465,7 @@ var exerciseMuscles = {
 },
 
 'Dumbbell Incline Y Raise': {
-    'Primary': {'Upper Traps': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Upper Traps': 50, 'Side Delts': 40},
     'Secondary': {'Front Deltoids': 10}
 },
 
@@ -2593,7 +2593,7 @@ var exerciseMuscles = {
 },
 
 'Barbell Upright Row (without weight)': {
-    'Primary': {'Trapezius': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Trapezius': 50, 'Side Delts': 40},
     'Secondary': {'Biceps': 10}
 },
 
@@ -2993,7 +2993,7 @@ var exerciseMuscles = {
 
 'Band front raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 }, 
 
 'Band wrist curl': {
@@ -3148,7 +3148,7 @@ var exerciseMuscles = {
 
 'Dumbbell Seated Alternate Front Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 }, 
 
 'Dumbbell Decline Bench Press': {
@@ -3473,7 +3473,7 @@ var exerciseMuscles = {
 
 'Cable Front Shoulder Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Band Biceps Curl (2)': {
@@ -3516,13 +3516,13 @@ var exerciseMuscles = {
 },
 
 'Dumbbell One Arm Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
 'Dumbbell Front Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Cable Reverse Grip Biceps Curl (SZ bar)': {
@@ -3608,7 +3608,7 @@ var exerciseMuscles = {
 },
 
 'Cable One Arm Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 70},
+    'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
@@ -3702,7 +3702,7 @@ var exerciseMuscles = {
 
 'Cable Standing Front Raise Variation': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Barbell Standing Wide Grip Biceps Curl': {
@@ -3810,12 +3810,12 @@ var exerciseMuscles = {
 },
 
 'Band Upright Row (Under two feet)': {
-    'Primary': {'Trapezius': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Trapezius': 50, 'Side Delts': 40},
     'Secondary': {'Biceps': 10}
 },
 
 'Dumbbell Cuban Press (version 2)': {
-    'Primary': {'Lateral Deltoids': 50, 'Posterior Deltoids': 30},
+    'Primary': {'Side Delts': 50, 'Posterior Deltoids': 30},
     'Secondary': {'Trapezius': 20}
 },
 
@@ -3856,7 +3856,7 @@ var exerciseMuscles = {
 
 'Barbell Front Raise': {
     'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Lateral Deltoids': 30}
+    'Secondary': {'Side Delts': 30}
 },
 
 'Cable Standing Cross over High Reverse Fly': {
@@ -3884,7 +3884,7 @@ var exerciseMuscles = {
 },
 
 'Cable Standing Lift': {
-    'Primary': {'Trapezius': 50, 'Lateral Deltoids': 40},
+    'Primary': {'Trapezius': 50, 'Side Delts': 40},
     'Secondary': {'Biceps': 10}
 },
 
@@ -3993,7 +3993,7 @@ var exerciseMuscles = {
 },
 
 'Cable Leaning Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 80},
+    'Primary': {'Side Delts': 80},
     'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
 },
 
@@ -4194,7 +4194,7 @@ var exerciseMuscles = {
 
 'Band upright row': {
     'Primary': {'Trapezius': 60},
-    'Secondary': {'Lateral Deltoids': 20, 'Biceps': 20}
+    'Secondary': {'Side Delts': 20, 'Biceps': 20}
 },
 
 'Sit up': {
@@ -4255,7 +4255,7 @@ var exerciseMuscles = {
 },
 
 'Barbell Upright Row': {
-    'Primary': {'Trapezius': 30, 'Lateral Deltoids': 30},
+    'Primary': {'Trapezius': 30, 'Side Delts': 30},
     'Secondary': {'Biceps': 20, 'Forearms': 20}
 },
 
@@ -4300,7 +4300,7 @@ var exerciseMuscles = {
 },
 
 'Cable Lateral Raise': {
-    'Primary': {'Lateral Deltoids': 80},
+    'Primary': {'Side Delts': 80},
     'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
 },
 
@@ -4581,7 +4581,7 @@ var exerciseMuscles = {
     },
 
     'Band lateral raise': {
-        'Primary': {'Lateral Deltoids': 80},
+        'Primary': {'Side Delts': 80},
         'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
     },
 
@@ -4635,7 +4635,7 @@ var exerciseMuscles = {
     },
 
     'Dumbbell Incline One Arm Lateral Raise': {
-        'Primary': {'Lateral Deltoids': 80},
+        'Primary': {'Side Delts': 80},
         'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
     },
 
@@ -4651,7 +4651,7 @@ var exerciseMuscles = {
 
     'Cable Single Arm Neutral Grip Front Raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 10, 'Upper Chest': 10}
+        'Secondary': {'Side Delts': 10, 'Upper Chest': 10}
     },
 
     'Cable Standing Face Pull': {
@@ -4680,7 +4680,7 @@ var exerciseMuscles = {
 
     'Cable Front Raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     },
 
     'Jump Squat': {
@@ -4839,11 +4839,11 @@ var exerciseMuscles = {
 
     'Dumbbell Incline Raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 10, 'Upper Chest': 10}
+        'Secondary': {'Side Delts': 10, 'Upper Chest': 10}
     },
 
     'Dumbbell Lateral to Front Raise': {
-        'Primary': {'Lateral Deltoids': 50, 'Anterior Deltoids': 50}
+        'Primary': {'Side Delts': 50, 'Anterior Deltoids': 50}
     },
 
     'Standing Single Leg Curl': {
@@ -4876,7 +4876,7 @@ var exerciseMuscles = {
     },
 
     'Cable Y raise': {
-        'Primary': {'Anterior Deltoids': 50, 'Lateral Deltoids': 50}
+        'Primary': {'Anterior Deltoids': 50, 'Side Delts': 50}
     },
 
     'Barbell Squat 2 sec Hold': {
@@ -4977,7 +4977,7 @@ var exerciseMuscles = {
 
     'Dumbbell Front Raise II': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     },
 
     'Barbell Lying Triceps Extension': {
@@ -5026,7 +5026,7 @@ var exerciseMuscles = {
 
     'Dumbbell Incline Front Raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     },
 
     'Dumbbell One Arm Standing Hammer Curl': {
@@ -5062,7 +5062,7 @@ var exerciseMuscles = {
     },
 
     'Dumbbell 4 Ways Lateral Raise': {
-        'Primary': {'Lateral Deltoids': 50, 'Anterior Deltoids': 25, 'Posterior Deltoids': 25}
+        'Primary': {'Side Delts': 50, 'Anterior Deltoids': 25, 'Posterior Deltoids': 25}
     },
 
     'Barbell Lying Close grip Press': {
@@ -5095,7 +5095,7 @@ var exerciseMuscles = {
 
     'Cable Forward Raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     },
 
     'Elevanted Push Up': {
@@ -5105,7 +5105,7 @@ var exerciseMuscles = {
 
     'Dumbbell Incline Two Front Raise with Chest Support': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     },
 
     'Dumbbell Reverse Bench Press': {
@@ -5114,7 +5114,7 @@ var exerciseMuscles = {
     },
 
     'Dumbbell High Curl': {
-        'Primary': {'Lateral Deltoids': 50, 'Trapezius': 30},
+        'Primary': {'Side Delts': 50, 'Trapezius': 30},
         'Secondary': {'Biceps': 20}
     },
 
@@ -5134,7 +5134,7 @@ var exerciseMuscles = {
 
     'Dumbbell One Arm Front Raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     },
 
     'Bench dip on floor': {
@@ -5187,6 +5187,6 @@ var exerciseMuscles = {
 
     'Band front lateral raise': {
         'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Lateral Deltoids': 20}
+        'Secondary': {'Side Delts': 20}
     }
 };
