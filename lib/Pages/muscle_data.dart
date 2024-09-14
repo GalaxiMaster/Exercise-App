@@ -1,4 +1,6 @@
 import 'package:exercise_app/Pages/data_charts.dart';
+import 'package:exercise_app/Pages/main_exercises.dart';
+import 'package:exercise_app/Pages/radar_chart.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -129,8 +131,8 @@ class MuscleData extends StatelessWidget {
                       ),
                     ),
                   ),
-                  box(Icons.track_changes, 'Radar chart', 'Look at your data in a radar chart', Theme.of(context).colorScheme),
-                  box(Icons.fitness_center, 'Main exercises', 'See what exercises you do the most', Theme.of(context).colorScheme),
+                  box(Icons.track_changes, 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
+                  box(Icons.fitness_center, 'Main exercises', 'See what exercises you do the most', context, MainExercisesPage(sets: unscaledMuscleData)),
                 ],
               ),
             );
@@ -166,105 +168,57 @@ class MuscleData extends StatelessWidget {
     return colors[key] ?? Colors.grey;
   }
 
-  Widget box(IconData icon, String label, String description, ColorScheme colorScheme) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Icon(icon, color: colorScheme.primary,),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    Text(
-                      description,
-                      softWrap: true,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ],
+  Widget box(IconData icon, String label, String description, var context, var path) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => path)
+        );      
+      },
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Icon(icon, color: colorScheme.primary,),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      Text(
+                        description,
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Icon(Icons.arrow_forward_ios),
-            ),
-          ],
+              const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Icon(Icons.arrow_forward_ios),
+              ),
+            ],
+          ),
+                            const Divider(
+          thickness: 1,
+          color: Colors.grey,
+          height: 1,
         ),
-                          const Divider(
-        thickness: 1,
-        color: Colors.grey,
-        height: 1,
+        ],
       ),
-      ],
     );
   }
 }
-
-
-
-
-
-
-
- // SizedBox(
-                  //   height: 352,
-                  //   child: RadarChart(
-                  //     RadarChartData(
-                  //       dataSets: [
-                  //         RadarDataSet(
-                  //           fillColor: Colors.blue.withOpacity(0.5),
-                  //           borderColor: Colors.blue,
-                  //           entryRadius: 3,
-                  //           dataEntries: [
-                  //             RadarEntry(value: (snapshot.data?['Lats'] ?? 0) + (snapshot.data?['Erector Spinae'] ?? 0) + (snapshot.data?['Rhomboids'] ?? 0) + (snapshot.data?['Lower Back'] ?? 0).roundToDouble()), // Back
-                  //             RadarEntry(value: (snapshot.data?['Pectorals'] ?? 0) + (snapshot.data?['Pectorals (Upper)'] ?? 0) + (snapshot.data?['Pectorals (Lower)'] ?? 0).roundToDouble()), // Chest
-                  //             RadarEntry(value: (snapshot.data?['Front Delts'] ?? 0) + (snapshot.data?['Side Delts'] ?? 0) + (snapshot.data?['Posterior Delts'] ?? 0) + (snapshot.data?['Trapezius'] ?? 0).roundToDouble()), // Shoulders
-                  //             RadarEntry(value: (snapshot.data?['Biceps'] ?? 0) + (snapshot.data?['Triceps'] ?? 0) + (snapshot.data?['Forearms'] ?? 0) + (snapshot.data?['Brachialis'] ?? 0).roundToDouble()), // Arms
-                  //             RadarEntry(value: (snapshot.data?['Quadriceps'] ?? 0) + (snapshot.data?['Hamstrings'] ?? 0) + (snapshot.data?['Glutes'] ?? 0) + (snapshot.data?['Calves'] ?? 0).roundToDouble()), // Legs
-                  //             RadarEntry(value: (snapshot.data?['Rectus Abdominis'] ?? 0) + (snapshot.data?['Obliques'] ?? 0) + (snapshot.data?['Core'] ?? 0) + (snapshot.data?['Hip Flexors'] ?? 0).roundToDouble()), // Core
-                  //           ]
-                  //         ),
-                  //       ],
-                  //       radarBackgroundColor: Colors.transparent,
-                  //       radarBorderData: const BorderSide(color: Colors.transparent),
-                  //       titlePositionPercentageOffset: 0,
-                  //       titleTextStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  //       gridBorderData: const BorderSide(color: Colors.grey),
-                  //       tickBorderData: const BorderSide(color: Colors.transparent),
-                  //       ticksTextStyle: const TextStyle(color: Colors.transparent),
-                  //       tickCount: 200,
-              
-                  //       radarShape: RadarShape.polygon,
-                  //       getTitle: (index, angle) {
-                  //         switch (index) {
-                  //           case 0:
-                  //             return const RadarChartTitle(text: 'Back');
-                  //           case 1:
-                  //             return const RadarChartTitle(text: 'Chest');
-                  //           case 2:
-                  //             return const RadarChartTitle(text: 'Shoulders');
-                  //           case 3:
-                  //             return const RadarChartTitle(text: 'Arms');
-                  //           case 4:
-                  //             return const RadarChartTitle(text: 'Legs');
-                  //           case 5:
-                  //             return const RadarChartTitle(text: 'Core');
-                  //           default:
-                  //             return const RadarChartTitle(text: '');
-                  //         }
-                  //       },
-                  //     ),
-                  //   ),
-                  // )

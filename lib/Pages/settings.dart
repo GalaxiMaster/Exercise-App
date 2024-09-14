@@ -74,7 +74,7 @@ import 'package:exercise_app/widgets.dart';
               const SizedBox(width: 8.0),
               Text(
                 label,
-                style: TextStyle(
+                style: const TextStyle(
                    fontSize: 23,
                 ),
               ),
