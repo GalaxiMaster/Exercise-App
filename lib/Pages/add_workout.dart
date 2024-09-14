@@ -127,6 +127,10 @@ class _AddworkoutState extends State<Addworkout> {
                             fontSize: 14,
                           )
                         ),
+                        onChanged: (value) { // TODO on hold due to a large amount of refactoring for it
+                          // sets[exercise]['notes'] = value;
+                          // updateExercises();
+                        },
                       ),
                     ),
                     Table(

@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -73,21 +74,26 @@ class _AddRoutineState extends State<AddRoutine> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
-                itemCount: sets.keys.length,
-                itemBuilder: (context, index) {
-                  String exercise = sets.keys.toList()[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
-                    children: [
-                      Row(
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
+              itemCount: sets.keys.length,
+              itemBuilder: (context, index) {
+                String exercise = sets.keys.toList()[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(exercise),
+                          Text(
+                            exercise,
+                            style: const TextStyle(
+                              fontSize: 18
+                            ),
+                          ),
                           GestureDetector(
                             onTap: (){
                               setState(() {
@@ -98,76 +104,81 @@ class _AddRoutineState extends State<AddRoutine> {
                           ),
                         ],
                       ),
-                      Table(
-                        border: TableBorder.all(),
-                        columnWidths: const {
-                          0: FlexColumnWidth(1),
-                          1: FlexColumnWidth(2),
-                          2: FlexColumnWidth(2),
-                        },
-                        children: [
-                          const TableRow(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
+                    ),
+                    Table(
+                      border: const TableBorder.symmetric(inside: BorderSide.none),
+                      columnWidths: const {
+                        0: FlexColumnWidth(1),
+                        1: FlexColumnWidth(2),
+                        2: FlexColumnWidth(2),
+                      },
+                      children: [
+                        const TableRow(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
                                 child: Text('Set'),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Weight'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
+                                child: Text('Weight (kg)')
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Reps'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
+                                child: Text('Reps')
                               ),
-                            ],
-                          ),
-                          for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
-                          TableRow(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _showSetTypeMenu(exercise, i);
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(vertical: 16), // Adjust vertical padding to increase hitbox
-                                    child: Text(
-                                      sets[exercise]![i]['type'] == 'Warmup'
-                                          ? 'W'
-                                          : sets[exercise]![i]['type'] == 'Failure'
-                                              ? 'F'
-                                              : '${_getNormalSetNumber(exercise, i)}', // Display correct set number
-                                      textAlign: TextAlign.center,
-                                    ),
+                            ),
+                          ],
+                        ),
+                        for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
+                        TableRow(
+                          decoration: BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                _showSetTypeMenu(exercise, i);
+                              },
+                              child: SizedBox(
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    sets[exercise]![i]['type'] == 'Warmup'
+                                        ? 'W'
+                                        : sets[exercise]![i]['type'] == 'Failure'
+                                            ? 'F'
+                                            : '${_getNormalSetNumber(exercise, i)}',
+                                    style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                              ),
-                            ],
-                          )
-
-                        ],
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                            ),
+                          ],
+                        )
+            
+                      ],
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          addNewSet(exercise);
+                        },
+                        child: const Text('Add Set'),
                       ),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            addNewSet(exercise);
-                          },
-                          child: const Text('Add Set'),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
