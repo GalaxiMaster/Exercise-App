@@ -1,4 +1,13 @@
-var exerciseMuscles = {
+Map<String, List<String>> muscleGroups = {
+  'Back': ['Lats', 'Erector Spinae', 'Rhomboids', 'Lower Back'],
+  'Chest': ['Pectorals', 'Pectorals (Upper)', 'Pectorals (Lower)'],
+  'Shoulders': ['Front Delts', 'Side Delts', 'Posterior Delts', 'Trapezius'],
+  'Arms': ['Biceps', 'Triceps', 'Forearms', 'Brachialis'],
+  'Legs': ['Quadriceps', 'Hamstrings', 'Glutes', 'Calves'],
+  'Core': ['Rectus Abdominis', 'Obliques', 'Core', 'Hip Flexors']
+};
+
+Map exerciseMuscles = {
 'Cable Pushdown': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Forearms': 20}

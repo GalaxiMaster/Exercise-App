@@ -148,30 +148,6 @@ class MuscleData extends StatelessWidget {
     );
   }
 
-  Color getColor(String key) {
-    var colors = {
-      'Pectorals': Colors.red,
-      'Triceps': Colors.orange,
-      'Biceps': Colors.pink,
-      'Deltoids': Colors.blue,
-      'Front Delts': Colors.lightBlue,
-      'Side Delts': Colors.cyan,
-      'Rear Delts': Colors.teal,
-      'Forearms': Colors.purple,
-      'Lats': Colors.indigo,
-      'Rhomboids': Colors.green,
-      'Lower Back': Colors.brown,
-      'Glutes': Colors.deepOrange,
-      'Quads': Colors.yellow,
-      'Hamstrings': Colors.amber,
-      'Calves': Colors.lightGreen,
-      'Abs': Colors.lightBlueAccent,
-      'Obliques': Colors.blueGrey,
-    };
-
-    return colors[key] ?? Colors.grey;
-  }
-
   Widget box(String iconPath, String label, String description, var context, var path) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return InkWell(
@@ -230,4 +206,34 @@ class MuscleData extends StatelessWidget {
       ),
     );
   }
+}
+
+Color getColor(String key) {
+  // Define the color map
+  var colors = {
+    'Pectorals': Colors.red,
+    'Pectorals (Upper)': Colors.redAccent,
+    'Pectorals (Lower)': Colors.deepOrangeAccent,
+    'Triceps': Colors.orange,
+    'Biceps': Colors.pink,
+    'Front Delts': Colors.lightBlue,
+    'Side Delts': Colors.cyan,
+    'Posterior Delts': Colors.teal,
+    'Forearms': Colors.purple,
+    'Lats': Colors.indigo,
+    'Erector Spinae': Colors.lightGreen,
+    'Rhomboids': Colors.green,
+    'Lower Back': Colors.brown,
+    'Glutes': Colors.deepOrange,
+    'Quadriceps': Colors.yellow,
+    'Hamstrings': Colors.amber,
+    'Calves': Colors.lightGreen,
+    'Rectus Abdominis': Colors.lightBlueAccent,
+    'Obliques': Colors.blueGrey,
+    'Core': Colors.blueGrey, // General color for core if needed
+    'Hip Flexors': Colors.lightBlue
+  };
+
+  // Return the color for the key or grey if not found
+  return colors[key] ?? Colors.grey;
 }

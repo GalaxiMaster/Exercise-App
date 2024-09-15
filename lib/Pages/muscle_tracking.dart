@@ -1,9 +1,12 @@
+import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:intl/intl.dart';
 
 class MuscleTracking extends StatelessWidget {
   final Map setData;
@@ -62,7 +65,7 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
                 value: value,
                 goal: 30,
                 onTap: () => setState(() => expandedMuscle = null),
-                data: widget.normalData,
+                data: getMuscleSpecifics(widget.normalData, muscle),
               );
             } else {
               return SetProgressTile(
@@ -77,6 +80,21 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
       ),
     );
   }
+Map getMuscleSpecifics(Map data, String muscle) {
+  Map<String, double> sortedData = {};
+
+  if (muscleGroups.containsKey(muscle)) {
+    List<String> muscleList = muscleGroups[muscle]!;
+
+    for (String muscleName in muscleList) {
+      if (data.containsKey(muscleName)) {
+        sortedData[muscleName] = data[muscleName];
+      }
+    }
+  }
+
+  return sortedData;
+}
 }
 
 class SetProgressTile extends StatelessWidget {
@@ -142,7 +160,6 @@ class ExpandedSetProgressTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> desiredKeys = ['Hip Flexors', 'Obliques', 'Rectus Abdominis']; // replace with your list of keys
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -151,13 +168,16 @@ class ExpandedSetProgressTile extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceContainer,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  muscle,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    muscle,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -166,25 +186,39 @@ class ExpandedSetProgressTile extends StatelessWidget {
                       flex: 1,
                       child: SizedBox(
                         height: 150,
-                        child: PieChart(
-                          PieChartData(
-                            centerSpaceRadius: 60,
-                            sections: data.entries.map((entry) {
-                              return PieChartSectionData(
-                                color: Colors.red,
-                                value: entry.value,
-                                title: '${entry.key}\n${entry.value}%',
-                                radius: 20,
-                                titleStyle: const TextStyle(color: Colors.transparent),
-                              );
-                            }).where((section) => desiredKeys.contains(section.title.split('\n').first)).toList()
-                          )
+                        child: Stack(
+                          children: [ 
+                            PieChart(
+                              PieChartData(
+                                centerSpaceRadius: 65,
+                                sections: data.entries.map((entry) {
+                                  return PieChartSectionData(
+                                    color: getColor(entry.key),
+                                    value: entry.value,
+                                    title: '${entry.key}\n${entry.value}%',
+                                    radius: 20,
+                                    titleStyle: const TextStyle(color: Colors.transparent),
+                                  );
+                                }).toList()
+                              )
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (int i = 0; i < data.keys.length; i++)
+                                  Text(data.keys.toList()[i], style: TextStyle(color: getColor(data.keys.toList()[i])),)
+                                ],
+                              ),
+                            )
+                          ]
                         ),
                       ),
                     ),
                     Expanded(
                       flex: 1,
-                      child: _buildWeeklyProgressChart(),
+                      child: WeeklyProgressChart(muscle: muscle,),
                     ),
                   ],
                 ),
@@ -195,27 +229,92 @@ class ExpandedSetProgressTile extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildWeeklyProgressChart() {
-    // Placeholder for the weekly progress chart
-    return SizedBox(
+}
+class WeeklyProgressChart extends StatelessWidget {
+  final String muscle;
+  const WeeklyProgressChart({super.key, required this.muscle});
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map>(
+        future: getWeekData(muscle),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error loading data'));
+          } else if (snapshot.hasData) {
+            return SizedBox(
       height: 150,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(7, (index) {
-          double height = (index + 1) * 15.0;
-          return Container(
-            width: 20,
-            height: height,
-            color: Colors.green.withOpacity(0.5 + (index * 0.07)),
-          );
-        }),
+      child: BarChart(
+        BarChartData(
+          alignment: BarChartAlignment.spaceAround,
+          maxY: 5,
+          barTouchData: BarTouchData(enabled: false),
+          titlesData: FlTitlesData(
+            show: true,
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) => Text(
+                  ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'][value.toInt()],
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+              ),
+            ),
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          ),
+          gridData: FlGridData(show: false),
+          borderData: FlBorderData(show: false),
+          barGroups: 
+          snapshot.data!.entries.toList().asMap().entries.map((entry) {
+            int index = entry.key; // This gives the index of each entry
+            var data = entry.value.value; // This gives the value of the entry (entry.value is a MapEntry)
+            return BarChartGroupData(
+              x: index, // Use the index as the x value to differentiate each bar
+              barRods: [
+                BarChartRodData(
+                  toY: data, // Use entry.value.value to get the y-axis value
+                  color: Colors.green,
+                  width: 16,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ],
+            );
+          }).toList(),
+        ),
       ),
     );
+  } else {
+    return const Text('No data available');
   }
+  });
 }
-
-// ... CaloriesSpeedometer and SpeedometerPainter classes remain the same
+  Future<Map> getWeekData(String muscle) async{
+  Map weekData = {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0};
+  Map data = await readData();
+  for (var day in data.keys){
+    if (DateTime.now().difference(DateTime.parse(day.split(' ')[0])).inDays < 7){
+      String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
+      for (var exercise in data[day]['sets'].keys){
+        if(exerciseMuscles.containsKey(exercise) && muscleGroups[muscle]!.contains(exerciseMuscles[exercise]['Primary']))
+        for (var set in data[day]['sets'][exercise]){
+          if (exerciseMuscles.containsKey(exercise)){
+            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseMuscles[exercise]!['Primary']![muscle]!/100);
+            }
+            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
+            }
+          }
+        }
+      }
+    }
+  }
+  return weekData;
+}
+}
 
   Future<List> getSetAmounts() async {
   Map data = {};
@@ -322,8 +421,8 @@ class SpeedometerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height - 10);  // Moved center down slightly
     final radius = size.width / 2;
-    const startAngle = 130 * math.pi / 180;  // Start at 210 degrees
-    const sweepAngle = 280 * math.pi / 180;  // Sweep 300 degrees
+    const startAngle = 130 * math.pi / 180;
+    const sweepAngle = 280 * math.pi / 180;
     const strokeWidth = 20.0;
 
     final backgroundPaint = Paint()
@@ -360,3 +459,4 @@ class SpeedometerPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
