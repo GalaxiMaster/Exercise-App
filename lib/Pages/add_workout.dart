@@ -23,7 +23,9 @@ class _AddworkoutState extends State<Addworkout> {
   Map records = {};
   Map sets = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
-    Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
+  Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
+  Map<String, List<Map<String, TextEditingController>>> _controllers = {};
+
 
   @override
   void initState() {        
@@ -42,28 +44,62 @@ class _AddworkoutState extends State<Addworkout> {
       sets = widget.sets['sets'];
     }
     preLoad();
-    _initializeFocusNodes();
+    _initializeFocusNodesAndControllers();
   }
   @override
   void dispose() {
-    // Dispose of focus nodes
+    // Dispose of focus nodes and controllers
     for (var exerciseNodes in _focusNodes.values) {
       for (var setNodes in exerciseNodes) {
         setNodes['weight']!.dispose();
         setNodes['reps']!.dispose();
       }
     }
+    for (var exerciseControllers in _controllers.values) {
+      for (var setControllers in exerciseControllers) {
+        setControllers['weight']!.dispose();
+        setControllers['reps']!.dispose();
+      }
+    }
     super.dispose();
   }
-   void _initializeFocusNodes() {
+  void _initializeFocusNodesAndControllers() {
     for (String exercise in sets.keys) {
+      _ensureExerciseFocusNodesAndControllers(exercise);
+    }
+  }
+
+ void _ensureExerciseFocusNodesAndControllers(String exercise) {
+    if (!_focusNodes.containsKey(exercise)) {
       _focusNodes[exercise] = [];
-      for (int i = 0; i < sets[exercise]!.length; i++) {
-        _focusNodes[exercise]!.add({
-          'weight': FocusNode(),
-          'reps': FocusNode(),
-        });
-      }
+      _controllers[exercise] = [];
+    }
+    while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
+      final weightFocusNode = FocusNode();
+      final repsFocusNode = FocusNode();
+      
+      weightFocusNode.addListener(() {
+        if (weightFocusNode.hasFocus) {
+          _controllers[exercise]![_focusNodes[exercise]!.length - 1]['weight']!.selection = 
+              TextSelection(baseOffset: 0, extentOffset: _controllers[exercise]![_focusNodes[exercise]!.length - 1]['weight']!.text.length);
+        }
+      });
+      
+      repsFocusNode.addListener(() {
+        if (repsFocusNode.hasFocus) {
+          _controllers[exercise]![_focusNodes[exercise]!.length - 1]['reps']!.selection = 
+              TextSelection(baseOffset: 0, extentOffset: _controllers[exercise]![_focusNodes[exercise]!.length - 1]['reps']!.text.length);
+        }
+      });
+
+      _focusNodes[exercise]!.add({
+        'weight': weightFocusNode,
+        'reps': repsFocusNode,
+      });
+      _controllers[exercise]!.add({
+        'weight': TextEditingController(text: sets[exercise]![_focusNodes[exercise]!.length - 1]['weight'].toString()),
+        'reps': TextEditingController(text: sets[exercise]![_focusNodes[exercise]!.length - 1]['reps'].toString()),
+      });
     }
   }
   void preLoad() async{
@@ -114,7 +150,7 @@ class _AddworkoutState extends State<Addworkout> {
               itemCount: sets.keys.length,
               itemBuilder: (context, index) {
                 String exercise = sets.keys.toList()[index];
-                _ensureExerciseFocusNodes(exercise);
+                _ensureExerciseFocusNodesAndControllers(exercise);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
                   children: [
@@ -215,8 +251,9 @@ class _AddworkoutState extends State<Addworkout> {
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
                                 child: TextFormField(
-                                  initialValue: sets[exercise]![i]['weight'].toString(),
+                                  // initialValue: sets[exercise]![i]['weight'].toString(),
                                   focusNode: _focusNodes[exercise]![i]['weight'],
+                                  controller: _controllers[exercise]![i]['weight'],
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -237,13 +274,18 @@ class _AddworkoutState extends State<Addworkout> {
                                     isRecord(exercise, i);
                                     updateExercises();
                                   },
-                                    onFieldSubmitted: (value) {
-                                      if (i == sets[exercise]!.length - 1) {
-                                        addNewSet(exercise);
-                                        // FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
-                                      } else {
-                                        FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
-                                      }
+                                  onFieldSubmitted: (value) {
+                                    if (i == sets[exercise]!.length - 1) {
+                                      addNewSet(exercise);
+                                    } else {
+                                      FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+                                    }
+                                  },
+                                  onTap: () {
+                                    _controllers[exercise]![i]['reps']!.selection = TextSelection(
+                                      baseOffset: 0,
+                                      extentOffset: _controllers[exercise]![i]['reps']!.text.length,
+                                    );
                                   },
                                 ),
                               ),
@@ -252,8 +294,9 @@ class _AddworkoutState extends State<Addworkout> {
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
                                 child: TextFormField(
-                                  initialValue: sets[exercise]![i]['reps'].toString(),
+                                  // initialValue: sets[exercise]![i]['reps'].toString(),
                                   focusNode: _focusNodes[exercise]![i]['reps'],
+                                  controller: _controllers[exercise]![i]['reps'],
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -277,6 +320,12 @@ class _AddworkoutState extends State<Addworkout> {
                                     onFieldSubmitted: (value) {
                                     addNewSet(exercise); // Add a new set on pressing "Enter"
                                     FocusScope.of(context).nextFocus(); // Move focus to the next field
+                                  },
+                                  onTap: () {
+                                    _controllers[exercise]![i]['reps']!.selection = TextSelection(
+                                      baseOffset: 0,
+                                      extentOffset: _controllers[exercise]![i]['reps']!.text.length,
+                                    );
                                   },
                                 ),
                               ),
@@ -410,7 +459,7 @@ class _AddworkoutState extends State<Addworkout> {
   void addNewSet(String exercise) {
     setState(() {
       sets[exercise]?.add({'weight': '', 'reps': '', 'type': 'Normal'});
-      _ensureExerciseFocusNodes(exercise);
+      _ensureExerciseFocusNodesAndControllers(exercise);
     });
     
     // Schedule a callback to set focus after the widget rebuilds
@@ -424,17 +473,6 @@ class _AddworkoutState extends State<Addworkout> {
     return _focusNodes[exercise]![lastSetIndex]['weight']!;
   }
   
-  void _ensureExerciseFocusNodes(String exercise) {
-    if (!_focusNodes.containsKey(exercise)) {
-      _focusNodes[exercise] = [];
-    }
-    while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
-      _focusNodes[exercise]!.add({
-        'weight': FocusNode(),
-        'reps': FocusNode(),
-      });
-    }
-  }
   
   void confirmExercises(var sets){
     bool isNull = checkNulls(sets);
