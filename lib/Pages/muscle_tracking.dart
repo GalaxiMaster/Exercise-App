@@ -40,6 +40,7 @@ class FlexibleMuscleLayout extends StatefulWidget {
   const FlexibleMuscleLayout({super.key, required this.data, required this.normalData});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FlexibleMuscleLayoutState createState() => _FlexibleMuscleLayoutState();
 }
 
@@ -248,7 +249,7 @@ class WeeklyProgressChart extends StatelessWidget {
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: 5,
+          maxY: 4, // TODO set this to something
           barTouchData: BarTouchData(enabled: false),
           titlesData: FlTitlesData(
             show: true,
@@ -261,21 +262,21 @@ class WeeklyProgressChart extends StatelessWidget {
                 ),
               ),
             ),
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
-          gridData: FlGridData(show: false),
+          gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
           barGroups: 
           snapshot.data!.entries.toList().asMap().entries.map((entry) {
-            int index = entry.key; // This gives the index of each entry
-            var data = entry.value.value; // This gives the value of the entry (entry.value is a MapEntry)
+            int index = entry.key;
+            var data = entry.value.value;
             return BarChartGroupData(
-              x: index, // Use the index as the x value to differentiate each bar
+              x: index,
               barRods: [
                 BarChartRodData(
-                  toY: data, // Use entry.value.value to get the y-axis value
+                  toY: data,
                   color: Colors.green,
                   width: 16,
                   borderRadius: BorderRadius.circular(4),
@@ -291,20 +292,23 @@ class WeeklyProgressChart extends StatelessWidget {
   }
   });
 }
-  Future<Map> getWeekData(String muscle) async{
-  Map weekData = {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0};
+  Future<Map> getWeekData(String mainMuscle) async{
+  Map weekData = {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0}; // double format
   Map data = await readData();
   for (var day in data.keys){
     if (DateTime.now().difference(DateTime.parse(day.split(' ')[0])).inDays < 7){
       String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
       for (var exercise in data[day]['sets'].keys){
-        if(exerciseMuscles.containsKey(exercise) && muscleGroups[muscle]!.contains(exerciseMuscles[exercise]['Primary']))
+        if(exerciseMuscles.containsKey(exercise))
+        // ignore: unused_local_variable, curly_braces_in_flow_control_structures
         for (var set in data[day]['sets'][exercise]){
-          if (exerciseMuscles.containsKey(exercise)){
-            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+          for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+            if (muscleGroups[mainMuscle]!.contains(muscle)){
               weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseMuscles[exercise]!['Primary']![muscle]!/100);
             }
-            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+          }
+          for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+            if (muscleGroups[mainMuscle]!.contains(muscle)){
               weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
             }
           }

@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 
 // ignore: must_be_immutable
 class MainExercisesPage extends StatelessWidget {
-  MainExercisesPage({super.key});   
+  const MainExercisesPage({super.key});   
     @override
     Widget build(BuildContext context) {
       return Scaffold(

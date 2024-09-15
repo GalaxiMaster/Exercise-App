@@ -64,7 +64,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           lineBarsData: [
                             LineChartBarData(
                               spots: spots,
-                              isCurved: true,
+                              // isCurved: true,
                               color: Colors.blue,
                               barWidth: 3,
                               belowBarData: BarAreaData(show: false),
@@ -106,7 +106,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           borderData: FlBorderData(
                             show: true,
-                            border: Border.all(color: Colors.black),
+                            border: Border.all(color: Theme.of(context).colorScheme.onSurface),
                           ),
                           gridData: const FlGridData(show: true),
                         ),
@@ -123,20 +123,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
 }
-AppBar appBar(BuildContext context, String exercise) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: Text(
-        exercise,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-      centerTitle: true,
-    );
-  }
 
 Future<List> getStats(String target) async{
   Map data = await readData();

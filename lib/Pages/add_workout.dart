@@ -23,6 +23,8 @@ class _AddworkoutState extends State<Addworkout> {
   Map records = {};
   Map sets = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
+    Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
+
   @override
   void initState() {        
     super.initState();
@@ -40,6 +42,29 @@ class _AddworkoutState extends State<Addworkout> {
       sets = widget.sets['sets'];
     }
     preLoad();
+    _initializeFocusNodes();
+  }
+  @override
+  void dispose() {
+    // Dispose of focus nodes
+    for (var exerciseNodes in _focusNodes.values) {
+      for (var setNodes in exerciseNodes) {
+        setNodes['weight']!.dispose();
+        setNodes['reps']!.dispose();
+      }
+    }
+    super.dispose();
+  }
+   void _initializeFocusNodes() {
+    for (String exercise in sets.keys) {
+      _focusNodes[exercise] = [];
+      for (int i = 0; i < sets[exercise]!.length; i++) {
+        _focusNodes[exercise]!.add({
+          'weight': FocusNode(),
+          'reps': FocusNode(),
+        });
+      }
+    }
   }
   void preLoad() async{
     records = await readData(path: 'records');
@@ -89,6 +114,7 @@ class _AddworkoutState extends State<Addworkout> {
               itemCount: sets.keys.length,
               itemBuilder: (context, index) {
                 String exercise = sets.keys.toList()[index];
+                _ensureExerciseFocusNodes(exercise);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
                   children: [
@@ -190,11 +216,12 @@ class _AddworkoutState extends State<Addworkout> {
                               child: Center(
                                 child: TextFormField(
                                   initialValue: sets[exercise]![i]['weight'].toString(),
+                                  focusNode: _focusNodes[exercise]![i]['weight'],
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
+                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                   ),
                                   decoration: InputDecoration(
                                     hintText: getPrevious(exercise, i+1, 'Weight'),
@@ -210,6 +237,14 @@ class _AddworkoutState extends State<Addworkout> {
                                     isRecord(exercise, i);
                                     updateExercises();
                                   },
+                                    onFieldSubmitted: (value) {
+                                      if (i == sets[exercise]!.length - 1) {
+                                        addNewSet(exercise);
+                                        // FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+                                      } else {
+                                        FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+                                      }
+                                  },
                                 ),
                               ),
                             ),
@@ -218,11 +253,12 @@ class _AddworkoutState extends State<Addworkout> {
                               child: Center(
                                 child: TextFormField(
                                   initialValue: sets[exercise]![i]['reps'].toString(),
+                                  focusNode: _focusNodes[exercise]![i]['reps'],
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Colors.black : Colors.blue,
+                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                   ),
                                   decoration: InputDecoration(
                                     hintText: getPrevious(exercise, i+1, 'Reps'),
@@ -237,6 +273,10 @@ class _AddworkoutState extends State<Addworkout> {
                                     sets[exercise]![i]['reps'] = value != 'null' ? value : '';
                                     isRecord(exercise, i);
                                     updateExercises();
+                                  },
+                                    onFieldSubmitted: (value) {
+                                    addNewSet(exercise); // Add a new set on pressing "Enter"
+                                    FocusScope.of(context).nextFocus(); // Move focus to the next field
                                   },
                                 ),
                               ),
@@ -370,7 +410,30 @@ class _AddworkoutState extends State<Addworkout> {
   void addNewSet(String exercise) {
     setState(() {
       sets[exercise]?.add({'weight': '', 'reps': '', 'type': 'Normal'});
+      _ensureExerciseFocusNodes(exercise);
     });
+    
+    // Schedule a callback to set focus after the widget rebuilds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_getLastTextFieldFocus(exercise));
+    });
+  }  
+  
+  FocusNode _getLastTextFieldFocus(String exercise) {
+    final lastSetIndex = sets[exercise]!.length - 1;
+    return _focusNodes[exercise]![lastSetIndex]['weight']!;
+  }
+  
+  void _ensureExerciseFocusNodes(String exercise) {
+    if (!_focusNodes.containsKey(exercise)) {
+      _focusNodes[exercise] = [];
+    }
+    while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
+      _focusNodes[exercise]!.add({
+        'weight': FocusNode(),
+        'reps': FocusNode(),
+      });
+    }
   }
   
   void confirmExercises(var sets){
