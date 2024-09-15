@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:exercise_app/Pages/routine_controller.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,13 +18,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List routines = [];
+  bool isCurrent = false;
 
   @override
   void initState() {
     super.initState();
     _loadRoutines();
+    getIsCurrent();
   }
-
+  void getIsCurrent() async{
+    Map data = await readData(path: 'current');
+    setState(() {
+      isCurrent = data['sets'].toString() != {}.toString();
+    });
+  }
   Future<void> _loadRoutines() async {
     List loadedRoutines = await getAllRoutines();
     debugPrint("${loadedRoutines}identify");
@@ -76,12 +84,51 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity, 
               height: 50,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => 
-                    Addworkout()
-                  ),
-                );
+                if (isCurrent){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Workout already in progress'),
+                        content: const Text('Continue or discard it?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Discard', style: TextStyle(color: Colors.red),),
+                            onPressed: () {
+                              resetData(false, true, false);
+                              Navigator.of(context).pop(); // Dismiss the dialog
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Addworkout()),
+                              ).then((_) {
+                                getIsCurrent();  // Call the method after returning from Addworkout
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('Resume'),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Dismiss the dialog
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Addworkout()),
+                              ).then((_) {
+                                getIsCurrent();  // Call the method after returning from Addworkout
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }else{
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Addworkout()),
+                  ).then((_) {
+                    getIsCurrent();  // Call the method after returning from Addworkout
+                  });
+                }
               }
             ),  
             const SizedBox(height: 20,),

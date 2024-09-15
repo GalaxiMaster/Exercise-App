@@ -132,19 +132,21 @@ String getMuscles(String exercise){
 }
 
 bool containsAllCharacters(String exercise, String query) {
-  int queryIndex = 0;
-  if (query.isEmpty){
+  if (query.isEmpty) {
     return true;
   }
-  for (int i = 0; i < exercise.length; i++) {
-    if (exercise[i].toLowerCase() == query[queryIndex].toLowerCase()) {
-      queryIndex++;
-    }
-    if (queryIndex == query.length) {
-      return true;
+
+  // Split the query into words
+  List<String> queryWords = query.toLowerCase().split(' ');
+
+  // Check if each word in queryWords exists as a consecutive substring in exercise
+  for (String word in queryWords) {
+    if (!exercise.toLowerCase().contains(word)) {
+      return false;
     }
   }
-  return false;
+
+  return true;
 }
 
 Future<bool> fileExists(String filePath) async {

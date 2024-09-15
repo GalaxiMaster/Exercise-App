@@ -1,6 +1,8 @@
-  import 'dart:io';
+  import 'dart:convert';
+import 'dart:io';
   import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:file_picker/file_picker.dart';
   import 'package:flutter/material.dart';
   import 'package:path_provider/path_provider.dart';
   import 'package:share_plus/share_plus.dart';
@@ -40,6 +42,12 @@ import 'package:exercise_app/widgets.dart';
               label: 'Reset data',
               function: (){resetData(true, false, true);},
             ),
+            setttingDividor(),
+            _buildSettingsBox(
+              icon: Icons.download,
+              label: 'Import data',
+              function: (){importData(context);},
+            ),
           ],
         ),
       );
@@ -64,7 +72,6 @@ import 'package:exercise_app/widgets.dart';
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 173, 173, 173).withOpacity(0.1), // Background color for the whole box
-          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 8),
@@ -242,4 +249,54 @@ class _GoalOptionsState extends State<GoalOptions> {
       };
       writeData(settings, path: 'settings',append: false);
     }
+  }
+  void importData(BuildContext context) async{
+  try {
+    // Open file picker and allow the user to select a JSON file
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom, // Restrict to custom types
+      allowedExtensions: ['json'], // Only allow .json files
+    );
+    
+    if (result != null && result.files.isNotEmpty) {
+      // Get the file path
+      String? filePath = result.files.single.path;
+
+      if (filePath != null) {
+        // Read the content of the file
+        File file = File(filePath);
+        String content = await file.readAsString();
+
+        // Parse the JSON content
+        Map<String, dynamic> jsonData = jsonDecode(content);
+        writeData(jsonData, append: true);
+        Map data = await readData();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Data written'),
+            content: Text(data.toString()),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+              ),
+            ],
+          );
+        },
+      );
+        // Do something with the parsed JSON data
+        debugPrint("Parsed JSON data: $jsonData");
+      } else {
+        debugPrint("File path is null");
+      }
+    } else {
+      debugPrint("User canceled the picker");
+    }
+  } catch (e) {
+    debugPrint("Error picking or reading file: $e");
+  }
   }

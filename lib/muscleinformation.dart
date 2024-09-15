@@ -5197,5 +5197,9 @@ Map exerciseMuscles = {
     'Band front lateral raise': {
         'Primary': {'Anterior Deltoids': 80},
         'Secondary': {'Side Delts': 20}
-    }
+    },
+    'Machine Rows': {
+    'Primary': {'Latissimus Dorsi': 60},
+    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+  },
 };

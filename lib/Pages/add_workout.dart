@@ -117,6 +117,9 @@ class _AddworkoutState extends State<Addworkout> {
 
   void updateExercises() async{
     if (!widget.confirm){
+      if (sets.isEmpty){
+        resetData(false, true, false);
+      }
       writeData({'stats': {'startTime': startTime}, 'sets': sets}, path: 'current', append: false);
     }
   }
