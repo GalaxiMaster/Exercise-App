@@ -91,7 +91,7 @@ import 'package:file_picker/file_picker.dart';
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.arrow_forward_ios),
+                child: const Icon(Icons.arrow_forward_ios),
               ),
             ],
           ),

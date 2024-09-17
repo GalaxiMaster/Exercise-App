@@ -23,8 +23,8 @@ class _AddworkoutState extends State<Addworkout> {
   Map records = {};
   Map sets = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
-  Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
-  Map<String, List<Map<String, TextEditingController>>> _controllers = {};
+  final Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
+  final Map<String, List<Map<String, TextEditingController>>> _controllers = {};
 
 
   @override

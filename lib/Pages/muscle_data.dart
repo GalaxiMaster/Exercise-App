@@ -134,7 +134,7 @@ class MuscleData extends StatelessWidget {
                     ),
                   ),
                   box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
-                  box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, MainExercisesPage()),
+                  box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, const MainExercisesPage()),
                   box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking(setData: unscaledMuscleData,)),
                   
                 ],

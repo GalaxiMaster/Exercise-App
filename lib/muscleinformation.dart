@@ -1,7 +1,7 @@
 Map<String, List<String>> muscleGroups = {
   'Back': ['Lats', 'Erector Spinae', 'Rhomboids', 'Lower Back'],
   'Chest': ['Pectorals', 'Pectorals (Upper)', 'Pectorals (Lower)'],
-  'Shoulders': ['Front Delts', 'Side Delts', 'Posterior Delts', 'Trapezius'],
+  'Shoulders': ['Front Deltoid', 'Side Delts', 'Posterior Deltoids', 'Trapezius'],
   'Arms': ['Biceps', 'Triceps', 'Forearms', 'Brachialis'],
   'Legs': ['Quadriceps', 'Hamstrings', 'Glutes', 'Calves'],
   'Core': ['Rectus Abdominis', 'Obliques', 'Core', 'Hip Flexors']
@@ -32,11 +32,6 @@ Map exerciseMuscles = {
     'Primary': {'Triceps': 80},
     'Secondary': {'Core': 20}
 },
-
-'Lever Standing Hip Extension': {
-    'Primary': {'Glutes': 70, 'Hamstrings': 30}
-},
-
 'Dumbbell Incline Twisted Flyes': {
     'Primary': {'Upper Chest': 70},
     'Secondary': {'Front Deltoids': 30}
@@ -50,11 +45,6 @@ Map exerciseMuscles = {
 'Dumbbell Incline Bench Press': {
     'Primary': {'Upper Chest': 70},
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
-'Crunch (on bench)': {
-    'Primary': {'Rectus Abdominis': 80},
-    'Secondary': {'Obliques': 20}
 },
 
 'Dumbbell Behind Back Finger Curl': {
@@ -72,11 +62,6 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
-'Barbell Rear Lunge (without weight)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Dumbbell Press Squat': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Shoulders': 20}
 },
@@ -84,11 +69,6 @@ Map exerciseMuscles = {
 'Dumbbell Single Leg Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance & Stability': 10}
-},
-
-'Barbell Incline Shoulder Raise': {
-    'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Side Delts': 30}
 },
 
 'Dumbbell One Arm Reverse Preacher Curl': {
@@ -110,11 +90,6 @@ Map exerciseMuscles = {
     'Primary': {'Biceps': 70, 'Brachialis': 30}
 },
 
-'Circles Elbow Arm': {
-    'Primary': {'Shoulders': 50},
-    'Secondary': {'Rotator Cuff': 50}
-},
-
 'Side Lunge': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
 },
@@ -129,33 +104,9 @@ Map exerciseMuscles = {
     'Secondary': {'Biceps (long head)': 20, 'Forearms': 10}
 },
 
-'Forearm   Supination': {
-    'Primary': {'Forearms (Supinators)': 100}
-},
-
-'Dumbbell forward leaning lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 40},
-    'Secondary': {'Hamstrings': 10}
-},
-
-'Kettlebell Step up (VERSION 2)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Barbell Good Morning': {
     'Primary': {'Hamstrings': 60, 'Glutes': 30},
     'Secondary': {'Lower Back': 10}
-},
-
-'Dumbbell Alternate Biceps Curl_1': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Brachialis': 15, 'Forearms': 5}
-},
-
-'Dumbbell Incline reverse grip 30 degrees bench press': {
-    'Primary': {'Lower Chest': 60},
-    'Secondary': {'Triceps': 30, 'Front Deltoids': 10}
 },
 
 'Lever Bicep Curl': {
@@ -168,29 +119,9 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps (lateral & medial heads)': 20}
 },
 
-'Barbell Full squat (with rack)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
-'Reverse Lunge (leg kick)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Self assisted Inverse Leg Curl': {
     'Primary': {'Hamstrings': 80},
     'Secondary': {'Calves': 20}
-},
-
-'Barbell Walk Calves Activation': {
-    'Primary': {'Calves': 80},
-    'Secondary': {'Balance & Stability': 20}
-},
-
-'Band one arm overhead biceps curl': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Brachialis': 15, 'Forearms': 5}
 },
 
 'Dumbbell One Arm Chest Fly on Exercise Ball': {
@@ -200,11 +131,6 @@ Map exerciseMuscles = {
 
 'Cross Body Twisting Crunch': {
     'Primary': {'Obliques': 60, 'Rectus Abdominis': 40}
-},
-
-'Self Assisted Inverse Leg Curl (VERSION 2)': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
 },
 
 'Barbell Stiff Legged Deadlift': {
@@ -237,34 +163,14 @@ Map exerciseMuscles = {
     'Secondary': {'Hip Flexors': 30, 'Quads': 10}
 },
 
-'Plate Hyperextension': {
-    'Primary': {'Lower Back': 70},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10}
-},
-
 'Cable Supine Reverse Fly': {
     'Primary': {'Rear Deltoids': 70},
     'Secondary': {'Trapezius': 30}
 },
 
-'Assisted Chest Dip (kneeling)': {
-    'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
 'Kettlebell Russian Twist': {
     'Primary': {'Obliques': 60},
     'Secondary': {'Rectus Abdominis': 30, 'Core': 10}
-},
-
-'Front Plank_1': {
-    'Primary': {'Core': 70},
-    'Secondary': {'Shoulders': 20, 'Back': 10}
-},
-
-'Band Low Chest Fly': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
 },
 
 'Handstand': {
@@ -287,24 +193,9 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 20, 'Hamstrings': 10}
 },
 
-'Band standing chest press': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
-},
-
-'Jump Squat II': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Barbell Spider Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Band Standing Straight Arm Pulldown_1': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Triceps': 30}
 },
 
 'Lever Triceps Extension': {
@@ -312,27 +203,7 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Lever Seated Leg Press (VERSION 2)': {
-    'Primary': {'Quadriceps': 70},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10}
-},
-
 'Barbell Prone Incline Curl': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
-'Barbell Floor Chest Press': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
-},
-
-'Band standing rear delt row': {
-    'Primary': {'Rear Deltoids': 70},
-    'Secondary': {'Trapezius': 30}
-},
-
-'Bodyweight Standing Biceps Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
 },
@@ -377,11 +248,6 @@ Map exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Dumbbell Over Bench One Arm Wrist Curl': {
-    'Primary': {'Forearms (flexors)': 90},
-    'Secondary': {'Grip Strength': 10}
-},
-
 'Dumbbell Incline Rear Lateral Raise': {
     'Primary': {'Rear Deltoids': 70},
     'Secondary': {'Trapezius': 30}
@@ -395,16 +261,6 @@ Map exerciseMuscles = {
 'Reverse Crunch m': {
     'Primary': {'Lower Abdominals': 70},
     'Secondary': {'Obliques': 30}
-},
-
-'Band Biceps Curl': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
-'Band Knelling Lat Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
 },
 
 'Dumbbell Full Can Lateral Raise': {
@@ -447,10 +303,6 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 30, 'Lower Back': 10}
 },
 
-'Lever Chest Press (VERSION 2)': {
-    'Primary': {'Pectorals': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
 'EZ Barbell Reverse Grip Curl': {
     'Primary': {'Biceps': 70, 'Brachialis': 30}
 },
@@ -465,16 +317,6 @@ Map exerciseMuscles = {
     'Secondary': {'Quadriceps': 10, 'Glutes': 10, 'Core': 10}
 },
 
-'Dumbbell Bent Arm Pullover Hold': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Chest': 20, 'Triceps': 20}
-},
-
-'Kettlebell Backward Lunge': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Barbell Incline Row': {
     'Primary': {'Upper Back': 60},
     'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
@@ -487,11 +329,6 @@ Map exerciseMuscles = {
 'Archer Push up': {
     'Primary': {'Chest': 60, 'Triceps': 30},
     'Secondary': {'Core': 10}
-},
-
-'Resistance Band Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
 },
 
 'Barbell Overhead Squat': {
@@ -523,11 +360,6 @@ Map exerciseMuscles = {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
 },
 
-'Band standing external shoulder rotation': {
-    'Primary': {'Rotator Cuff': 80},
-    'Secondary': {'Posterior Deltoids': 20}
-},
-
 'Dumbbell Step Up Single Leg Balance with Bicep Curl': {
     'Primary': {'Quadriceps': 40, 'Glutes': 30, 'Biceps': 20},
     'Secondary': {'Hamstrings': 5, 'Balance': 5}
@@ -536,26 +368,6 @@ Map exerciseMuscles = {
 'Kettlebell Kickstand One Leg Deadlift': {
     'Primary': {'Hamstrings': 50, 'Glutes': 30},
     'Secondary': {'Lower Back': 10, 'Balance': 10}
-},
-
-'Lever One Leg Extension': {
-    'Primary': {'Quadriceps': 90},
-    'Secondary': {'Knee Joint Stability': 10}
-},
-
-'Dumbbell Lying Triceps Extension_1': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Chest': 20}
-},
-
-'Dumbbell Over Bench Revers Wrist Curl': {
-    'Primary': {'Forearms (extensors)': 90},
-    'Secondary': {'Grip Strength': 10}
-},
-
-'Barbell Full Squat': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
 },
 
 'Hanging Toes to Bar': {
@@ -568,11 +380,6 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Single Leg Extension (on stability ball)': {
-    'Primary': {'Quadriceps': 80},
-    'Secondary': {'Core': 10, 'Balance': 10}
-},
-
 'Dumbbell Seated Front Raise': {
     'Primary': {'Front Deltoids': 70},
     'Secondary': {'Side Delts': 30}
@@ -583,31 +390,12 @@ Map exerciseMuscles = {
     'Secondary': {'Balance': 10}
 },
 
-'Lever Rotary Calf': {
-    'Primary': {'Calves': 100}
-},
-
-'Assisted Chin up': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
-},
-
 'Seated Flutter Kick': {
     'Primary': {'Lower Abdominals': 70},
     'Secondary': {'Hip Flexors': 30}
 },
 
-'Cable One Arm Curl': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
 'Barbell Shrug': {
-    'Primary': {'Trapezius': 80},
-    'Secondary': {'Upper Back': 20}
-},
-
-'Cable Seated Horizontal Shrug': {
     'Primary': {'Trapezius': 80},
     'Secondary': {'Upper Back': 20}
 },
@@ -641,11 +429,6 @@ Map exerciseMuscles = {
     'Secondary': {'Latissimus Dorsi': 20}
 },
 
-'Dumbbell Floor Fly': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
-},
-
 'Crunch (hands overhead)': {
     'Primary': {'Rectus Abdominis': 80},
     'Secondary': {'Obliques': 20}
@@ -664,20 +447,6 @@ Map exerciseMuscles = {
 'Dumbbell Seated Lateral Raise': {
     'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
-},
-
-'Cable One Arm Biceps Curl (VERSION 2)': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
-'Assisted Wide Grip Chest Dip (kneeling)': {
-    'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
-'Ankle Circles': {
-    'Primary': {'Ankles': 100}
 },
 
 'Dumbbell Goblet Box Squat': {
@@ -705,19 +474,9 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 10}
 },
 
-'Barbell Bent Over Wide Grip Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
 'Donkey Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Hamstrings': 10}
-},
-
-'Assisted Inverse Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
 },
 
 'Cable Standing One Arm Tricep Pushdown (Overhand Grip)': {
@@ -730,24 +489,9 @@ Map exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Squat mobility Complex': {
-    'Primary': {'Hip Flexors': 40, 'Ankles': 30},
-    'Secondary': {'Thoracic Spine': 20, 'Shoulders': 10}
-},
-
 'Smith Close Grip Bench Press': {
     'Primary': {'Triceps': 60, 'Chest': 30},
     'Secondary': {'Front Deltoids': 10}
-},
-
-'Deep Push Up': {
-    'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
-'Resistance Band Bent Leg Side Kick (kneeling)': {
-    'Primary': {'Glutes': 60, 'Hip Abductors': 30},
-    'Secondary': {'Core': 10}
 },
 
 'Reverse Plank with Leg Lift': {
@@ -755,29 +499,14 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 10}
 },
 
-'Dumbbell Incline Bench Press_1': {
-    'Primary': {'Upper Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
 'Cable One Arm Straight Back High Row (kneeling)': {
     'Primary': {'Upper Back': 60},
     'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
 },
 
-'Lever Lying Single Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
-},
-
 'Cable Decline Seated Wide Grip Row': {
     'Primary': {'Latissimus Dorsi': 60},
     'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
-'Lever Back Extension (version 2)': {
-    'Primary': {'Lower Back': 70},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10}
 },
 
 'Barbell Decline Pullover': {
@@ -787,11 +516,6 @@ Map exerciseMuscles = {
 
 'Weighted Frog Pump': {
     'Primary': {'Glutes': 70, 'Adductors': 30}
-},
-
-'Lever Seated Hip Adduction (VERSION 2)': {
-    'Primary': {'Adductors': 80},
-    'Secondary': {'Glutes': 20}
 },
 
 'Modified Push Up to Forearms': {
@@ -867,16 +591,6 @@ Map exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Lever Preacher Curl (plate loaded)_1': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Brachialis': 15, 'Forearms': 5}
-},
-
-'Landmine Rear Lunge': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Lever Standing Rear Kick': {
     'Primary': {'Glutes': 70},
     'Secondary': {'Hamstrings': 30}
@@ -885,11 +599,6 @@ Map exerciseMuscles = {
 'Dumbbell Concentration Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Dumbbell Half Kneeling Military Press': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 20, 'Core': 10}
 },
 
 'Roll Seated Single Leg Shoulder Flexor Depresor Retractor': {
@@ -902,18 +611,9 @@ Map exerciseMuscles = {
     'Secondary': {'Posterior Deltoids': 10}
 },
 
-'Dumbbell Side Lunge (VERSION 3)': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
-},
-
 'Cable Bench Press': {
     'Primary': {'Chest': 70},
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
-'Cable Triceps Pushdown (V bar) (VERSION 2)': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Forearms': 20}
 },
 
 'Incline Push up': {
@@ -936,43 +636,14 @@ Map exerciseMuscles = {
     'Secondary': {'Chest': 30, 'Shoulders': 10}
 },
 
-'Triceps Dip': {
-    'Primary': {'Triceps': 70},
-    'Secondary': {'Chest': 30}
-},
-
-'Standing Gastrocnemius': {
-    'Primary': {'Calves': 100}
-},
-
 'Cable Reverse grip Straight Back Seated High Row': {
     'Primary': {'Upper Back': 60, 'Biceps': 30},
     'Secondary': {'Posterior Deltoids': 10}
 },
 
-'Cable Overhead Triceps Extension (rope attachment)': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
-},
-
-'Dumbbell Rear Lateral Raise (support head)': {
-    'Primary': {'Rear Deltoids': 70},
-    'Secondary': {'Trapezius': 30}
-},
-
-'Glute Ham Raise (VERSION 2)': {
-    'Primary': {'Hamstrings': 60},
-    'Secondary': {'Glutes': 30, 'Lower Back': 10}
-},
-
 'Crab Twist Toe Touch': {
     'Primary': {'Obliques': 60},
     'Secondary': {'Core': 20, 'Shoulders': 20}
-},
-
-'Barbell Squat (on knees)': {
-    'Primary': {'Quadriceps': 80},
-    'Secondary': {'Glutes': 20}
 },
 
 'Dumbbell Low Fly': {
@@ -983,11 +654,6 @@ Map exerciseMuscles = {
 'Body Saw Plank': {
     'Primary': {'Core': 60},
     'Secondary': {'Shoulders': 20, 'Triceps': 20}
-},
-
-'Dumbbell Two Arm Seated Hammer Curl on Exercise Ball': {
-    'Primary': {'Biceps': 60, 'Brachialis': 30},
-    'Secondary': {'Forearms': 5, 'Core': 5}
 },
 
 'Weighted Seated Triceps Extension': {
@@ -1024,24 +690,9 @@ Map exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Band Pull Apart': {
-    'Primary': {'Posterior Deltoids': 60, 'Rhomboids': 30},
-    'Secondary': {'Trapezius': 10}
-},
-
-'Band Upright Shoulder External Rotation': {
-    'Primary': {'Rotator Cuff': 80},
-    'Secondary': {'Posterior Deltoids': 20}
-},
-
 'Resistance Band Assisted Nordic Hamstring Curl': {
     'Primary': {'Hamstrings': 80},
     'Secondary': {'Glutes': 10, 'Lower Back': 10}
-},
-
-'Lever Banded Chest Press': {
-    'Primary': {'Pectorals': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
 'Cable Standing Chest Press': {
@@ -1059,19 +710,9 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
-'Alternate Lateral Pulldown_1': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
-},
-
 'Dumbbell Biceps Curl Reverse': {
     'Primary': {'Brachialis': 60},
     'Secondary': {'Biceps': 30, 'Forearms': 10}
-},
-
-'Barbell Rear Lunge': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
 },
 
 'Dumbbell One Arm Standing Curl': {
@@ -1082,16 +723,6 @@ Map exerciseMuscles = {
 'Dumbbell Seated Bicep Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Ankle   Dorsal Flexion': {
-    'Primary': {'Tibialis Anterior': 80},
-    'Secondary': {'Extensor Hallucis Longus': 10, 'Extensor Digitorum Longus': 10}
-},
-
-'Barbell Side Split Squat II': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Adductors': 10}
 },
 
 'Barbell Pullover': {
@@ -1129,16 +760,6 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 20, 'Lower Back': 10}
 },
 
-'Band Standing Single Arm Row_1': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
-'Ankle   Plantar Flexion': {
-    'Primary': {'Calves': 80},
-    'Secondary': {'Soleus': 20}
-},
-
 'Landmine Romanian Deadlift': {
     'Primary': {'Hamstrings': 60},
     'Secondary': {'Glutes': 30, 'Lower Back': 10}
@@ -1159,31 +780,6 @@ Map exerciseMuscles = {
     'Secondary': {'Shoulders': 20, 'Glutes': 10}
 },
 
-'Band reverse fly': {
-    'Primary': {'Posterior Deltoids': 70},
-    'Secondary': {'Trapezius': 30}
-},
-
-'Dumbbell One Arm Shoulder Press II': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
-},
-
-'Alternate Biceps Curl (with band)': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
-'Dumbbell Bench Seated Press': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
-},
-
-'Lever Lying Two One Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
-},
-
 'Twist Crunch (leg up)': {
     'Primary': {'Obliques': 60, 'Rectus Abdominis': 40}
 },
@@ -1191,11 +787,6 @@ Map exerciseMuscles = {
 'Cable Seated One Arm Concentration Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Cable Front Squat (VERSION 2)': {
-    'Primary': {'Quadriceps': 70},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10}
 },
 
 'EZ bar Biceps Curl (with arm blaster)': {
@@ -1211,11 +802,6 @@ Map exerciseMuscles = {
 'Barbell Single Leg Split Squat': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
-},
-
-'Band standing leg curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
 },
 
 'Weighted Sissy Squat': {
@@ -1243,23 +829,8 @@ Map exerciseMuscles = {
     'Secondary': {'Lower Back': 10}
 },
 
-'Cable Bent Over Row with Rope Attachment': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
 'Kettlebell Sumo Squat': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
-},
-
-'Barbell Standing Wide grip Curl': {
-    'Primary': {'Biceps (outer head)': 70},
-    'Secondary': {'Biceps (inner head)': 20, 'Forearms': 10}
-},
-
-'Side Crunch II': {
-    'Primary': {'Obliques': 70},
-    'Secondary': {'Rectus Abdominis': 30}
 },
 
 'Cable Cross over Revers Fly': {
@@ -1275,11 +846,6 @@ Map exerciseMuscles = {
 'Cable Kneeling Leaning Forward One Arm Row': {
     'Primary': {'Latissimus Dorsi': 60},
     'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
-'Forward Lunge': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
 },
 
 'Sled Lying Squat': {
@@ -1328,11 +894,6 @@ Map exerciseMuscles = {
 'Cable Hammer Curl': {
     'Primary': {'Biceps': 60, 'Brachialis': 30},
     'Secondary': {'Forearms': 10}
-},
-
-'Barbell Seated Shrug': {
-    'Primary': {'Trapezius': 80},
-    'Secondary': {'Upper Back': 20}
 },
 
 'Band face pull': {
@@ -1385,11 +946,6 @@ Map exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Dumbbell Lunge (VERSION 2)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Cable Standing Back Wrist Curl': {
     'Primary': {'Forearms (extensors)': 90},
     'Secondary': {'Grip Strength': 10}
@@ -1397,16 +953,6 @@ Map exerciseMuscles = {
 
 'Weighted Seated Supination': {
     'Primary': {'Forearms (Supinators)': 100}
-},
-
-'Dumbbell Lunge_1': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
-'Dumbbell Over Bench One Arm  Neutral Wrist Curl': {
-    'Primary': {'Forearms (flexors)': 90},
-    'Secondary': {'Grip Strength': 10}
 },
 
 'Barbell Lunge': {
@@ -1419,7 +965,7 @@ Map exerciseMuscles = {
     'Secondary': {'Quadriceps': 10, 'Glutes': 10, 'Core': 10}
 },
 
-'Barball Pullover To Press': {
+'Barbell Pullover To Press': {
     'Primary': {'Chest': 40, 'Latissimus Dorsi': 30, 'Shoulders': 20},
     'Secondary': {'Triceps': 10}
 },
@@ -1454,14 +1000,9 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 15, 'Hamstrings': 10, 'Core': 5}
 },
 
-'Cable Kneeling Rear Delt Row (with rope)': {
+'Cable Kneeling Rear Delt Row (Rope)': {
     'Primary': {'Rear Deltoids': 70},
     'Secondary': {'Trapezius': 20, 'Biceps': 10}
-},
-
-'Dumbbell One Arm Lateral Raise_1': {
-    'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
 'Barbell Decline Bench Press': {
@@ -1504,11 +1045,6 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Dumbbell Incline Shoulder Raise': {
-    'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Side Delts': 30}
-},
-
 'Lever Horizontal One leg Press': {
     'Primary': {'Quadriceps': 70},
     'Secondary': {'Glutes': 20, 'Hamstrings': 10}
@@ -1517,26 +1053,6 @@ Map exerciseMuscles = {
 'Bodyweight Squatting Row (with towel)': {
     'Primary': {'Back': 50},
     'Secondary': {'Biceps': 30, 'Quadriceps': 20}
-},
-
-'Lying Leg Raise and Hold': {
-    'Primary': {'Rectus Abdominis': 60},
-    'Secondary': {'Hip Flexors': 40}
-},
-
-'Dumbbell Cross Body Hammer Curl (Version 2)': {
-    'Primary': {'Biceps': 60, 'Brachialis': 30},
-    'Secondary': {'Forearms': 10}
-},
-
-'Band Seated Leg Extension': {
-    'Primary': {'Quadriceps': 90},
-    'Secondary': {'Knee Joint Stability': 10}
-},
-
-'Cable Assisted Inverse Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
 },
 
 'Bodyweight Pulse Squat': {
@@ -1558,34 +1074,14 @@ Map exerciseMuscles = {
     'Secondary': {'Quadriceps': 10}
 },
 
-'Kettlebell Pistol Squat': {
+'Weighted Pistol Squat': {
     'Primary': {'Quadriceps': 60},
     'Secondary': {'Glutes': 20, 'Hamstrings': 10, 'Balance': 10}
-},
-
-'Band Lateral Raise (Version 2)': {
-    'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
 },
 
 'Dumbbell Goblet Split Squat': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
-},
-
-'Lever Seated Hip Abduction (VERSION 2)': {
-    'Primary': {'Hip Abductors': 80},
-    'Secondary': {'Glutes': 20}
-},
-
-'Dumbbell Alternate Bench Press (high start)': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
-'Cable kickback II': {
-    'Primary': {'Glutes': 70},
-    'Secondary': {'Hamstrings': 30}
 },
 
 'Kicks Leg Bent': {
@@ -1596,11 +1092,6 @@ Map exerciseMuscles = {
 'Cable Bent Over One Arm Lateral Raise': {
     'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Core': 10}
-},
-
-'Dumbbell Over Bench Neutral Wrist Curl': {
-    'Primary': {'Forearms (flexors)': 90},
-    'Secondary': {'Grip Strength': 10}
 },
 
 'Barbell Bent Arm Pullover': {
@@ -1623,16 +1114,6 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Assisted Triceps Dip': {
-    'Primary': {'Triceps': 70},
-    'Secondary': {'Chest': 30}
-},
-
-'Chest Dip': {
-    'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
 'Dumbbell side lunge': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
 },
@@ -1640,11 +1121,6 @@ Map exerciseMuscles = {
 'Squat (arms overhead)': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10, 'Shoulders': 10}
-},
-
-'Suspender Straight Hip Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Glutes': 20}
 },
 
 'Dumbbell Seated One Arm Arnold Press': {
@@ -1662,37 +1138,12 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
-'Dumbbell Decline Bench Press_1': {
-    'Primary': {'Lower Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
 'Cable Incline Fly': {
     'Primary': {'Upper Chest': 80},
     'Secondary': {'Front Deltoids': 20}
 },
 
-'Archer Pull up_1': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
-},
-
-'Suspender Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
-},
-
-'Band straight leg deadlift_1': {
-    'Primary': {'Hamstrings': 70},
-    'Secondary': {'Glutes': 20, 'Lower Back': 10}
-},
-
-'Assisted Pullup (Neutral grip)': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
-},
-
-'Cable Seated on Floor Row with Rope': {
+'Cable Seated on Floor Row Rope': {
     'Primary': {'Latissimus Dorsi': 60},
     'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
 },
@@ -1710,26 +1161,6 @@ Map exerciseMuscles = {
 'Step up on Chair': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
-},
-
-'Barbell Full Squat (without weight)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
-'Crunch Floor m': {
-    'Primary': {'Rectus Abdominis': 80},
-    'Secondary': {'Obliques': 20}
-},
-
-'Band One Arm Twisting Seated Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Obliques': 10}
-},
-
-'Cable Lying Cross Lateral Raise': {
-    'Primary': {'Posterior Deltoids': 70},
-    'Secondary': {'Side Delts': 30}
 },
 
 'Dumbbell Reverse Fly': {
@@ -1757,16 +1188,6 @@ Map exerciseMuscles = {
     'Secondary': {'Trapezius': 30}
 },
 
-'Band Close Grip Row': {
-    'Primary': {'Latissimus Dorsi': 60, 'Biceps': 30},
-    'Secondary': {'Posterior Deltoids': 10}
-},
-
-'Single Leg Squat (pistol) male': {
-    'Primary': {'Quadriceps': 60},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10, 'Balance': 10}
-},
-
 'Dumbbell Lateral Raise': {
     'Primary': {'Side Delts': 70},
     'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
@@ -1780,11 +1201,6 @@ Map exerciseMuscles = {
 'Dumbbell Lying One Arm Supinated Triceps Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
-},
-
-'Dumbbell Bench Squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Shoulders': 10}
 },
 
 'Cable Lying Triceps Extension': {
@@ -1812,23 +1228,10 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 10}
 },
 
-'Dumbbell Lying Pronation on Floor': {
-    'Primary': {'Forearms (Pronators)': 100}
-},
-
-'Cable Low Fly_1': {
-    'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
-},
 
 'Cable Fly with Chest Supported': {
     'Primary': {'Chest': 80},
     'Secondary': {'Front Deltoids': 20}
-},
-
-'Assisted Pull up (Overhand)': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
 },
 
 'Cable one arm lat pulldown': {
@@ -1854,11 +1257,6 @@ Map exerciseMuscles = {
 'Cable Kneeling Crunch': {
     'Primary': {'Rectus Abdominis': 80},
     'Secondary': {'Obliques': 20}
-},
-
-'Dumbbell Lying on Floor Hammer Press': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
 'EZ Bar Standing French Press': {
@@ -1891,10 +1289,6 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 10}
 },
 
-'Lever Hip Extension (VERSION 2)': {
-    'Primary': {'Glutes': 70, 'Hamstrings': 30}
-},
-
 'Cable Incline Skull Crusher': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
@@ -1910,24 +1304,9 @@ Map exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Cable Lying Biceps Curl (VERSION 2)': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
 'Dumbbell Flat Around the World': {
     'Primary': {'Shoulders': 60},
     'Secondary': {'Trapezius': 20, 'Core': 20}
-},
-
-'Barbell Jump Squat': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
-'Cable Lateral Pulldown (with rope attachment)': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
 },
 
 'Cable High Pulley Overhead Tricep Extension': {
@@ -1935,21 +1314,12 @@ Map exerciseMuscles = {
     'Secondary': {'Latissimus Dorsi': 20}
 },
 
-'Dumbbell Sumo Squat (back on stability ball wall)': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
-},
-
-'Smith Full Squat': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Barbell Incline Triceps Extension Skull Crusher': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
 },
 
-'Cable Hammer Curl (with rope) m': {
+'Cable Hammer Curl (Rope) m': {
     'Primary': {'Biceps': 60, 'Brachialis': 30},
     'Secondary': {'Forearms': 10}
 },
@@ -1969,11 +1339,6 @@ Map exerciseMuscles = {
     'Secondary': {'Core': 30, 'Shoulders': 10}
 },
 
-'Kettlebell One Arm Floor Press': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
 'Cable Alternate Triceps Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Forearms': 20}
@@ -1982,16 +1347,6 @@ Map exerciseMuscles = {
 'Scissors (advanced)': {
     'Primary': {'Lower Abdominals': 70},
     'Secondary': {'Hip Flexors': 30}
-},
-
-'Single Leg Sliding Floor Bridge Curl on Towel': {
-    'Primary': {'Hamstrings': 70, 'Glutes': 20},
-    'Secondary': {'Core': 10}
-},
-
-'Band reverse wrist curl': {
-    'Primary': {'Forearms (extensors)': 90},
-    'Secondary': {'Grip Strength': 10}
 },
 
 'Barbell Standing Close Grip Curl': {
@@ -2004,34 +1359,9 @@ Map exerciseMuscles = {
     'Secondary' : {'Glutes': 30, 'Adductors': 20}
 },
 
-'Smith rear lunge (version 2)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
-'Lever Seated Calf Press': {
-    'Primary': {'Calves': 90},
-    'Secondary': {'Quadriceps': 10}
-},
-
-'Resistance Band Bent Leg Kickback (Kneeling)': {
-    'Primary': {'Glutes': 70},
-    'Secondary': {'Hamstrings': 30}
-},
-
-'Barbell Standing Wide Military Press': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 20, 'Upper Chest': 10}
-},
-
 'Lever Standing Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance': 10}
-},
-
-'Barbell Wide Grip Upright Row': {
-    'Primary': {'Trapezius': 50, 'Side Delts': 40},
-    'Secondary': {'Biceps': 10}
 },
 
 'Barbell Reverse Preacher Curl': {
@@ -2044,19 +1374,9 @@ Map exerciseMuscles = {
     'Secondary': {'Posterior Deltoids': 10}
 },
 
-'Barbell Standing Military Press': {
+'Standing Overhead Press (Barbell)': {
     'Primary': {'Shoulders': 70},
     'Secondary': {'Triceps': 30}
-},
-
-'Smith Calf Raise (version 2)': {
-    'Primary': {'Calves': 90},
-    'Secondary': {'Balance': 10}
-},
-
-'Barbell Standing Front Raise Over Head': {
-    'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Side Delts': 30}
 },
 
 'Barbell Lying Row on Rack': {
@@ -2114,29 +1434,14 @@ Map exerciseMuscles = {
     'Secondary': {'Front Deltoids': 20}
 },
 
-'Battling Ropes High Waves': {
-    'Primary': {'Shoulders': 50, 'Core': 30},
-    'Secondary': {'Biceps': 10, 'Triceps': 10}
-},
-
 'Dumbbell Squeeze Bench Press': {
     'Primary': {'Chest': 80},
     'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
 },
 
-'Barbell Standing Military Press (without rack)': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 20, 'Core': 10}
-},
-
 'One Leg Quarter Squat': {
     'Primary': {'Quadriceps': 70},
     'Secondary': {'Glutes': 20, 'Balance': 10}
-},
-
-'Bar Band Bent Over Rear Delt Fly': {
-    'Primary': {'Posterior Deltoids': 70},
-    'Secondary': {'Trapezius': 30}
 },
 
 'Butt ups': {
@@ -2152,11 +1457,6 @@ Map exerciseMuscles = {
 'Smith Machine Incline Tricep Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
-},
-
-'Barbell Bench Squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Shoulders': 10}
 },
 
 'Cable One Arm Pulldown': {
@@ -2189,11 +1489,6 @@ Map exerciseMuscles = {
     'Secondary': {'Brachialis': 15, 'Forearms': 5}
 },
 
-'Lunge': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Kettlebell Front Squat': {
     'Primary': {'Quadriceps': 60},
     'Secondary': {'Glutes': 30, 'Hamstrings': 10}
@@ -2223,11 +1518,6 @@ Map exerciseMuscles = {
     'Primary': {'Upper Chest': 60, 'Triceps': 30},
     'Secondary': {'Front Deltoids': 10}
 },
-
-'Band overhead triceps extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
-}, 
 
 'Cocoons': {
     'Primary': {'Rectus Abdominis': 50, 'Obliques': 40},
@@ -2277,11 +1567,6 @@ Map exerciseMuscles = {
 'Cable Low Fly': {
     'Primary': {'Lower Chest': 80},
     'Secondary': {'Front Deltoids': 20}
-}, 
-
-'Resistance Band Leg Extension': {
-    'Primary': {'Quadriceps': 90},
-    'Secondary': {'Knee Joint Stability': 10}
 }, 
 
 'Weighted one leg hip thrust': {
@@ -2359,19 +1644,9 @@ Map exerciseMuscles = {
     'Secondary': {'Trapezius': 20, 'Rhomboids': 10}
 }, 
 
-'Barbell Curl (without weight)': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-}, 
-
 'Weighted Kneeling Step with Swing': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10, 'Core': 10}
-}, 
-
-'Bodyweight Drop Jump Squat': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
 }, 
 
 'Sit (wall)': {
@@ -2404,40 +1679,6 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps': 10, 'Chest': 10}
 }, 
 
-'Dumbbell Bench Press_1': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-}, 
-
-'Band Assisted Chin Up (From Knee)_1': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
-}, 
-
-'Dumbbell Incline Curl II': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-}, 
-
-'Wrist   Extension': {
-    'Primary': {'Forearms (extensors)': 100}
-}, 
-
-'Dumbbell Rear Lunge': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-}, 
-
-'Resistance Band Full Squat': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-}, 
-
-'Sliding Leg Curl on Floor with Towel': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
-}, 
-
 'Smith Lateral Step Up': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
@@ -2448,17 +1689,12 @@ Map exerciseMuscles = {
     'Secondary': {'Front Deltoids': 10}
 },
 
-'Cable Overhead Single Arm Triceps Extension (rope attachment)': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
-},
-
 'Barbell Wide Reverse Grip Bench Press': {
     'Primary': {'Upper Chest': 60},
     'Secondary': {'Triceps': 30, 'Front Deltoids': 10}
 },
 
-'Cable Standing Face Pull (with rope)': {
+'Cable Standing Face Pull (Rope)': {
     'Primary': {'Rear Deltoids': 60, 'Trapezius': 30},
     'Secondary': {'Biceps': 10}
 },
@@ -2468,7 +1704,7 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Cable Rear Delt Row (with rope)': {
+'Cable Rear Delt Row (Rope)': {
     'Primary': {'Rear Deltoids': 70},
     'Secondary': {'Trapezius': 20, 'Biceps': 10}
 },
@@ -2498,19 +1734,9 @@ Map exerciseMuscles = {
     'Secondary': {'Balance & Stability': 10}
 },
 
-'Barbell Lying extension': {
-    'Primary': {'Lower Back': 70},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10}
-},
-
 'Cable Palm Rotational Row': {
     'Primary': {'Latissimus Dorsi': 60},
     'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Forearms': 10}
-},
-
-'Circles Arm': {
-    'Primary': {'Shoulders': 60},
-    'Secondary': {'Chest': 20, 'Back': 20}
 },
 
 'Sled 45 Leg Wide Press': {
@@ -2542,11 +1768,6 @@ Map exerciseMuscles = {
     'Secondary': {'Obliques': 30}
 },
 
-'Band Overhead Single Arm Triceps Extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
-},
-
 'Cable Kneeling One Arm Lat Pulldown': {
     'Primary': {'Latissimus Dorsi': 70},
     'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
@@ -2572,7 +1793,7 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 20}
 },
 
-'Cable Pull Through (with rope)': {
+'Cable Pull Through (Rope)': {
     'Primary': {'Glutes': 70},
     'Secondary': {'Hamstrings': 30}
 },
@@ -2601,29 +1822,14 @@ Map exerciseMuscles = {
     'Primary': {'Hip Abductors': 60, 'Glutes': 40}
 },
 
-'Barbell Upright Row (without weight)': {
-    'Primary': {'Trapezius': 50, 'Side Delts': 40},
-    'Secondary': {'Biceps': 10}
-},
-
 'Dumbbell Standing Inner Biceps Curl': {
     'Primary': {'Biceps (short head)': 70},
     'Secondary': {'Biceps (long head)': 20, 'Forearms': 10}
 },
 
-'Band Kneeling Preacher Curl': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Brachialis': 15, 'Forearms': 5}
-},
-
 'Dumbbell Drag Bicep Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Inverse Leg Curl (bench support)': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
 },
 
 'Dumbbell Alternate Side Press': {
@@ -2651,19 +1857,9 @@ Map exerciseMuscles = {
     'Secondary': {'Biceps': 30, 'Forearms': 10}
 },
 
-'Barbell Full Squat (Back POV)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Smith Toe Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance & Stability': 10}
-},
-
-'Alternate Lying Floor Leg Raise': {
-    'Primary': {'Lower Abdominals': 70},
-    'Secondary': {'Obliques': 30}
 },
 
 'Dumbbell One Arm Bench Fly': {
@@ -2681,11 +1877,6 @@ Map exerciseMuscles = {
     'Secondary': {'Balance & Stability': 10}
 },
 
-'Lever Seated Hip Abduction': {
-    'Primary': {'Hip Abductors': 80},
-    'Secondary': {'Glutes': 20}
-},
-
 'Barbell Standing Leg Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance': 10}
@@ -2701,16 +1892,6 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Barbell Incline Reverse grip Spider Curl with Chest Support': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
-'Full Squat Mobility': {
-    'Primary': {'Hips': 40, 'Thoracic Spine': 30, 'Ankles': 20},
-    'Secondary': {'Quadriceps': 10}
-},
-
 'Biceps Leg Concentration Curl': {
     'Primary': {'Hamstrings': 80},
     'Secondary': {'Calves': 20}
@@ -2724,11 +1905,6 @@ Map exerciseMuscles = {
 'Weighted Seated One Arm Reverse Wrist Curl': {
     'Primary': {'Forearms (extensors)': 90},
     'Secondary': {'Grip Strength': 10}
-},
-
-'Band high fly': {
-    'Primary': {'Upper Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
 },
 
 'Barbell High Bar Squat': {
@@ -2759,11 +1935,6 @@ Map exerciseMuscles = {
 'Vertical Leg Raise (on parallel bars)': {
     'Primary': {'Rectus Abdominis': 60},
     'Secondary': {'Hip Flexors': 40}
-},
-
-'Weighted Three Bench Dips': {
-    'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
 },
 
 'Dumbbell Incline Alternate Press': {
@@ -2801,11 +1972,6 @@ Map exerciseMuscles = {
     'Secondary': {'Brachialis': 15, 'Forearms': 5}
 },
 
-'Lever Seated One Leg Curl': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
-},
-
 'Smith Single Leg Split Squat': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
@@ -2814,11 +1980,6 @@ Map exerciseMuscles = {
 'Dumbbell Standing Alternating Tricep Kickback': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Core': 20}
-},
-
-'Dumbbell Standing Inner Biceps Curl (version 2)': {
-    'Primary': {'Biceps (short head)': 70},
-    'Secondary': {'Biceps (long head)': 20, 'Forearms': 10}
 },
 
 'EZ Barbell Seated Curls': {
@@ -2851,11 +2012,6 @@ Map exerciseMuscles = {
     'Secondary': {'Front Deltoids': 10}
 },
 
-'Brachialis Narrow Pull ups': {
-    'Primary': {'Latissimus Dorsi': 50, 'Biceps': 40},
-    'Secondary': {'Posterior Deltoids': 10}
-},
-
 'Dumbbell Russian Twist': {
     'Primary': {'Obliques': 60},
     'Secondary': {'Rectus Abdominis': 30, 'Core': 10}
@@ -2864,11 +2020,6 @@ Map exerciseMuscles = {
 'Dumbbell Twisted Fly': {
     'Primary': {'Upper Chest': 70},
     'Secondary': {'Front Deltoids': 30}
-},
-
-'Bodyweight Kneeling Push Up Row': {
-    'Primary': {'Chest': 40, 'Back': 40},
-    'Secondary': {'Triceps': 10, 'Biceps': 10}
 },
 
 'EZ Barbell Decline Triceps Extension': {
@@ -2891,11 +2042,6 @@ Map exerciseMuscles = {
     'Secondary': {'Front Deltoids': 20}
 }, 
 
-'Barbell Close Grip Bench Press_1': {
-    'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
-}, 
-
 'Dumbbell Seated Kickback': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Core': 20}
@@ -2904,11 +2050,6 @@ Map exerciseMuscles = {
 'Cable One Arm Bent over Row': {
     'Primary': {'Latissimus Dorsi': 60},
     'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-}, 
-
-'Kettlebell Alternating Press on Floor': {
-    'Primary': {'Shoulders': 60},
-    'Secondary': {'Triceps': 20, 'Core': 20}
 }, 
 
 'Dumbbell Incline Two Arm Extension': {
@@ -2924,11 +2065,6 @@ Map exerciseMuscles = {
 'Dumbbell Standing Bent Over One Arm Triceps Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Core': 20}
-}, 
-
-'Cable Standing Fly_1': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
 }, 
 
 'EZ Bar Lying Close Grip Triceps Extension Behind Head': {
@@ -2950,19 +2086,9 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps': 20}
 }, 
 
-'Cable High Row (kneeling%2C rope attachment)': {
-    'Primary': {'Upper Back': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 20}
-}, 
-
 'Bench Dip with legs on bench': {
     'Primary': {'Triceps': 70},
     'Secondary': {'Chest': 30}
-}, 
-
-'Chest Dip (on dip pull up cage)': {
-    'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
 }, 
 
 'Reverse Dip': {
@@ -2973,11 +2099,6 @@ Map exerciseMuscles = {
 'Cable Rope High Pulley Overhead Tricep Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Latissimus Dorsi': 20}
-}, 
-
-'Dumbbell Flat Flye Hold': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
 }, 
 
 'Barbell Sumo Romanian Deadlift': {
@@ -2998,16 +2119,6 @@ Map exerciseMuscles = {
 'Band standing internal shoulder rotation': {
     'Primary': {'Subscapularis': 70},
     'Secondary': {'Pectoralis Major': 20, 'Latissimus Dorsi': 10}
-}, 
-
-'Band front raise': {
-    'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Side Delts': 30}
-}, 
-
-'Band wrist curl': {
-    'Primary': {'Forearms (flexors)': 90},
-    'Secondary': {'Grip Strength': 10}
 }, 
 
 'Sled 45 degrees One Leg Press': {
@@ -3055,14 +2166,9 @@ Map exerciseMuscles = {
     'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
 }, 
 
-'Cable Lying Triceps Extension (with Rope)': {
+'Cable Lying Triceps Extension (Rope)': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
-}, 
-
-'Bench Dip (knees bent)': {
-    'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
 }, 
 
 'Cable Rope Incline Tricep Extension': {
@@ -3105,16 +2211,6 @@ Map exerciseMuscles = {
     'Secondary': {'Chest': 30}
 }, 
 
-'Suspender Triceps Extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
-}, 
-
-'Barbell Deadlift_1': {
-    'Primary': {'Hamstrings': 40, 'Quadriceps': 30, 'Glutes': 20},
-    'Secondary': {'Lower Back': 10}
-}, 
-
 'Bodyweight Standing Pulse Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance & Stability': 10}
@@ -3128,16 +2224,6 @@ Map exerciseMuscles = {
 'Dumbbell Rear Delt Raise': {
     'Primary': {'Rear Deltoids': 70},
     'Secondary': {'Trapezius': 30}
-}, 
-
-'Band middle fly': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
-}, 
-
-'Barbell Skier': {
-    'Primary': {'Hamstrings': 50, 'Glutes': 30},
-    'Secondary': {'Lower Back': 20}
 }, 
 
 'Barbell Front Chest Squat': {
@@ -3170,11 +2256,6 @@ Map exerciseMuscles = {
     'Secondary': {'Brachialis': 15, 'Forearms': 5}
 }, 
 
-'Barbell Seated Military Press (inside squat cage)': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 30}
-}, 
-
 'Triceps Dip (bench leg)': {
     'Primary': {'Triceps': 70},
     'Secondary': {'Chest': 30}
@@ -3205,39 +2286,14 @@ Map exerciseMuscles = {
     'Secondary': {'Biceps': 30, 'Forearms': 10}
 }, 
 
-'Band bent over rear lateral raise': {
-    'Primary': {'Rear Deltoids': 70},
-    'Secondary': {'Trapezius': 30}
-}, 
-
 'Dumbbell Lying Single Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
 }, 
 
-'Hyperextension': {
-    'Primary': {'Lower Back': 70},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10}
-}, 
-
 'Dumbbell Lying Hamstring Curl': {
     'Primary': {'Hamstrings': 80},
     'Secondary': {'Calves': 20}
-}, 
-
-'Cable Kneeling Single Lat Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
-}, 
-
-'Band Skull Crusher': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
-}, 
-
-'Sit Up II': {
-    'Primary': {'Rectus Abdominis': 80},
-    'Secondary': {'Hip Flexors': 20}
 }, 
 
 'Smith Stiff Legged Deadlift': {
@@ -3265,29 +2321,14 @@ Map exerciseMuscles = {
     'Secondary': {'Core': 20}
 }, 
 
-'Band reverse curl': {
-    'Primary': {'Brachialis': 60},
-    'Secondary': {'Biceps': 30, 'Forearms': 10}
-}, 
-
 'Dumbbell Standing Alternate Hammer Curl and Press': {
     'Primary': {'Biceps': 40, 'Brachialis': 30, 'Shoulders': 20},
     'Secondary': {'Forearms': 10}
 }, 
 
-'Cable standing hip extension (version 2)': {
-    'Primary': {'Glutes': 70},
-    'Secondary': {'Hamstrings': 30}
-}, 
-
 'Cable Rear Drive': {
     'Primary': {'Glutes': 70},
     'Secondary': {'Hamstrings': 30}
-}, 
-
-'Landmine Floor One Arm Chest Fly': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
 }, 
 
 'Dumbbell Incline Around the World': {
@@ -3320,21 +2361,6 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 20, 'Core': 10}
 }, 
 
-'Lever Kneeling Leg Curl (plate loaded)': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 20}
-}, 
-
-'Sit up with Arms on Chest': {
-    'Primary': {'Rectus Abdominis': 80},
-    'Secondary': {'Hip Flexors': 20}
-}, 
-
-'Assisted Weighted Push up': {
-    'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
-}, 
-
 'Dumbbell Peacher Hammer Curl': {
     'Primary': {'Biceps': 60, 'Brachialis': 30},
     'Secondary': {'Forearms': 10}
@@ -3343,11 +2369,6 @@ Map exerciseMuscles = {
 'Hack One Leg Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance & Stability': 10}
-}, 
-
-'Cable Lying Extension Pullover (with rope attachment)': {
-    'Primary': {'Latissimus Dorsi': 50, 'Chest': 30},
-    'Secondary': {'Triceps': 20}
 }, 
 
 'Side Lying Clam': {
@@ -3365,19 +2386,9 @@ Map exerciseMuscles = {
     'Secondary': {'Core': 10}
 }, 
 
-'Barbell Full Squat (Side POV)': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-}, 
-
 'Bodyweight Standing Row': {
     'Primary': {'Back': 60},
     'Secondary': {'Biceps': 40}
-}, 
-
-'Band side triceps extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
 }, 
 
 'Landmine Front Squat': {
@@ -3410,11 +2421,6 @@ Map exerciseMuscles = {
     'Secondary': {'Hip Flexors': 40}
 }, 
 
-'Barbell Revers Wrist Curl II': {
-    'Primary': {'Forearms (extensors)': 90},
-    'Secondary': {'Grip Strength': 10}
-}, 
-
 'Sumo Squat m': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
 }, 
@@ -3427,11 +2433,6 @@ Map exerciseMuscles = {
 'Jack Plank': {
     'Primary': {'Core': 60},
     'Secondary': {'Shoulders': 20, 'Obliques': 20}
-}, 
-
-'Standing Straight Leg Hamstring Contract Relax on Exercise Ball': {
-    'Primary': {'Hamstrings': 70},
-    'Secondary': {'Calves': 20, 'Balance': 10}
 }, 
 
 'Sled 45 Leg Press (Side POV)': {
@@ -3470,24 +2471,9 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 10}
 },
 
-'Cable Standing Calf Raise': {
-    'Primary': {'Calves': 90},
-    'Secondary': {'Balance': 10}
-},
-
 'Otis Up': {
     'Primary': {'Latissimus Dorsi': 60},
     'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
-},
-
-'Cable Front Shoulder Raise': {
-    'Primary': {'Front Deltoids': 70},
-    'Secondary': {'Side Delts': 30}
-},
-
-'Band Biceps Curl (2)': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
 },
 
 'Dumbbell Kickback': {
@@ -3500,11 +2486,6 @@ Map exerciseMuscles = {
     'Secondary': {'Quadriceps': 10}
 },
 
-'Band Chest Fly': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
-},
-
 'Barbell Guillotine Bench Press': {
     'Primary': {'Chest': 70},
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
@@ -3512,11 +2493,6 @@ Map exerciseMuscles = {
 
 'Barbell sumo squat': {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
-},
-
-'Cable Standing Reverse Grip One Arm Overhead Tricep Extension': {
-    'Primary': {'Triceps (long head)': 80},
-    'Secondary': {'Triceps (lateral & medial heads)': 20}
 },
 
 'Barbell Decline Wide grip Press': {
@@ -3558,33 +2534,14 @@ Map exerciseMuscles = {
     'Secondary': {'Forearms': 20, 'Core': 10}
 },
 
-'Forearm Pronation': {
-    'Primary': {'Forearms (Pronators)': 100}
-},
-
-'Cable Single Arm Triceps Pushdown (Rope Attachment)': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
 'Dumbbell Press on Exercise Ball': {
     'Primary': {'Chest': 60},
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10, 'Core': 10}
 },
 
-'Band seated row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
 'Bodyweight Step up on Stepbox': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
-},
-
-'Resistance Band Leg Lift': {
-    'Primary': {'Hip Flexors': 70},
-    'Secondary': {'Rectus Abdominis': 30}
 },
 
 'Dumbbell One arm Wrist Curl': {
@@ -3670,28 +2627,14 @@ Map exerciseMuscles = {
     'Secondary': {'Front Deltoids': 20}
 },
 
-'Dumbbell Lying on Floor Chest Press': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
-},
-
 'Barbell Wide Bench Press': {
     'Primary': {'Chest': 70},
     'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
-'Wrist Flexion': {
-    'Primary': {'Forearms (flexors)': 100}
-},
-
 'Smith Deadlift': {
     'Primary': {'Hamstrings': 40, 'Quadriceps': 30, 'Glutes': 20},
     'Secondary': {'Lower Back': 10}
-},
-
-'Barbell Zercher Squat Hold': {
-    'Primary': {'Quadriceps': 60},
-    'Secondary': {'Glutes': 30, 'Hamstrings': 10}
 },
 
 'Knee Touch Crunch': {
@@ -3719,16 +2662,6 @@ Map exerciseMuscles = {
     'Secondary': {'Biceps (inner head)': 20, 'Forearms': 10}
 },
 
-'Dumbbell Standing One Arm Curl (over incline bench)': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
-'Dumbbell Arnold Press II': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 20, 'Upper Chest': 10}
-},
-
 'Barbell Wide Shrug': {
     'Primary': {'Trapezius': 80},
     'Secondary': {'Upper Back': 20}
@@ -3737,11 +2670,6 @@ Map exerciseMuscles = {
 'Triceps Press (Head Below Bench)': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
-},
-
-'Incline Scapula Push up': {
-    'Primary': {'Serratus Anterior': 50, 'Chest': 30},
-    'Secondary': {'Triceps': 20}
 },
 
 'Squat (with band)': {
@@ -3758,31 +2686,6 @@ Map exerciseMuscles = {
     'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
 },
 
-'Band Low Chest Press': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
-},
-
-'Bodyweight Standing Military Press': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 30}
-},
-
-'Barbell Bent Over Wide Row Plus': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
-'Band One Arm Standing Wide Grip Low Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
-'Biceps Curl with Bed Sheet': {
-    'Primary': {'Biceps': 80},
-    'Secondary': {'Forearms': 20}
-},
-
 'Dumbbell Incline Triceps Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
@@ -3793,24 +2696,9 @@ Map exerciseMuscles = {
     'Secondary': {'Chest': 30}
 },
 
-'Band hammer curl': {
-    'Primary': {'Biceps': 60, 'Brachialis': 30},
-    'Secondary': {'Forearms': 10}
-},
-
 'Cable One Arm Wrist Curl': {
     'Primary': {'Forearms (flexors)': 90},
     'Secondary': {'Grip Strength': 10}
-},
-
-'Cable Low Row with Rope Attachment': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-},
-
-'Dumbbell One Arm Wide Grip Bench Press': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
 },
 
 'Barbell One Leg Squat': {
@@ -3818,24 +2706,9 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 20, 'Hamstrings': 10, 'Balance': 10}
 },
 
-'Band Upright Row (Under two feet)': {
-    'Primary': {'Trapezius': 50, 'Side Delts': 40},
-    'Secondary': {'Biceps': 10}
-},
-
-'Dumbbell Cuban Press (version 2)': {
-    'Primary': {'Side Delts': 50, 'Posterior Deltoids': 30},
-    'Secondary': {'Trapezius': 20}
-},
-
 'Cable Standing Wrist Reverse Curl': {
     'Primary': {'Forearms (extensors)': 90},
     'Secondary': {'Grip Strength': 10}
-},
-
-'Two Legs Hammer Curl with Towel (VERSION 2)': {
-    'Primary': {'Biceps': 60, 'Brachialis': 30},
-    'Secondary': {'Forearms': 10}
 },
 
 'Hanging Straight Leg Raise': {
@@ -3846,11 +2719,6 @@ Map exerciseMuscles = {
 'Dumbbell Standing Biceps Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Cable Decline Fly_1': {
-    'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
 },
 
 'Body Up': {
@@ -3871,11 +2739,6 @@ Map exerciseMuscles = {
 'Cable Standing Cross over High Reverse Fly': {
     'Primary': {'Posterior Deltoids': 70},
     'Secondary': {'Trapezius': 30}
-},
-
-'Alternate Punching': {
-    'Primary': {'Chest': 30, 'Shoulders': 30, 'Triceps': 30},
-    'Secondary': {'Core': 10}
 },
 
 'Dumbbell Tricep Kickback With Stork Stance': {
@@ -3902,11 +2765,6 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 10, 'Hamstrings': 5, 'Core': 5}
 },
 
-'Band Lunges': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
-},
-
 'Dumbbell Seated Biceps Curl to Shoulder Press': {
     'Primary': {'Biceps': 50, 'Shoulders': 40},
     'Secondary': {'Forearms': 10}
@@ -3921,29 +2779,11 @@ Map exerciseMuscles = {
     'Secondary': {'Rhomboids': 15, 'Trapezius': 15}
 },
 
-'Lever Gripper Hands (plate loaded)': {
-    'Primary': {'Forearms': 100}
-},
-
-'45 degrees Back Extension': {
-    'Primary': {'Erector Spinae': 70},
-    'Secondary': {'Hamstrings': 15, 'Glutes': 15}
-},
-
 'Smith Hip Thrust': {
     'Primary': {'Glutes': 80},
     'Secondary': {'Hamstrings': 20}
 },
 
-'Lever Single Leg Extension (plate loaded)': {
-    'Primary': {'Quadriceps': 90},
-    'Secondary': {'Hip Flexors': 10}
-},
-
-'Barbell Step up': {
-    'Primary': {'Quadriceps': 35, 'Glutes': 35},
-    'Secondary': {'Hamstrings': 15, 'Calves': 15}
-},
 'Hanging Oblique Knee Raise': {
     'Primary': {'Obliques': 80},
     'Secondary': {'Rectus Abdominis': 20}
@@ -3952,19 +2792,6 @@ Map exerciseMuscles = {
 'Weighted Standing Curl': {
     'Primary': {'Biceps Brachii': 80},
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
-},
-
-'Isometric Chest Squeeze': {
-    'Primary': {'Chest': 100}
-},
-'Weighted Reduction Triangle': {
-    'Primary': {'Adductors': 70},
-    'Secondary': {'Glutes': 15, 'Hamstrings': 15}
-},
-
-'Band one arm Standing Low Row': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Posterior Deltoids': 15, 'Biceps': 15}
 },
 
 'Incline Push Up Depth Jump': {
@@ -3982,19 +2809,9 @@ Map exerciseMuscles = {
     'Secondary': {'Rectus Abdominis': 20}
 },
 
-'Incline Reverse Grip Push Up': {
-    'Primary': {'Lower Chest': 30, 'Triceps': 30},
-    'Secondary': {'Shoulders': 20, 'Upper Back': 20}
-},
-
-'Cable Standing Pulldown (with rope)': {
+'Cable Standing Pulldown (Rope)': {
     'Primary': {'Latissimus Dorsi': 70},
     'Secondary': {'Biceps': 15, 'Forearms': 15}
-},
-
-'Band bent': {
-    'Primary': {'Hamstrings': 70},
-    'Secondary': {'Glutes': 15, 'Lower Back': 15}
 },
 
 'Barbell Seated Calf Raise': {
@@ -4003,7 +2820,7 @@ Map exerciseMuscles = {
 
 'Cable Leaning Lateral Raise': {
     'Primary': {'Side Delts': 80},
-    'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
+    'Secondary': {'Front Deltoid': 10, 'Trapezius': 10}
 },
 
 'Crunch (straight leg up)': {
@@ -4028,15 +2845,6 @@ Map exerciseMuscles = {
 
 'Dumbbell Seated Calf Raise': {
     'Primary': {'Calves': 100}
-},
-
-'Two Legs Reverse Biceps Curl with Towel (VERSION 2)': {
-    'Primary': {'Brachialis': 70},
-    'Secondary': {'Biceps Brachii': 15, 'Forearm Flexors': 15}
-},
-
-'Dumbbell Over Bench Wrist Curl': {
-    'Primary': {'Forearm Flexors': 100}
 },
 
 'Chest Dip on Straight Bar': {
@@ -4066,7 +2874,7 @@ Map exerciseMuscles = {
 
 'Cable Incline Bench Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Anterior Deltoids': 15, 'Triceps': 15}
+    'Secondary': {'Front Deltoid': 15, 'Triceps': 15}
 },
 
 'Sled Closer Hack Squat': {
@@ -4113,10 +2921,6 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 30}
 },
 
-'Wrist Adduction': {
-    'Primary': {'Forearm Flexors': 100}
-},
-
 'Barbell Jefferson Squat': {
     'Primary': {'Quadriceps': 30, 'Glutes': 30},
     'Secondary': {'Hamstrings': 15, 'Core': 15, 'Adductors': 10}
@@ -4144,15 +2948,6 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 10, 'Adductors': 10, 'Core': 10, 'Balance': 10}
 },
 
-'Wrist Circles': {
-    'Primary': {'Forearms': 100}
-},
-
-'Assisted Pistol Squat with Bed Sheet': {
-    'Primary': {'Quadriceps': 35, 'Glutes': 35},
-    'Secondary': {'Hamstrings': 10, 'Balance': 10, 'Core': 10}
-},
-
 'Single Leg Calf Raise (on a dumbbell)': {
     'Primary': {'Calves': 100}
 },
@@ -4177,33 +2972,16 @@ Map exerciseMuscles = {
     'Secondary': {'Triceps': 10, 'Shoulders': 5, 'Core': 5}
 },
 
-    'Lying Leg Raise': {
-        'Primary': {'Rectus Abdominis': 70},
-        'Secondary': {'Hip Flexors': 30}
-    },
-
-    'Cable hip abduction (version 2)': {
-        'Primary': {'Hip Abductors': 100}
-    },
-
-   'Resistance Band Lunge': {
-    'Primary': {'Quadriceps': 35, 'Glutes': 35},
-    'Secondary': {'Hamstrings': 30}
+'Lying Leg Raise': {
+    'Primary': {'Rectus Abdominis': 70},
+    'Secondary': {'Hip Flexors': 30}
 },
+    
+
 
 'Split Squats': {
     'Primary': {'Quadriceps': 35, 'Glutes': 35},
     'Secondary': {'Hamstrings': 15, 'Balance': 15}
-},
-
-'Dumbbell Lying One Arm Press II': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 10, 'Anterior Deltoids': 10}
-},
-
-'Band upright row': {
-    'Primary': {'Trapezius': 60},
-    'Secondary': {'Side Delts': 20, 'Biceps': 20}
 },
 
 'Sit up': {
@@ -4226,33 +3004,14 @@ Map exerciseMuscles = {
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
 },
 
-'Suspender Abduction Lunge': {
-    'Primary': {'Quadriceps': 20, 'Glutes': 20, 'Hip Abductors': 20},
-    'Secondary': {'Hamstrings': 15, 'Balance': 15, 'Core': 10},
-},
     'Lever Calf Press (plate loaded)': {
         'Primary': {'Calves': 100}
-    },
-
-    'Band Triceps Kickback': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Core': 10}
-    },
-
-    'Cable Kneeling Triceps Extension (VERSION 2)': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Core': 10}
     },
 
     'Lunge with Jump': {
         'Primary': {'Quadriceps, Glutes, Hamstrings': 60},
         'Secondary': {'Calves, Core, Balance': 40}
     },
-
-'Brachialis Pull up': {
-    'Primary': {'Brachialis': 30, 'Biceps Brachii': 30},
-    'Secondary': {'Latissimus Dorsi': 20, 'Forearms': 20}
-},
 
 'Barbell Curtsey Lunge': {
     'Primary': {'Quadriceps': 20, 'Glutes': 20, 'Adductors': 20},
@@ -4270,7 +3029,7 @@ Map exerciseMuscles = {
 
 'Dumbbell Incline Hammer Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Anterior Deltoids': 15, 'Triceps': 15}
+    'Secondary': {'Front Deltoid': 15, 'Triceps': 15}
 },
 
 'Dumbbell Lying Triceps Extension': {
@@ -4303,16 +3062,6 @@ Map exerciseMuscles = {
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
 },
 
-'Kettlebell One Arm Bench Press': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 10, 'Anterior Deltoids': 10, 'Core': 10}
-},
-
-'Cable Lateral Raise': {
-    'Primary': {'Side Delts': 80},
-    'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
-},
-
 'Barbell Thruster': {
     'Primary': {'Quadriceps': 25, 'Shoulders': 25},
     'Secondary': {'Glutes': 25, 'Hamstrings': 12.5, 'Triceps': 12.5} 
@@ -4325,7 +3074,7 @@ Map exerciseMuscles = {
 
 'Barbell Incline Bench Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Anterior Deltoids': 15, 'Triceps': 15}
+    'Secondary': {'Front Deltoid': 15, 'Triceps': 15}
 },
 
 'Wrist Roller': {
@@ -4335,11 +3084,6 @@ Map exerciseMuscles = {
 'Kettlebell Plyo Pushup': {
     'Primary': {'Chest': 20, 'Triceps': 20, 'Shoulders': 20},
     'Secondary': {'Core': 20, 'Power': 20}
-},
-
-'Dumbbell Seated Bench Extension': {
-    'Primary': {'Triceps': 90},
-    'Secondary': {'Chest': 5, 'Shoulders': 5}
 },
 
 'Butt Bridge': {
@@ -4357,19 +3101,9 @@ Map exerciseMuscles = {
     'Secondary': {'Glutes': 10, 'Hamstrings': 10, 'Calves': 10}
 },
 
-'Battling Ropes': {
-    'Primary': {'Shoulders': 20, 'Arms': 20, 'Core': 20},
-    'Secondary': {'Cardiovascular System': 40}
-},
-
 'Kettlebell Lunge Clean and Press': {
     'Primary': {'Quadriceps': 17, 'Shoulders': 17, 'Core': 16},
     'Secondary': {'Glutes': 12, 'Hamstrings': 13, 'Triceps': 12, 'Balance': 13} 
-},
-
-'Barbell One Arm Floor Press': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 10, 'Anterior Deltoids': 10, 'Core': 10}
 },
 
 'Dumbbell Standing Triceps Extension': {
@@ -4387,10 +3121,6 @@ Map exerciseMuscles = {
     'Secondary': {'Biceps': 10, 'Posterior Deltoids': 10, 'Forearms': 10, 'Grip Strength': 10}
 },
 
-'Elbow Extension': {
-    'Primary': {'Triceps': 100}
-},
-
 'Kettlebell deadlift': {
     'Primary': {'Hamstrings': 20, 'Glutes': 20, 'Back': 20},
     'Secondary': {'Forearms': 15, 'Grip Strength': 15, 'Core': 10}
@@ -4405,13 +3135,9 @@ Map exerciseMuscles = {
     'Secondary': {'Hamstrings': 15, 'Core': 15}
 },
 
-'Cable Seated Face Pull (with rope)': {
+'Cable Seated Face Pull (Rope)': {
     'Primary': {'Posterior Deltoids': 35, 'Traps': 35},
     'Secondary': {'Rhomboids': 15, 'Rotator Cuff': 15}
-},
-
-'Barbell Wrist Curl II': {
-    'Primary': {'Forearm Flexors': 100}
 },
 
 'Cable Cross over Lateral Pulldown': {
@@ -4427,11 +3153,6 @@ Map exerciseMuscles = {
 'Dumbbell Step up': {
     'Primary': {'Quadriceps': 35, 'Glutes': 35},
     'Secondary': {'Hamstrings': 10, 'Calves': 10, 'Balance': 10}
-},
-
-'Barbell Narrow Stance Squat': {
-    'Primary': {'Quadriceps': 70},
-    'Secondary': {'Glutes': 10, 'Hamstrings': 10, 'Adductors': 10}
 },
 
 'Frog Crunch': {
@@ -4451,16 +3172,12 @@ Map exerciseMuscles = {
 
 'Dumbbell Close Grip Press': {
     'Primary': {'Triceps': 70},
-    'Secondary': {'Chest': 15, 'Anterior Deltoids': 15}
+    'Secondary': {'Chest': 15, 'Front Deltoid': 15}
 },
 
 'Dumbbell Standing One Arm Extension': {
     'Primary': {'Triceps': 90},
     'Secondary': {'Core': 5, 'Shoulders': 5}
-},
-
-'Cable Pushdown (straight arm) II': {
-    'Primary': {'Triceps': 100}
 },
 
 'Cable Pulldown': {
@@ -4493,27 +3210,12 @@ Map exerciseMuscles = {
 
 'Smith Machine Decline Close Grip Bench Press': {
     'Primary': {'Lower Chest': 35, 'Triceps': 35},
-    'Secondary': {'Anterior Deltoids': 30}
-},
-
-'Band Cross Body One Arm Chest Press': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 10, 'Anterior Deltoids': 5, 'Core': 5}
+    'Secondary': {'Front Deltoid': 30}
 },
 
 'Barbell Stiff Leg Good Morning': {
     'Primary': {'Hamstrings': 70},
     'Secondary': {'Glutes': 10, 'Lower Back': 10, 'Erector Spinae': 10}
-},
-
-'Extra Decline Sit up': {
-    'Primary': {'Rectus Abdominis': 80},
-    'Secondary': {'Hip Flexors': 10, 'Obliques': 10}
-},
-
-'Lever Seated Leg Extension (VERSION 2)': {
-    'Primary': {'Quadriceps': 90},
-    'Secondary': {'Hip Flexors': 10}
 },
 
 'Dumbbell Standing Zottman Preacher Curl': {
@@ -4551,11 +3253,6 @@ Map exerciseMuscles = {
     'Secondary': {'Core': 5, 'Shoulders': 5}
 },
 
-'Squat Hold Calf Raise': {
-    'Primary': {'Calves': 25, 'Quadriceps': 25},
-    'Secondary': {'Glutes': 25, 'Hamstrings': 25}
-},
-
 'Cable Parallel Grip Lat Pulldown on Floor': {
     'Primary': {'Latissimus Dorsi': 70},
     'Secondary': {'Biceps': 15, 'Forearms': 15}
@@ -4579,19 +3276,10 @@ Map exerciseMuscles = {
 'EZ Barbell Standing Wrist Reverse Curl': {
     'Primary': {'Forearm Extensors': 100}
 },
-'Suspender Arm Curl': {
-        'Primary': {'Biceps Brachii': 80},
-        'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
-    },
 
     'Lever Total Abdominal Crunch': {
         'Primary': {'Rectus Abdominis': 70},
         'Secondary': {'Hip Flexors': 15, 'Obliques': 15}
-    },
-
-    'Band lateral raise': {
-        'Primary': {'Side Delts': 80},
-        'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
     },
 
     'Cable Incline Bench Row': {
@@ -4604,28 +3292,14 @@ Map exerciseMuscles = {
         'Secondary': {'Latissimus Dorsi': 15, 'Erector Spinae': 15}
     },
 
-    'Dumbbell Alternate Shoulder Press': {
-        'Primary': {'Shoulders': 70},
-        'Secondary': {'Triceps': 20, 'Upper Chest': 10}
-    },
-
     'EZ Barbell JM Bench Press': {
         'Primary': {'Chest': 70},
-        'Secondary': {'Triceps': 20, 'Anterior Deltoids': 10}
-    },
-
-    'Barbell Reverse Wrist Curl': {
-        'Primary': {'Forearm Extensors': 100}
+        'Secondary': {'Triceps': 20, 'Front Deltoid': 10}
     },
 
     'Cable Standing Fly': {
         'Primary': {'Chest': 80},
-        'Secondary': {'Anterior Deltoids': 20}
-    },
-
-    'Barbell Incline Bench Press_1': {
-        'Primary': {'Upper Chest': 70},
-        'Secondary': {'Anterior Deltoids': 15, 'Triceps': 15}
+        'Secondary': {'Front Deltoid': 20}
     },
 
     'Oblique Crunches Floor': {
@@ -4645,21 +3319,11 @@ Map exerciseMuscles = {
 
     'Dumbbell Incline One Arm Lateral Raise': {
         'Primary': {'Side Delts': 80},
-        'Secondary': {'Anterior Deltoids': 10, 'Trapezius': 10}
-    },
-
-    'Medicine Ball Close Grip Push Up': {
-        'Primary': {'Triceps': 70},
-        'Secondary': {'Chest': 30} 
-    },
-
-    'Barbell Seated Overhead Press': {
-        'Primary': {'Shoulders': 70},
-        'Secondary': {'Triceps': 20, 'Upper Chest': 10}
+        'Secondary': {'Front Deltoid': 10, 'Trapezius': 10}
     },
 
     'Cable Single Arm Neutral Grip Front Raise': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 10, 'Upper Chest': 10}
     },
 
@@ -4672,34 +3336,19 @@ Map exerciseMuscles = {
         'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
     },
 
-    'Sliding Floor Bridge Curl on Towel': {
-        'Primary': {'Hamstrings': 75},
-        'Secondary': {'Glutes': 15, 'Calves': 10}
-    },
-
     'Kettlebell Goblet Squat': {
         'Primary': {'Quadriceps': 50, 'Glutes': 30},
         'Secondary': {'Hamstrings': 10, 'Core': 10}
     },
 
-    'Cable Middle Fly_1': {
-        'Primary': {'Chest': 80},
-        'Secondary': {'Anterior Deltoids': 20}
-    },
-
     'Cable Front Raise': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 20}
     },
 
     'Jump Squat': {
         'Primary': {'Quadriceps': 50, 'Glutes': 30},
         'Secondary': {'Hamstrings': 10, 'Calves': 10}
-    },
-
-    'Kettlebell Extended Range One Arm Press on Floor': {
-        'Primary': {'Chest': 65, 'Triceps': 20},
-        'Secondary': {'Shoulders': 10, 'Core': 5}
     },
 
     'Bulgarian Split Squat with Chair': {
@@ -4712,19 +3361,9 @@ Map exerciseMuscles = {
         'Secondary': {'Chest': 30}
     },
 
-    'Suspender Side Lunge': {
-        'Primary': {'Quadriceps': 45, 'Glutes': 30, 'Adductors': 15},
-        'Secondary': {'Hamstrings': 5, 'Core': 5}
-    },
-
     'Diamond Push up': {
         'Primary': {'Triceps': 70},
         'Secondary': {'Chest': 30}
-    },
-
-    'Barbell Bench Press_1': {
-        'Primary': {'Chest': 70},
-        'Secondary': {'Triceps': 20, 'Anterior Deltoids': 10}
     },
 
     'Olympic Barbell Hammer Curl': {
@@ -4734,10 +3373,6 @@ Map exerciseMuscles = {
     'Dumbbell Plyo Squat': {
         'Primary': {'Quadriceps': 50, 'Glutes': 30},
         'Secondary': {'Hamstrings': 10, 'Calves': 10}
-    },
-
-    'Barbell Standing Close Grip Military Press': {
-        'Primary': {'Shoulders': 60, 'Triceps': 40}
     },
 
     'Dumbbell Lying Rear Lateral Raise': {
@@ -4775,25 +3410,6 @@ Map exerciseMuscles = {
         'Secondary': {'Quadriceps': 10, 'Glutes': 10}
     },
 
-    'Barbell Deadstop Row': {
-        'Primary': {'Latissimus Dorsi': 60, 'Traps': 20},
-        'Secondary': {'Rhomboids': 10, 'Biceps': 10}
-    },
-
-    'Squat On Bosu Ball': {
-        'Primary': {'Quadriceps': 45, 'Glutes': 25, 'Core': 20},
-        'Secondary': {'Hamstrings': 10}
-    },
-
-    'Cable Pushdown (with rope attachment)': {
-        'Primary': {'Triceps': 100}
-    },
-
-    'Bodyweight Kneeling Triceps Extension': {
-        'Primary': {'Triceps': 80},
-        'Secondary': {'Core': 20}
-    },
-
     'EZ Barbell Standing Preacher Curl': {
         'Primary': {'Biceps Brachii': 80},
         'Secondary': {'Brachialis': 20}
@@ -4802,17 +3418,7 @@ Map exerciseMuscles = {
     'Lever Hammer Grip Preacher Curl': {
         'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
     },
-
-    'Barbell Seated Bradford Rocky Press': {
-        'Primary': {'Shoulders': 70},
-        'Secondary': {'Triceps': 20, 'Upper Chest': 10}
-    },
-
-    'Barbell Rear Lunge II': {
-        'Primary': {'Quadriceps': 50, 'Glutes': 40},
-        'Secondary': {'Hamstrings': 10}
-    },
-
+    
     'Dumbbell Goblet Split Squat Front Foot Elevanted': {
         'Primary': {'Quadriceps': 60, 'Glutes': 30},
         'Secondary': {'Hamstrings': 5, 'Core': 5}
@@ -4828,10 +3434,6 @@ Map exerciseMuscles = {
         'Secondary': {'Rhomboids': 10, 'Biceps': 10}
     },
 
-    'Band pushdown': {
-        'Primary': {'Triceps': 100}
-    },
-
     'Resistance Band Side Walk': {
         'Primary': {'Hip Abductors': 70},
         'Secondary': {'Glutes': 30}
@@ -4841,23 +3443,13 @@ Map exerciseMuscles = {
         'Secondary': {'Brachialis': 20}
     },
 
-    'Dumbbell Incline Triceps Extension_1': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
-
     'Dumbbell Incline Raise': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 10, 'Upper Chest': 10}
     },
 
     'Dumbbell Lateral to Front Raise': {
-        'Primary': {'Side Delts': 50, 'Anterior Deltoids': 50}
-    },
-
-    'Standing Single Leg Curl': {
-        'Primary': {'Hamstrings': 90},
-        'Secondary': {'Calves': 10}
+        'Primary': {'Side Delts': 50, 'Front Deltoid': 50}
     },
 
     'Barbell Clean grip Front Squat': {
@@ -4870,11 +3462,6 @@ Map exerciseMuscles = {
         'Secondary': {'Chest': 5, 'Shoulders': 5}
     },
 
-    'Bodyweight Rear Lunge': {
-        'Primary': {'Quadriceps': 40, 'Glutes': 40},
-        'Secondary': {'Hamstrings': 20}
-    },
-
     'Cable Rear Pulldown': {
         'Primary': {'Latissimus Dorsi': 70},
         'Secondary': {'Posterior Deltoids': 15, 'Biceps': 15}
@@ -4885,12 +3472,7 @@ Map exerciseMuscles = {
     },
 
     'Cable Y raise': {
-        'Primary': {'Anterior Deltoids': 50, 'Side Delts': 50}
-    },
-
-    'Barbell Squat 2 sec Hold': {
-        'Primary': {'Quadriceps': 50, 'Glutes': 30},
-        'Secondary': {'Hamstrings': 10, 'Core': 10}
+        'Primary': {'Front Deltoid': 50, 'Side Delts': 50}
     },
 
     'Front Plank': {
@@ -4903,19 +3485,9 @@ Map exerciseMuscles = {
         'Secondary': {'Hamstrings': 10}
     },
 
-    'Band Close Grip Biceps Curl': {
-        'Primary': {'Biceps Brachii': 80},
-        'Secondary': {'Brachialis': 20}
-    },
-
     'Cable Incline Triceps Extension': {
         'Primary': {'Triceps': 90},
         'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
-
-    'Walking Lunge Male': {
-        'Primary': {'Quadriceps': 40, 'Glutes': 40},
-        'Secondary': {'Hamstrings': 20}
     },
 
     'Dumbbell Lying Supine Curl': {
@@ -4925,21 +3497,12 @@ Map exerciseMuscles = {
 
     'Cable Standing Up Straight Crossovers': {
         'Primary': {'Chest': 80},
-        'Secondary': {'Anterior Deltoids': 20}
-    },
-
-    'Dumbbell Reverse Wrist Curl': {
-        'Primary': {'Forearm Extensors': 100}
+        'Secondary': {'Front Deltoid': 20}
     },
 
     'Glute Ham Raise': {
         'Primary': {'Hamstrings': 70},
         'Secondary': {'Glutes': 15, 'Calves': 15}
-    },
-
-    'Dumbbell Walking Lunges': {
-        'Primary': {'Quadriceps': 40, 'Glutes': 40},
-        'Secondary': {'Hamstrings': 20}
     },
 
     'Sumo Squat': {
@@ -4961,22 +3524,9 @@ Map exerciseMuscles = {
         'Secondary': {'Rhomboids': 10, 'Biceps': 10}
     },
 
-    'Band underhand pulldown': {
-        'Primary': {'Latissimus Dorsi': 70},
-        'Secondary': {'Biceps': 30}
-    },
-
     'Groin Crunch': {
         'Primary': {'Adductors': 70},
         'Secondary': {'Obliques': 30}
-    },
-
-    'Band Assisted Dip_1': {
-        'Primary': {'Chest': 50, 'Triceps': 50}
-    },
-
-    'Band lying leg curl': {
-        'Primary': {'Hamstrings': 100}
     },
 
     'Dumbbell Single Leg Step Up': {
@@ -4984,18 +3534,9 @@ Map exerciseMuscles = {
         'Secondary': {'Hamstrings': 5, 'Balance': 5}
     },
 
-    'Dumbbell Front Raise II': {
-        'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Side Delts': 20}
-    },
-
     'Barbell Lying Triceps Extension': {
         'Primary': {'Triceps': 90},
         'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
-
-    'Band Assisted Pull Up': {
-        'Primary': {'Latissimus Dorsi': 50, 'Biceps': 50}
     },
 
     'Hip Thrusts': {
@@ -5003,26 +3544,8 @@ Map exerciseMuscles = {
         'Secondary': {'Hamstrings': 30}
     },
 
-    'Lever Preacher Curl_1': {
-        'Primary': {'Biceps Brachii': 80},
-        'Secondary': {'Brachialis': 20}
-    },
-
-    'Band Pushdown': {
-        'Primary': {'Triceps': 100}
-    },
-
-    'Cable Lat Pulldown Full Range Of Motion': {
-        'Primary': {'Latissimus Dorsi': 70},
-        'Secondary': {'Biceps': 15, 'Forearms': 15}
-    },
-
     'Bear Plank': {
         'Primary': {'Core': 50, 'Shoulders': 50}
-    },
-        'Lever Back Extension': {
-        'Primary': {'Erector Spinae': 70},
-        'Secondary': {'Glutes': 15, 'Hamstrings': 15}
     },
 
     'Resistance Band Triceps Pushdown': {
@@ -5034,7 +3557,7 @@ Map exerciseMuscles = {
     },
 
     'Dumbbell Incline Front Raise': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 20}
     },
 
@@ -5045,15 +3568,6 @@ Map exerciseMuscles = {
     'Dumbbell Straight Arm Pullover': {
         'Primary': {'Latissimus Dorsi': 70},
         'Secondary': {'Chest': 15, 'Triceps': 15}
-    },
-
-    'Barbell Pullover Hold': {
-        'Primary': {'Latissimus Dorsi': 60},
-        'Secondary': {'Chest': 20, 'Serratus Anterior': 20}
-    },
-
-    'Band standing leg extension': {
-        'Primary': {'Quadriceps': 100}
     },
 
     'Barbell Narrow Row': {
@@ -5068,10 +3582,6 @@ Map exerciseMuscles = {
     'Dumbbell Seated Upright Alternate Squeeze Press': {
         'Primary': {'Shoulders': 70},
         'Secondary': {'Triceps': 20, 'Upper Chest': 10}
-    },
-
-    'Dumbbell 4 Ways Lateral Raise': {
-        'Primary': {'Side Delts': 50, 'Anterior Deltoids': 25, 'Posterior Deltoids': 25}
     },
 
     'Barbell Lying Close grip Press': {
@@ -5089,10 +3599,6 @@ Map exerciseMuscles = {
         'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
     },
 
-    'Cable Triceps Pushdown (V bar attachment)': {
-        'Primary': {'Triceps': 100}
-    },
-
     'Dumbbell Lying Floor Skullcrusher': {
         'Primary': {'Triceps': 90},
         'Secondary': {'Chest': 5, 'Shoulders': 5}
@@ -5103,7 +3609,7 @@ Map exerciseMuscles = {
     },
 
     'Cable Forward Raise': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 20}
     },
 
@@ -5113,13 +3619,13 @@ Map exerciseMuscles = {
     },
 
     'Dumbbell Incline Two Front Raise with Chest Support': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 20}
     },
 
     'Dumbbell Reverse Bench Press': {
         'Primary': {'Chest': 60},
-        'Secondary': {'Triceps': 20, 'Anterior Deltoids': 20}
+        'Secondary': {'Triceps': 20, 'Front Deltoid': 20}
     },
 
     'Dumbbell High Curl': {
@@ -5131,18 +3637,13 @@ Map exerciseMuscles = {
         'Primary': {'Hamstrings': 100}
     },
 
-    'Cable Kneeling Shoulder Press': {
-        'Primary': {'Shoulders': 70},
-        'Secondary': {'Triceps': 20, 'Core': 10}
-    },
-
     'Close Grip Push up': {
         'Primary': {'Triceps': 70},
         'Secondary': {'Chest': 30}
     },
 
     'Dumbbell One Arm Front Raise': {
-        'Primary': {'Anterior Deltoids': 80},
+        'Primary': {'Front Deltoid': 80},
         'Secondary': {'Side Delts': 20}
     },
 
@@ -5151,18 +3652,9 @@ Map exerciseMuscles = {
         'Secondary': {'Chest': 30}
     },
 
-    'Dumbbell Hammer Curl II': {
-        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
-    },
-
     'Dumbbell Lying One Arm Pronated Triceps Extension': {
         'Primary': {'Triceps': 90},
         'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
-
-    'Dumbbell Lying Hammer Press (version 2)': {
-        'Primary': {'Chest': 70},
-        'Secondary': {'Anterior Deltoids': 15, 'Triceps': 15}
     },
 
     'Dumbbell Biceps Curl': {
@@ -5170,18 +3662,9 @@ Map exerciseMuscles = {
         'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
     },
 
-    'Inverse Leg Curl (on pull up cable machine)': {
-        'Primary': {'Hamstrings': 100}
-    },
-
-    'Cable one arm inner biceps curl': {
-        'Primary': {'Biceps Brachii': 80},
-        'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
-    },
-
     'Cable Seated Chest Fly': {
         'Primary': {'Chest': 80},
-        'Secondary': {'Anterior Deltoids': 20}
+        'Secondary': {'Front Deltoid': 20}
     },
 
     'Bench Reverse Crunch Circle': {
@@ -5194,12 +3677,565 @@ Map exerciseMuscles = {
         'Secondary': {'Brachialis': 20}
     },
 
-    'Band front lateral raise': {
-        'Primary': {'Anterior Deltoids': 80},
-        'Secondary': {'Side Delts': 20}
+    'Dumbbell Bent Over Bench Row': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Posterior Deltoids': 15, 'Biceps': 20, 'Trapezius': 15}
     },
-    'Machine Rows': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
-  },
+    'Lying T-Bar Row': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Posterior Deltoids': 10, 'Biceps': 20, 'Trapezius': 20}
+    },
+    'Rear Delt Fly (Machine)': {
+      'Primary': {'Posterior Deltoids': 80},
+      'Secondary': {'Trapezius': 20}
+    },
+    'Chest Dips': {
+      'Primary': {'Pectoralis Major': 60},
+      'Secondary': {'Triceps': 30, 'Front Deltoid': 10}
+    },
+    'Tricep Dips': {
+      'Primary': {'Triceps': 70},
+      'Secondary': {'Pectoralis Major': 20, 'Front Deltoid': 10}
+    },
+    'Assisted Chest Dips': {
+      'Primary': {'Pectoralis Major': 60},
+      'Secondary': {'Triceps': 30, 'Front Deltoid': 10}
+    },
+    'Assisted Tricep Dips': {
+      'Primary': {'Triceps': 70},
+      'Secondary': {'Pectoralis Major': 20, 'Front Deltoid': 10}
+    },
+    'Weighted Neutral Grip Pull Up': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Assisted Neutral Grip Pull Ups': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Neutral Grip Pull Up': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Commando Pull Up': {
+      'Primary': {'Latissimus Dorsi': 40},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+    },
+    'Band Assisted One Arm Chin Up': {
+      'Primary': {'Latissimus Dorsi': 40},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+    },
+    'Weighted One Handed Pull Up': {
+      'Primary': {'Latissimus Dorsi': 40},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+    },
+    'Close Grip Pull Up': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Archer Pull Up': {
+      'Primary': {'Latissimus Dorsi': 40},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 10}
+    },
+    'Chin Up': {
+      'Primary': {'Latissimus Dorsi': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Close Grip Chin Up': {
+      'Primary': {'Latissimus Dorsi': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Band Assisted Chin Up': {
+      'Primary': {'Latissimus Dorsi': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Assisted Close Grip Chin Up': {
+      'Primary': {'Latissimus Dorsi': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Pull Up': {
+      'Primary': {'Latissimus Dorsi': 50},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+    'Single Arm Pull Up': {
+      'Primary': {'Latissimus Dorsi': 40},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+    },
+    'L-Pull Ups': {
+      'Primary': {'Latissimus Dorsi': 40},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 10}
+    },
+    'Weighted Chin Up': {
+      'Primary': {'Latissimus Dorsi': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
+    },
+        'Assisted Chin up': {
+        'Primary': {'Lats': 50, 'Biceps': 40},
+        'Secondary': {'Forearms': 10}
+    },
+    'Assisted Pullup (Neutral grip)': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Shoulders': 10, 'Forearms': 10}
+    },
+    'Assisted Triceps Dip': {
+        'Primary': {'Triceps': 60},
+        'Secondary': {'Chest': 30, 'Shoulders': 10}
+    },
+    'Back Extensions': {
+        'Primary': {'Lower Back': 70},
+        'Secondary': {'Glutes': 20, 'Hamstrings': 10}
+    },
+    'Back Lever': {
+        'Primary': {'Lats': 50, 'Core': 30},
+        'Secondary': {'Shoulders': 20}
+    },
+    'Band Assisted Dips': {
+        'Primary': {'Triceps': 60},
+        'Secondary': {'Chest': 30, 'Shoulders': 10}
+    },
+    'Band Assisted Muscle up': {
+        'Primary': {'Lats': 40, 'Biceps': 30},
+        'Secondary': {'Triceps': 20, 'Shoulders': 10}
+    },
+    'Bar Shoulder Press': {
+        'Primary': {'Shoulders': 60},
+        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
+    },
+    'Barbell Bench Squat': {
+        'Primary': {'Quads': 50, 'Glutes': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Barbell Bent Over Wide Grip Row': {
+        'Primary': {'Upper Back': 60, 'Biceps': 30},
+        'Secondary': {'Rear Deltoids': 10}
+    },
+    'Barbell Close Grip Bench Press': {
+        'Primary': {'Triceps': 60},
+        'Secondary': {'Chest': 30, 'Shoulders': 10}
+    },
+    'Barbell Deadstop Row': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Lower Back': 20}
+    },
+    'Barbell Decline Close Grip To Skull Press': {
+        'Primary': {'Triceps': 60},
+        'Secondary': {'Chest': 30, 'Shoulders': 10}
+    },
+    'Barbell Full Squat': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Lower Back': 10}
+    },
+    'Barbell Incline Close Grip Bench Press': {
+        'Primary': {'Upper Chest': 50, 'Triceps': 40},
+        'Secondary': {'Shoulders': 10}
+    },
+    'Barbell JM Bench Press': {
+        'Primary': {'Triceps': 60},
+        'Secondary': {'Chest': 30, 'Shoulders': 10}
+    },
+    'Barbell Rear Lunge': {
+        'Primary': {'Glutes': 50, 'Quads': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Barbell Reverse Wrist Curl': {
+        'Primary': {'Forearms': 70},
+        'Secondary': {'Biceps': 30}
+    },
+    'Battling Ropes': {
+        'Primary': {'Shoulders': 40, 'Arms': 30},
+        'Secondary': {'Core': 30}
+    },
+    'Biceps Curl with Bed Sheet': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Bodyweight Kneeling Triceps Extension': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Bodyweight Standing Biceps Curl': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Bodyweight Standing Military Press': {
+        'Primary': {'Shoulders': 60},
+        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
+    },
+    'Cable Assisted Inverse Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 20, 'Lower Back': 10}
+    },
+    'Cable Bent Over Row (Rope)': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Rear Deltoids': 20}
+    },
+    'Cable Concentration Extension (on knee)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Decline Fly': {
+        'Primary': {'Chest': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Hip Abduction': {
+        'Primary': {'Glutes': 80},
+        'Secondary': {'Outer Thighs': 20}
+    },
+    'Cable Kneeling High Row (Rope)': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Rear Deltoids': 20}
+    },
+    'Cable Lateral Pulldown (Rope)': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Shoulders': 20}
+    },
+    'Cable Lateral Pulldown (V Bar)': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Shoulders': 20}
+    },
+    'Cable Low Row with (Rope)': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Rear Deltoids': 20}
+    },
+    'Cable Lying Biceps Curl': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Cable Lying Extension Pullover (Rope)': {
+        'Primary': {'Lats': 50, 'Triceps': 30},
+        'Secondary': {'Shoulders': 20}
+    },
+    'Cable One Arm Biceps Curl': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Cable One Arm Lateral Bent Over': {
+        'Primary': {'Rear Deltoids': 60},
+        'Secondary': {'Traps': 30, 'Biceps': 10}
+    },
+    'Cable Overhead Single Arm Triceps Extension (Rope)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Overhead Triceps Extension (Rope)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Pushdown (Rope)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Reverse Grip Pulldown': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Forearms': 20}
+    },
+
+    'Cable Single Arm Triceps Pushdown (Rope)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Standing High Cross Triceps Extension': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Standing One Arm Triceps Extension': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Triceps Pushdown (SZ Bar)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Triceps Pushdown (V Bar)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Cable Two Arm Lateral Raise': {
+        'Primary': {'Shoulders': 70},
+        'Secondary': {'Traps': 30}
+    },
+    'Chest Dip': {
+        'Primary': {'Chest': 60, 'Triceps': 30},
+        'Secondary': {'Shoulders': 10}
+    },
+    'Cobra Push Up': {
+        'Primary': {'Triceps': 60, 'Chest': 30},
+        'Secondary': {'Shoulders': 10}
+    },
+    'Dips between Chairs': {
+        'Primary': {'Triceps': 60},
+        'Secondary': {'Chest': 30, 'Shoulders': 10}
+    },
+    'Dumbbell Bent Arm Pullover Hold': {
+        'Primary': {'Chest': 50, 'Lats': 30},
+        'Secondary': {'Triceps': 20}
+    },
+    'Dumbbell Cuban Press': {
+        'Primary': {'Shoulders': 60, 'Upper Back': 30},
+        'Secondary': {'Triceps': 10}
+    },
+    'Dumbbell Devils Press': {
+        'Primary': {'Chest': 40, 'Shoulders': 30},
+        'Secondary': {'Triceps': 20, 'Legs': 10}
+    },
+    'Dumbbell Flat Flye Hold': {
+        'Primary': {'Chest': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Dumbbell Half Kneeling Military Press': {
+        'Primary': {'Shoulders': 60},
+        'Secondary': {'Triceps': 30, 'Core': 10}
+    },
+    'Dumbbell Incline Press on Exercise Ball': {
+        'Primary': {'Chest': 50, 'Shoulders': 30},
+        'Secondary': {'Triceps': 20}
+    },
+
+    'Dumbbell Lying One Arm Press': {
+        'Primary': {'Chest': 50, 'Triceps': 30},
+        'Secondary': {'Shoulders': 20}
+    },
+    'Dumbbell One Arm Reverse Fly (with support)': {
+        'Primary': {'Rear Deltoids': 60},
+        'Secondary': {'Traps': 30, 'Biceps': 10}
+    },
+    'Dumbbell Reverse Wrist Curl': {
+        'Primary': {'Forearms': 70},
+        'Secondary': {'Biceps': 30}
+    },
+    'Dumbbell Seated Bench Tricep Extension': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Dumbbell Seated Preacher Curl': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Dumbbell Seated Reverse Grip One Arm Overhead Tricep Extension': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Dumbbell Side Lunge': {
+        'Primary': {'Quads': 50, 'Glutes': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Dumbbell Two Arm Seated Hammer Curl on Exercise Ball': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Dumbbell Walking Lunges': {
+        'Primary': {'Quads': 50, 'Glutes': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Finger Curls': {
+        'Primary': {'Forearms': 80},
+        'Secondary': {'Grip': 20}
+    },
+    'Full Squat Mobility': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Core': 10}
+    },
+    'Kettlebell Step Up': {
+        'Primary': {'Quads': 50, 'Glutes': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Kneeling Push Up Row': {
+        'Primary': {'Chest': 50, 'Lats': 30},
+        'Secondary': {'Triceps': 20}
+    },
+    'Landmine Rear Lunge': {
+        'Primary': {'Glutes': 50, 'Quads': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Lever Hip Extension': {
+        'Primary': {'Glutes': 60},
+        'Secondary': {'Lower Back': 30, 'Hamstrings': 10}
+    },
+    'Lever Incline Chest Press': {
+        'Primary': {'Chest': 60, 'Triceps': 30},
+        'Secondary': {'Shoulders': 10}
+    },
+    'Lever Leg Extension': {
+        'Primary': {'Quads': 80},
+        'Secondary': {'Knees': 20}
+    },
+    'Lever Lying Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+    'Lever Lying Single Leg Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+
+    'Lever Seated Hip Adduction': {
+        'Primary': {'Inner Thighs': 80},
+        'Secondary': {'Glutes': 20}
+    },
+    'Lever Seated Leg Extension': {
+        'Primary': {'Quads': 80},
+        'Secondary': {'Knees': 20}
+    },
+    'Lever Seated One Leg Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+    'Lying Leg Raise and Hold': {
+        'Primary': {'Abs': 70},
+        'Secondary': {'Hip Flexors': 30}
+    },
+    'Machine Back Extension': {
+        'Primary': {'Lower Back': 70},
+        'Secondary': {'Glutes': 20, 'Hamstrings': 10}
+    },
+    'Machine Shoulder Press': {
+        'Primary': {'Shoulders': 60},
+        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
+    },
+    'Narrow Squat from Deficit': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Hamstrings': 10}
+    },
+    'One Leg Floor Calf Raise': {
+        'Primary': {'Calves': 80},
+        'Secondary': {'Ankles': 20}
+    },
+    'One Leg Leg Extension': {
+        'Primary': {'Quads': 80},
+        'Secondary': {'Knees': 20}
+    },
+    'Resistance Band Bent Leg Kickback (Kneeling)': {
+        'Primary': {'Glutes': 60},
+        'Secondary': {'Hamstrings': 30, 'Lower Back': 10}
+    },
+
+    'Resistance Band Full Squat': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Core': 10}
+    },
+    'Resistance Band Leg Extension': {
+        'Primary': {'Quads': 70},
+        'Secondary': {'Hip Flexors': 30}
+    },
+    'Resistance Band Leg Lift': {
+        'Primary': {'Glutes': 60, 'Quads': 30},
+        'Secondary': {'Hamstrings': 10}
+    },
+    'Resistance Band Seated Single Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+    'Seated Lever Machine Row': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Rear Deltoids': 20}
+    },
+    'Seated Machine Row': {
+        'Primary': {'Lats': 50, 'Biceps': 30},
+        'Secondary': {'Rear Deltoids': 20}
+    },
+    'Seated Overhead Press (Barbell)': {
+        'Primary': {'Shoulders': 60},
+        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
+    },
+
+    'Self Assisted Inverse Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+    'Side Bridge': {
+        'Primary': {'Obliques': 70},
+        'Secondary': {'Core': 30}
+    },
+    'Single Leg Hip Thrust': {
+        'Primary': {'Glutes': 60},
+        'Secondary': {'Hamstrings': 30, 'Lower Back': 10}
+    },
+    'Pistol Squat': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Hamstrings': 10}
+    },
+    'Sit Up': {
+        'Primary': {'Abs': 70},
+        'Secondary': {'Hip Flexors': 30}
+    },
+    'Smith Calf Raise': {
+        'Primary': {'Calves': 80},
+        'Secondary': {'Ankles': 20}
+    },
+    'Smith Full Squat': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Core': 10}
+    },
+    'Smith Machine Standing Overhead Press': {
+        'Primary': {'Shoulders': 60},
+        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
+    },
+    'Smith Rear Lunge': {
+        'Primary': {'Glutes': 50, 'Quads': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Squat Hold Calf Raise': {
+        'Primary': {'Calves': 70},
+        'Secondary': {'Quads': 30}
+    },
+    'Suspender Arm Curl': {
+        'Primary': {'Biceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Suspender Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+    'Suspender Squat': {
+        'Primary': {'Quads': 60},
+        'Secondary': {'Glutes': 30, 'Core': 10}
+    },
+    'Suspender Straight Hip Leg Curl': {
+        'Primary': {'Hamstrings': 70},
+        'Secondary': {'Glutes': 30}
+    },
+    'Suspender Triceps Extension': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Shoulders': 30}
+    },
+    'Walking Lunge': {
+        'Primary': {'Quads': 50, 'Glutes': 30},
+        'Secondary': {'Hamstrings': 20}
+    },
+    'Weighted Crunch': {
+        'Primary': {'Abs': 70},
+        'Secondary': {'Hip Flexors': 30}
+    },
+    'Weighted Push Up': {
+        'Primary': {'Chest': 50, 'Shoulders': 30},
+        'Secondary': {'Triceps': 20}
+    },
+       'Cable Seated Horizontal Shrug': {
+        'Primary': {'Traps': 70},
+        'Secondary': {'Rear Deltoids': 20, 'Biceps': 10}
+    },
+    'Cable Triceps Pushdown (SZ bar)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Cable Triceps Pushdown (V bar)': {
+        'Primary': {'Triceps': 70},
+        'Secondary': {'Forearms': 30}
+    },
+    'Dumbbell Over Bench Neutral Wrist Curl': {
+        'Primary': {'Forearms': 70},
+        'Secondary': {'Biceps': 30}
+    },
+    'Dumbbell Over Bench Wrist Curl': {
+        'Primary': {'Forearms': 70},
+        'Secondary': {'Biceps': 30}
+    },
+    'Dumbbell Over Bench Reverse Wrist Curl': {
+        'Primary': {'Forearms': 70},
+        'Secondary': {'Biceps': 30}
+    },
+        'Dumbbell Over Bench One Arm Wrist Curl': {
+        'Primary': {'Forearms': 70},
+        'Secondary': {'Biceps': 30}
+    },
 };
