@@ -1,6 +1,8 @@
   import 'dart:convert';
 import 'dart:io';
-  import 'package:exercise_app/file_handling.dart';
+import 'dart:ui';
+  import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
   import 'package:flutter/material.dart';
@@ -47,6 +49,12 @@ import 'package:file_picker/file_picker.dart';
               icon: Icons.download,
               label: 'Import data',
               function: (){importData(context);},
+            ),
+            setttingDividor(),
+            _buildSettingsBox(
+              icon: Icons.move_down,
+              label: 'Move exercises',
+              function: (){moveExercises(context);},
             ),
           ],
         ),
@@ -270,13 +278,13 @@ class _GoalOptionsState extends State<GoalOptions> {
         // Parse the JSON content
         Map<String, dynamic> jsonData = jsonDecode(content);
         writeData(jsonData, append: true);
-        Map data = await readData();
+        // Map data = await readData();
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Data written'),
-            content: Text(data.toString()),
+            content: Text(jsonData.toString()),
             actions: <Widget>[
               TextButton(
                 child: const Text('OK'),
@@ -300,3 +308,50 @@ class _GoalOptionsState extends State<GoalOptions> {
     debugPrint("Error picking or reading file: $e");
   }
   }
+
+void moveExercises(BuildContext context) async{
+  final resultFrom = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const WorkoutList(setting: 'choose',),
+    ),
+  );
+  final resultTo = await Navigator.push(
+    // ignore: use_build_context_synchronously
+    context,
+    MaterialPageRoute(
+      builder: (context) => const WorkoutList(setting: 'choose',),
+    ),
+  );
+if (resultTo != null && resultFrom != null) {
+  Map data = await readData();
+  
+  // Create a new map to preserve key order
+  Map newData = {};
+
+  for (var day in data.keys) {
+    newData[day] = {
+      'stats': {},
+      'sets': {}  // Create an empty 'sets' map to populate later
+    };
+    
+    // Iterate over the original keys in order
+    for (var exercise in data[day]['sets'].keys) {
+      if (exercise == resultFrom) {
+        newData[day]['stats'] = data[day]['stats'];
+        newData[day]['sets'][resultTo] = data[day]['sets'][exercise];
+      } else {
+        // Keep the original key and value
+                newData[day]['stats'] = data[day]['stats'];
+        newData[day]['sets'][exercise] = data[day]['sets'][exercise];
+      }
+    }
+  }
+  resetData(true, false, false);
+  writeData(newData);
+}
+
+
+
+  
+}

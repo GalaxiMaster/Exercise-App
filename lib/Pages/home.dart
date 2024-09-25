@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   void getIsCurrent() async{
     Map data = await readData(path: 'current');
     setState(() {
-      isCurrent = data['sets'] == null ? true : data['sets'].toString() != {}.toString();
+      isCurrent = data['sets'] == null ? false : data['sets'].toString() != {}.toString();
     });
   }
   Future<void> _loadRoutines() async {

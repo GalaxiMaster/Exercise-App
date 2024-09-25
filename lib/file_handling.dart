@@ -23,32 +23,41 @@ Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
   return jsonData;
 }
 
-void writeData(Map newData, {String path = 'output', bool append = true}) async {  
-  final dir = await getApplicationDocumentsDirectory();
-  if (append){
-    Map data = await readData(path: path);
-    newData.addAll(data);
-  }
+Future<void> writeData(Map newData, {String path = 'output', bool append = true}) async {
+  try {
+    final dir = await getApplicationDocumentsDirectory();
 
-  if (path.split('/').length > 1){
-    String directoryPath = '${dir.path}/${(path.split('/').sublist(0, path.split('/').length - 1)).join('/')}';
-    // Create the directory if it doesn't exist
+    // Path handling: split the provided path into directory and file name components
+    List<String> pathComponents = path.split('/');
+    String directoryPath = '${dir.path}/${pathComponents.sublist(0, pathComponents.length - 1).join('/')}';
+    String filePath = '${dir.path}/$path.json';
+
+    // If appending is enabled, merge existing data with new data
+    if (append) {
+      Map existingData = await readData(path: path);
+      newData.addAll(existingData);
+    }
+
+    // Ensure the directory exists, create it if not
     Directory routineDir = Directory(directoryPath);
     if (!routineDir.existsSync()) {
-      await routineDir.create(recursive: true);  // Create directory recursively
+      await routineDir.create(recursive: true);  // Create directory recursively if necessary
     }
+
+    // Convert map data to JSON string
+    String jsonString = jsonEncode(newData);
+
+    // Write the JSON data to the file
+    File file = File(filePath);
+    await file.writeAsString(jsonString);
+
+    debugPrint('Data has been written to the file: $filePath');
+  } catch (e) {
+    // Catch and report any errors
+    debugPrint('Error writing data: $e');
   }
+}
 
-  String jsonString = jsonEncode(newData);
-  // debugPrint(jsonString);
-  String  filepath = '${dir.path}/$path.json';
-  debugPrint(filepath);
-  File file = File(filepath);
-
-  await file.writeAsString(jsonString);
-  readData(path: path );
-  debugPrint('JSON data has been written to the file.');
-} 
 
 Future<void> resetData(bool output, bool current, bool records) async {
   if (output){

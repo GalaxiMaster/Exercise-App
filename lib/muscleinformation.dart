@@ -4138,4 +4138,8 @@ Map exerciseMuscles = {
         'Primary': {'Forearms': 70},
         'Secondary': {'Biceps': 30}
     },
+        'Machine Chest Fly': {
+        'Primary': {'Chest': 80},
+        'Secondary': {'Front Deltoid': 20}
+    },
 };
