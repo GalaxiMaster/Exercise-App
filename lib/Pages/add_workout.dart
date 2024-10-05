@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -219,7 +220,7 @@ class _AddworkoutState extends State<Addworkout> {
                               child: Center(
                                 child: Text('Weight (kg)')
                               ),
-                            ),
+                            ), 
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
@@ -253,44 +254,52 @@ class _AddworkoutState extends State<Addworkout> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
-                                child: TextFormField(
-                                  // initialValue: sets[exercise]![i]['weight'].toString(),
-                                  focusNode: _focusNodes[exercise]![i]['weight'],
-                                  controller: _controllers[exercise]![i]['weight'],
-                                  keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintText: getPrevious(exercise, i+1, 'Weight'),
-                                    border: InputBorder.none,
-                                    hintStyle: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16, // Adjust hint text size
+                                child: exerciseMuscles[exercise]['type'] == 'Weighted' ? 
+                                  TextFormField(
+                                    focusNode: _focusNodes[exercise]![i]['weight'],
+                                    controller: _controllers[exercise]![i]['weight'],
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                     ),
-                                  ),
-                                  onChanged: (value) {
-                                    value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                    sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                                    isRecord(exercise, i);
-                                    updateExercises();
-                                  },
-                                  onFieldSubmitted: (value) {
-                                    if (i == sets[exercise]!.length - 1) {
-                                      addNewSet(exercise);
-                                    } else {
-                                      FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
-                                    }
-                                  },
-                                  onTap: () {
-                                    _controllers[exercise]![i]['reps']!.selection = TextSelection(
-                                      baseOffset: 0,
-                                      extentOffset: _controllers[exercise]![i]['reps']!.text.length,
-                                    );
-                                  },
-                                ),
+                                    decoration: InputDecoration(
+                                      hintText: getPrevious(exercise, i+1, 'Weight'),
+                                      border: InputBorder.none,
+                                      hintStyle: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 16, // Adjust hint text size
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                      value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                                      sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                                      isRecord(exercise, i);
+                                      updateExercises();
+                                    },
+                                    onFieldSubmitted: (value) {
+                                      if (i == sets[exercise]!.length - 1) {
+                                        addNewSet(exercise);
+                                      } else {
+                                        FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+                                      }
+                                    },
+                                    onTap: () {
+                                      _controllers[exercise]![i]['reps']!.selection = TextSelection(
+                                        baseOffset: 0,
+                                        extentOffset: _controllers[exercise]![i]['reps']!.text.length,
+                                      );
+                                    },
+                                  ) : 
+                                  const Text(
+                                    '-',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 30, // Adjust hint text size
+                                    ),
+                                  )
+ 
                               ),
                             ),
                             Padding(
@@ -364,7 +373,7 @@ class _AddworkoutState extends State<Addworkout> {
                 if (result != null) {
                   setState(() {
                     sets[result] = [
-                      {'weight': '', 'reps': '', 'type': 'Normal'}
+                      {'weight': exerciseMuscles[result]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'}
                     ]; // Initialize sets list for the new exercise
                     updateExercises();
                   });
@@ -461,7 +470,7 @@ class _AddworkoutState extends State<Addworkout> {
 
   void addNewSet(String exercise) {
     setState(() {
-      sets[exercise]?.add({'weight': '', 'reps': '', 'type': 'Normal'});
+      sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
       _ensureExerciseFocusNodesAndControllers(exercise);
     });
     

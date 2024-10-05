@@ -211,14 +211,15 @@ class MuscleData extends StatelessWidget {
 Color getColor(String key) {
   // Define the color map
   var colors = {
-    'Pectorals': Colors.red,
-    'Pectorals (Upper)': Colors.redAccent,
-    'Pectorals (Lower)': Colors.deepOrangeAccent,
+    'Chest': Colors.red,
+    'Upper Chest': Colors.redAccent,
+    'Lower Chest': Colors.deepOrangeAccent,
     'Triceps': Colors.orange,
     'Biceps': Colors.pink,
     'Front Delts': Colors.lightBlue,
     'Side Delts': Colors.cyan,
-    'Posterior Delts': Colors.teal,
+    'Rear Delts': Colors.teal,
+    'Trapezius': Colors.deepPurpleAccent,
     'Forearms': Colors.purple,
     'Lats': Colors.indigo,
     'Erector Spinae': Colors.lightGreen,
@@ -230,7 +231,6 @@ Color getColor(String key) {
     'Calves': Colors.lightGreen,
     'Rectus Abdominis': Colors.lightBlueAccent,
     'Obliques': Colors.blueGrey,
-    'Core': Colors.blueGrey, // General color for core if needed
     'Hip Flexors': Colors.lightBlue
   };
 

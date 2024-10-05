@@ -393,7 +393,7 @@ class CaloriesSpeedometer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '$calories of',
+                  '${calories.toStringAsFixed(2)} of',
                   style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(

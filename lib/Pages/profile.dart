@@ -250,7 +250,7 @@ class DataBarChart extends StatelessWidget {
                   dashArray: [5, 5], // Optional: dashed line
                   label: HorizontalLineLabel(
                     show: true,
-                    labelResolver: (line) => 'Goal', // Label for the goal line
+                    labelResolver: (line) => 'Goal (${goal.toStringAsFixed(0)})', // Label for the goal line
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(right: 5),
                   ),

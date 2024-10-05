@@ -1,13 +1,12 @@
-  import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
-  import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
-  import 'package:flutter/material.dart';
-  import 'package:path_provider/path_provider.dart';
-  import 'package:share_plus/share_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
   class Settings extends StatelessWidget {
     const Settings({super.key});

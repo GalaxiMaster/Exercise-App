@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -124,29 +125,6 @@ class _DataChartsState extends State<DataCharts> {
     );
   }
   
-  Color getColor(String key) {
-    var colors = {
-      'Pectorals': Colors.red,
-      'Triceps': Colors.orange,
-      'Biceps': Colors.pink,
-      'Deltoids': Colors.blue,
-      'Front Delts': Colors.lightBlue,
-      'Side Delts': Colors.cyan,
-      'Rear Delts': Colors.teal,
-      'Forearms': Colors.purple,
-      'Lats': Colors.indigo,
-      'Rhomboids': Colors.green,
-      'Lower Back': Colors.brown,
-      'Glutes': Colors.deepOrange,
-      'Quads': Colors.yellow,
-      'Hamstrings': Colors.amber,
-      'Calves': Colors.lightGreen,
-      'Abs': Colors.lightBlueAccent,
-      'Obliques': Colors.blueGrey,
-    };
-
-    return colors[key] ?? Colors.grey;
-  }
   Future<List> getStuff(String target) async {
     Map muscleData = {};
     Map data = await readData();

@@ -74,7 +74,7 @@ class ConfirmWorkout extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            stats.keys.elementAt(index) != 'Volume' ? '${stats.values.elementAt(index)}' : '${stats.values.elementAt(index)}kg',
+                            stats.keys.elementAt(index) != 'Volume' ? '${stats.values.elementAt(index)}' : '${stats.values.elementAt(index).toStringAsFixed(2)}kg',
                             style: const TextStyle(
                               fontSize: 30,
                             ),

@@ -1,5 +1,5 @@
 import os
-
+import json
 
 exerciseMuscles = {
 'Cable Pushdown': {
@@ -11,14 +11,248 @@ exerciseMuscles = {
     'Primary': {'Biceps': 80},
     'Secondary': {'Brachialis': 15, 'Forearms': 5}
 },
+    'Barbell Clean and Press': {
+    'Primary': {'Front Delts': 30, 'Side Delts': 15, 'Trapezius': 35},
+    'Secondary': {'Quadriceps': 10, 'Glutes': 10},
+},
+
+'Barbell Overhead Squat': {
+    'Primary': {'Quadriceps': 40, 'Front Delts': 20, 'Side Delts': 10},
+    'Secondary': {'Glutes': 15, 'Hamstrings': 15},
+},
+
+'Reverse Push Up': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Dumbbell One Arm Shoulder Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 30},
+    'Secondary': {'Triceps': 20},
+},
+
+'Barbell Pullover To Press': {
+    'Primary': {'Chest': 40, 'Lats': 30, 'Front Delts': 20},
+    'Secondary': {'Triceps': 10},
+},
+
+'Squat (arms overhead)': {
+    'Primary': {'Quadriceps': 50, 'Glutes': 30},
+    'Secondary': {'Hamstrings': 10, 'Front Delts': 10},
+},
+
+'Dumbbell Seated One Arm Arnold Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 20},
+    'Secondary': {'Triceps': 20, 'Upper Chest': 10},
+},
+
+'Standing Overhead Press (Barbell)': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 20},
+    'Secondary': {'Triceps': 30},
+},
+
+'Dumbbell Alternate Arnold Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 20},
+    'Secondary': {'Triceps': 20, 'Upper Chest': 10},
+},
+
+'Cable Shoulder Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 30},
+    'Secondary': {'Triceps': 20},
+},
+
+'Dumbbell Seated One Arm Shoulder Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 30},
+    'Secondary': {'Triceps': 20},
+},
+
+'Dumbbell Alternate Side Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 30},
+    'Secondary': {'Triceps': 20},
+},
+
+'Dumbbell Seated Shoulder Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 30},
+    'Secondary': {'Triceps': 20},
+},
+
+'Reverse Dip': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Dumbbell Standing Biceps Curl to Shoulder Press': {
+    'Primary': {'Biceps': 50, 'Front Delts': 30, 'Side Delts': 10},
+    'Secondary': {'Forearms': 10},
+},
+
+'Dumbbell Standing Alternate Hammer Curl and Press': {
+    'Primary': {'Biceps': 40, 'Brachialis': 30, 'Front Delts': 10, 'Side Delts': 10},
+    'Secondary': {'Forearms': 10},
+},
+
+'Body Up': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Dumbbell Seated Biceps Curl to Shoulder Press': {
+    'Primary': {'Biceps': 50, 'Front Delts': 30, 'Side Delts': 10},
+    'Secondary': {'Forearms': 10},
+},
+
+'Ring Dip': {
+    'Primary': {'Triceps': 70},
+    'Secondary': {'Chest': 15, 'Front Delts': 15},
+},
+
+'Chest Dip on Straight Bar': {
+    'Primary': {'Chest': 60},
+    'Secondary': {'Triceps': 20, 'Front Delts': 20},
+},
+
+'Dumbbell Lying Triceps Extension': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Chest': 5, 'Front Delts': 5},
+},
+
+'Barbell Thruster': {
+    'Primary': {'Quadriceps': 25, 'Front Delts': 15, 'Side Delts': 10},
+    'Secondary': {'Glutes': 25, 'Hamstrings': 12.5, 'Triceps': 12.5},
+},
+
+'Roll Seated Shoulder Flexor Depresor Retractor FIX': {
+    'Primary': {'Rear Delts': 20, 'Front Delts': 15, 'Upper Back': 35},
+    'Secondary': {'Chest': 30},
+},
+
+'Dumbbell Arnold Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 20},
+    'Secondary': {'Triceps': 20, 'Upper Chest': 10},
+},
+
+'Barbell Lying Close Grip Triceps Extension': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Chest': 5, 'Front Delts': 5},
+},
+
+'Cable Incline Triceps Extension': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Chest': 5, 'Front Delts': 5},
+},
+
+'Barbell Lying Triceps Extension': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Chest': 5, 'Front Delts': 5},
+},
+
+'Dumbbell Seated Upright Alternate Squeeze Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 20},
+    'Secondary': {'Triceps': 20, 'Upper Chest': 10},
+},
+
+'Dumbbell Lying Floor Skullcrusher': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Chest': 5, 'Front Delts': 5},
+},
+
+'Elevated Push Up': {
+    'Primary': {'Chest': 50, 'Triceps': 30},
+    'Secondary': {'Front Delts': 20},
+},
+
+'Dumbbell Lying One Arm Pronated Triceps Extension': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Chest': 5, 'Front Delts': 5},
+},
+
+'Assisted Pullup (Neutral grip)': {
+    'Primary': {'Lats': 50, 'Biceps': 30},
+    'Secondary': {'Rear Delts': 10, 'Forearms': 10},
+},
+
+'Assisted Triceps Dip': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Back Lever': {
+    'Primary': {'Lats': 50, 'Rectus Abdominis': 30},
+    'Secondary': {'Rear Delts': 20},
+},
+
+'Band Assisted Dips': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Band Assisted Muscle Up': {
+    'Primary': {'Lats': 40, 'Biceps': 30},
+    'Secondary': {'Triceps': 20, 'Front Delts': 10},
+},
+
+'Bar Shoulder Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 10},
+    'Secondary': {'Triceps': 30, 'Upper Chest': 10},
+},
+
+'Barbell Close Grip Bench Press': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Barbell Decline Close Grip To Skull Press': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Barbell Incline Close Grip Bench Press': {
+    'Primary': {'Upper Chest': 50, 'Triceps': 40},
+    'Secondary': {'Front Delts': 10},
+},
+
+'Barbell JM Bench Press': {
+    'Primary': {'Triceps': 60},
+    'Secondary': {'Chest': 30, 'Front Delts': 10},
+},
+
+'Battling Ropes': {
+    'Primary': {'Front Delts': 20, 'Side Delts': 20, 'Arms': 30},
+    'Secondary': {'Rectus Abdominis': 30},
+},
+
+'Bodyweight Kneeling Triceps Extension': {
+    'Primary': {'Triceps': 70},
+    'Secondary': {'Front Delts': 30},
+},
+
+'Bodyweight Standing Military Press': {
+    'Primary': {'Front Delts': 50, 'Side Delts': 10},
+    'Secondary': {'Triceps': 30, 'Upper Chest': 10},
+},
+
+'Cable Concentration Extension (on knee)': {
+    'Primary': {'Triceps': 70},
+    'Secondary': {'Front Delts': 30},
+},
+
+'Cable Concentration Triceps Extension': {
+    'Primary': {'Triceps': 70},
+    'Secondary': {'Front Delts': 30},
+},
+
+'Cable Incline Triceps Kickback': {
+    'Primary': {'Triceps': 90},
+    'Secondary': {'Front Delts': 10},
+},
 'Machine Lat Pulldowns': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Biceps': 15, 'Trapezius': 10, 'Rhomboids': 5}
 },
 
 'Wide Grip Seated Cable Row': {
     'Primary': {'Rhomboids': 50, 'Trapezius': 30},
-    'Secondary': {'Biceps': 10, 'Latissimus Dorsi': 10}
+    'Secondary': {'Biceps': 10, 'Lats': 10}
 },
 
 'Barbell Wide Squat': {
@@ -26,23 +260,19 @@ exerciseMuscles = {
     'Secondary': {'Hamstrings': 10}
 },
 
-'Cable Two Arm Tricep Kickback': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
-},
 'Dumbbell Incline Twisted Flyes': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Front Deltoids': 30}
+    'Secondary': {'Front Deltss': 30}
 },
 
 'Lever Chest Press (plate loaded)': {
-    'Primary': {'Pectorals': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Primary': {'Chest': 70},
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Incline Bench Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Behind Back Finger Curl': {
@@ -52,16 +282,12 @@ exerciseMuscles = {
 
 'Dip on Floor with Chair': {
     'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Lever Incline Chest Press (plate loaded)': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
-'Dumbbell Press Squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Shoulders': 20}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Single Leg Calf Raise': {
@@ -85,11 +311,13 @@ exerciseMuscles = {
 },
 
 'Cable Standing Reverse Grip Curl (Straight bar)': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+    'Primary': {'Biceps': 70},
+    'Secondary': {'Brachialis': 30}
 },
 
 'Side Lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Cable kickback': {
@@ -122,13 +350,9 @@ exerciseMuscles = {
     'Secondary': {'Calves': 20}
 },
 
-'Dumbbell One Arm Chest Fly on Exercise Ball': {
-    'Primary': {'Chest': 70},
-    'Secondary': {'Front Deltoids': 20, 'Core': 10}
-},
-
 'Cross Body Twisting Crunch': {
-    'Primary': {'Obliques': 60, 'Rectus Abdominis': 40}
+    'Primary': {'Obliques': 60},
+    'Secondary': {'Rectus Abdominis': 40}
 },
 
 'Barbell Stiff Legged Deadlift': {
@@ -156,24 +380,14 @@ exerciseMuscles = {
     'Secondary': {'Glutes': 20, 'Hamstrings': 10}
 },
 
-'Kick out Sit (wall)': {
-    'Primary': {'Core': 60},
-    'Secondary': {'Hip Flexors': 30, 'Quads': 10}
-},
-
 'Cable Supine Reverse Fly': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 },
 
 'Kettlebell Russian Twist': {
     'Primary': {'Obliques': 60},
-    'Secondary': {'Rectus Abdominis': 30, 'Core': 10}
-},
-
-'Handstand': {
-    'Primary': {'Shoulders': 50},
-    'Secondary': {'Core': 30, 'Triceps': 20}
+    'Secondary': {'Rectus Abdominis': 40}
 },
 
 'Dumbbell Squat': {
@@ -213,7 +427,7 @@ exerciseMuscles = {
 
 'Dumbbell Decline Hammer Press': {
     'Primary': {'Lower Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Cable Curl with Multipurpose V bar': {
@@ -237,13 +451,13 @@ exerciseMuscles = {
 },
 
 'Dumbbell Incline Rear Lateral Raise': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 },
 
 'Dumbbell Neutral Grip Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Reverse Crunch m': {
@@ -253,17 +467,12 @@ exerciseMuscles = {
 
 'Dumbbell Full Can Lateral Raise': {
     'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
+    'Secondary': {'Trapezius': 20, 'Front Deltss': 10}
 },
 
 'Bent Leg Kickback (kneeling)': {
     'Primary': {'Glutes': 70},
     'Secondary': {'Hamstrings': 30}
-},
-
-'Glute Bridge March': {
-    'Primary': {'Glutes': 70},
-    'Secondary': {'Hamstrings': 20, 'Core': 10}
 },
 
 'Assisted Hanging Knee Raise': {
@@ -283,7 +492,7 @@ exerciseMuscles = {
 
 'Cable Seated Shoulder Internal Rotation': {
     'Primary': {'Subscapularis': 70},
-    'Secondary': {'Pectoralis Major': 20, 'Latissimus Dorsi': 10}
+    'Secondary': {'Chest': 20, 'Lats': 10}
 },
 
 'Dumbbell Romanian Deadlift': {
@@ -292,7 +501,8 @@ exerciseMuscles = {
 },
 
 'EZ Barbell Reverse Grip Curl': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+    'Primary': {'Biceps': 70},
+    'Secondary': {'Brachialis': 30}
 },
 
 'Kettlebell One Legged Deadlift': {
@@ -300,28 +510,19 @@ exerciseMuscles = {
     'Secondary': {'Lower Back': 10, 'Balance': 10}
 },
 
-'Barbell Clean and Press': {
-    'Primary': {'Shoulders': 40, 'Trapezius': 30},
-    'Secondary': {'Quadriceps': 10, 'Glutes': 10, 'Core': 10}
-},
-
 'Barbell Incline Row': {
     'Primary': {'Upper Back': 60},
-    'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
+    'Secondary': {'Biceps': 30, 'Rear Delts': 10}
 },
 
 'Dumbbell Seated Reverse Grip Biceps Curl': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+    'Primary': {'Biceps': 70},
+    'Secondary': {'Brachialis': 30}
 },
 
 'Archer Push up': {
-    'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Core': 10}
-},
-
-'Barbell Overhead Squat': {
-    'Primary': {'Quadriceps': 40, 'Shoulders': 30},
-    'Secondary': {'Glutes': 15, 'Hamstrings': 10, 'Core': 5}
+    'Primary': {'Chest': 60},
+    'Secondary': {'Triceps': 40}
 },
 
 'Bodyweight Wall Squat': {
@@ -336,7 +537,7 @@ exerciseMuscles = {
 
 'Cable Standing Alternate Low Fly': {
     'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Dumbbell Prone Incline Curl': {
@@ -345,7 +546,8 @@ exerciseMuscles = {
 },
 
 'Dumbbell Curtsey lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Dumbbell Step Up Single Leg Balance with Bicep Curl': {
@@ -359,7 +561,7 @@ exerciseMuscles = {
 },
 
 'Hanging Toes to Bar': {
-    'Primary': {'Rectus Abdominis': 50, 'Latissimus Dorsi': 30},
+    'Primary': {'Rectus Abdominis': 50, 'Lats': 30},
     'Secondary': {'Hip Flexors': 20}
 },
 
@@ -369,7 +571,7 @@ exerciseMuscles = {
 },
 
 'Dumbbell Seated Front Raise': {
-    'Primary': {'Front Deltoids': 70},
+    'Primary': {'Front Deltss': 70},
     'Secondary': {'Side Delts': 30}
 },
 
@@ -398,10 +600,6 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'EZ bar 21s': {
-    'Primary': {'Biceps': 100}
-},
-
 'Dumbbell One Arm Seated Hammer Curl': {
     'Primary': {'Biceps': 60, 'Brachialis': 30},
     'Secondary': {'Forearm': 10}
@@ -409,12 +607,12 @@ exerciseMuscles = {
 
 'Barbell Pin Presses': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Cable Overhead Tricep Extension Straight Bar': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Crunch (hands overhead)': {
@@ -424,17 +622,17 @@ exerciseMuscles = {
 
 'Cable Seated High Row (V bar)': {
     'Primary': {'Upper Back': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 20}
+    'Secondary': {'Rear Delts': 20, 'Biceps': 20}
 },
 
 'Bodyweight Bent Over Rear Delt Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 },
 
 'Dumbbell Seated Lateral Raise': {
     'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
+    'Secondary': {'Trapezius': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Goblet Box Squat': {
@@ -474,31 +672,17 @@ exerciseMuscles = {
 
 'Smith Close Grip Bench Press': {
     'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
-'Reverse Plank with Leg Lift': {
-    'Primary': {'Core': 60, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Cable One Arm Straight Back High Row (kneeling)': {
     'Primary': {'Upper Back': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Trapezius': 10}
 },
 
 'Barbell Decline Pullover': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Chest': 20, 'Triceps': 20}
-},
-
-'Weighted Frog Pump': {
-    'Primary': {'Glutes': 70, 'Adductors': 30}
-},
-
-'Modified Push Up to Forearms': {
-    'Primary': {'Chest': 50, 'Triceps': 30},
-    'Secondary': {'Core': 10, 'Forearms': 10}
 },
 
 'Resistance Band Hammer Curl': {
@@ -512,7 +696,8 @@ exerciseMuscles = {
 },
 
 'Dumbbell Gobelt Curtsey Lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Safety Bar Front Squat': {
@@ -522,7 +707,7 @@ exerciseMuscles = {
 
 'Dumbbell One Arm Reverse Grip Press': {
     'Primary': {'Chest': 60},
-    'Secondary': {'Triceps': 30, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 30, 'Front Deltss': 10}
 },
 
 'Cable Half Kneeling Push Pull': {
@@ -537,16 +722,17 @@ exerciseMuscles = {
 
 'Lever Incline Hammer Chest Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Kettlebell Swing': {
     'Primary': {'Glutes': 50, 'Hamstrings': 30},
-    'Secondary': {'Lower Back': 10, 'Core': 10}
+    'Secondary': {'Lower Back': 10, 'Rectus Abdominis': 10}
 },
 
 'Smith Sumo Squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Cable Upright Row': {
@@ -569,33 +755,23 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Roll Seated Single Leg Shoulder Flexor Depresor Retractor': {
-    'Primary': {'Shoulders': 60, 'Upper Back': 30},
-    'Secondary': {'Core': 10}
-},
-
 'Cable Bent Over Reverse Grip Row': {
-    'Primary': {'Latissimus Dorsi': 60, 'Biceps': 30},
-    'Secondary': {'Posterior Deltoids': 10}
+    'Primary': {'Lats': 60, 'Biceps': 30},
+    'Secondary': {'Rear Delts': 10}
 },
 
 'Cable Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Incline Push up': {
     'Primary': {'Upper Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
-'Side Bridge (knee tuck)': {
-    'Primary': {'Obliques': 70},
-    'Secondary': {'Core': 20, 'Shoulders': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Barbell Rear Delt Row': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 20, 'Biceps': 10}
 },
 
@@ -604,19 +780,9 @@ exerciseMuscles = {
     'Secondary': {'Chest': 30, 'Shoulders': 10}
 },
 
-'Crab Twist Toe Touch': {
-    'Primary': {'Obliques': 60},
-    'Secondary': {'Core': 20, 'Shoulders': 20}
-},
-
 'Dumbbell Low Fly': {
     'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
-},
-
-'Body Saw Plank': {
-    'Primary': {'Core': 60},
-    'Secondary': {'Shoulders': 20, 'Triceps': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Weighted Seated Triceps Extension': {
@@ -624,12 +790,13 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Dumbbell Seated Revers grip Concentration Curl': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+'Dumbbell Seated Reverse grip Concentration Curl': {
+    'Primary': {'Biceps': 70,},
+    'Secondary': { 'Brachialis': 30}
 },
 
 'Cable Straight Arm Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Triceps': 30}
 },
 
@@ -660,7 +827,7 @@ exerciseMuscles = {
 
 'Cable Standing Chest Press': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
+    'Secondary': {'Triceps': 15, 'Front Deltss': 5}
 },
 
 'Assisted Prone Hamstring': {
@@ -670,7 +837,7 @@ exerciseMuscles = {
 
 'Barbell Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Biceps Curl Reverse': {
@@ -689,7 +856,7 @@ exerciseMuscles = {
 },
 
 'Barbell Pullover': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Chest': 20, 'Triceps': 20}
 },
 
@@ -728,23 +895,9 @@ exerciseMuscles = {
     'Secondary': {'Glutes': 30, 'Lower Back': 10}
 },
 
-'Hip Roll Plank': {
-    'Primary': {'Core': 60},
-    'Secondary': {'Obliques': 30, 'Glutes': 10}
-},
-
 'Dumbbell RDL Death March': {
     'Primary': {'Hamstrings': 60},
     'Secondary': {'Glutes': 30, 'Lower Back': 10}
-},
-
-'Resistance Band Plank March': {
-    'Primary': {'Core': 70},
-    'Secondary': {'Shoulders': 20, 'Glutes': 10}
-},
-
-'Twist Crunch (leg up)': {
-    'Primary': {'Obliques': 60, 'Rectus Abdominis': 40}
 },
 
 'Cable Seated One Arm Concentration Curl': {
@@ -759,7 +912,7 @@ exerciseMuscles = {
 
 'Cable Middle Fly': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Barbell Single Leg Split Squat': {
@@ -784,7 +937,7 @@ exerciseMuscles = {
 
 'Diamond Press': {
     'Primary': {'Triceps': 60, 'Inner Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Trap Bar Deadlift': {
@@ -793,17 +946,13 @@ exerciseMuscles = {
 },
 
 'Kettlebell Sumo Squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Cable Cross over Revers Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
-},
-
-'Dumbbell One Arm Shoulder Press': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
 },
 
 'Sled Lying Squat': {
@@ -813,17 +962,12 @@ exerciseMuscles = {
 
 'Dumbbell Lying Hammer Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Smith Seated Wrist Curl': {
     'Primary': {'Forearms (flexors)': 90},
     'Secondary': {'Grip Strength': 10}
-},
-
-'Dumbbell One Arm Kickback': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
 },
 
 'Lever Chair Squat': {
@@ -832,21 +976,23 @@ exerciseMuscles = {
 },
 
 'Lever Crossovers': {
-    'Primary': {'Pectorals': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Primary': {'Chest': 80},
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Superman Row with Towel': {
-    'Primary': {'Upper Back': 50, 'Rear Deltoids': 30},
+    'Primary': {'Upper Back': 50, 'Rear Delts': 30},
     'Secondary': {'Lower Back': 20}
 },
 
 'Barbell Standing Reverse Grip Curl': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+    'Primary': {'Biceps': 70,},
+    'Secondary': { 'Brachialis': 30}
 },
 
 'Weighted Cossack Squats': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50,},
+    'Secondary': {'Glutes': 30, 'Hamstrings': 20}
 },
 
 'Cable Hammer Curl': {
@@ -855,7 +1001,7 @@ exerciseMuscles = {
 },
 
 'Band face pull': {
-    'Primary': {'Rear Deltoids': 60, 'Trapezius': 30},
+    'Primary': {'Rear Delts': 60, 'Trapezius': 30},
     'Secondary': {'Rhomboids': 10}
 },
 
@@ -870,7 +1016,7 @@ exerciseMuscles = {
 },
 
 'Cable Seated Pullover': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Chest': 20, 'Triceps': 20}
 },
 
@@ -884,11 +1030,6 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 10}
 },
 
-'Push up on Forearms': {
-    'Primary': {'Chest': 50, 'Triceps': 30},
-    'Secondary': {'Core': 10, 'Forearms': 10}
-},
-
 'Finger Push up': {
     'Primary': {'Chest': 60, 'Triceps': 30},
     'Secondary': {'Forearms': 10}
@@ -896,7 +1037,7 @@ exerciseMuscles = {
 
 'Russian Twist': {
     'Primary': {'Obliques': 60},
-    'Secondary': {'Rectus Abdominis': 30, 'Core': 10}
+    'Secondary': {'Rectus Abdominis': 40}
 },
 
 'Barbell Behind Back Finger Curl': {
@@ -909,28 +1050,9 @@ exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Weighted Seated Supination': {
-    'Primary': {'Forearms (Supinators)': 100}
-},
-
 'Barbell Lunge': {
     'Primary': {'Quadriceps': 60, 'Glutes': 30},
     'Secondary': {'Hamstrings': 10}
-},
-
-'Dumbbell One Arm Snatch': {
-    'Primary': {'Shoulders': 40, 'Trapezius': 30},
-    'Secondary': {'Quadriceps': 10, 'Glutes': 10, 'Core': 10}
-},
-
-'Barbell Pullover To Press': {
-    'Primary': {'Chest': 40, 'Latissimus Dorsi': 30, 'Shoulders': 20},
-    'Secondary': {'Triceps': 10}
-},
-
-'Dumbbell Overhead Squat': {
-    'Primary': {'Quadriceps': 40, 'Shoulders': 30},
-    'Secondary': {'Glutes': 15, 'Hamstrings': 10, 'Core': 5}
 },
 
 'Dumbbell Alternate Hammer Preacher Curl': {
@@ -953,28 +1075,14 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Kettlebell One Arm Overhead Squat': {
-    'Primary': {'Quadriceps': 40, 'Shoulders': 30},
-    'Secondary': {'Glutes': 15, 'Hamstrings': 10, 'Core': 5}
-},
 
 'Barbell Decline Bench Press': {
     'Primary': {'Lower Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-},
-
-'Dumbbell Front Rack Lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Core': 10}
-},
-
-'Balance Board': {
-    'Primary': {'Core': 50, 'Ankles': 30},
-    'Secondary': {'Calves': 20}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Cable One Arm Reverse Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 20, 'Rhomboids': 10}
 },
 
@@ -985,7 +1093,7 @@ exerciseMuscles = {
 
 'Dumbbell Fly (knees at 90 degrees)': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Lever Deadlift (plate loaded)': {
@@ -1014,7 +1122,8 @@ exerciseMuscles = {
 },
 
 'Curtsey Squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50,},
+    'Secondary': {'Glutes': 30, 'Hamstrings': 20}
 },
 
 'Cable Drag Curl': {
@@ -1042,13 +1151,8 @@ exerciseMuscles = {
     'Secondary': {'Lower Back': 10}
 },
 
-'Cable Bent Over One Arm Lateral Raise': {
-    'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Core': 10}
-},
-
 'Barbell Bent Arm Pullover': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Chest': 20, 'Triceps': 20}
 },
 
@@ -1068,32 +1172,23 @@ exerciseMuscles = {
 },
 
 'Dumbbell side lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
-},
-
-'Squat (arms overhead)': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Shoulders': 10}
-},
-
-'Dumbbell Seated One Arm Arnold Press': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 20, 'Upper Chest': 10}
+    'Primary': {'Quadriceps': 50,},
+    'Secondary': { 'Glutes': 30, 'Adductors': 20}
 },
 
 'Barbell Reverse Grip Incline Bench Row': {
     'Primary': {'Upper Back': 60, 'Biceps': 30},
-    'Secondary': {'Posterior Deltoids': 10}
+    'Secondary': {'Rear Delts': 10}
 },
 
 'Lever Chest Press': {
-    'Primary': {'Pectorals': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Primary': {'Chest': 70},
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Cable Incline Fly': {
     'Primary': {'Upper Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Cable One Arm Side Triceps Pushdown': {
@@ -1102,7 +1197,7 @@ exerciseMuscles = {
 },
 
 'Cable Incline Cross Rear Fly': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 },
 
@@ -1112,7 +1207,7 @@ exerciseMuscles = {
 },
 
 'Dumbbell Reverse Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 20, 'Rhomboids': 10}
 },
 
@@ -1123,22 +1218,22 @@ exerciseMuscles = {
 
 'Hyght Dumbbell Fly': {
     'Primary': {'Upper Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Cable Upper Chest Crossovers': {
     'Primary': {'Upper Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Barbell Rear Delt Raise': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 },
 
 'Dumbbell Lateral Raise': {
     'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
+    'Secondary': {'Trapezius': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Alternate Biceps Curl (with arm blaster)': {
@@ -1163,12 +1258,12 @@ exerciseMuscles = {
 
 'Barbell Lying Back of the Head Tricep Extension': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Barbell Lying Close Grip Underhand Row on Rack': {
     'Primary': {'Biceps': 60},
-    'Secondary': {'Latissimus Dorsi': 20, 'Posterior Deltoids': 10, 'Forearms': 10}
+    'Secondary': {'Lats': 20, 'Rear Delts': 10, 'Forearms': 10}
 },
 
 'Bulgarian Split Squat': {
@@ -1179,12 +1274,12 @@ exerciseMuscles = {
 
 'Cable Fly with Chest Supported': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Cable one arm lat pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 },
 
 'Barbell Reverse Curl': {
@@ -1209,12 +1304,12 @@ exerciseMuscles = {
 
 'EZ Bar Standing French Press': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Dumbbell Incline Fly': {
     'Primary': {'Upper Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Smith Low Bar Squat': {
@@ -1243,7 +1338,7 @@ exerciseMuscles = {
 },
 
 'Barbell Decline wide grip pullover': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Chest': 20, 'Triceps': 20}
 },
 
@@ -1252,14 +1347,9 @@ exerciseMuscles = {
     'Secondary': {'Grip Strength': 10}
 },
 
-'Dumbbell Flat Around the World': {
-    'Primary': {'Shoulders': 60},
-    'Secondary': {'Trapezius': 20, 'Core': 20}
-},
-
 'Cable High Pulley Overhead Tricep Extension': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Barbell Incline Triceps Extension Skull Crusher': {
@@ -1280,11 +1370,6 @@ exerciseMuscles = {
 'Cable Squatting Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
-},
-
-'Bent Knee Side Plank': {
-    'Primary': {'Obliques': 60},
-    'Secondary': {'Core': 30, 'Shoulders': 10}
 },
 
 'Cable Alternate Triceps Extension': {
@@ -1318,18 +1403,13 @@ exerciseMuscles = {
 },
 
 'Barbell Reverse Grip Bent over Row': {
-    'Primary': {'Latissimus Dorsi': 60, 'Biceps': 30},
-    'Secondary': {'Posterior Deltoids': 10}
-},
-
-'Standing Overhead Press (Barbell)': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 30}
+    'Primary': {'Lats': 60, 'Biceps': 30},
+    'Secondary': {'Rear Delts': 10}
 },
 
 'Barbell Lying Row on Rack': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Trapezius': 10}
 },
 
 'Squat m': {
@@ -1352,19 +1432,14 @@ exerciseMuscles = {
     'Secondary': {'Quadriceps': 30}
 },
 
-'Leg Curl (on stability ball)': {
-    'Primary': {'Hamstrings': 80},
-    'Secondary': {'Calves': 10, 'Core': 10}
-},
-
 'Cable Rope Hammer Preacher Curl': {
     'Primary': {'Biceps': 60, 'Brachialis': 30},
     'Secondary': {'Forearms': 10}
 },
 
 'Band kneeling one arm pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 },
 
 'EZ Bar California Skullcrusher': {
@@ -1379,12 +1454,12 @@ exerciseMuscles = {
 
 'Dumbbell One Arm Low Fly': {
     'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Dumbbell Squeeze Bench Press': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
+    'Secondary': {'Triceps': 15, 'Front Deltss': 5}
 },
 
 'One Leg Quarter Squat': {
@@ -1397,19 +1472,14 @@ exerciseMuscles = {
     'Secondary': {'Hamstrings': 20, 'Lower Back': 10}
 },
 
-'Dumbbell Alternate Arnold Press': {
-    'Primary': {'Shoulders': 70},
-    'Secondary': {'Triceps': 20, 'Upper Chest': 10}
-},
-
 'Smith Machine Incline Tricep Extension': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
 },
 
 'Cable One Arm Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 },
 
 'EZ Barbell Curl': {
@@ -1424,12 +1494,7 @@ exerciseMuscles = {
 
 'Cable Seated Chest Press': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 15, 'Front Deltoids': 5}
-},
-
-'Bridge   Mountain Climber (Cross Body)': {
-    'Primary': {'Core': 50, 'Glutes': 30},
-    'Secondary': {'Shoulders': 10, 'Obliques': 10}
+    'Secondary': {'Triceps': 15, 'Front Deltss': 5}
 },
 
 'Lever Preacher Curl': {
@@ -1444,11 +1509,11 @@ exerciseMuscles = {
 
 'Barbell Seated Overhead Triceps Extension': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Dumbbell Incline T Raise': {
-    'Primary': {'Posterior Deltoids': 60, 'Side Delts': 30},
+    'Primary': {'Rear Delts': 60, 'Side Delts': 30},
     'Secondary': {'Trapezius': 10}
 },
 
@@ -1457,14 +1522,9 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Clock Push Up': {
-    'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Core': 10}
-},
-
 'Decline Push Up m': {
     'Primary': {'Upper Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Cocoons': {
@@ -1482,11 +1542,6 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 }, 
 
-'Kettlebell Bottoms Up Clean From The Hang Position': {
-    'Primary': {'Trapezius': 40, 'Shoulders': 30},
-    'Secondary': {'Core': 20, 'Forearms': 10}
-}, 
-
 'Seated Leg Raise': {
     'Primary': {'Rectus Abdominis': 60},
     'Secondary': {'Hip Flexors': 40}
@@ -1502,19 +1557,14 @@ exerciseMuscles = {
     'Secondary': {'Hamstrings': 10}
 }, 
 
-'Cable Shoulder Press': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
-}, 
-
 'Dumbbell Incline Close grip Press Variation': {
     'Primary': {'Upper Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
+    'Secondary': {'Front Deltss': 10}
 }, 
 
 'Cable Low Fly': {
     'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 }, 
 
 'Weighted one leg hip thrust': {
@@ -1538,7 +1588,7 @@ exerciseMuscles = {
 }, 
 
 'Dumbbell Around Pullover': {
-    'Primary': {'Latissimus Dorsi': 50, 'Chest': 30},
+    'Primary': {'Lats': 50, 'Chest': 30},
     'Secondary': {'Triceps': 20}
 }, 
 
@@ -1557,19 +1607,9 @@ exerciseMuscles = {
     'Secondary': {'Obliques': 20}
 }, 
 
-'Dumbbell Push Press': {
-    'Primary': {'Shoulders': 60},
-    'Secondary': {'Triceps': 20, 'Quadriceps': 10, 'Core': 10}
-}, 
-
 'Smith Chair Squat': {
     'Primary': {'Quadriceps': 60},
     'Secondary': {'Glutes': 30, 'Hamstrings': 10}
-}, 
-
-'Dumbbell Clean': {
-    'Primary': {'Trapezius': 40, 'Shoulders': 30},
-    'Secondary': {'Quadriceps': 10, 'Glutes': 10, 'Core': 10}
 }, 
 
 'Hand Spring Wrist Curl': {
@@ -1588,13 +1628,8 @@ exerciseMuscles = {
 }, 
 
 'Dumbbell Rear Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 20, 'Rhomboids': 10}
-}, 
-
-'Weighted Kneeling Step with Swing': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Core': 10}
 }, 
 
 'Sit (wall)': {
@@ -1603,8 +1638,8 @@ exerciseMuscles = {
 }, 
 
 'Cable Close Grip Front Lat Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 }, 
 
 'Dumbbell Prone Incline Hammer Curl': {
@@ -1612,18 +1647,13 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 10}
 }, 
 
-'Dumbbell Seated One Arm Shoulder Press': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
-}, 
-
 'Barbell Bent Over Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Trapezius': 10}
 }, 
 
 'Barbell Front Raise and Pullover': {
-    'Primary': {'Front Deltoids': 40, 'Latissimus Dorsi': 40},
+    'Primary': {'Front Deltss': 40, 'Lats': 40},
     'Secondary': {'Triceps': 10, 'Chest': 10}
 }, 
 
@@ -1634,16 +1664,16 @@ exerciseMuscles = {
 
 'EZ bar Close Grip Bench Press': {
     'Primary': {'Triceps': 60, 'Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Barbell Wide Reverse Grip Bench Press': {
     'Primary': {'Upper Chest': 60},
-    'Secondary': {'Triceps': 30, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 30, 'Front Deltss': 10}
 },
 
 'Cable Standing Face Pull (Rope)': {
-    'Primary': {'Rear Deltoids': 60, 'Trapezius': 30},
+    'Primary': {'Rear Delts': 60, 'Trapezius': 30},
     'Secondary': {'Biceps': 10}
 },
 
@@ -1654,7 +1684,7 @@ exerciseMuscles = {
 
 'Dumbbell Incline Y Raise': {
     'Primary': {'Upper Traps': 50, 'Side Delts': 40},
-    'Secondary': {'Front Deltoids': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Cable Rope One Arm Hammer Preacher Curl': {
@@ -1678,12 +1708,8 @@ exerciseMuscles = {
 },
 
 'Cable Palm Rotational Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Forearms': 10}
-},
-
-'Sled 45 Leg Wide Press': {
-    'Primary': {'Quadriceps': 60, 'Glutes': 20, 'Adductors': 20}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Forearms': 10}
 },
 
 'Lever Seated Leg Curl': {
@@ -1696,13 +1722,8 @@ exerciseMuscles = {
     'Secondary': {'Glutes': 20, 'Hamstrings': 10}
 },
 
-'Roll Body Saw': {
-    'Primary': {'Core': 60},
-    'Secondary': {'Shoulders': 20, 'Triceps': 20}
-},
-
 'Cable Seated Rear Lateral Raise': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 },
 
@@ -1712,13 +1733,8 @@ exerciseMuscles = {
 },
 
 'Cable Kneeling One Arm Lat Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
-},
-
-'Hollow Hold': {
-    'Primary': {'Core': 70},
-    'Secondary': {'Hip Flexors': 30}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 },
 
 'Negative Crunch': {
@@ -1751,18 +1767,9 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Wall Ball': {
-    'Primary': {'Quadriceps': 40, 'Shoulders': 30},
-    'Secondary': {'Glutes': 15, 'Hamstrings': 10, 'Core': 5}
-},
-
 'Cable Stiff Leg Deadlift from Stepbox': {
     'Primary': {'Hamstrings': 70},
     'Secondary': {'Glutes': 20, 'Lower Back': 10}
-},
-
-'Resistance Band Lateral Walk': {
-    'Primary': {'Hip Abductors': 60, 'Glutes': 40}
 },
 
 'Dumbbell Standing Inner Biceps Curl': {
@@ -1775,19 +1782,14 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Dumbbell Alternate Side Press': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
-},
-
 'Cable Lying Fly': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Barbell Lying Triceps Extension Skull Crusher': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Barbell Deadlift': {
@@ -1796,7 +1798,7 @@ exerciseMuscles = {
 },
 
 'Handboard Hang with 135 Degree Elbow': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Biceps': 30, 'Forearms': 10}
 },
 
@@ -1807,7 +1809,7 @@ exerciseMuscles = {
 
 'Dumbbell One Arm Bench Fly': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'EZ Barbell Standing Wide Grip Biceps Curl': {
@@ -1862,7 +1864,7 @@ exerciseMuscles = {
 
 'Dumbbell One Arm Incline Chest Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Vertical Leg Raise (on parallel bars)': {
@@ -1872,7 +1874,7 @@ exerciseMuscles = {
 
 'Dumbbell Incline Alternate Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Decline Crunch': {
@@ -1910,11 +1912,6 @@ exerciseMuscles = {
     'Secondary': {'Hamstrings': 10}
 },
 
-'Dumbbell Standing Alternating Tricep Kickback': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
-},
-
 'EZ Barbell Seated Curls': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Forearms': 20}
@@ -1926,33 +1923,23 @@ exerciseMuscles = {
 },
 
 'Dumbbell Pullover': {
-    'Primary': {'Latissimus Dorsi': 60},
+    'Primary': {'Lats': 60},
     'Secondary': {'Chest': 20, 'Triceps': 20}
-},
-
-'Dumbbell Seated One Arm Rotate': {
-    'Primary': {'Obliques': 70},
-    'Secondary': {'Core': 30}
 },
 
 'Dumbbell Banded Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Push up': {
     'Primary': {'Chest': 60, 'Triceps': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
-'Dumbbell Russian Twist': {
-    'Primary': {'Obliques': 60},
-    'Secondary': {'Rectus Abdominis': 30, 'Core': 10}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Dumbbell Twisted Fly': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Front Deltoids': 30}
+    'Secondary': {'Front Deltss': 30}
 },
 
 'EZ Barbell Decline Triceps Extension': {
@@ -1972,17 +1959,12 @@ exerciseMuscles = {
 
 'Cable Crossover Variation': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
-}, 
-
-'Dumbbell Seated Kickback': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
+    'Secondary': {'Front Deltss': 20}
 }, 
 
 'Cable One Arm Bent over Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Trapezius': 10}
 }, 
 
 'Dumbbell Incline Two Arm Extension': {
@@ -1995,28 +1977,14 @@ exerciseMuscles = {
     'Secondary': {'Glutes': 30, 'Lower Back': 10}
 }, 
 
-'Dumbbell Standing Bent Over One Arm Triceps Extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
-}, 
-
 'EZ Bar Lying Close Grip Triceps Extension Behind Head': {
     'Primary': {'Triceps (long head)': 80},
     'Secondary': {'Triceps (lateral & medial heads)': 20}
 }, 
 
-'Weighted Standing Hand Squeeze': {
-    'Primary': {'Forearms (grip strength)': 100}
-}, 
-
 'Lever Decline Chest Press': {
     'Primary': {'Lower Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
-}, 
-
-'Dumbbell Seated Shoulder Press': {
-    'Primary': {'Shoulders': 80},
-    'Secondary': {'Triceps': 20}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 }, 
 
 'Bench Dip with legs on bench': {
@@ -2024,14 +1992,9 @@ exerciseMuscles = {
     'Secondary': {'Chest': 30}
 }, 
 
-'Reverse Dip': {
-    'Primary': {'Triceps': 60},
-    'Secondary': {'Chest': 30, 'Shoulders': 10}
-}, 
-
 'Cable Rope High Pulley Overhead Tricep Extension': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 }, 
 
 'Barbell Sumo Romanian Deadlift': {
@@ -2047,11 +2010,6 @@ exerciseMuscles = {
 'Smith Front Squat': {
     'Primary': {'Quadriceps': 70},
     'Secondary': {'Glutes': 20, 'Hamstrings': 10}
-}, 
-
-'Band standing internal shoulder rotation': {
-    'Primary': {'Subscapularis': 70},
-    'Secondary': {'Pectoralis Major': 20, 'Latissimus Dorsi': 10}
 }, 
 
 'Sled 45 degrees One Leg Press': {
@@ -2080,7 +2038,7 @@ exerciseMuscles = {
 }, 
 
 'Dumbbell Rotation Reverse Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 20, 'Rhomboids': 10}
 }, 
 
@@ -2089,14 +2047,9 @@ exerciseMuscles = {
     'Secondary': {'Biceps (long head)': 20, 'Forearms': 10}
 }, 
 
-'Dumbbell Standing Biceps Curl to Shoulder Press': {
-    'Primary': {'Biceps': 50, 'Shoulders': 40},
-    'Secondary': {'Forearms': 10}
-}, 
-
 'Band kneeling pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 }, 
 
 'Cable Lying Triceps Extension (Rope)': {
@@ -2121,12 +2074,12 @@ exerciseMuscles = {
 
 'Dumbbell Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 }, 
 
 'Cable Low Seated Row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Trapezius': 10}
 }, 
 
 'Dumbbell Front Squat': {
@@ -2155,18 +2108,18 @@ exerciseMuscles = {
 }, 
 
 'Dumbbell Rear Delt Raise': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
 }, 
 
 'Barbell Front Chest Squat': {
     'Primary': {'Quadriceps': 60},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10, 'Core': 10}
+    'Secondary': {'Glutes': 25, 'Hamstrings': 15}
 }, 
 
 'Barbell Reverse Grip Skullcrusher': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 }, 
 
 'Barbell Wrist Curl': {
@@ -2175,13 +2128,13 @@ exerciseMuscles = {
 }, 
 
 'Dumbbell Seated Alternate Front Raise': {
-    'Primary': {'Front Deltoids': 70},
+    'Primary': {'Front Deltss': 70},
     'Secondary': {'Side Delts': 30}
 }, 
 
 'Dumbbell Decline Bench Press': {
     'Primary': {'Lower Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 }, 
 
 'Lever Preacher Curl (plate loaded)': {
@@ -2201,7 +2154,7 @@ exerciseMuscles = {
 
 'Dumbbell Decline Fly': {
     'Primary': {'Lower Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 }, 
 
 'Squat': {
@@ -2234,39 +2187,14 @@ exerciseMuscles = {
     'Secondary': {'Glutes': 20, 'Lower Back': 10}
 }, 
 
-'Cable twisting overhead press': {
-    'Primary': {'Shoulders': 70, 'Core': 20},
-    'Secondary': {'Triceps': 10}
-}, 
-
 'Lever Seated Horizontal Leg Press': {
     'Primary': {'Quadriceps': 70},
     'Secondary': {'Glutes': 20, 'Hamstrings': 10}
 }, 
 
-'Cable Twist': {
-    'Primary': {'Obliques': 60},
-    'Secondary': {'Rectus Abdominis': 30, 'Core': 10}
-}, 
-
-'Cable Kneeling Triceps Extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
-}, 
-
-'Dumbbell Standing Alternate Hammer Curl and Press': {
-    'Primary': {'Biceps': 40, 'Brachialis': 30, 'Shoulders': 20},
-    'Secondary': {'Forearms': 10}
-}, 
-
 'Cable Rear Drive': {
     'Primary': {'Glutes': 70},
     'Secondary': {'Hamstrings': 30}
-}, 
-
-'Dumbbell Incline Around the World': {
-    'Primary': {'Shoulders': 60},
-    'Secondary': {'Trapezius': 20, 'Core': 20}
 }, 
 
 'Dumbbell Standing Reverse Curl': {
@@ -2282,11 +2210,6 @@ exerciseMuscles = {
 'Cable One Arm Preacher Curl': {
     'Primary': {'Biceps': 80},
     'Secondary': {'Brachialis': 15, 'Forearms': 5}
-}, 
-
-'Bridge (straight arm)': {
-    'Primary': {'Glutes': 70},
-    'Secondary': {'Hamstrings': 20, 'Core': 10}
 }, 
 
 'Dumbbell Peacher Hammer Curl': {
@@ -2305,13 +2228,8 @@ exerciseMuscles = {
 }, 
 
 'Cable Seated Rear Delt Fly with Chest Support': {
-    'Primary': {'Rear Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
-}, 
-
-'Bent Leg Side Kick (kneeling)': {
-    'Primary': {'Glutes': 60, 'Hip Abductors': 30},
-    'Secondary': {'Core': 10}
 }, 
 
 'Bodyweight Standing Row': {
@@ -2339,28 +2257,9 @@ exerciseMuscles = {
     'Secondary': {'Balance & Stability': 10}
 }, 
 
-'Dumbbell Swing': {
-    'Primary': {'Glutes': 50, 'Hamstrings': 30},
-    'Secondary': {'Lower Back': 10, 'Core': 10}
-}, 
-
 'Hanging Leg Raise': {
     'Primary': {'Rectus Abdominis': 60},
     'Secondary': {'Hip Flexors': 40}
-}, 
-
-'Sumo Squat m': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
-}, 
-
-'Landmine Kneeling Squeeze Press': {
-    'Primary': {'Chest': 60},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10, 'Core': 10}
-}, 
-
-'Jack Plank': {
-    'Primary': {'Core': 60},
-    'Secondary': {'Shoulders': 20, 'Obliques': 20}
 }, 
 
 'Sled 45 Leg Press (Side POV)': {
@@ -2370,12 +2269,7 @@ exerciseMuscles = {
 
 'Cable Half Kneeling External Rotation': {
     'Primary': {'Rotator Cuff': 80},
-    'Secondary': {'Posterior Deltoids': 20}
-}, 
-
-'Dumbbell Standing Bent Over Two Arm Triceps Extension': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
+    'Secondary': {'Rear Delts': 20}
 }, 
 
 'Roll Reverse Crunch': {
@@ -2384,8 +2278,8 @@ exerciseMuscles = {
 }, 
 
 'Cable seated row': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Posterior Deltoids': 20, 'Biceps': 10, 'Trapezius': 10}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Rear Delts': 20, 'Biceps': 10, 'Trapezius': 10}
 }, 
 
 
@@ -2395,13 +2289,8 @@ exerciseMuscles = {
 },
 
 'Otis Up': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Biceps': 30, 'Posterior Deltoids': 10}
-},
-
-'Dumbbell Kickback': {
-    'Primary': {'Triceps': 80},
-    'Secondary': {'Core': 20}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Biceps': 30, 'Rear Delts': 10}
 },
 
 'Sled 45 Calf Press': {
@@ -2411,30 +2300,32 @@ exerciseMuscles = {
 
 'Barbell Guillotine Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Barbell sumo squat': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50,},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Barbell Decline Wide grip Press': {
     'Primary': {'Lower Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell One Arm Lateral Raise': {
     'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
+    'Secondary': {'Trapezius': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Front Raise': {
-    'Primary': {'Front Deltoids': 70},
+    'Primary': {'Front Deltss': 70},
     'Secondary': {'Side Delts': 30}
 },
 
-'Cable Reverse Grip Biceps Curl (SZ bar)': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+'Cable Reverse Grip Biceps Curl (EZ bar)': {
+    'Primary': {'Biceps': 70,},
+    'Secondary': {'Brachialis': 30}
 },
 
 'Dumbbell Lying Elbow Press': {
@@ -2450,16 +2341,6 @@ exerciseMuscles = {
 'Smith One Leg Floor Calf Raise': {
     'Primary': {'Calves': 90},
     'Secondary': {'Balance & Stability': 10}
-},
-
-'Dumbbell One Arm Concetration Curl (on stability ball)': {
-    'Primary': {'Biceps': 70},
-    'Secondary': {'Forearms': 20, 'Core': 10}
-},
-
-'Dumbbell Press on Exercise Ball': {
-    'Primary': {'Chest': 60},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10, 'Core': 10}
 },
 
 'Bodyweight Step up on Stepbox': {
@@ -2489,16 +2370,12 @@ exerciseMuscles = {
 
 'Dumbbell Incline Palm in Press': {
     'Primary': {'Triceps': 60, 'Upper Chest': 30},
-    'Secondary': {'Front Deltoids': 10}
-},
-
-'Bycicle Twisting Crunch': {
-    'Primary': {'Obliques': 60, 'Rectus Abdominis': 40}
+    'Secondary': {'Front Deltss': 10}
 },
 
 'Cable One Arm Lateral Raise': {
     'Primary': {'Side Delts': 70},
-    'Secondary': {'Trapezius': 20, 'Front Deltoids': 10}
+    'Secondary': {'Trapezius': 20, 'Front Deltss': 10}
 },
 
 'Dumbbell Tate Press': {
@@ -2516,18 +2393,9 @@ exerciseMuscles = {
     'Secondary': {'Balance': 10}
 },
 
-'Air Twisting Crunch': {
-    'Primary': {'Obliques': 60, 'Rectus Abdominis': 40}
-},
-
 'Cable Neutral Grip Lat Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 20, 'Posterior Deltoids': 10}
-},
-
-'Kettlebell Single Leg Glute Bridge Pullover': {
-    'Primary': {'Glutes': 50, 'Hamstrings': 30},
-    'Secondary': {'Latissimus Dorsi': 10, 'Core': 10}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Biceps': 20, 'Rear Delts': 10}
 },
 
 'Single Leg Step up': {
@@ -2537,17 +2405,17 @@ exerciseMuscles = {
 
 'Barbell Standing Overhead Triceps Extension': {
     'Primary': {'Triceps': 80},
-    'Secondary': {'Latissimus Dorsi': 20}
+    'Secondary': {'Lats': 20}
 },
 
 'Dumbbell Fly': {
     'Primary': {'Chest': 80},
-    'Secondary': {'Front Deltoids': 20}
+    'Secondary': {'Front Deltss': 20}
 },
 
 'Barbell Wide Bench Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Triceps': 20, 'Front Deltoids': 10}
+    'Secondary': {'Triceps': 20, 'Front Deltss': 10}
 },
 
 'Smith Deadlift': {
@@ -2560,18 +2428,13 @@ exerciseMuscles = {
     'Secondary': {'Obliques': 20}
 },
 
-'Barbell full Zercher Squat': {
-    'Primary': {'Quadriceps': 60},
-    'Secondary': {'Glutes': 20, 'Hamstrings': 10, 'Core': 10}
-},
-
 'V up': {
     'Primary': {'Rectus Abdominis': 60},
     'Secondary': {'Hip Flexors': 40}
 },
 
 'Cable Standing Front Raise Variation': {
-    'Primary': {'Front Deltoids': 70},
+    'Primary': {'Front Deltss': 70},
     'Secondary': {'Side Delts': 30}
 },
 
@@ -2601,7 +2464,8 @@ exerciseMuscles = {
 },
 
 'Kettlebell Gobelt Curtsey Lunge': {
-    'Primary': {'Quadriceps': 50, 'Glutes': 30, 'Adductors': 20}
+    'Primary': {'Quadriceps': 50},
+    'Secondary': {'Glutes': 30, 'Adductors': 20}
 },
 
 'Dumbbell Incline Triceps Extension': {
@@ -2639,29 +2503,19 @@ exerciseMuscles = {
     'Secondary': {'Forearms': 20}
 },
 
-'Body Up': {
-    'Primary': {'Triceps': 60},
-    'Secondary': {'Chest': 30, 'Shoulders': 10}
-},
-
 'Nordic Hamstring Curl': {
     'Primary': {'Hamstrings': 80},
     'Secondary': {'Glutes': 10, 'Lower Back': 10}
 },
 
 'Barbell Front Raise': {
-    'Primary': {'Front Deltoids': 70},
+    'Primary': {'Front Deltss': 70},
     'Secondary': {'Side Delts': 30}
 },
 
 'Cable Standing Cross over High Reverse Fly': {
-    'Primary': {'Posterior Deltoids': 70},
+    'Primary': {'Rear Delts': 70},
     'Secondary': {'Trapezius': 30}
-},
-
-'Dumbbell Tricep Kickback With Stork Stance': {
-    'Primary': {'Triceps': 70},
-    'Secondary': {'Core': 20, 'Balance': 10}
 },
 
 'Weighted Tricep Dips': {
@@ -2670,7 +2524,8 @@ exerciseMuscles = {
 },
 
 'EZ Barbell Reverse grip Preacher Curl': {
-    'Primary': {'Biceps': 70, 'Brachialis': 30}
+    'Primary': {'Biceps': 70},
+    'Secondary': {'Forearms': 30}
 },
 
 'Cable Standing Lift': {
@@ -2678,22 +2533,13 @@ exerciseMuscles = {
     'Secondary': {'Biceps': 10}
 },
 
-'Landmine Squat and Press': {
-    'Primary': {'Quadriceps': 40, 'Shoulders': 40},
-    'Secondary': {'Glutes': 10, 'Hamstrings': 5, 'Core': 5}
-},
-
-'Dumbbell Seated Biceps Curl to Shoulder Press': {
-    'Primary': {'Biceps': 50, 'Shoulders': 40},
-    'Secondary': {'Forearms': 10}
-},
 'Lever Overhand Triceps Dip': {
     'Primary': {'Triceps': 80},
     'Secondary': {'Chest': 20}
 },
 
 'Cable Bent Over Row': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Rhomboids': 15, 'Trapezius': 15}
 },
 
@@ -2712,13 +2558,9 @@ exerciseMuscles = {
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
 },
 
-'Incline Push Up Depth Jump': {
-    'Primary': {'Chest': 30, 'Triceps': 30},
-    'Secondary': {'Shoulders': 20, 'Core': 20}
-},
-
 'Lever seated one leg calf raise': {
-    'Primary': {'Calves': 100}
+    'Primary': {'Calves': 100},
+    'Secondary': {}
 },
 
 
@@ -2728,17 +2570,18 @@ exerciseMuscles = {
 },
 
 'Cable Standing Pulldown (Rope)': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Biceps': 15, 'Forearms': 15}
 },
 
 'Barbell Seated Calf Raise': {
-    'Primary': {'Calves': 100}
+    'Primary': {'Calves': 100},
+    'Secondary': {}
 },
 
 'Cable Leaning Lateral Raise': {
     'Primary': {'Side Delts': 80},
-    'Secondary': {'Front Deltoid': 10, 'Trapezius': 10}
+    'Secondary': {'Front Delts': 10, 'Trapezius': 10}
 },
 
 'Crunch (straight leg up)': {
@@ -2746,10 +2589,6 @@ exerciseMuscles = {
     'Secondary': {'Hip Flexors': 20}
 },
 
-'Ring Dip': {
-    'Primary': {'Triceps': 70},
-    'Secondary': {'Chest': 15, 'Shoulders': 15}
-},
 
 'Diamond Push up (on knees)': {
     'Primary': {'Triceps': 70},
@@ -2762,12 +2601,8 @@ exerciseMuscles = {
 },
 
 'Dumbbell Seated Calf Raise': {
-    'Primary': {'Calves': 100}
-},
-
-'Chest Dip on Straight Bar': {
-    'Primary': {'Chest': 60},
-    'Secondary': {'Triceps': 20, 'Shoulders': 20}
+    'Primary': {'Calves': 100},
+    'Secondary': {}
 },
 
 'Weighted Counterbalanced Squat': {
@@ -2781,18 +2616,18 @@ exerciseMuscles = {
 },
 
 'Kettlebell Farmers Carry': {
-    'Primary': {'Forearms': 25, 'Grip Strength': 25},
-    'Secondary': {'Trapezius': 25, 'Core': 25}
+    'Primary': {'Forearms': 50},
+    'Secondary': {'Trapezius': 25, 'Rectus Abdominis': 10, 'Obliques': 15}
 },
 
 'Cable Seated Row (Bent bar)': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Rhomboids': 10, 'Trapezius': 10, 'Biceps': 10}
 },
 
 'Cable Incline Bench Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Front Deltoid': 15, 'Triceps': 15}
+    'Secondary': {'Front Delts': 15, 'Triceps': 15}
 },
 
 'Sled Closer Hack Squat': {
@@ -2801,17 +2636,13 @@ exerciseMuscles = {
 },
 
 'Standing Calf Raise (On a staircase)': {
-    'Primary': {'Calves': 100}
+    'Primary': {'Calves': 100},
+    'Secondary': {}
 },
 
 'Cable Pulldown (pro lat bar)': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Biceps': 15, 'Forearms': 15}
-},
-
-'Seated In Out Leg Raise on Floor': {
-    'Primary': {'Hip Adductors': 35, 'Abductors': 35},
-    'Secondary': {'Core': 30}
 },
 
 'Incline Twisting Situp': {
@@ -2820,58 +2651,31 @@ exerciseMuscles = {
 },
 
 'Cable Bar Lateral Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Biceps': 15, 'Forearms': 15}
 },
 
 'Dumbbell One Arm Triceps Extension (on bench)': {
     'Primary': {'Triceps': 90},
-    'Secondary': {'Latissimus Dorsi': 10}
-},
-
-'Plate Pinch': {
-    'Primary': {'Forearms': 100
-    }
+    'Secondary': {'Lats': 10}
 },
 
 'Bodyweight Frog Pump': {
     'Primary': {'Glutes': 35, 'Adductors': 35},
     'Secondary': {'Hamstrings': 30}
 },
-
-'Barbell Jefferson Squat': {
-    'Primary': {'Quadriceps': 30, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 15, 'Core': 15, 'Adductors': 10}
-},
-
-'Russian Twist (with medicine ball)': {
-    'Primary': {'Obliques': 70},
-    'Secondary': {'Rectus Abdominis': 15, 'Core': 15}
-},
-
-'Single Leg Heel Touch Squat': {
-    'Primary': {'Quadriceps': 30, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 15, 'Balance': 15, 'Core': 10}
-},
-'Dead Bug': {
-    'Primary': {'Core': 100}
-},
 'Hand Opposite Knee Crunch': {
         'Primary': {'Obliques': 70},
         'Secondary': {'Rectus Abdominis': 30}
     },
 
-'Squat side kick': {
-    'Primary': {'Quadriceps': 30, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Adductors': 10, 'Core': 10, 'Balance': 10}
-},
-
 'Single Leg Calf Raise (on a dumbbell)': {
-    'Primary': {'Calves': 100}
+    'Primary': {'Calves': 100},
+    'Secondary': {}
 },
 
 'Bent over Row with Towel': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Biceps': 10, 'Forearms': 10, 'Grip Strength': 10}
 },
 
@@ -2883,11 +2687,6 @@ exerciseMuscles = {
 'Dumbbell Seated Curl': {
     'Primary': {'Biceps Brachii': 80},
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
-},
-
-'Cable twisting standing one arm chest press': {
-    'Primary': {'Chest': 80},
-    'Secondary': {'Triceps': 10, 'Shoulders': 5, 'Core': 5}
 },
 
 'Lying Leg Raise': {
@@ -2918,22 +2717,9 @@ exerciseMuscles = {
 },
 
     'Lever Calf Press (plate loaded)': {
-        'Primary': {'Calves': 100}
+        'Primary': {'Calves': 100},
+    'Secondary': {}
     },
-
-    'Lunge with Jump': {
-        'Primary': {'Quadriceps, Glutes, Hamstrings': 60},
-        'Secondary': {'Calves, Core, Balance': 40}
-    },
-
-'Barbell Curtsey Lunge': {
-    'Primary': {'Quadriceps': 20, 'Glutes': 20, 'Adductors': 20},
-    'Secondary': {'Hamstrings': 13, 'Balance': 13, 'Core': 14}  
-},
-
-'Sled Forward Angled Calf Raise': {
-    'Primary': {'Calves': 100}
-},
 
 'Barbell Upright Row': {
     'Primary': {'Trapezius': 30, 'Side Delts': 30},
@@ -2942,12 +2728,7 @@ exerciseMuscles = {
 
 'Dumbbell Incline Hammer Press': {
     'Primary': {'Chest': 70},
-    'Secondary': {'Front Deltoid': 15, 'Triceps': 15}
-},
-
-'Dumbbell Lying Triceps Extension': {
-    'Primary': {'Triceps': 90},
-    'Secondary': {'Chest': 5, 'Shoulders': 5}
+    'Secondary': {'Front Delts': 15, 'Triceps': 15}
 },
 
  'Barbell Drag Curl': {
@@ -2960,52 +2741,24 @@ exerciseMuscles = {
     'Secondary': {'Hip Flexors': 15, 'Obliques': 15}
 },
 
-'Kettlebell Lunge Pass Through': {
-    'Primary': {'Quadriceps': 30, 'Glutes': 30},
-    'Secondary': {'Hamstrings': 10, 'Shoulders': 10, 'Core': 10, 'Balance': 10}
-},
-
-'Bird Dog': {
-    'Primary': {'Core': 25, 'Erector Spinae': 25},
-    'Secondary': {'Glutes': 25, 'Hamstrings': 25}
-},
-
 'Dumbbell Incline Biceps Curl': {
     'Primary': {'Biceps Brachii': 80},
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
 },
 
-'Barbell Thruster': {
-    'Primary': {'Quadriceps': 25, 'Shoulders': 25},
-    'Secondary': {'Glutes': 25, 'Hamstrings': 12.5, 'Triceps': 12.5} 
-},
 
 'Cable Rope Seated Row': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Rhomboids': 10, 'Trapezius': 10, 'Biceps': 10}
 },
 
 'Barbell Incline Bench Press': {
     'Primary': {'Upper Chest': 70},
-    'Secondary': {'Front Deltoid': 15, 'Triceps': 15}
-},
-
-'Wrist Roller': {
-    'Primary': {'Forearms': 50, 'Grip Strength': 50}
-},
-
-'Kettlebell Plyo Pushup': {
-    'Primary': {'Chest': 20, 'Triceps': 20, 'Shoulders': 20},
-    'Secondary': {'Core': 20, 'Power': 20}
-},
-
-'Butt Bridge': {
-    'Primary': {'Glutes': 35, 'Hamstrings': 35},
-    'Secondary': {'Core': 15, 'Erector Spinae': 15}
+    'Secondary': {'Front Delts': 15, 'Triceps': 15}
 },
 
 'Barbell Decline Bent Arm Pullover': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Chest': 15, 'Triceps': 15}
 },
 
@@ -3014,48 +2767,29 @@ exerciseMuscles = {
     'Secondary': {'Glutes': 10, 'Hamstrings': 10, 'Calves': 10}
 },
 
-'Kettlebell Lunge Clean and Press': {
-    'Primary': {'Quadriceps': 17, 'Shoulders': 17, 'Core': 16},
-    'Secondary': {'Glutes': 12, 'Hamstrings': 13, 'Triceps': 12, 'Balance': 13} 
-},
-
-'Dumbbell Standing Triceps Extension': {
-    'Primary': {'Triceps': 90},
-    'Secondary': {'Core': 5, 'Shoulders': 5}
-},
-
 'Cable Pulldown Bicep Curl': {
-    'Primary': {'Latissimus Dorsi': 25, 'Biceps': 25},
+    'Primary': {'Lats': 25, 'Biceps': 25},
     'Secondary': {'Forearms': 50}
 },
 
 'Bodyweight Standing Row (with towel)': {
-    'Primary': {'Latissimus Dorsi': 60},
-    'Secondary': {'Biceps': 10, 'Posterior Deltoids': 10, 'Forearms': 10, 'Grip Strength': 10}
-},
-
-'Kettlebell deadlift': {
-    'Primary': {'Hamstrings': 20, 'Glutes': 20, 'Back': 20},
-    'Secondary': {'Forearms': 15, 'Grip Strength': 15, 'Core': 10}
+    'Primary': {'Lats': 60},
+    'Secondary': {'Biceps': 10, 'Rear Delts': 10, 'Forearms': 10, 'Grip Strength': 10}
 },
 
 'Lever Biceps Curl': {
     'Primary': {'Biceps Brachii': 80},
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
 },
-'Bridge Hip Abduction': {
-    'Primary': {'Glutes': 35, 'Hip Abductors': 35},
-    'Secondary': {'Hamstrings': 15, 'Core': 15}
-},
 
 'Cable Seated Face Pull (Rope)': {
-    'Primary': {'Posterior Deltoids': 35, 'Traps': 35},
+    'Primary': {'Rear Delts': 35, 'Traps': 35},
     'Secondary': {'Rhomboids': 15, 'Rotator Cuff': 15}
 },
 
 'Cable Cross over Lateral Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Posterior Deltoids': 15, 'Biceps': 15}
+    'Primary': {'Lats': 70},
+    'Secondary': {'Rear Delts': 15, 'Biceps': 15}
 },
 
 'Sled 45 Leg Press': {
@@ -3078,28 +2812,19 @@ exerciseMuscles = {
     'Secondary': {'Hip Flexors': 10, 'Obliques': 10}
 },
 
-'Kettlebell Alternating Hang Clean': {
-    'Primary': {'Traps': 15, 'Shoulders': 15, 'Core': 15, 'Hamstrings': 15},
-    'Secondary': {'Quadriceps': 20, 'Glutes': 10, 'Power': 10}
-},
-
 'Dumbbell Close Grip Press': {
     'Primary': {'Triceps': 70},
-    'Secondary': {'Chest': 15, 'Front Deltoid': 15}
-},
-
-'Dumbbell Standing One Arm Extension': {
-    'Primary': {'Triceps': 90},
-    'Secondary': {'Core': 5, 'Shoulders': 5}
+    'Secondary': {'Chest': 15, 'Front Delts': 15}
 },
 
 'Cable Pulldown': {
-    'Primary': {'Latissimus Dorsi': 70},
+    'Primary': {'Lats': 70},
     'Secondary': {'Biceps, Forearms': 30}
 },
 
 'Barbell Standing Back Wrist Curl': {
-    'Primary': {'Forearm Extensors': 100}
+    'Primary': {'Forearm Extensors': 100},
+    'Secondary': {}
 },
 
 'Dumbbell Standing One Arm Curl Over Incline Bench': {
@@ -3112,10 +2837,6 @@ exerciseMuscles = {
     'Secondary': {'Biceps Brachii': 15, 'Forearm Flexors': 15}
 },
 
-'Bodyweight Shrug': {
-    'Primary': {'Trapezius': 100}
-},
-
 'EZ bar Drag Bicep Curl': {
     'Primary': {'Biceps Brachii': 80},
     'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
@@ -3123,7 +2844,7 @@ exerciseMuscles = {
 
 'Smith Machine Decline Close Grip Bench Press': {
     'Primary': {'Lower Chest': 35, 'Triceps': 35},
-    'Secondary': {'Front Deltoid': 30}
+    'Secondary': {'Front Delts': 30}
 },
 
 'Barbell Stiff Leg Good Morning': {
@@ -3156,28 +2877,9 @@ exerciseMuscles = {
     'Secondary': {'Forearm Flexors': 50}
 },
 
-'Dumbbell Standing Kickback': {
-    'Primary': {'Triceps': 90},
-    'Secondary': {'Core': 5, 'Shoulders': 5}
-},
-
-'Cable Parallel Grip Lat Pulldown on Floor': {
-    'Primary': {'Latissimus Dorsi': 70},
-    'Secondary': {'Biceps': 15, 'Forearms': 15}
-},
-
-'Elbow Up and Down Dynamic Plank': {
-    'Primary': {'Core': 25, 'Triceps': 25},
-    'Secondary': {'Chest': 25, 'Shoulders': 25}
-},
-
-'Side Push up': {
-    'Primary': {'Chest': 20, 'Obliques': 20, 'Shoulders': 20},
-    'Secondary': {'Triceps': 20, 'Core': 20}
-},
-
 'EZ Barbell Standing Wrist Reverse Curl': {
-    'Primary': {'Forearm Extensors': 100}
+    'Primary': {'Forearm Extensors': 100},
+    'Secondary': {}
 },
 
     'Lever Total Abdominal Crunch': {
@@ -3186,23 +2888,23 @@ exerciseMuscles = {
     },
 
     'Cable Incline Bench Row': {
-        'Primary': {'Latissimus Dorsi': 60, 'Upper Back': 20},
-        'Secondary': {'Posterior Deltoids': 10, 'Biceps': 10}
+        'Primary': {'Lats': 60, 'Upper Back': 20},
+        'Secondary': {'Rear Delts': 10, 'Biceps': 10}
     },
 
     'Dumbbell Side Bend': {
         'Primary': {'Obliques': 70},
-        'Secondary': {'Latissimus Dorsi': 15, 'Erector Spinae': 15}
+        'Secondary': {'Lats': 15, 'Erector Spinae': 15}
     },
 
     'EZ Barbell JM Bench Press': {
         'Primary': {'Chest': 70},
-        'Secondary': {'Triceps': 20, 'Front Deltoid': 10}
+        'Secondary': {'Triceps': 20, 'Front Delts': 10}
     },
 
     'Cable Standing Fly': {
         'Primary': {'Chest': 80},
-        'Secondary': {'Front Deltoid': 20}
+        'Secondary': {'Front Delts': 20}
     },
 
     'Oblique Crunches Floor': {
@@ -3215,37 +2917,28 @@ exerciseMuscles = {
         'Secondary': {'Brachialis': 20}
     },
 
-    'Side Plank m': {
-        'Primary': {'Obliques': 50},
-        'Secondary': {'Core': 25, 'Shoulders': 25}
-    },
-
     'Dumbbell Incline One Arm Lateral Raise': {
         'Primary': {'Side Delts': 80},
-        'Secondary': {'Front Deltoid': 10, 'Trapezius': 10}
+        'Secondary': {'Front Delts': 10, 'Trapezius': 10}
     },
 
     'Cable Single Arm Neutral Grip Front Raise': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 10, 'Upper Chest': 10}
     },
 
     'Cable Standing Face Pull': {
-        'Primary': {'Posterior Deltoids': 60, 'Traps': 20},
+        'Primary': {'Rear Delts': 60, 'Traps': 20},
         'Secondary': {'Rhomboids': 10, 'Rotator Cuff': 10}
     },
 
     'Dumbbell Hammer Curls (with arm blaster)': {
-        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
-    },
-
-    'Kettlebell Goblet Squat': {
-        'Primary': {'Quadriceps': 50, 'Glutes': 30},
-        'Secondary': {'Hamstrings': 10, 'Core': 10}
+        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50},
+        'Secondary': {}
     },
 
     'Cable Front Raise': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 20}
     },
 
@@ -3259,18 +2952,9 @@ exerciseMuscles = {
         'Secondary': {'Hamstrings': 10}
     },
 
-    'Roll Seated Shoulder Flexor Depresor Retractor FIX': {
-        'Primary': {'Shoulders': 35, 'Upper Back': 35},
-        'Secondary': {'Chest': 30}
-    },
-
     'Diamond Push up': {
         'Primary': {'Triceps': 70},
         'Secondary': {'Chest': 30}
-    },
-
-    'Olympic Barbell Hammer Curl': {
-        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
     },
 
     'Dumbbell Plyo Squat': {
@@ -3279,7 +2963,7 @@ exerciseMuscles = {
     },
 
     'Dumbbell Lying Rear Lateral Raise': {
-        'Primary': {'Posterior Deltoids': 80},
+        'Primary': {'Rear Delts': 80},
         'Secondary': {'Traps': 10, 'Rhomboids': 10}
     },
 
@@ -3289,17 +2973,12 @@ exerciseMuscles = {
     },
 
     'Barbell One Arm Bent over Row': {
-        'Primary': {'Latissimus Dorsi': 70},
-        'Secondary': {'Posterior Deltoids': 15, 'Biceps': 15}
-    },
-
-    'Dumbbell Arnold Press': {
-        'Primary': {'Shoulders': 70},
-        'Secondary': {'Triceps': 20, 'Upper Chest': 10}
+        'Primary': {'Lats': 70},
+        'Secondary': {'Rear Delts': 15, 'Biceps': 15}
     },
 
     'Barbell Incline Lying Rear Delt Raise': {
-        'Primary': {'Posterior Deltoids': 80},
+        'Primary': {'Rear Delts': 80},
         'Secondary': {'Traps': 10, 'Rhomboids': 10}
     },
 
@@ -3308,32 +2987,23 @@ exerciseMuscles = {
         'Secondary': {'Calves': 10}
     },
 
-    'Kettlebell Double Alternating Hang Clean': {
-        'Primary': {'Traps': 20, 'Shoulders': 20, 'Core': 20, 'Hamstrings': 20},
-        'Secondary': {'Quadriceps': 10, 'Glutes': 10}
-    },
-
     'EZ Barbell Standing Preacher Curl': {
         'Primary': {'Biceps Brachii': 80},
         'Secondary': {'Brachialis': 20}
     },
 
     'Lever Hammer Grip Preacher Curl': {
-        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
+        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50},
+    'Secondary': {}
     },
     
-    'Dumbbell Goblet Split Squat Front Foot Elevanted': {
-        'Primary': {'Quadriceps': 60, 'Glutes': 30},
-        'Secondary': {'Hamstrings': 5, 'Core': 5}
-    },
-
     'Cross Body Crunch': {
         'Primary': {'Obliques': 70},
         'Secondary': {'Rectus Abdominis': 30}
     },
 
     'Cable one arm twisting seated row': {
-        'Primary': {'Latissimus Dorsi': 60, 'Obliques': 20},
+        'Primary': {'Lats': 60, 'Obliques': 20},
         'Secondary': {'Rhomboids': 10, 'Biceps': 10}
     },
 
@@ -3347,17 +3017,8 @@ exerciseMuscles = {
     },
 
     'Dumbbell Incline Raise': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 10, 'Upper Chest': 10}
-    },
-
-    'Dumbbell Lateral to Front Raise': {
-        'Primary': {'Side Delts': 50, 'Front Deltoid': 50}
-    },
-
-    'Barbell Clean grip Front Squat': {
-        'Primary': {'Quadriceps': 60, 'Core': 20},
-        'Secondary': {'Glutes': 10, 'Hamstrings': 10}
     },
 
     'Barbell Lying Close grip Triceps Extension': {
@@ -3366,31 +3027,18 @@ exerciseMuscles = {
     },
 
     'Cable Rear Pulldown': {
-        'Primary': {'Latissimus Dorsi': 70},
-        'Secondary': {'Posterior Deltoids': 15, 'Biceps': 15}
-    },
-
-    'Dumbbell finger curls': {
-        'Primary': {'Forearm Flexors': 100}
+        'Primary': {'Lats': 70},
+        'Secondary': {'Rear Delts': 15, 'Biceps': 15}
     },
 
     'Cable Y raise': {
-        'Primary': {'Front Deltoid': 50, 'Side Delts': 50}
-    },
-
-    'Front Plank': {
-        'Primary': {'Core': 60},
-        'Secondary': {'Shoulders': 20, 'Back': 20}
+        'Primary': {'Front Delts': 50, 'Side Delts': 50},
+    'Secondary': {}
     },
 
     'Dumbbell Single Leg Split Squat': {
         'Primary': {'Quadriceps': 60, 'Glutes': 30},
         'Secondary': {'Hamstrings': 10}
-    },
-
-    'Cable Incline Triceps Extension': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Chest': 5, 'Shoulders': 5}
     },
 
     'Dumbbell Lying Supine Curl': {
@@ -3400,7 +3048,7 @@ exerciseMuscles = {
 
     'Cable Standing Up Straight Crossovers': {
         'Primary': {'Chest': 80},
-        'Secondary': {'Front Deltoid': 20}
+        'Secondary': {'Front Delts': 20}
     },
 
     'Glute Ham Raise': {
@@ -3414,16 +3062,17 @@ exerciseMuscles = {
     },
 
     'Handboard Slope Hang': {
-        'Primary': {'Forearms': 50, 'Grip Strength': 50}
+        'Primary': {'Forearms': 50, 'Grip Strength': 50},
+    'Secondary': {}
     },
 
     'Dumbbell Bent Over Alternate Rear Delt Fly': {
-        'Primary': {'Posterior Deltoids': 80},
+        'Primary': {'Rear Delts': 80},
         'Secondary': {'Traps': 10, 'Rhomboids': 10}
     },
 
     'Barbell Pendlay Row': {
-        'Primary': {'Latissimus Dorsi': 60, 'Traps': 20},
+        'Primary': {'Lats': 60, 'Traps': 20},
         'Secondary': {'Rhomboids': 10, 'Biceps': 10}
     },
 
@@ -3437,54 +3086,34 @@ exerciseMuscles = {
         'Secondary': {'Hamstrings': 5, 'Balance': 5}
     },
 
-    'Barbell Lying Triceps Extension': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
-
     'Hip Thrusts': {
         'Primary': {'Glutes': 70},
         'Secondary': {'Hamstrings': 30}
     },
 
-    'Bear Plank': {
-        'Primary': {'Core': 50, 'Shoulders': 50}
-    },
-
-    'Resistance Band Triceps Pushdown': {
-        'Primary': {'Triceps': 100}
-    },
-
     'Dumbbell One Arm Hammer Preacher Curl': {
-        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
+        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50},
+        'Secondary': {}
     },
 
     'Dumbbell Incline Front Raise': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 20}
     },
 
     'Dumbbell One Arm Standing Hammer Curl': {
-        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50}
+        'Primary': {'Brachialis': 50, 'Biceps Brachii': 50},
+        'Secondary': {}
     },
 
     'Dumbbell Straight Arm Pullover': {
-        'Primary': {'Latissimus Dorsi': 70},
+        'Primary': {'Lats': 70},
         'Secondary': {'Chest': 15, 'Triceps': 15}
     },
 
     'Barbell Narrow Row': {
-        'Primary': {'Latissimus Dorsi': 60, 'Traps': 20},
+        'Primary': {'Lats': 60, 'Traps': 20},
         'Secondary': {'Rhomboids': 10, 'Biceps': 10}
-    },
-
-    'Calf Raise from Deficit with Chair Supported': {
-        'Primary': {'Calves': 100}
-    },
-
-    'Dumbbell Seated Upright Alternate Squeeze Press': {
-        'Primary': {'Shoulders': 70},
-        'Secondary': {'Triceps': 20, 'Upper Chest': 10}
     },
 
     'Barbell Lying Close grip Press': {
@@ -3502,17 +3131,13 @@ exerciseMuscles = {
         'Secondary': {'Brachialis': 10, 'Forearm Flexors': 10}
     },
 
-    'Dumbbell Lying Floor Skullcrusher': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
-
-    'Dumbbell Revers grip Biceps Curl': {
-        'Primary': {'Brachialis': 60, 'Biceps Brachii': 40}
+    'Dumbbell Reverse grip Biceps Curl': {
+        'Primary': {'Brachialis': 60, 'Biceps Brachii': 40},
+    'Secondary': {}
     },
 
     'Cable Forward Raise': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 20}
     },
 
@@ -3522,22 +3147,18 @@ exerciseMuscles = {
     },
 
     'Dumbbell Incline Two Front Raise with Chest Support': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 20}
     },
 
     'Dumbbell Reverse Bench Press': {
         'Primary': {'Chest': 60},
-        'Secondary': {'Triceps': 20, 'Front Deltoid': 20}
+        'Secondary': {'Triceps': 20, 'Front Delts': 20}
     },
 
     'Dumbbell High Curl': {
         'Primary': {'Side Delts': 50, 'Trapezius': 30},
         'Secondary': {'Biceps': 20}
-    },
-
-    'Dumbbell Lying Femoral': {
-        'Primary': {'Hamstrings': 100}
     },
 
     'Close Grip Push up': {
@@ -3546,7 +3167,7 @@ exerciseMuscles = {
     },
 
     'Dumbbell One Arm Front Raise': {
-        'Primary': {'Front Deltoid': 80},
+        'Primary': {'Front Delts': 80},
         'Secondary': {'Side Delts': 20}
     },
 
@@ -3555,10 +3176,6 @@ exerciseMuscles = {
         'Secondary': {'Chest': 30}
     },
 
-    'Dumbbell Lying One Arm Pronated Triceps Extension': {
-        'Primary': {'Triceps': 90},
-        'Secondary': {'Chest': 5, 'Shoulders': 5}
-    },
 
     'Dumbbell Biceps Curl': {
         'Primary': {'Biceps Brachii': 80},
@@ -3567,7 +3184,7 @@ exerciseMuscles = {
 
     'Cable Seated Chest Fly': {
         'Primary': {'Chest': 80},
-        'Secondary': {'Front Deltoid': 20}
+        'Secondary': {'Front Delts': 20}
     },
 
     'Bench Reverse Crunch Circle': {
@@ -3581,161 +3198,130 @@ exerciseMuscles = {
     },
 
     'Dumbbell Bent Over Bench Row': {
-      'Primary': {'Latissimus Dorsi': 50},
-      'Secondary': {'Posterior Deltoids': 15, 'Biceps': 20, 'Trapezius': 15}
+      'Primary': {'Lats': 50},
+      'Secondary': {'Rear Delts': 15, 'Biceps': 20, 'Trapezius': 15}
     },
     'Lying T-Bar Row': {
-      'Primary': {'Latissimus Dorsi': 50},
-      'Secondary': {'Posterior Deltoids': 10, 'Biceps': 20, 'Trapezius': 20}
+      'Primary': {'Lats': 50},
+      'Secondary': {'Rear Delts': 10, 'Biceps': 20, 'Trapezius': 20}
     },
     'Rear Delt Fly (Machine)': {
-      'Primary': {'Posterior Deltoids': 80},
+      'Primary': {'Rear Delts': 80},
       'Secondary': {'Trapezius': 20}
     },
     'Chest Dips': {
-      'Primary': {'Pectoralis Major': 60},
-      'Secondary': {'Triceps': 30, 'Front Deltoid': 10}
+      'Primary': {'Chest': 60},
+      'Secondary': {'Triceps': 30, 'Front Delts': 10}
     },
     'Tricep Dips': {
       'Primary': {'Triceps': 70},
-      'Secondary': {'Pectoralis Major': 20, 'Front Deltoid': 10}
+      'Secondary': {'Chest': 20, 'Front Delts': 10}
     },
     'Assisted Chest Dips': {
-      'Primary': {'Pectoralis Major': 60},
-      'Secondary': {'Triceps': 30, 'Front Deltoid': 10}
+      'Primary': {'Chest': 60},
+      'Secondary': {'Triceps': 30, 'Front Delts': 10}
     },
     'Assisted Tricep Dips': {
       'Primary': {'Triceps': 70},
-      'Secondary': {'Pectoralis Major': 20, 'Front Deltoid': 10}
+      'Secondary': {'Chest': 20, 'Front Delts': 10}
     },
     'Weighted Neutral Grip Pull Up': {
-      'Primary': {'Latissimus Dorsi': 50},
+      'Primary': {'Lats': 50},
       'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Assisted Neutral Grip Pull Ups': {
-      'Primary': {'Latissimus Dorsi': 50},
+      'Primary': {'Lats': 50},
       'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Neutral Grip Pull Up': {
-      'Primary': {'Latissimus Dorsi': 50},
+      'Primary': {'Lats': 50},
       'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Commando Pull Up': {
-      'Primary': {'Latissimus Dorsi': 40},
-      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+      'Primary': {'Lats': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Band Assisted One Arm Chin Up': {
-      'Primary': {'Latissimus Dorsi': 40},
-      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+      'Primary': {'Lats': 40},
+      'Secondary': {'Biceps': 35, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Weighted One Handed Pull Up': {
-      'Primary': {'Latissimus Dorsi': 40},
-      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+      'Primary': {'Lats': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Close Grip Pull Up': {
-      'Primary': {'Latissimus Dorsi': 50},
+      'Primary': {'Lats': 50},
       'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Archer Pull Up': {
-      'Primary': {'Latissimus Dorsi': 40},
-      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 10}
+      'Primary': {'Lats': 45},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Chin Up': {
-      'Primary': {'Latissimus Dorsi': 45},
+      'Primary': {'Lats': 45},
       'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Close Grip Chin Up': {
-      'Primary': {'Latissimus Dorsi': 45},
+      'Primary': {'Lats': 45},
       'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Band Assisted Chin Up': {
-      'Primary': {'Latissimus Dorsi': 45},
+      'Primary': {'Lats': 45},
       'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Assisted Close Grip Chin Up': {
-      'Primary': {'Latissimus Dorsi': 45},
+      'Primary': {'Lats': 45},
       'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Pull Up': {
-      'Primary': {'Latissimus Dorsi': 50},
+      'Primary': {'Lats': 50},
       'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'Single Arm Pull Up': {
-      'Primary': {'Latissimus Dorsi': 40},
-      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 5}
+      'Primary': {'Lats': 45},
+      'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
     'L-Pull Ups': {
-      'Primary': {'Latissimus Dorsi': 40},
-      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10, 'Core': 10}
+      'Primary': {'Lats': 40},
+      'Secondary': {'Biceps': 25, 'Rhomboids': 15, 'Trapezius': 10, 'Rectus Abdominis': 10}
     },
     'Weighted Chin Up': {
-      'Primary': {'Latissimus Dorsi': 45},
+      'Primary': {'Lats': 45},
       'Secondary': {'Biceps': 30, 'Rhomboids': 15, 'Trapezius': 10}
     },
         'Assisted Chin up': {
         'Primary': {'Lats': 50, 'Biceps': 40},
         'Secondary': {'Forearms': 10}
     },
-    'Assisted Pullup (Neutral grip)': {
-        'Primary': {'Lats': 50, 'Biceps': 30},
-        'Secondary': {'Shoulders': 10, 'Forearms': 10}
-    },
-    'Assisted Triceps Dip': {
-        'Primary': {'Triceps': 60},
-        'Secondary': {'Chest': 30, 'Shoulders': 10}
-    },
+
     'Back Extensions': {
         'Primary': {'Lower Back': 70},
         'Secondary': {'Glutes': 20, 'Hamstrings': 10}
-    },
-    'Back Lever': {
-        'Primary': {'Lats': 50, 'Core': 30},
-        'Secondary': {'Shoulders': 20}
-    },
-    'Band Assisted Dips': {
-        'Primary': {'Triceps': 60},
-        'Secondary': {'Chest': 30, 'Shoulders': 10}
     },
     'Band Assisted Muscle up': {
         'Primary': {'Lats': 40, 'Biceps': 30},
         'Secondary': {'Triceps': 20, 'Shoulders': 10}
     },
-    'Bar Shoulder Press': {
-        'Primary': {'Shoulders': 60},
-        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
-    },
+
     'Barbell Bench Squat': {
         'Primary': {'Quads': 50, 'Glutes': 30},
         'Secondary': {'Hamstrings': 20}
     },
     'Barbell Bent Over Wide Grip Row': {
         'Primary': {'Upper Back': 60, 'Biceps': 30},
-        'Secondary': {'Rear Deltoids': 10}
+        'Secondary': {'Rear Delts': 10}
     },
-    'Barbell Close Grip Bench Press': {
-        'Primary': {'Triceps': 60},
-        'Secondary': {'Chest': 30, 'Shoulders': 10}
-    },
+
     'Barbell Deadstop Row': {
         'Primary': {'Lats': 50, 'Biceps': 30},
         'Secondary': {'Lower Back': 20}
     },
-    'Barbell Decline Close Grip To Skull Press': {
-        'Primary': {'Triceps': 60},
-        'Secondary': {'Chest': 30, 'Shoulders': 10}
-    },
+
     'Barbell Full Squat': {
         'Primary': {'Quads': 60},
         'Secondary': {'Glutes': 30, 'Lower Back': 10}
     },
-    'Barbell Incline Close Grip Bench Press': {
-        'Primary': {'Upper Chest': 50, 'Triceps': 40},
-        'Secondary': {'Shoulders': 10}
-    },
-    'Barbell JM Bench Press': {
-        'Primary': {'Triceps': 60},
-        'Secondary': {'Chest': 30, 'Shoulders': 10}
-    },
+
     'Barbell Rear Lunge': {
         'Primary': {'Glutes': 50, 'Quads': 30},
         'Secondary': {'Hamstrings': 20}
@@ -3744,34 +3330,22 @@ exerciseMuscles = {
         'Primary': {'Forearms': 70},
         'Secondary': {'Biceps': 30}
     },
-    'Battling Ropes': {
-        'Primary': {'Shoulders': 40, 'Arms': 30},
-        'Secondary': {'Core': 30}
-    },
+
     'Biceps Curl with Bed Sheet': {
         'Primary': {'Biceps': 70},
         'Secondary': {'Forearms': 30}
     },
-    'Bodyweight Kneeling Triceps Extension': {
-        'Primary': {'Triceps': 70},
-        'Secondary': {'Shoulders': 30}
-    },
+
     'Bodyweight Standing Biceps Curl': {
         'Primary': {'Biceps': 70},
         'Secondary': {'Forearms': 30}
     },
-    'Bodyweight Standing Military Press': {
-        'Primary': {'Shoulders': 60},
-        'Secondary': {'Triceps': 30, 'Upper Chest': 10}
-    },
+
     'Cable Assisted Inverse Leg Curl': {
         'Primary': {'Hamstrings': 70},
         'Secondary': {'Glutes': 20, 'Lower Back': 10}
     },
-    'Cable Concentration Extension (on knee)': {
-        'Primary': {'Triceps': 70},
-        'Secondary': {'Shoulders': 30}
-    },
+
     'Cable Decline Fly': {
         'Primary': {'Chest': 70},
         'Secondary': {'Shoulders': 30}
@@ -3782,7 +3356,7 @@ exerciseMuscles = {
     },
     'Cable Kneeling High Row (Rope)': {
         'Primary': {'Lats': 50, 'Biceps': 30},
-        'Secondary': {'Rear Deltoids': 20}
+        'Secondary': {'Rear Delts': 20}
     },
     'Cable Lateral Pulldown (Rope)': {
         'Primary': {'Lats': 50, 'Biceps': 30},
@@ -3805,7 +3379,7 @@ exerciseMuscles = {
         'Secondary': {'Forearms': 30}
     },
     'Cable One Arm Lateral Bent Over': {
-        'Primary': {'Rear Deltoids': 60},
+        'Primary': {'Rear Delts': 60},
         'Secondary': {'Traps': 30, 'Biceps': 10}
     },
     'Cable Overhead Single Arm Triceps Extension (Rope)': {
@@ -3877,10 +3451,7 @@ exerciseMuscles = {
         'Primary': {'Chest': 70},
         'Secondary': {'Shoulders': 30}
     },
-    'Dumbbell Half Kneeling Military Press': {
-        'Primary': {'Shoulders': 60},
-        'Secondary': {'Triceps': 30, 'Core': 10}
-    },
+
     'Dumbbell Incline Press on Exercise Ball': {
         'Primary': {'Chest': 50, 'Shoulders': 30},
         'Secondary': {'Triceps': 20}
@@ -3891,7 +3462,7 @@ exerciseMuscles = {
         'Secondary': {'Shoulders': 20}
     },
     'Dumbbell One Arm Reverse Fly (with support)': {
-        'Primary': {'Rear Deltoids': 60},
+        'Primary': {'Rear Delts': 60},
         'Secondary': {'Traps': 30, 'Biceps': 10}
     },
     'Dumbbell Reverse Wrist Curl': {
@@ -3926,10 +3497,7 @@ exerciseMuscles = {
         'Primary': {'Forearms': 80},
         'Secondary': {'Grip': 20}
     },
-    'Full Squat Mobility': {
-        'Primary': {'Quads': 60},
-        'Secondary': {'Glutes': 30, 'Core': 10}
-    },
+
     'Kettlebell Step Up': {
         'Primary': {'Quads': 50, 'Glutes': 30},
         'Secondary': {'Hamstrings': 20}
@@ -3961,10 +3529,6 @@ exerciseMuscles = {
     'Lever Lying Single Leg Leg Curl': {
         'Primary': {'Hamstrings': 70},
         'Secondary': {'Glutes': 30}
-    },
-    'Lever Seated Crunch': {
-        'Primary': {'Abs': 80},
-        'Secondary': {'Core': 20}
     },
     'Lever Seated Hip Adduction': {
         'Primary': {'Inner Thighs': 80},
@@ -4006,11 +3570,6 @@ exerciseMuscles = {
         'Primary': {'Glutes': 60},
         'Secondary': {'Hamstrings': 30, 'Lower Back': 10}
     },
-
-    'Resistance Band Full Squat': {
-        'Primary': {'Quads': 60},
-        'Secondary': {'Glutes': 30, 'Core': 10}
-    },
     'Resistance Band Leg Extension': {
         'Primary': {'Quads': 70},
         'Secondary': {'Hip Flexors': 30}
@@ -4025,11 +3584,11 @@ exerciseMuscles = {
     },
     'Seated Lever Machine Row': {
         'Primary': {'Lats': 50, 'Biceps': 30},
-        'Secondary': {'Rear Deltoids': 20}
+        'Secondary': {'Rear Delts': 20}
     },
     'Seated Machine Row': {
         'Primary': {'Lats': 50, 'Biceps': 30},
-        'Secondary': {'Rear Deltoids': 20}
+        'Secondary': {'Rear Delts': 20}
     },
     'Seated Overhead Press (Barbell)': {
         'Primary': {'Shoulders': 60},
@@ -4040,10 +3599,7 @@ exerciseMuscles = {
         'Primary': {'Hamstrings': 70},
         'Secondary': {'Glutes': 30}
     },
-    'Side Bridge': {
-        'Primary': {'Obliques': 70},
-        'Secondary': {'Core': 30}
-    },
+
     'Single Leg Hip Thrust': {
         'Primary': {'Glutes': 60},
         'Secondary': {'Hamstrings': 30, 'Lower Back': 10}
@@ -4060,10 +3616,7 @@ exerciseMuscles = {
         'Primary': {'Calves': 80},
         'Secondary': {'Ankles': 20}
     },
-    'Smith Full Squat': {
-        'Primary': {'Quads': 60},
-        'Secondary': {'Glutes': 30, 'Core': 10}
-    },
+
     'Smith Machine Standing Overhead Press': {
         'Primary': {'Shoulders': 60},
         'Secondary': {'Triceps': 30, 'Upper Chest': 10}
@@ -4084,10 +3637,7 @@ exerciseMuscles = {
         'Primary': {'Hamstrings': 70},
         'Secondary': {'Glutes': 30}
     },
-    'Suspender Squat': {
-        'Primary': {'Quads': 60},
-        'Secondary': {'Glutes': 30, 'Core': 10}
-    },
+
     'Suspender Straight Hip Leg Curl': {
         'Primary': {'Hamstrings': 70},
         'Secondary': {'Glutes': 30}
@@ -4110,11 +3660,7 @@ exerciseMuscles = {
     },
        'Cable Seated Horizontal Shrug': {
         'Primary': {'Traps': 70},
-        'Secondary': {'Rear Deltoids': 20, 'Biceps': 10}
-    },
-    'Cable Standing Pulldown (Rope)': {
-        'Primary': {'Lats': 60},
-        'Secondary': {'Biceps': 30, 'Rear Deltoids': 10}
+        'Secondary': {'Rear Delts': 20, 'Biceps': 10}
     },
     'Cable Triceps Pushdown (SZ bar)': {
         'Primary': {'Triceps': 70},
@@ -4140,44 +3686,59 @@ exerciseMuscles = {
         'Primary': {'Forearms': 70},
         'Secondary': {'Biceps': 30}
     },
+    'Machine Chest Fly': {
+        'Primary': {'Chest': 80},
+        'Secondary': {'Front Delts': 20}
+    },
+
 };
+
 
 filesSet = set()
 
-def iterate_through_folders(root_dir):
-    for root, dirs, files in os.walk(root_dir):
-        for file in files:
-            try:
-                exerciseMuscles[file.split('.')[0]]
-            except Exception as e:
-                print(file)
-print("############# Images that don't have dictionary ###############")
-root_dir = "Exercises/"  # replace with the directory you want to iterate through
-iterate_through_folders(root_dir)
+# def iterate_through_folders(root_dir):
+#     for root, dirs, files in os.walk(root_dir):
+#         for file in files:
+#             try:
+#                 exerciseMuscles[file.split('.')[0]]
+#             except Exception as e:
+#                 print(file)
+# print("############# Images that don't have dictionary ###############")
+# root_dir = "Exercises/"  # replace with the directory you want to iterate through
+# iterate_through_folders(root_dir)
 
-print("############# Dictionary that don't have images ###############")
+# print("############# Dictionary that don't have images ###############")
 
-for exercise in exerciseMuscles:
-    try:
-        open(f'Exercises/{exercise}.png')
-    except Exception as e:
-        print(exercise)
+# for exercise in exerciseMuscles:
+#     if 'Shoulders' in exerciseMuscles[exercise]['Primary'] or 'Shoulders' in exerciseMuscles[exercise]['Secondary']:
+#         print(f"""
+#             '{exercise}': {{
+#                 'Primary': {{{', '.join(f"'{muscle}': {exerciseMuscles[exercise]['Primary'][muscle]}" for muscle in exerciseMuscles[exercise]['Primary'])}}},
+#                 'Secondary': {{{', '.join(f"'{muscle}': {exerciseMuscles[exercise]['Secondary'][muscle]}" for muscle in exerciseMuscles[exercise]['Secondary'])}}},
+#             }},
+#         """)
 
-def rename_files_with_extension_word(directory):
-    # Loop through all files in the directory
-    for filename in os.listdir(directory):
-        # Check if 'extension' exists in the filename
-        if 'with Rope' in filename:
-            # Replace 'extension' with 'Extension'
-            new_filename = filename.replace('with Rope', 'Rope')
-            old_file = os.path.join(directory, filename)
-            new_file = os.path.join(directory, new_filename)
+#     try:
+#         open(f'Exercises/{exercise}.png')
+#     except Exception as e:
+#         print(exercise)
+
+# def rename_files_with_extension_word(directory):
+#     # Loop through all files in the directory
+#     for filename in os.listdir(directory):
+#         # Check if 'extension' exists in the filename
+#         if 'with Rope' in filename:
+#             # Replace 'extension' with 'Extension'
+#             new_filename = filename.replace('with Rope', 'Rope')
+#             old_file = os.path.join(directory, filename)
+#             new_file = os.path.join(directory, new_filename)
             
-            # Rename the file
-            os.rename(old_file, new_file)
-            print(f"Renamed: {filename} -> {new_filename}")
+#             # Rename the file
+#             os.rename(old_file, new_file)
+#             print(f"Renamed: {filename} -> {new_filename}")
 
-# Example usage
+# # Example usage
 directory_path = "Exercises/"
-
-rename_files_with_extension_word(directory_path)
+with open("exercises.json", "w") as outfile: 
+    json.dump(exerciseMuscles, outfile)
+# rename_files_with_extension_word(directory_path)
