@@ -353,12 +353,10 @@ class WeeklyProgressChart extends StatelessWidget {
     for (String group in muscleGroups.keys){
       for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
         double muscleNum = (muscleData[muscleGroups[group]?[i]] ?? 0);
-        if (muscleNum > 0){
           if (data[group] == null) {
             data[group] = 0;
           }
           data[group] += muscleNum;
-        }
       }
       // data[group] = double.parse(data[group].toStringAsFixed(2));
     }

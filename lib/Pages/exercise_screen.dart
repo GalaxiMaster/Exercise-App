@@ -1,4 +1,5 @@
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/muscleinformation.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -38,13 +39,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-        final List dates = exerciseData.map((data) => data['date'].split(' ')[0]).toList();
+    final List dates = exerciseData.map((data) => data['date'].split(' ')[0]).toList();
     final List<FlSpot> spots = exerciseData
         .asMap()
         .entries
         .map((entry) => FlSpot(
               entry.key.toDouble(), // Use the index as the X value
-              double.parse(entry.value['weight'].toString()), // Parse the weight (Y value)
+              exerciseMuscles[widget.exercise]['type'] != 'bodyweight' ? double.parse(entry.value['weight'].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
             ))
         .toList();
     return Scaffold(

@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List routines = [];
-  bool isCurrent = false;
 
   @override
   void initState() {
@@ -26,11 +25,9 @@ class _HomePageState extends State<HomePage> {
     _loadRoutines();
     getIsCurrent();
   }
-  void getIsCurrent() async{
+  Future<bool> getIsCurrent() async{
     Map data = await readData(path: 'current');
-    setState(() {
-      isCurrent = data['sets'] == null ? false : data['sets'].toString() != {}.toString();
-    });
+    return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
   Future<void> _loadRoutines() async {
     List loadedRoutines = await getAllRoutines();
@@ -84,9 +81,11 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: 15, 
                 width: double.infinity, 
                 height: 50,
-                onTap: () {
+                onTap: () async {
+                  bool isCurrent = await getIsCurrent();
                   if (isCurrent){
                     showDialog(
+                      // ignore: use_build_context_synchronously
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -126,9 +125,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Addworkout()),
-                    ).then((_) {
-                      getIsCurrent();  // Call the method after returning from Addworkout
-                    });
+                    );
                   }
                 }
               ),  

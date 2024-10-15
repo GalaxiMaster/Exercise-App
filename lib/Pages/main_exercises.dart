@@ -92,7 +92,9 @@ class MainExercisesPage extends StatelessWidget {
         exerciseMap[exercise] = (exerciseMap[exercise] ?? 0) + 1;
       }
     }
-    debugPrint(exerciseMap.toString());
+    List<MapEntry> entries = exerciseMap.entries.toList();
+    entries.sort((a, b) => b.value.compareTo(a.value));
+    exerciseMap = Map.fromEntries(entries);
     return exerciseMap;
   }
 }

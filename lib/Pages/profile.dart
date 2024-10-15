@@ -69,7 +69,7 @@ class _ProfileState extends State<Profile> {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
             final data = snapshot.data![0]; // Extract data
-            final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 7.0; // Extract goal
+            final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
             return Column(
               children: [
                 DataBarChart(data: data, goal: goal), // Pass the goal to DataBarChart

@@ -41,7 +41,7 @@ import 'package:share_plus/share_plus.dart';
             _buildSettingsBox(
               icon: Icons.refresh,
               label: 'Reset data',
-              function: (){resetData(true, false, true);},
+              function: (){resetDataButton(context);},
             ),
             setttingDividor(),
             _buildSettingsBox(
@@ -234,7 +234,33 @@ class _GoalOptionsState extends State<GoalOptions> {
   }
 }
 
-
+void resetDataButton(BuildContext context){
+  debugPrint('hakhj');
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Are you sure you want to delete your data'),
+        content: const Text('Doing so will reset ALL of your data'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss the dialog
+            },
+          ),
+          TextButton(
+            child: const Text('Delete', style: TextStyle(color: Colors.red),),
+            onPressed: () {
+              resetData(true, true, true);
+              Navigator.of(context).pop(); // Dismiss the dialog
+            },
+          ),
+        ],
+      );
+    }
+  );
+}
 
 
   void updateSettings(String option, String value) async{
