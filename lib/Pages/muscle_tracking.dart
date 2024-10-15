@@ -1,4 +1,3 @@
-import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
@@ -156,7 +155,8 @@ class ExpandedSetProgressTile extends StatelessWidget {
     required this.muscle,
     required this.value,
     required this.goal,
-    required this.onTap, required this.data,
+    required this.onTap, 
+    required this.data,
   });
 
   @override
@@ -196,7 +196,7 @@ class ExpandedSetProgressTile extends StatelessWidget {
                                   return PieChartSectionData(
                                     color: getColor(entry.key),
                                     value: entry.value,
-                                    title: '${entry.key}\n${entry.value}%',
+                                    // title: '${entry.key}\n${entry.value}%',
                                     radius: 20,
                                     titleStyle: const TextStyle(color: Colors.transparent),
                                   );
@@ -209,7 +209,7 @@ class ExpandedSetProgressTile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   for (int i = 0; i < data.keys.length; i++)
-                                  Text(data.keys.toList()[i], style: TextStyle(color: getColor(data.keys.toList()[i])),)
+                                  Text('${data.keys.toList()[i]} ${data.values.toList()[i]}', style: TextStyle(color: getColor(data.keys.toList()[i])),)
                                 ],
                               ),
                             )
@@ -349,17 +349,23 @@ class WeeklyProgressChart extends StatelessWidget {
         }
       }
     }
-    sets = muscleData;
-    data['Back'] = (sets['Lats'] ?? 0) + (sets['Erector Spinae'] ?? 0) + (sets['Rhomboids'] ?? 0) + (sets['Lower Back'] ?? 0).roundToDouble(); // Back
-    data['Chest'] = (sets['Pectorals'] ?? 0) + (sets['Pectorals (Upper)'] ?? 0) + (sets['Pectorals (Lower)'] ?? 0).roundToDouble(); // Chest
-    data['Shoulders'] = (sets['Front Delts'] ?? 0) + (sets['Side Delts'] ?? 0) + (sets['Posterior Delts'] ?? 0) + (sets['Trapezius'] ?? 0).roundToDouble(); // Shoulders
-    data['Arms'] = (sets['Biceps'] ?? 0) + (sets['Triceps'] ?? 0) + (sets['Forearms'] ?? 0) + (sets['Brachialis'] ?? 0).roundToDouble(); // Arms
-    data['Legs'] = (sets['Quadriceps'] ?? 0) + (sets['Hamstrings'] ?? 0) + (sets['Glutes'] ?? 0) + (sets['Calves'] ?? 0).roundToDouble();// Legs
-    data['Core'] = (sets['Rectus Abdominis'] ?? 0) + (sets['Obliques'] ?? 0) + (sets['Core'] ?? 0) + (sets['Hip Flexors'] ?? 0).roundToDouble(); // Core
+
+    for (String group in muscleGroups.keys){
+      for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
+        double muscleNum = (muscleData[muscleGroups[group]?[i]] ?? 0);
+        if (muscleNum > 0){
+          if (data[group] == null) {
+            data[group] = 0;
+          }
+          data[group] += muscleNum;
+        }
+      }
+      // data[group] = double.parse(data[group].toStringAsFixed(2));
+    }
     List<MapEntry> entries = data.entries.toList();
     entries.sort((a, b) => b.value.compareTo(a.value));
     data = Map.fromEntries(entries);
-    return [data,  sets];
+    return [data,  muscleData];
 
   }
 

@@ -208,7 +208,7 @@ class _GoalOptionsState extends State<GoalOptions> {
                           _options[index],
                           style: TextStyle(
                             fontSize: 20,
-                            color: _selectedIndex == index ? Colors.blue : Colors.black38,
+                            color: _selectedIndex == index ? Colors.blue : const Color.fromARGB(96, 255, 255, 255),
                             fontWeight: _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),

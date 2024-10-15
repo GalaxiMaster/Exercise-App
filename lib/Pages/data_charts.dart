@@ -1,4 +1,3 @@
-import 'package:exercise_app/Pages/muscle_data.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:fl_chart/fl_chart.dart';

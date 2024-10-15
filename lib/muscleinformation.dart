@@ -1,12 +1,40 @@
+import 'package:flutter/material.dart';
+
 Map<String, List<String>> muscleGroups = {
-  'Back': ['Lats', 'Erector Spinae', 'Rhomboids', 'Lower Back'],
+  'Back': ['Lats', 'Erectors', 'Rhomboids', 'Lower Back'],
   'Chest': ['Chest', 'Upper Chest', 'Lower Chest'],
-  'Shoulders': ['Front Delts', 'Side Delts', 'Rear Delts', 'Trapezius'],
+  'Shoulders': ['Front Delts', 'Side Delts', 'Rear Delts', 'Traps'],
   'Arms': ['Biceps', 'Triceps', 'Forearms', 'Brachialis'],
   'Legs': ['Quadriceps', 'Hamstrings', 'Glutes', 'Calves'],
-  'Core': ['Rectus Abdominis', 'Obliques', 'Hip Flexors']
+  'Core': ['Abdominals', 'Obliques', 'Hip Flexors']
 };
+Color getColor(String key) {
+  var colors = {
+    'Chest': Colors.red,
+    'Upper Chest': Colors.redAccent,
+    'Lower Chest': Colors.deepOrangeAccent,
+    'Triceps': Colors.orange,
+    'Biceps': Colors.pink,
+    'Front Delts': Colors.lightBlue,
+    'Side Delts': Colors.cyan,
+    'Rear Delts': Colors.teal,
+    'Trapezius': Colors.deepPurpleAccent,
+    'Forearms': Colors.purple,
+    'Lats': Colors.indigo,
+    'Erectors': Colors.lightGreen,
+    'Rhomboids': Colors.green,
+    'Lower Back': Colors.brown,
+    'Glutes': Colors.deepOrange,
+    'Quadriceps': Colors.yellow,
+    'Hamstrings': Colors.amber,
+    'Calves': Colors.lightGreen,
+    'Abdominals': Colors.lightBlueAccent,
+    'Obliques': Colors.blueGrey,
+    'Hip Flexors': Colors.lightBlue
+  };
 
+  return colors[key] ?? Colors.grey;
+}
 Map exerciseMuscles = {
 "Cable Pushdown": {
         "Primary": {
@@ -31,7 +59,7 @@ Map exerciseMuscles = {
         "Primary": {
             "Front Delts": 30,
             "Side Delts": 15,
-            "Trapezius": 35
+            "Traps": 35
         },
         "Secondary": {
             "Quadriceps": 10,
@@ -262,17 +290,7 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Roll Seated Shoulder Flexor Depresor Retractor FIX": {
-        "Primary": {
-            "Rear Delts": 20,
-            "Front Delts": 15,
-            "Upper Back": 35
-        },
-        "Secondary": {
-            "Chest": 30
-        },
-        "type": "Weighted"
-    },
+
     "Dumbbell Arnold Press": {
         "Primary": {
             "Front Delts": 50,
@@ -379,7 +397,7 @@ Map exerciseMuscles = {
     "Back Lever": {
         "Primary": {
             "Lats": 50,
-            "Rectus Abdominis": 30
+            "Abdominals": 30
         },
         "Secondary": {
             "Rear Delts": 20
@@ -465,7 +483,7 @@ Map exerciseMuscles = {
             "Arms": 30
         },
         "Secondary": {
-            "Rectus Abdominis": 30
+            "Abdominals": 30
         },
         "type": "Weighted"
     },
@@ -522,7 +540,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Biceps": 15,
-            "Trapezius": 10,
+            "Traps": 10,
             "Rhomboids": 5
         },
         "type": "Weighted"
@@ -530,7 +548,7 @@ Map exerciseMuscles = {
     "Wide Grip Seated Cable Row": {
         "Primary": {
             "Rhomboids": 50,
-            "Trapezius": 30
+            "Traps": 30
         },
         "Secondary": {
             "Biceps": 10,
@@ -553,7 +571,7 @@ Map exerciseMuscles = {
             "Upper Chest": 70
         },
         "Secondary": {
-            "Front Deltss": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -563,7 +581,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -573,7 +591,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -592,7 +610,7 @@ Map exerciseMuscles = {
             "Chest": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -602,7 +620,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -727,7 +745,7 @@ Map exerciseMuscles = {
             "Obliques": 60
         },
         "Secondary": {
-            "Rectus Abdominis": 40
+            "Abdominals": 40
         },
         "type": "bodyweight"
     },
@@ -785,7 +803,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -794,7 +812,7 @@ Map exerciseMuscles = {
             "Obliques": 60
         },
         "Secondary": {
-            "Rectus Abdominis": 40
+            "Abdominals": 40
         },
         "type": "Weighted"
     },
@@ -813,7 +831,7 @@ Map exerciseMuscles = {
             "Obliques": 70
         },
         "Secondary": {
-            "Rectus Abdominis": 30
+            "Abdominals": 30
         },
         "type": "Weighted"
     },
@@ -869,7 +887,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -914,7 +932,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -924,7 +942,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -942,8 +960,8 @@ Map exerciseMuscles = {
             "Side Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
-            "Front Deltss": 10
+            "Traps": 20,
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -958,7 +976,7 @@ Map exerciseMuscles = {
     },
     "Assisted Hanging Knee Raise": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -967,7 +985,7 @@ Map exerciseMuscles = {
     },
     "Hanging Leg Hip Raise": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -976,7 +994,7 @@ Map exerciseMuscles = {
     },
     "Leg Raise Hip Lift": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -1025,7 +1043,8 @@ Map exerciseMuscles = {
     },
     "Barbell Incline Row": {
         "Primary": {
-            "Upper Back": 60
+            "Rhomboids": 30,
+            "Traps": 30,
         },
         "Secondary": {
             "Biceps": 30,
@@ -1074,7 +1093,7 @@ Map exerciseMuscles = {
             "Lower Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -1122,7 +1141,7 @@ Map exerciseMuscles = {
     },
     "Hanging Toes to Bar": {
         "Primary": {
-            "Rectus Abdominis": 50,
+            "Abdominals": 50,
             "Lats": 30
         },
         "Secondary": {
@@ -1141,7 +1160,7 @@ Map exerciseMuscles = {
     },
     "Dumbbell Seated Front Raise": {
         "Primary": {
-            "Front Deltss": 70
+            "Front Delts": 70
         },
         "Secondary": {
             "Side Delts": 30
@@ -1168,10 +1187,10 @@ Map exerciseMuscles = {
     },
     "Barbell Shrug": {
         "Primary": {
-            "Trapezius": 80
+            "Traps": 80
         },
         "Secondary": {
-            "Upper Back": 20
+            "Rhomboids": 20
         },
         "type": "Weighted"
     },
@@ -1210,7 +1229,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1225,7 +1244,7 @@ Map exerciseMuscles = {
     },
     "Crunch (hands overhead)": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -1234,7 +1253,8 @@ Map exerciseMuscles = {
     },
     "Cable Seated High Row (V bar)": {
         "Primary": {
-            "Upper Back": 60
+            "Rhomboids": 30,
+            "Trapezius": 30
         },
         "Secondary": {
             "Rear Delts": 20,
@@ -1247,7 +1267,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "bodyweight"
     },
@@ -1256,8 +1276,8 @@ Map exerciseMuscles = {
             "Side Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
-            "Front Deltss": 10
+            "Traps": 20,
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1334,18 +1354,19 @@ Map exerciseMuscles = {
             "Chest": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
     "Cable One Arm Straight Back High Row (kneeling)": {
         "Primary": {
-            "Upper Back": 60
+            "Rhomboids": 30,
+            "Trapezius": 30
         },
         "Secondary": {
             "Rear Delts": 20,
             "Biceps": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -1404,7 +1425,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 30,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1434,7 +1455,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1445,7 +1466,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Lower Back": 10,
-            "Rectus Abdominis": 10
+            "Abdominals": 10
         },
         "type": "Weighted"
     },
@@ -1461,7 +1482,7 @@ Map exerciseMuscles = {
     },
     "Cable Upright Row": {
         "Primary": {
-            "Trapezius": 50,
+            "Traps": 50,
             "Side Delts": 40
         },
         "Secondary": {
@@ -1512,7 +1533,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1522,7 +1543,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1531,27 +1552,18 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
+            "Traps": 20,
             "Biceps": 10
         },
         "type": "Weighted"
     },
-    "Reverse Push up": {
-        "Primary": {
-            "Triceps": 60
-        },
-        "Secondary": {
-            "Chest": 30,
-            "Shoulders": 10
-        },
-        "type": "Weighted"
-    },
+
     "Dumbbell Low Fly": {
         "Primary": {
             "Lower Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -1635,7 +1647,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 15,
-            "Front Deltss": 5
+            "Front Delts": 5
         },
         "type": "Weighted"
     },
@@ -1654,7 +1666,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1710,7 +1722,7 @@ Map exerciseMuscles = {
             "Obliques": 60
         },
         "Secondary": {
-            "Rectus Abdominis": 40
+            "Abdominals": 40
         },
         "type": "Weighted"
     },
@@ -1795,7 +1807,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -1843,7 +1855,7 @@ Map exerciseMuscles = {
             "Inner Chest": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1873,7 +1885,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -1893,7 +1905,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -1921,16 +1933,17 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
     "Superman Row with Towel": {
         "Primary": {
-            "Upper Back": 50,
+            "Trapezius": 30,
             "Rear Delts": 30
         },
         "Secondary": {
+            "Rhomboids": 20,
             "Lower Back": 20
         },
         "type": "Weighted"
@@ -1967,7 +1980,7 @@ Map exerciseMuscles = {
     "Band face pull": {
         "Primary": {
             "Rear Delts": 60,
-            "Trapezius": 30
+            "Traps": 30
         },
         "Secondary": {
             "Rhomboids": 10
@@ -2037,7 +2050,7 @@ Map exerciseMuscles = {
             "Obliques": 60
         },
         "Secondary": {
-            "Rectus Abdominis": 40
+            "Abdominals": 40
         },
         "type": "Weighted"
     },
@@ -2112,7 +2125,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -2121,7 +2134,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
+            "Traps": 20,
             "Rhomboids": 10
         },
         "type": "Weighted"
@@ -2142,7 +2155,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2307,7 +2320,8 @@ Map exerciseMuscles = {
     },
     "Barbell Reverse Grip Incline Bench Row": {
         "Primary": {
-            "Upper Back": 60,
+            "Rhomboids": 30,
+            "Trapezius": 30,
             "Biceps": 30
         },
         "Secondary": {
@@ -2321,7 +2335,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -2330,7 +2344,7 @@ Map exerciseMuscles = {
             "Upper Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2348,7 +2362,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -2367,7 +2381,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
+            "Traps": 20,
             "Rhomboids": 10
         },
         "type": "Weighted"
@@ -2386,7 +2400,7 @@ Map exerciseMuscles = {
             "Upper Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2395,7 +2409,7 @@ Map exerciseMuscles = {
             "Upper Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2404,7 +2418,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -2413,8 +2427,8 @@ Map exerciseMuscles = {
             "Side Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
-            "Front Deltss": 10
+            "Traps": 20,
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -2489,7 +2503,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2534,7 +2548,7 @@ Map exerciseMuscles = {
     },
     "Cable Kneeling Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -2555,7 +2569,7 @@ Map exerciseMuscles = {
             "Upper Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2746,7 +2760,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 20,
             "Biceps": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -2830,7 +2844,7 @@ Map exerciseMuscles = {
             "Lower Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -2840,7 +2854,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 15,
-            "Front Deltss": 5
+            "Front Delts": 5
         },
         "type": "Weighted"
     },
@@ -2909,7 +2923,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 15,
-            "Front Deltss": 5
+            "Front Delts": 5
         },
         "type": "Weighted"
     },
@@ -2948,7 +2962,7 @@ Map exerciseMuscles = {
             "Side Delts": 30
         },
         "Secondary": {
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -2967,13 +2981,13 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "bodyweight"
     },
     "Cocoons": {
         "Primary": {
-            "Rectus Abdominis": 50,
+            "Abdominals": 50,
             "Obliques": 40
         },
         "Secondary": {
@@ -3002,7 +3016,7 @@ Map exerciseMuscles = {
     },
     "Seated Leg Raise": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -3034,7 +3048,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -3043,7 +3057,7 @@ Map exerciseMuscles = {
             "Lower Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -3113,7 +3127,7 @@ Map exerciseMuscles = {
     },
     "Dumbbell Crunch Up": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -3141,7 +3155,7 @@ Map exerciseMuscles = {
     },
     "Crunch (arms straight)": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -3163,7 +3177,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
+            "Traps": 20,
             "Rhomboids": 10
         },
         "type": "Weighted"
@@ -3204,13 +3218,13 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 20,
             "Biceps": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
     "Barbell Front Raise and Pullover": {
         "Primary": {
-            "Front Deltss": 40,
+            "Front Delts": 40,
             "Lats": 40
         },
         "Secondary": {
@@ -3235,7 +3249,7 @@ Map exerciseMuscles = {
             "Chest": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -3245,14 +3259,14 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 30,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
     "Cable Standing Face Pull (Rope)": {
         "Primary": {
             "Rear Delts": 60,
-            "Trapezius": 30
+            "Traps": 30
         },
         "Secondary": {
             "Biceps": 10
@@ -3274,7 +3288,7 @@ Map exerciseMuscles = {
             "Side Delts": 40
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -3353,7 +3367,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -3378,7 +3392,7 @@ Map exerciseMuscles = {
     },
     "Negative Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -3465,7 +3479,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -3513,7 +3527,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -3547,10 +3561,10 @@ Map exerciseMuscles = {
     },
     "Barbell Behind The Back Shrug": {
         "Primary": {
-            "Trapezius": 80
+            "Traps": 90
         },
         "Secondary": {
-            "Upper Back": 20
+            "Rhomboids": 10,
         },
         "type": "Weighted"
     },
@@ -3617,13 +3631,13 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
     "Vertical Leg Raise (on parallel bars)": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -3636,7 +3650,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -3742,7 +3756,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "banded"
     },
@@ -3752,7 +3766,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -3761,7 +3775,7 @@ Map exerciseMuscles = {
             "Upper Chest": 70
         },
         "Secondary": {
-            "Front Deltss": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -3799,7 +3813,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -3810,7 +3824,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 20,
             "Biceps": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -3848,7 +3862,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -3882,7 +3896,7 @@ Map exerciseMuscles = {
     },
     "Lever Seated Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -3952,7 +3966,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
+            "Traps": 20,
             "Rhomboids": 10
         },
         "type": "Weighted"
@@ -4020,7 +4034,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4031,7 +4045,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 20,
             "Biceps": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -4086,7 +4100,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -4120,7 +4134,7 @@ Map exerciseMuscles = {
     },
     "Dumbbell Seated Alternate Front Raise": {
         "Primary": {
-            "Front Deltss": 70
+            "Front Delts": 70
         },
         "Secondary": {
             "Side Delts": 30
@@ -4133,7 +4147,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4170,7 +4184,7 @@ Map exerciseMuscles = {
             "Lower Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -4312,7 +4326,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -4366,7 +4380,7 @@ Map exerciseMuscles = {
     },
     "Hanging Leg Raise": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -4408,7 +4422,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 20,
             "Biceps": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -4447,7 +4461,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4467,7 +4481,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4476,14 +4490,14 @@ Map exerciseMuscles = {
             "Side Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
-            "Front Deltss": 10
+            "Traps": 20,
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
     "Dumbbell Front Raise": {
         "Primary": {
-            "Front Deltss": 70
+            "Front Delts": 70
         },
         "Secondary": {
             "Side Delts": 30
@@ -4579,7 +4593,7 @@ Map exerciseMuscles = {
             "Upper Chest": 30
         },
         "Secondary": {
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4588,8 +4602,8 @@ Map exerciseMuscles = {
             "Side Delts": 70
         },
         "Secondary": {
-            "Trapezius": 20,
-            "Front Deltss": 10
+            "Traps": 20,
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4654,7 +4668,7 @@ Map exerciseMuscles = {
             "Chest": 80
         },
         "Secondary": {
-            "Front Deltss": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -4664,7 +4678,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Triceps": 20,
-            "Front Deltss": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4681,7 +4695,7 @@ Map exerciseMuscles = {
     },
     "Knee Touch Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -4690,7 +4704,7 @@ Map exerciseMuscles = {
     },
     "V up": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -4699,7 +4713,7 @@ Map exerciseMuscles = {
     },
     "Cable Standing Front Raise Variation": {
         "Primary": {
-            "Front Deltss": 70
+            "Front Delts": 70
         },
         "Secondary": {
             "Side Delts": 30
@@ -4718,10 +4732,10 @@ Map exerciseMuscles = {
     },
     "Barbell Wide Shrug": {
         "Primary": {
-            "Trapezius": 80
+            "Traps": 80
         },
         "Secondary": {
-            "Upper Back": 20
+            "Rhomboids": 20
         },
         "type": "Weighted"
     },
@@ -4746,8 +4760,9 @@ Map exerciseMuscles = {
     },
     "Barbell Rack Pull": {
         "Primary": {
-            "Upper Back": 50,
-            "Trapezius": 30
+            "Rhomboids": 20,
+            "Trapezius": 30,
+            "Erectors": 50
         },
         "Secondary": {
             "Hamstrings": 10,
@@ -4814,7 +4829,7 @@ Map exerciseMuscles = {
     },
     "Hanging Straight Leg Raise": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 40
@@ -4842,7 +4857,7 @@ Map exerciseMuscles = {
     },
     "Barbell Front Raise": {
         "Primary": {
-            "Front Deltss": 70
+            "Front Delts": 70
         },
         "Secondary": {
             "Side Delts": 30
@@ -4854,7 +4869,7 @@ Map exerciseMuscles = {
             "Rear Delts": 70
         },
         "Secondary": {
-            "Trapezius": 30
+            "Traps": 30
         },
         "type": "Weighted"
     },
@@ -4878,7 +4893,7 @@ Map exerciseMuscles = {
     },
     "Cable Standing Lift": {
         "Primary": {
-            "Trapezius": 50,
+            "Traps": 50,
             "Side Delts": 40
         },
         "Secondary": {
@@ -4901,7 +4916,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Rhomboids": 15,
-            "Trapezius": 15
+            "Traps": 15
         },
         "type": "Weighted"
     },
@@ -4919,7 +4934,7 @@ Map exerciseMuscles = {
             "Obliques": 80
         },
         "Secondary": {
-            "Rectus Abdominis": 20
+            "Abdominals": 20
         },
         "type": "Weighted"
     },
@@ -4945,7 +4960,7 @@ Map exerciseMuscles = {
             "Obliques": 80
         },
         "Secondary": {
-            "Rectus Abdominis": 20
+            "Abdominals": 20
         },
         "type": "bodyweight"
     },
@@ -4972,13 +4987,13 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Front Delts": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
     "Crunch (straight leg up)": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Hip Flexors": 20
@@ -5027,7 +5042,7 @@ Map exerciseMuscles = {
             "Hamstrings": 35
         },
         "Secondary": {
-            "Erector Spinae": 30
+            "Erectors": 30
         },
         "type": "Weighted"
     },
@@ -5036,8 +5051,8 @@ Map exerciseMuscles = {
             "Forearms": 50
         },
         "Secondary": {
-            "Trapezius": 25,
-            "Rectus Abdominis": 10,
+            "Traps": 25,
+            "Abdominals": 10,
             "Obliques": 15
         },
         "type": "Weighted"
@@ -5048,7 +5063,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Rhomboids": 10,
-            "Trapezius": 10,
+            "Traps": 10,
             "Biceps": 10
         },
         "type": "Weighted"
@@ -5093,7 +5108,7 @@ Map exerciseMuscles = {
     },
     "Incline Twisting Situp": {
         "Primary": {
-            "Rectus Abdominis": 35,
+            "Abdominals": 35,
             "Obliques": 35
         },
         "Secondary": {
@@ -5135,7 +5150,7 @@ Map exerciseMuscles = {
             "Obliques": 70
         },
         "Secondary": {
-            "Rectus Abdominis": 30
+            "Abdominals": 30
         },
         "type": "bodyweight"
     },
@@ -5179,7 +5194,7 @@ Map exerciseMuscles = {
     },
     "Lying Leg Raise": {
         "Primary": {
-            "Rectus Abdominis": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -5199,7 +5214,7 @@ Map exerciseMuscles = {
     },
     "Sit up": {
         "Primary": {
-            "Rectus Abdominis": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -5208,7 +5223,7 @@ Map exerciseMuscles = {
     },
     "Crunch (leg raise)": {
         "Primary": {
-            "Rectus Abdominis": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -5234,7 +5249,7 @@ Map exerciseMuscles = {
     },
     "Barbell Upright Row": {
         "Primary": {
-            "Trapezius": 30,
+            "Traps": 30,
             "Side Delts": 30
         },
         "Secondary": {
@@ -5265,7 +5280,7 @@ Map exerciseMuscles = {
     },
     "Weighted Seated Tuck Crunch on Floor": {
         "Primary": {
-            "Rectus Abdominis": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 15,
@@ -5289,7 +5304,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Rhomboids": 10,
-            "Trapezius": 10,
+            "Traps": 10,
             "Biceps": 10
         },
         "type": "Weighted"
@@ -5403,7 +5418,7 @@ Map exerciseMuscles = {
     },
     "Frog Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Hip Flexors": 10,
@@ -5413,7 +5428,7 @@ Map exerciseMuscles = {
     },
     "Tuck Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Hip Flexors": 10,
@@ -5493,7 +5508,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Glutes": 10,
             "Lower Back": 10,
-            "Erector Spinae": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -5510,7 +5525,7 @@ Map exerciseMuscles = {
     },
     "Cable Seated Crunch": {
         "Primary": {
-            "Rectus Abdominis": 80
+            "Abdominals": 80
         },
         "Secondary": {
             "Obliques": 20
@@ -5556,7 +5571,7 @@ Map exerciseMuscles = {
     },
     "Lever Total Abdominal Crunch": {
         "Primary": {
-            "Rectus Abdominis": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 15,
@@ -5567,10 +5582,11 @@ Map exerciseMuscles = {
     "Cable Incline Bench Row": {
         "Primary": {
             "Lats": 60,
-            "Upper Back": 20
+            "Rhomboids": 10,
+            "Trapezius": 10
         },
         "Secondary": {
-            "Rear Delts": 10,
+            "Rear Delts (Posterior Deltoids)": 10,
             "Biceps": 10
         },
         "type": "Weighted"
@@ -5581,7 +5597,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Lats": 15,
-            "Erector Spinae": 15
+            "Erectors": 15
         },
         "type": "Weighted"
     },
@@ -5609,7 +5625,7 @@ Map exerciseMuscles = {
             "Obliques": 70
         },
         "Secondary": {
-            "Rectus Abdominis": 30
+            "Abdominals": 30
         },
         "type": "bodyweight"
     },
@@ -5628,7 +5644,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Front Delts": 10,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -5781,7 +5797,7 @@ Map exerciseMuscles = {
             "Obliques": 70
         },
         "Secondary": {
-            "Rectus Abdominis": 30
+            "Abdominals": 30
         },
         "type": "bodyweight"
     },
@@ -5824,16 +5840,7 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Barbell Lying Close grip Triceps Extension": {
-        "Primary": {
-            "Triceps": 90
-        },
-        "Secondary": {
-            "Chest": 5,
-            "Shoulders": 5
-        },
-        "type": "Weighted"
-    },
+
     "Cable Rear Pulldown": {
         "Primary": {
             "Lats": 70
@@ -6017,7 +6024,7 @@ Map exerciseMuscles = {
     },
     "Captains Chair Straight Leg Raise": {
         "Primary": {
-            "Rectus Abdominis": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -6057,7 +6064,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Shoulders": 20
+            "Front Delts": 20
         },
         "type": "bodyweight"
     },
@@ -6083,7 +6090,7 @@ Map exerciseMuscles = {
     "Dumbbell High Curl": {
         "Primary": {
             "Side Delts": 50,
-            "Trapezius": 30
+            "Traps": 30
         },
         "Secondary": {
             "Biceps": 20
@@ -6138,7 +6145,7 @@ Map exerciseMuscles = {
     },
     "Bench Reverse Crunch Circle": {
         "Primary": {
-            "Rectus Abdominis": 60
+            "Abdominals": 60
         },
         "Secondary": {
             "Hip Flexors": 20,
@@ -6162,7 +6169,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 15,
             "Biceps": 20,
-            "Trapezius": 15
+            "Traps": 15
         },
         "type": "Weighted"
     },
@@ -6173,7 +6180,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rear Delts": 10,
             "Biceps": 20,
-            "Trapezius": 20
+            "Traps": 20
         },
         "type": "Weighted"
     },
@@ -6182,7 +6189,7 @@ Map exerciseMuscles = {
             "Rear Delts": 80
         },
         "Secondary": {
-            "Trapezius": 20
+            "Traps": 20
         },
         "type": "Weighted"
     },
@@ -6233,7 +6240,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -6244,7 +6251,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -6255,7 +6262,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -6266,7 +6273,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6277,7 +6284,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 35,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "banded"
     },
@@ -6288,7 +6295,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -6299,7 +6306,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6310,7 +6317,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6321,7 +6328,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6332,7 +6339,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6343,7 +6350,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "banded"
     },
@@ -6354,7 +6361,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -6365,7 +6372,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6376,7 +6383,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "bodyweight"
     },
@@ -6387,8 +6394,8 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 25,
             "Rhomboids": 15,
-            "Trapezius": 10,
-            "Rectus Abdominis": 10
+            "Traps": 10,
+            "Abdominals": 10
         },
         "type": "Weighted"
     },
@@ -6399,7 +6406,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Rhomboids": 15,
-            "Trapezius": 10
+            "Traps": 10
         },
         "type": "Weighted"
     },
@@ -6423,17 +6430,7 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Band Assisted Muscle up": {
-        "Primary": {
-            "Lats": 40,
-            "Biceps": 30
-        },
-        "Secondary": {
-            "Triceps": 20,
-            "Shoulders": 10
-        },
-        "type": "banded"
-    },
+
     "Barbell Bench Squat": {
         "Primary": {
             "Quads": 50,
@@ -6446,11 +6443,12 @@ Map exerciseMuscles = {
     },
     "Barbell Bent Over Wide Grip Row": {
         "Primary": {
-            "Upper Back": 60,
+            "Rhomboids": 30,
+            "Trapezius": 30,
             "Biceps": 30
         },
         "Secondary": {
-            "Rear Delts": 10
+            "Rear Delts (Posterior Deltoids)": 10
         },
         "type": "Weighted"
     },
@@ -6526,7 +6524,7 @@ Map exerciseMuscles = {
             "Chest": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6555,7 +6553,7 @@ Map exerciseMuscles = {
             "Biceps": 30
         },
         "Secondary": {
-            "Shoulders": 20
+            "Side Delts": 20
         },
         "type": "Weighted"
     },
@@ -6565,7 +6563,7 @@ Map exerciseMuscles = {
             "Biceps": 30
         },
         "Secondary": {
-            "Shoulders": 20
+            "Side Delts": 20
         },
         "type": "Weighted"
     },
@@ -6584,7 +6582,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Shoulders": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -6612,7 +6610,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6621,7 +6619,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6630,7 +6628,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6649,7 +6647,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6658,7 +6656,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6667,7 +6665,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6676,7 +6674,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6685,13 +6683,13 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
     "Cable Two Arm Lateral Raise": {
         "Primary": {
-            "Shoulders": 70
+            "Front Delts": 70
         },
         "Secondary": {
             "Traps": 30
@@ -6704,7 +6702,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Shoulders": 10
+            "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -6714,7 +6712,7 @@ Map exerciseMuscles = {
             "Chest": 30
         },
         "Secondary": {
-            "Shoulders": 10
+            "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -6724,7 +6722,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Chest": 30,
-            "Shoulders": 10
+            "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -6740,8 +6738,9 @@ Map exerciseMuscles = {
     },
     "Dumbbell Cuban Press": {
         "Primary": {
-            "Shoulders": 60,
-            "Upper Back": 30
+            "Side Delts": 40,
+            "Front Delts": 20,
+            "Traps": 30
         },
         "Secondary": {
             "Triceps": 10
@@ -6751,11 +6750,11 @@ Map exerciseMuscles = {
     "Dumbbell Devils Press": {
         "Primary": {
             "Chest": 40,
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "Secondary": {
             "Triceps": 20,
-            "Legs": 10
+            "Quads": 10
         },
         "type": "Weighted"
     },
@@ -6764,14 +6763,14 @@ Map exerciseMuscles = {
             "Chest": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
     "Dumbbell Incline Press on Exercise Ball": {
         "Primary": {
             "Chest": 50,
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "Secondary": {
             "Triceps": 20
@@ -6784,7 +6783,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Shoulders": 20
+            "Front Delts": 20
         },
         "type": "Weighted"
     },
@@ -6812,7 +6811,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6825,12 +6824,12 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbell Seated Reverse Grip One Arm Overhead Tricep Extension": {
+    "Dumbbell Seated Reverse Grip Tricep Extension": {
         "Primary": {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -6918,7 +6917,7 @@ Map exerciseMuscles = {
             "Triceps": 30
         },
         "Secondary": {
-            "Shoulders": 10
+            "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -6978,7 +6977,7 @@ Map exerciseMuscles = {
     },
     "Lying Leg Raise and Hold": {
         "Primary": {
-            "Abs": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -6997,7 +6996,7 @@ Map exerciseMuscles = {
     },
     "Machine Shoulder Press": {
         "Primary": {
-            "Shoulders": 60
+            "Front Delts": 60
         },
         "Secondary": {
             "Triceps": 30,
@@ -7093,7 +7092,7 @@ Map exerciseMuscles = {
     },
     "Seated Overhead Press (Barbell)": {
         "Primary": {
-            "Shoulders": 60
+            "Front Delts": 60
         },
         "Secondary": {
             "Triceps": 30,
@@ -7132,7 +7131,7 @@ Map exerciseMuscles = {
     },
     "Sit Up": {
         "Primary": {
-            "Abs": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -7150,7 +7149,7 @@ Map exerciseMuscles = {
     },
     "Smith Machine Standing Overhead Press": {
         "Primary": {
-            "Shoulders": 60
+            "Front Delts": 60
         },
         "Secondary": {
             "Triceps": 30,
@@ -7209,7 +7208,7 @@ Map exerciseMuscles = {
             "Triceps": 70
         },
         "Secondary": {
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "type": "Weighted"
     },
@@ -7225,7 +7224,7 @@ Map exerciseMuscles = {
     },
     "Weighted Crunch": {
         "Primary": {
-            "Abs": 70
+            "Abdominals": 70
         },
         "Secondary": {
             "Hip Flexors": 30
@@ -7235,7 +7234,7 @@ Map exerciseMuscles = {
     "Weighted Push Up": {
         "Primary": {
             "Chest": 50,
-            "Shoulders": 30
+            "Front Delts": 30
         },
         "Secondary": {
             "Triceps": 20
