@@ -26,7 +26,7 @@ class _AddworkoutState extends State<Addworkout> {
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   final Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   final Map<String, List<Map<String, TextEditingController>>> _controllers = {};
-
+  final Map<String, List<bool>> _checkBoxStates = {};
 
   @override
   void initState() {        
@@ -74,6 +74,7 @@ class _AddworkoutState extends State<Addworkout> {
     if (!_focusNodes.containsKey(exercise)) {
       _focusNodes[exercise] = [];
       _controllers[exercise] = [];
+      _checkBoxStates[exercise] = [];
     }
     while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
       final weightFocusNode = FocusNode();
@@ -101,6 +102,9 @@ class _AddworkoutState extends State<Addworkout> {
         'weight': TextEditingController(text: sets[exercise]![_focusNodes[exercise]!.length - 1]['weight'].toString()),
         'reps': TextEditingController(text: sets[exercise]![_focusNodes[exercise]!.length - 1]['reps'].toString()),
       });
+      _checkBoxStates[exercise]!.add(
+        false
+      );
     }
   }
   void preLoad() async{
@@ -205,6 +209,7 @@ class _AddworkoutState extends State<Addworkout> {
                         0: FlexColumnWidth(1),
                         1: FlexColumnWidth(2),
                         2: FlexColumnWidth(2),
+                        3: FlexColumnWidth(1),
                       },
                       children: [
                         const TableRow(
@@ -227,11 +232,17 @@ class _AddworkoutState extends State<Addworkout> {
                                 child: Text('Reps')
                               ),
                             ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3),
+                              child: Center(
+                                child: Icon(Icons.check)
+                              ),
+                            ),
                           ],
                         ),
                         for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
                         TableRow(
-                          decoration: BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
+                          decoration: _checkBoxStates[exercise]![i] ? BoxDecoration(color: const Color.fromARGB(255, 111, 223, 36).withAlpha(175)): BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
                           children: [
                             InkWell(
                               onTap: () {
@@ -295,8 +306,8 @@ class _AddworkoutState extends State<Addworkout> {
                                   const Text(
                                     '-',
                                     style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 30, // Adjust hint text size
+                                      color: Colors.white,
+                                      fontSize: 30,
                                     ),
                                   )
  
@@ -342,11 +353,23 @@ class _AddworkoutState extends State<Addworkout> {
                                 ),
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: Checkbox(
+                                checkColor: Colors.white,
+                                activeColor: Colors.green,
+                                value: _checkBoxStates[exercise]![i],
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _checkBoxStates[exercise]![i] = value!;
+                                  });
+                                },
+                              ),
+                            )
                           ],
                         )
                       ],
                     ),
-            
                     Center(
                       child: ElevatedButton(
                         onPressed: () {

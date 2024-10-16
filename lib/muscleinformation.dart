@@ -392,7 +392,7 @@ Map exerciseMuscles = {
             "Chest": 30,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Weighted"
     },
     "Back Lever": {
         "Primary": {
@@ -4796,7 +4796,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Weighted"
     },
     "Cable One Arm Wrist Curl": {
         "Primary": {
@@ -4880,7 +4880,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Weighted"
     },
     "EZ Barbell Reverse grip Preacher Curl": {
         "Primary": {
@@ -4908,7 +4908,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 20
         },
-        "type": "bodyweight"
+        "type": "Weighted"
     },
     "Cable Bent Over Row": {
         "Primary": {
@@ -6122,7 +6122,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "Weighted"
+        "type": "Bodyweight"
     },
     "Dumbbell Biceps Curl": {
         "Primary": {
@@ -6221,7 +6221,7 @@ Map exerciseMuscles = {
             "Triceps": 30,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Weighted"
     },
     "Assisted Tricep Dips": {
         "Primary": {
@@ -6231,7 +6231,7 @@ Map exerciseMuscles = {
             "Chest": 20,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Weighted"
     },
     "Weighted Neutral Grip Pull Up": {
         "Primary": {
