@@ -13,7 +13,7 @@ import 'package:share_plus/share_plus.dart';
 
     @override
     Widget build(BuildContext context) {
-      createSettings();
+      getAllSettings();
       return Scaffold(
         appBar: myAppBar(context, 'Settings'),
         body: Column(
@@ -164,7 +164,7 @@ class _GoalOptionsState extends State<GoalOptions> {
   }
 
   Future<String> getStartingPoint() async {
-    Map data = await getSettings();
+    Map data = await getAllSettings();
     return data['Day Goal'] ?? '';
   }
 
@@ -270,19 +270,6 @@ void resetDataButton(BuildContext context){
     writeData(data, path: 'settings', append: false);
   }
 
-  Future<Map> getSettings() async{
-    Map daata = await readData(path: 'settings');
-    return daata;
-  }
-  void createSettings() async{
-    Map data = await readData(path: 'settings');
-    if (data.isEmpty){
-      Map settings = {
-        'Day Goal' : '1'
-      };
-      writeData(settings, path: 'settings',append: false);
-    }
-  }
   void importData(BuildContext context) async{
   try {
     // Open file picker and allow the user to select a JSON file

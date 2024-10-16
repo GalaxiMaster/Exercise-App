@@ -26,7 +26,7 @@ class _ProfileState extends State<Profile> {
   }
 
   void _loadData() {
-    _futureData = Future.wait([getData(), getSettings()]);
+    _futureData = Future.wait([getData(), getAllSettings()]);
   }
 
   @override

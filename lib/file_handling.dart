@@ -58,7 +58,6 @@ Future<void> writeData(Map newData, {String path = 'output', bool append = true}
   }
 }
 
-
 Future<void> resetData(bool output, bool current, bool records) async {
   if (output){
     try {
@@ -93,6 +92,30 @@ Future<void> resetData(bool output, bool current, bool records) async {
       debugPrint('Error saving json file: $e');
     }
   }
+}
+
+Future<Map> getAllSettings() async{
+  Map settings = await readData(path: 'settings');
+  double defaultMuscleGoal = 30;
+  Map defaultSettings = {
+    'Day Goal' : '1',
+    'Muscle Goals': {
+      'Core': defaultMuscleGoal,
+      'Legs': defaultMuscleGoal,
+      'Chest': defaultMuscleGoal,
+      'Back': defaultMuscleGoal,
+      'Shoulders': defaultMuscleGoal,
+      'Arms': defaultMuscleGoal,
+    }
+  };
+  // check if the settings file has all of the right fields
+  for (String key in defaultSettings.keys){
+    if (!settings.containsKey(key)){
+      settings[key] = defaultSettings[key];
+    }
+  }
+  writeData(settings, path: 'settings',append: false);
+  return settings;
 }
 
 void deleteFile(String fileName) async{

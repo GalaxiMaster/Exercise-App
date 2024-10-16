@@ -1,3 +1,4 @@
+import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,16 @@ class RadarChartPage extends StatelessWidget {
   RadarChartPage({super.key, required this.sets});   
     @override
     Widget build(BuildContext context) {
+      // gather data dynamically
+      List<RadarEntry> data = [];
+      for (String group in muscleGroups.keys){
+        double total = 0;
+        for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
+          double muscleNum = (sets[muscleGroups[group]?[i]] ?? 0);
+            total += muscleNum;
+        }
+        data.add(RadarEntry(value: total));
+      }
       return Scaffold(
         appBar: myAppBar(context, 'Radar Chart'),
         body: Column(
@@ -22,14 +33,7 @@ class RadarChartPage extends StatelessWidget {
                             borderColor: Colors.blue,
                             borderWidth: 2,
                             entryRadius: 3,
-                            dataEntries: [
-                              RadarEntry(value: (sets['Lats'] ?? 0) + (sets['Erector Spinae'] ?? 0) + (sets['Rhomboids'] ?? 0) + (sets['Lower Back'] ?? 0).roundToDouble()), // Back
-                              RadarEntry(value: (sets['Pectorals'] ?? 0) + (sets['Pectorals (Upper)'] ?? 0) + (sets['Pectorals (Lower)'] ?? 0).roundToDouble()), // Chest
-                              RadarEntry(value: (sets['Front Delts'] ?? 0) + (sets['Side Delts'] ?? 0) + (sets['Posterior Delts'] ?? 0) + (sets['Trapezius'] ?? 0).roundToDouble()), // Shoulders
-                              RadarEntry(value: (sets['Biceps'] ?? 0) + (sets['Triceps'] ?? 0) + (sets['Forearms'] ?? 0) + (sets['Brachialis'] ?? 0).roundToDouble()), // Arms
-                              RadarEntry(value: (sets['Quadriceps'] ?? 0) + (sets['Hamstrings'] ?? 0) + (sets['Glutes'] ?? 0) + (sets['Calves'] ?? 0).roundToDouble()), // Legs
-                              RadarEntry(value: (sets['Rectus Abdominis'] ?? 0) + (sets['Obliques'] ?? 0) + (sets['Core'] ?? 0) + (sets['Hip Flexors'] ?? 0).roundToDouble()), // Core
-                            ]
+                            dataEntries: data
                           ),
                         ],
                         // radarBackgroundColor: Colors.transparent,
