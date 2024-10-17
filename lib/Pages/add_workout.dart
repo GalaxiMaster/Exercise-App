@@ -460,11 +460,18 @@ class _AddworkoutState extends State<Addworkout> {
                 leading: const Icon(Icons.delete, color: Colors.red),
                 title: const Text('Remove Set', style: TextStyle(color: Colors.red)),
                 onTap: () {
+                  debugPrint(sets[exercise].toString());
                   setState(() {
-                    if(setIndex == 0){
+                    if(setIndex == 0 && sets[exercise].length == 1){
                       sets.remove(exercise);
+                      _controllers.remove(exercise);
+                      _focusNodes.remove(exercise);
+                      _checkBoxStates.remove(exercise);
                     } else {
                       sets[exercise]?.removeAt(setIndex);
+                      _controllers[exercise]!.removeAt(setIndex);
+                      _focusNodes[exercise]!.removeAt(setIndex);
+                      _checkBoxStates[exercise]!.removeAt(setIndex);
                     }
                     updateExercises();
                   });

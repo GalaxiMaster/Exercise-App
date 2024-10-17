@@ -46,24 +46,24 @@ class ConfirmWorkout extends StatelessWidget {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 2.0, // Adjust to fit your needs
+                  childAspectRatio: 2.0,
                 ),
                 shrinkWrap: true,
-                padding: EdgeInsets.zero, // Remove padding around the GridView
-                physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                padding: EdgeInsets.zero,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   return Center(
                     child: Container(
                       width: 190,
                       padding: const EdgeInsets.all(8.0),
-                      margin: EdgeInsets.zero, // Remove margin
+                      margin: EdgeInsets.zero,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.blueAccent, // Border color
-                          width: 2.0, // Border width
+                          color: Colors.blueAccent,
+                          width: 2.0,
                         ),
-                        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min, // Keeps the column compact

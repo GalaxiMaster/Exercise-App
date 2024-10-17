@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:flutter/services.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
@@ -9,30 +7,15 @@ import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
 
-class MuscleTracking extends StatefulWidget {
+class MuscleTracking extends StatelessWidget {
   final Map setData;
   const MuscleTracking({super.key, required this.setData});
-
-  @override
-  _MuscleTrackingState createState() => _MuscleTrackingState();
-}
-
-class _MuscleTrackingState extends State<MuscleTracking> {
-  Map<String, dynamic>? muscleGoals;
-
-  void onGoalUpdate(String muscle, double newGoal) {
-    setState(() {
-      muscleGoals?[muscle] = newGoal;
-    });
-    // Persist the updated goal
-    writeMuscleGoal(muscle, newGoal);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: myAppBar(context, 'Muscle Tracking'),
-      body: FutureBuilder(
+      body: FutureBuilder<List>(
         future: getSetAmounts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,14 +23,7 @@ class _MuscleTrackingState extends State<MuscleTracking> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
-            // Initialize muscleGoals if it's null
-            muscleGoals ??= Map<String, dynamic>.from(snapshot.data![2]['Muscle Goals']);
-            return FlexibleMuscleLayout(
-              data: snapshot.data![0],
-              normalData: snapshot.data![1],
-              goals: muscleGoals!,
-              onGoalUpdate: onGoalUpdate,
-            );
+            return FlexibleMuscleLayout(data: snapshot.data![0], normalData: snapshot.data![1]);
           } else {
             return const Text('No data available');
           }
@@ -56,14 +32,11 @@ class _MuscleTrackingState extends State<MuscleTracking> {
     );
   }
 }
-// ignore: must_be_immutable
+
 class FlexibleMuscleLayout extends StatefulWidget {
   final Map data;
   final Map normalData;
-  Map goals;
-    final Function(String, double) onGoalUpdate;
-
-  FlexibleMuscleLayout({super.key, required this.data, required this.normalData, required this.goals, required this.onGoalUpdate});
+  const FlexibleMuscleLayout({super.key, required this.data, required this.normalData});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -72,12 +45,6 @@ class FlexibleMuscleLayout extends StatefulWidget {
 
 class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
   String? expandedMuscle;
-
-  void reloadState(){
-    setState(() {
-
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +63,7 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
               return ExpandedSetProgressTile(
                 muscle: muscle,
                 value: value,
-                goal: widget.goals[muscle],
+                goal: 30,
                 onTap: () => setState(() => expandedMuscle = null),
                 data: getMuscleSpecifics(widget.normalData, muscle),
               );
@@ -104,9 +71,8 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
               return SetProgressTile(
                 muscle: muscle,
                 value: value,
-                goal: widget.goals[muscle],
+                goal: 30,
                 onTap: () => setState(() => expandedMuscle = muscle),
-                onGoalUpdate: widget.onGoalUpdate,
               );
             }
           }).toList(),
@@ -131,27 +97,22 @@ Map getMuscleSpecifics(Map data, String muscle) {
 }
 }
 
-// ignore: must_be_immutable
 class SetProgressTile extends StatelessWidget {
   final String muscle;
   final double value;
-  double goal;
+  final double goal;
   final VoidCallback onTap;
-  final Function(String, double) onGoalUpdate;
 
-  SetProgressTile({
+  const SetProgressTile({
     super.key,
     required this.muscle,
     required this.value,
     required this.goal,
-    required this.onTap, 
-    required this.onGoalUpdate,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    double currentValue = 0.0;
-    
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -164,98 +125,9 @@ class SetProgressTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      muscle,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Set Goal: '),
-                              content: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 100),
-                                child: TextFormField(
-                                  inputFormatters: [
-                                    TextInputFormatter.withFunction((oldValue, newValue) {
-                                      try {
-                                        final text = newValue.text;
-                                        if (text.isEmpty) {
-                                          return newValue;
-                                        }
-                                        double? number = double.tryParse(text);
-                                        if (number == null) {
-                                          return oldValue;
-                                        }
-                                        if (number > 100) {
-                                          return oldValue;
-                                        }
-                                        if (text.contains('.')) {
-                                          var parts = text.split('.');
-                                          if (parts.length > 2 || parts[1].length > 1) {
-                                            return oldValue;
-                                          }
-                                        }
-                                        return newValue;
-                                      } catch (e) {
-                                        return oldValue;
-                                      }
-                                    }),
-                                  ],
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter a number';
-                                    }
-                                    int? number = int.tryParse(value);
-                                    if (number == null) {
-                                      return 'Please enter a valid number';
-                                    }
-                                    if (number < 1 || number > 100) {
-                                      return 'Please enter a number between 1 and 100';
-                                    }
-                                    return null;
-                                  },                                  
-                                  initialValue: goal.toString(),
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  decoration: const InputDecoration(
-                                    hintText: 'value...',
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey
-                                    )
-                                  ),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  onChanged: (value) {
-                                    currentValue = double.tryParse(value) ?? currentValue;
-                                  },
-                                ),
-                              ),
-                              
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Center(child: Text('OK', style: TextStyle(color: Colors.blue),)),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Dismiss the dialog
-                                    writeMuscleGoal(muscle, currentValue);
-                                    goal = currentValue;
-                                    onGoalUpdate(muscle, currentValue);
-                                  },
-                                ),
-                              ],
-                            );
-                          }
-                        );
-                      },
-                      child: const Icon(Icons.edit, size: 20)
-                    )
-                  ],
+                Text(
+                  muscle,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
@@ -316,7 +188,7 @@ class ExpandedSetProgressTile extends StatelessWidget {
                       child: SizedBox(
                         height: 150,
                         child: Stack(
-                          children: [
+                          children: [ 
                             PieChart(
                               PieChartData(
                                 centerSpaceRadius: 65,
@@ -359,7 +231,6 @@ class ExpandedSetProgressTile extends StatelessWidget {
     );
   }
 }
-
 class WeeklyProgressChart extends StatelessWidget {
   final String muscle;
   const WeeklyProgressChart({super.key, required this.muscle});
@@ -378,7 +249,7 @@ class WeeklyProgressChart extends StatelessWidget {
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: snapshot.data!.values.cast<num>().toList().reduce(max).toDouble(), // get the max value out of the array
+          maxY: 4, // TODO set this to something
           barTouchData: BarTouchData(enabled: false),
           titlesData: FlTitlesData(
             show: true,
@@ -421,8 +292,7 @@ class WeeklyProgressChart extends StatelessWidget {
   }
   });
 }
-
-Future<Map> getWeekData(String mainMuscle) async{
+  Future<Map> getWeekData(String mainMuscle) async{
   Map weekData = {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0}; // double format
   Map data = await readData();
   for (var day in data.keys){
@@ -450,41 +320,32 @@ Future<Map> getWeekData(String mainMuscle) async{
 }
 }
 
-void writeMuscleGoal(String muscle, double value) async{
-  Map settings = await getAllSettings();
-  settings['Muscle Goals'][muscle] = value;
-  writeData(settings, path: 'settings',append: false);
-}
-
-Future<List> getSetAmounts() async {
+  Future<List> getSetAmounts() async {
   Map data = {};
   Map muscleData = {};
     Map sets = await readData();
     for (var day in sets.keys){
-      Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
-
-      if (difference.inDays < 7){
-        for (var exercise in sets[day]['sets'].keys){
-          if (exerciseMuscles.containsKey(exercise)){
-            for (int i = 0; i < sets[day]['sets'][exercise].length; i++){
-              for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
-                if (muscleData.containsKey(muscle)){
-                  muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-                } else{
-                  muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-                }
-              }
-              for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
-                if (muscleData.containsKey(muscle)){
-                  muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-                } else{
-                  muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-                }
+      for (var exercise in sets[day]['sets'].keys){
+        if (exerciseMuscles.containsKey(exercise)){
+          // ignore: unused_local_variable
+          for (var set in sets[day]['sets'][exercise]){
+            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
+              } else{
+                muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
               }
             }
-          } else{
-            debugPrint('Unknown exercise: $exercise');
+            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
+              } else{
+                muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
+              }
+            }
           }
+        } else{
+          debugPrint('Unknown exercise: $exercise');
         }
       }
     }
@@ -492,17 +353,19 @@ Future<List> getSetAmounts() async {
     for (String group in muscleGroups.keys){
       for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
         double muscleNum = (muscleData[muscleGroups[group]?[i]] ?? 0);
+        if (muscleNum > 0){
           if (data[group] == null) {
             data[group] = 0;
           }
           data[group] += muscleNum;
+        }
       }
+      // data[group] = double.parse(data[group].toStringAsFixed(2));
     }
     List<MapEntry> entries = data.entries.toList();
     entries.sort((a, b) => b.value.compareTo(a.value));
     data = Map.fromEntries(entries);
-    Map settings = await getAllSettings();
-    return [data,  muscleData, settings];
+    return [data,  muscleData];
 
   }
 
@@ -551,6 +414,7 @@ class CaloriesSpeedometer extends StatelessWidget {
     );
   }
 }
+
 
 class SpeedometerPainter extends CustomPainter {
   final double progress;
