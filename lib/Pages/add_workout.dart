@@ -23,6 +23,7 @@ class _AddworkoutState extends State<Addworkout> {
   var preCsvData = {};
   Map records = {};
   Map sets = {};
+  Map<String, String> exerciseNotes = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   final Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   final Map<String, List<Map<String, TextEditingController>>> _controllers = {};
@@ -35,6 +36,7 @@ class _AddworkoutState extends State<Addworkout> {
       getPreviousWorkout().then((data) {
         setState(() {
           sets = data['sets'] ?? {};
+          exerciseNotes = data['stats']?['notes'] ?? {};
           if (sets.isNotEmpty){
             startTime = data['stats']['startTime'];
           }
@@ -107,6 +109,7 @@ class _AddworkoutState extends State<Addworkout> {
       );
     }
   }
+  
   void preLoad() async{
     records = await readData(path: 'records');
     preCsvData = await readData();
@@ -125,7 +128,7 @@ class _AddworkoutState extends State<Addworkout> {
       if (sets.isEmpty){
         resetData(false, true, false);
       }
-      writeData({'stats': {'startTime': startTime}, 'sets': sets}, path: 'current', append: false);
+      writeData({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets}, path: 'current', append: false);
     }
   }
 
@@ -142,7 +145,7 @@ class _AddworkoutState extends State<Addworkout> {
           iconWidth: 20,
           onTap: () {
             if (!widget.confirm){
-              confirmExercises(sets);
+              confirmExercises(sets, exerciseNotes);
             } else{
               Navigator.pop(context, sets);
             }
@@ -188,7 +191,7 @@ class _AddworkoutState extends State<Addworkout> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: TextFormField(
-                        // initialValue: 'Enter your notes here....',
+                        initialValue: exerciseNotes[exercise] ?? '',
                         decoration: const InputDecoration(
                           hintText: 'Enter your notes here...',
                           border: InputBorder.none,
@@ -197,9 +200,9 @@ class _AddworkoutState extends State<Addworkout> {
                             fontSize: 14,
                           )
                         ),
-                        onChanged: (value) { // TODO on hold due to a large amount of refactoring for it
-                          // sets[exercise]['notes'] = value;
-                          // updateExercises();
+                        onChanged: (value) {
+                          exerciseNotes[exercise] = value;
+                          updateExercises();
                         },
                       ),
                     ),
@@ -516,13 +519,13 @@ class _AddworkoutState extends State<Addworkout> {
   }
   
   
-  void confirmExercises(var sets){
+  void confirmExercises(var sets, Map<String, String> exerciseNotes){
     bool isNull = checkNulls(sets);
     if (isNull){
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ConfirmWorkout(sets: sets, startTime: startTime),
+          builder: (context) => ConfirmWorkout(sets: sets, startTime: startTime, exerciseNotes: exerciseNotes,),
         ),
       );
     } else {

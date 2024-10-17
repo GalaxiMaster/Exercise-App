@@ -5,10 +5,11 @@ import 'package:intl/intl.dart';
 class ConfirmWorkout extends StatelessWidget {
   final Map sets;
   final String startTime; 
+  final Map<String, String> exerciseNotes;
   const ConfirmWorkout({
     super.key,
     required this.sets,
-    required this.startTime,
+    required this.startTime, required this.exerciseNotes,
   });
 
   Map getStats(){
@@ -33,6 +34,7 @@ class ConfirmWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map stats = getStats();
+    Map<String, String> notes = exerciseNotes;
     List<String> messages = ['Weight lifted:', 'Sets Done:', 'Exercises Done:', 'Workout Time'];
     return Scaffold(
       appBar: AppBar(
@@ -87,9 +89,27 @@ class ConfirmWorkout extends StatelessWidget {
               ),
             ),
             //stats
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'notes...',
+                  labelText: 'Workout Notes',
+                  hintStyle: TextStyle(
+                    color: Colors.grey
+                  )
+                ),
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+                onChanged: (value) {
+                  notes['Workout'] = value;
+                },
+              ),
+            ),
             ElevatedButton( //confirm 
               onPressed: (){
-                saveExercises(sets, startTime);
+                saveExercises(sets, startTime, notes);
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
@@ -101,7 +121,7 @@ class ConfirmWorkout extends StatelessWidget {
     );
   }
 
-  void saveExercises(var exerciseList, String startTime) async {
+  void saveExercises(var exerciseList, String startTime, Map workoutNotes) async {
     String endTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
     String day = startTime.split(' ')[0];
     Map daata = await readData();
@@ -116,6 +136,7 @@ class ConfirmWorkout extends StatelessWidget {
       'stats' : {
         'startTime' : startTime,
         'endTime' : endTime,
+        'notes' : workoutNotes,
       },
       'sets' : exerciseList
       }
