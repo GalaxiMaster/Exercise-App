@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class ConfirmWorkout extends StatelessWidget {
   final Map sets;
   final String startTime; 
-  final Map<String, String> exerciseNotes;
+  final Map exerciseNotes;
   const ConfirmWorkout({
     super.key,
     required this.sets,
@@ -34,7 +34,7 @@ class ConfirmWorkout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map stats = getStats();
-    Map<String, String> notes = exerciseNotes;
+    Map notes = exerciseNotes;
     List<String> messages = ['Weight lifted:', 'Sets Done:', 'Exercises Done:', 'Workout Time'];
     return Scaffold(
       appBar: AppBar(

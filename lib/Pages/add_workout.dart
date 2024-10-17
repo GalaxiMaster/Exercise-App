@@ -23,7 +23,7 @@ class _AddworkoutState extends State<Addworkout> {
   var preCsvData = {};
   Map records = {};
   Map sets = {};
-  Map<String, String> exerciseNotes = {};
+  Map exerciseNotes = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   final Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   final Map<String, List<Map<String, TextEditingController>>> _controllers = {};
@@ -45,6 +45,7 @@ class _AddworkoutState extends State<Addworkout> {
       });
     }else {
       sets = widget.sets['sets'];
+      exerciseNotes = widget.sets['stats']?['notes'] ?? {};
     }
     preLoad();
     _initializeFocusNodesAndControllers();
@@ -519,7 +520,7 @@ class _AddworkoutState extends State<Addworkout> {
   }
   
   
-  void confirmExercises(var sets, Map<String, String> exerciseNotes){
+  void confirmExercises(var sets, Map exerciseNotes){
     bool isNull = checkNulls(sets);
     if (isNull){
       Navigator.push(

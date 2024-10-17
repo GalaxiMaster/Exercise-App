@@ -316,7 +316,7 @@ class _DayScreenState extends State<DayScreen> {
                             if (value == day) {
                               keyToRemove = key;
                             }
-                          });                                    
+                          });            
                           await deleteDay(day);
                           widget.dayData.remove(keyToRemove);
                           widget.reload();
@@ -346,6 +346,11 @@ class _DayScreenState extends State<DayScreen> {
               ),
             ),
             WorkoutStats(workout: day),
+            if (day['stats']?['notes']?['Workout'] != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text('Notes :${day['stats']?['notes']?['Workout']}'),
+              ),
             const Row(
               children: [
                 Padding(
