@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
@@ -26,48 +27,58 @@ class MainExercisesPage extends StatelessWidget {
                       itemCount: snapshot.data!.keys.length,
                       itemBuilder:  (context, index) {
                         String exercise = snapshot.data!.keys.toList()[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                          child: Row(
-                            children: [
-                              FutureBuilder<bool>(
-                                future: fileExists("Assets/Exercises/$exercise.png"),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return const CircularProgressIndicator(); // Loading state
-                                  } else if (snapshot.hasError) {
-                                    return const Icon(Icons.error); // Show error icon if something went wrong
-                                  } else if (snapshot.hasData && snapshot.data!) {
-                                    return Image.asset(
-                                      "Assets/Exercises/$exercise.png",
-                                      height: 50,
-                                      width: 50,
-                                    );
-                                  } else {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: SvgPicture.asset(
-                                        "Assets/profile.svg",
-                                        height: 35,
-                                        width: 35,
-                                      ),
-                                    );
-                                  }
-                                },
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseScreen(exercise: exercise,),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                  Text(exercise),
-                                  Text('${snapshot.data![snapshot.data!.keys.toList()[index]]} times')
-                                  ],
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                            child: Row(
+                              children: [
+                                FutureBuilder<bool>(
+                                  future: fileExists("Assets/Exercises/$exercise.png"),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return const CircularProgressIndicator(); // Loading state
+                                    } else if (snapshot.hasError) {
+                                      return const Icon(Icons.error); // Show error icon if something went wrong
+                                    } else if (snapshot.hasData && snapshot.data!) {
+                                      return Image.asset(
+                                        "Assets/Exercises/$exercise.png",
+                                        height: 50,
+                                        width: 50,
+                                      );
+                                    } else {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: SvgPicture.asset(
+                                          "Assets/profile.svg",
+                                          height: 35,
+                                          width: 35,
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
-                              ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios)
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                    Text(exercise),
+                                    Text('${snapshot.data![snapshot.data!.keys.toList()[index]]} times')
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                                const Icon(Icons.arrow_forward_ios)
+                              ],
+                            ),
                           ),
                         );
                       },

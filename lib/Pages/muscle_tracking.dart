@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -289,6 +288,11 @@ class ExpandedSetProgressTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // sort entries
+    List<MapEntry> entries = data.entries.toList();
+    entries.sort((a, b) => b.value.compareTo(a.value));
+    Map sortedData = Map.fromEntries(entries);
+
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -320,7 +324,7 @@ class ExpandedSetProgressTile extends StatelessWidget {
                             PieChart(
                               PieChartData(
                                 centerSpaceRadius: 65,
-                                sections: data.entries.map((entry) {
+                                sections: sortedData.entries.map((entry) {
                                   return PieChartSectionData(
                                     color: getColor(entry.key),
                                     value: entry.value,
@@ -336,8 +340,8 @@ class ExpandedSetProgressTile extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  for (int i = 0; i < data.keys.length; i++)
-                                  Text('${data.keys.toList()[i]} ${data.values.toList()[i]}', style: TextStyle(color: getColor(data.keys.toList()[i])),)
+                                  for (int i = 0; i < sortedData.keys.length; i++)
+                                  Text('${sortedData.keys.toList()[i]} ${sortedData.values.toList()[i].toStringAsFixed(2)}', style: TextStyle(color: getColor(sortedData.keys.toList()[i])),)
                                 ],
                               ),
                             )
@@ -378,7 +382,7 @@ class WeeklyProgressChart extends StatelessWidget {
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: snapshot.data!.values.cast<num>().toList().reduce(max).toDouble(), // get the max value out of the array
+          maxY: snapshot.data?.values.reduce((a, b) => a + b) ?? 10, // get the max value out of the array with snapshot.data!.values.cast<num>().toList().reduce(max).toDouble()
           barTouchData: BarTouchData(enabled: false),
           titlesData: FlTitlesData(
             show: true,

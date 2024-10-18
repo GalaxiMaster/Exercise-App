@@ -84,7 +84,7 @@ class MuscleData extends StatelessWidget {
               return PieChartSectionData(
                 color: getColor(entry.key),
                 value: entry.value,
-                title: entry.value > 5 ? '${entry.key}\n${entry.value}%' : '',
+                title: entry.value > 7.5 ? '${entry.key}\n${entry.value}%' : '',
                 radius: radius,
                 titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
               );

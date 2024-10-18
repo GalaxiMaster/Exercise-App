@@ -18,6 +18,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   List exerciseData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
+  String selector = 'volume';
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         .entries
         .map((entry) => FlSpot(
               entry.key.toDouble(), // Use the index as the X value
-              exerciseMuscles[widget.exercise]['type'] != 'bodyweight' ? double.parse(entry.value['weight'].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
+              exerciseMuscles[widget.exercise]['type'] != 'bodyweight' ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
             ))
         .toList();
     return Scaffold(
@@ -65,7 +66,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           lineBarsData: [
                             LineChartBarData(
                               spots: spots,
-                              // isCurved: true,
+                              // isCurved: true, // lets the graph be extrapolated, turned off due to incorrect points
                               color: Colors.blue,
                               barWidth: 3,
                               belowBarData: BarAreaData(show: false),
@@ -113,6 +114,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         ),
                       ),
                     ),
+                    Row(
+                      children: [
+                        selectorBox('Weight', selector == 'weight'),
+                        selectorBox('Volume', selector == 'volume'),
+                        selectorBox('Reps', selector == 'reps'),
+                      ],
+                    ),
                     const SizedBox(height: 20),
                     Text('Most weight : ${heaviestWeight['weight']}kg x ${heaviestWeight['reps']}'),
                     Text('Most volume : ${heaviestVolume['weight']}kg x ${heaviestVolume['reps']}'),
@@ -123,32 +131,81 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       ),
     );
   }
+  Widget selectorBox(String text, bool selected){
+    return GestureDetector(
+      onTap: () async{
+        setState(() {
+          switch(text){
+            case 'Weight': selector = 'weight';
+            case 'Volume': selector = 'volume';
+            case 'Reps': selector = 'reps';
+          }
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: selected ? Colors.blue : Colors.grey,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            child: Text(
+              text
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-Future<List> getStats(String target) async{
+Future<List> getStats(String target) async {
   Map data = await readData();
   List targetData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
-  for (var day in data.keys.toList().reversed){
-    for(var exercise in data[day]['sets'].keys){
-      if (exercise == target){      
-        for(var set in data[day]['sets'][exercise]){
-          set = {'weight' : double.parse(set['weight']), 'reps' : double.parse(set['reps']), 'type' : set['type'], 'date' : day};
-          targetData.add(set);
-          if (heaviestVolume.isEmpty){
-            heaviestVolume = set;
-          }else if(set['weight'] * set['reps'] > heaviestVolume['weight'] * heaviestVolume['reps']){
-            heaviestVolume = set;
+
+  for (var day in data.keys.toList().reversed) {
+    Map dayHeaviestWeight = {};
+    Map dayHeaviestVolume = {};
+
+    for (var exercise in data[day]['sets'].keys) {
+      if (exercise == target) {
+        for (var set in data[day]['sets'][exercise]) {
+          set = {
+            'weight': double.parse(set['weight']),
+            'reps': double.parse(set['reps']),
+            'type': set['type'],
+            'date': day,
+            'volume': double.parse(set['reps']) * double.parse(set['weight'])
+          };
+
+          if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {
+            dayHeaviestWeight = set;
           }
-          if (heaviestWeight.isEmpty){
-            heaviestWeight = set;
-          }else if(set['weight'] > heaviestWeight['weight']){
-            heaviestWeight = set;
-          }        
+
+          if (dayHeaviestVolume.isEmpty || set['volume'] > dayHeaviestVolume['volume']) {
+            dayHeaviestVolume = set;
+          }
+        }
+
+        if (dayHeaviestWeight.isNotEmpty) {
+          targetData.add(dayHeaviestWeight);
+        }
+
+        if (heaviestWeight.isEmpty || dayHeaviestWeight['weight'] > heaviestWeight['weight']) {
+          heaviestWeight = dayHeaviestWeight;
+        }
+
+        if (heaviestVolume.isEmpty || dayHeaviestVolume['volume'] > heaviestVolume['volume']) {
+          heaviestVolume = dayHeaviestVolume;
         }
       }
     }
   }
+
   return [targetData, heaviestWeight, heaviestVolume];
 }

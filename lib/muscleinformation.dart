@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 Map<String, List<String>> muscleGroups = {
-  'Back': ['Lats', 'Erectors', 'Rhomboids', 'Lower Back'],
+  'Back': ['Lats', 'Erectors', 'Rhomboids', 'Traps'],
   'Chest': ['Chest', 'Upper Chest', 'Lower Chest'],
-  'Shoulders': ['Front Delts', 'Side Delts', 'Rear Delts', 'Traps'],
+  'Shoulders': ['Front Delts', 'Side Delts', 'Rear Delts'],
   'Arms': ['Biceps', 'Triceps', 'Forearms', 'Brachialis'],
   'Legs': ['Quadriceps', 'Hamstrings', 'Glutes', 'Calves'],
   'Core': ['Abdominals', 'Obliques', 'Hip Flexors']
@@ -18,12 +18,11 @@ Color getColor(String key) {
     'Front Delts': Colors.lightBlue,
     'Side Delts': Colors.cyan,
     'Rear Delts': Colors.teal,
-    'Trapezius': Colors.deepPurpleAccent,
+    'Traps': Colors.deepPurpleAccent,
     'Forearms': Colors.purple,
     'Lats': Colors.indigo,
     'Erectors': Colors.lightGreen,
     'Rhomboids': Colors.green,
-    'Lower Back': Colors.brown,
     'Glutes': Colors.deepOrange,
     'Quadriceps': Colors.yellow,
     'Hamstrings': Colors.amber,
@@ -649,7 +648,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10,
+            "Erectors": 10,
             "Balance & Stability": 10
         },
         "type": "Weighted"
@@ -708,7 +707,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -755,7 +754,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1017,7 +1016,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1036,7 +1035,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10,
+            "Erectors": 10,
             "Balance": 10
         },
         "type": "Weighted"
@@ -1134,7 +1133,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10,
+            "Erectors": 10,
             "Balance": 10
         },
         "type": "Weighted"
@@ -1465,7 +1464,7 @@ Map exerciseMuscles = {
             "Hamstrings": 30
         },
         "Secondary": {
-            "Lower Back": 10,
+            "Erectors": 10,
             "Abdominals": 10
         },
         "type": "Weighted"
@@ -1637,7 +1636,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 10,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "banded"
     },
@@ -1732,7 +1731,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1760,7 +1759,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1770,7 +1769,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1780,7 +1779,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1866,7 +1865,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -1944,7 +1943,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Rhomboids": 20,
-            "Lower Back": 20
+            "Erectors": 20
         },
         "type": "Weighted"
     },
@@ -1989,7 +1988,7 @@ Map exerciseMuscles = {
     },
     "Superman": {
         "Primary": {
-            "Lower Back": 50
+            "Erectors": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -2146,7 +2145,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -2166,7 +2165,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -2266,7 +2265,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -2286,7 +2285,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -2673,7 +2672,7 @@ Map exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Lower Back": 10,
+            "Erectors": 10,
             "Balance": 10
         },
         "type": "Weighted"
@@ -2874,7 +2873,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Hamstrings": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -2913,7 +2912,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -3168,7 +3167,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -3309,7 +3308,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -3451,7 +3450,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -3499,7 +3498,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -3533,10 +3532,10 @@ Map exerciseMuscles = {
     },
     "EZ Barbell Standing Wide Grip Biceps Curl": {
         "Primary": {
-            "Biceps (outer head)": 70
+            "Biceps": 70
         },
         "Secondary": {
-            "Biceps (inner head)": 20,
+            "Biceps": 20,
             "Forearms": 10
         },
         "type": "Weighted"
@@ -3843,7 +3842,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -3948,7 +3947,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -4241,7 +4240,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -4689,7 +4688,7 @@ Map exerciseMuscles = {
             "Glutes": 20
         },
         "Secondary": {
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -4717,16 +4716,6 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Side Delts": 30
-        },
-        "type": "Weighted"
-    },
-    "Barbell Standing Wide Grip Biceps Curl": {
-        "Primary": {
-            "Biceps (outer head)": 70
-        },
-        "Secondary": {
-            "Biceps (inner head)": 20,
-            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -4851,7 +4840,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 10,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -4940,11 +4929,11 @@ Map exerciseMuscles = {
     },
     "Weighted Standing Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5174,21 +5163,21 @@ Map exerciseMuscles = {
     },
     "Cable Seated Floor One Arm Concentration Curl": {
         "Primary": {
-            "Biceps Brachii": 90
+            "Biceps": 90
         },
         "Secondary": {
             "Brachialis": 5,
-            "Forearm Flexors": 5
+            "Forearms": 5
         },
         "type": "Weighted"
     },
     "Dumbbell Seated Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5232,11 +5221,11 @@ Map exerciseMuscles = {
     },
     "Cable Lying Bicep Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5270,11 +5259,11 @@ Map exerciseMuscles = {
     },
     "Barbell Drag Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5290,11 +5279,11 @@ Map exerciseMuscles = {
     },
     "Dumbbell Incline Biceps Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5364,11 +5353,11 @@ Map exerciseMuscles = {
     },
     "Lever Biceps Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5464,10 +5453,10 @@ Map exerciseMuscles = {
     },
     "Dumbbell Standing One Arm Curl Over Incline Bench": {
         "Primary": {
-            "Biceps Brachii": 90
+            "Biceps": 90
         },
         "Secondary": {
-            "Brachialis, Forearm Flexors": 10
+            "Brachialis, Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5476,18 +5465,18 @@ Map exerciseMuscles = {
             "Brachialis": 70
         },
         "Secondary": {
-            "Biceps Brachii": 15,
-            "Forearm Flexors": 15
+            "Biceps": 15,
+            "Forearms": 15
         },
         "type": "Weighted"
     },
     "EZ bar Drag Bicep Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5507,19 +5496,17 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 10,
-            "Lower Back": 10,
-            "Erectors": 10
+            "Erectors": 20,
         },
         "type": "Weighted"
     },
     "Dumbbell Standing Zottman Preacher Curl": {
         "Primary": {
-            "Biceps Brachii": 25,
+            "Biceps": 25,
             "Brachialis": 25
         },
         "Secondary": {
-            "Forearm Flexors": 25,
-            "Forearm Extensors": 25
+            "Forearms": 50,
         },
         "type": "Weighted"
     },
@@ -5534,31 +5521,31 @@ Map exerciseMuscles = {
     },
     "Barbell Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
     "Cable Biceps Curl (SZ bar)": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
     "Dumbbell Incline Hammer Curl": {
         "Primary": {
             "Brachialis": 25,
-            "Biceps Brachii": 25
+            "Biceps": 25
         },
         "Secondary": {
-            "Forearm Flexors": 50
+            "Forearms": 50
         },
         "type": "Weighted"
     },
@@ -5631,7 +5618,7 @@ Map exerciseMuscles = {
     },
     "EZ Barbell Close Grip Preacher Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 20
@@ -5672,7 +5659,7 @@ Map exerciseMuscles = {
     "Dumbbell Hammer Curls (with arm blaster)": {
         "Primary": {
             "Brachialis": 50,
-            "Biceps Brachii": 50
+            "Biceps": 50
         },
         "Secondary": {},
         "type": "Weighted"
@@ -5742,7 +5729,7 @@ Map exerciseMuscles = {
             "Brachialis": 70
         },
         "Secondary": {
-            "Biceps Brachii": 30
+            "Biceps": 30
         },
         "type": "Weighted"
     },
@@ -5777,7 +5764,7 @@ Map exerciseMuscles = {
     },
     "EZ Barbell Standing Preacher Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 20
@@ -5787,7 +5774,7 @@ Map exerciseMuscles = {
     "Lever Hammer Grip Preacher Curl": {
         "Primary": {
             "Brachialis": 50,
-            "Biceps Brachii": 50
+            "Biceps": 50
         },
         "Secondary": {},
         "type": "Weighted"
@@ -5823,7 +5810,7 @@ Map exerciseMuscles = {
     },
     "EZ Barbell Spider Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 20
@@ -5871,11 +5858,11 @@ Map exerciseMuscles = {
     },
     "Dumbbell Lying Supine Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -5970,7 +5957,7 @@ Map exerciseMuscles = {
     "Dumbbell One Arm Hammer Preacher Curl": {
         "Primary": {
             "Brachialis": 50,
-            "Biceps Brachii": 50
+            "Biceps": 50
         },
         "Secondary": {},
         "type": "Weighted"
@@ -5987,7 +5974,7 @@ Map exerciseMuscles = {
     "Dumbbell One Arm Standing Hammer Curl": {
         "Primary": {
             "Brachialis": 50,
-            "Biceps Brachii": 50
+            "Biceps": 50
         },
         "Secondary": {},
         "type": "Weighted"
@@ -6033,18 +6020,18 @@ Map exerciseMuscles = {
     },
     "Cable Unilateral Bicep Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
     "Dumbbell Reverse grip Biceps Curl": {
         "Primary": {
             "Brachialis": 60,
-            "Biceps Brachii": 40
+            "Biceps": 40
         },
         "Secondary": {},
         "type": "Weighted"
@@ -6126,11 +6113,11 @@ Map exerciseMuscles = {
     },
     "Dumbbell Biceps Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 10,
-            "Forearm Flexors": 10
+            "Forearms": 10
         },
         "type": "Weighted"
     },
@@ -6155,7 +6142,7 @@ Map exerciseMuscles = {
     },
     "Dumbbell Preacher Curl": {
         "Primary": {
-            "Biceps Brachii": 80
+            "Biceps": 80
         },
         "Secondary": {
             "Brachialis": 20
@@ -6422,7 +6409,7 @@ Map exerciseMuscles = {
     },
     "Back Extensions": {
         "Primary": {
-            "Lower Back": 70
+            "Erectors": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -6458,7 +6445,7 @@ Map exerciseMuscles = {
             "Biceps": 30
         },
         "Secondary": {
-            "Lower Back": 20
+            "Erectors": 20
         },
         "type": "Weighted"
     },
@@ -6468,7 +6455,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -6515,7 +6502,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Glutes": 20,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -6906,7 +6893,7 @@ Map exerciseMuscles = {
             "Glutes": 60
         },
         "Secondary": {
-            "Lower Back": 30,
+            "Erectors": 30,
             "Hamstrings": 10
         },
         "type": "Weighted"
@@ -6986,7 +6973,7 @@ Map exerciseMuscles = {
     },
     "Machine Back Extension": {
         "Primary": {
-            "Lower Back": 70
+            "Erectors": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -7038,7 +7025,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Hamstrings": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "banded"
     },
@@ -7115,7 +7102,7 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Hamstrings": 30,
-            "Lower Back": 10
+            "Erectors": 10
         },
         "type": "Weighted"
     },
@@ -7313,5 +7300,26 @@ Map exerciseMuscles = {
             "Front Delts": 20
         },
         "type": "Weighted"
-    }
+    },
+    "Cable Pullover": {
+    "Primary": {
+        "Lats": 70
+    },
+    "Secondary": {
+        "Chest": 15,
+        "Triceps": 15
+    },
+    "type": "Weighted"
+  },
+  "Incline Chest Supported Row (Dumbbell)": {
+    "Primary": {
+        "Rhomboids": 50
+    },
+    "Secondary": {
+        "Lats": 20,
+        "Rear Delts": 15,
+        "Biceps": 15
+    },
+    "type": "Weighted"
+  }
 };
