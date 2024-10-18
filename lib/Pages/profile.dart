@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/muscle_data.dart';
@@ -18,6 +20,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
+  String graphSelector = 'sessions';
 
   @override
   void initState() {
@@ -27,13 +30,6 @@ class _ProfileState extends State<Profile> {
 
   void _loadData() {
     _futureData = Future.wait([getData(), getAllSettings()]);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Reload the data when dependencies change
-    _loadData();
   }
 
   @override
@@ -68,12 +64,23 @@ class _ProfileState extends State<Profile> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
-            final data = snapshot.data![0]; // Extract data
+            final data = snapshot.data![0][graphSelector]; // Extract data
             final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
             return Column(
               children: [
-                DataBarChart(data: data, goal: goal), // Pass the goal to DataBarChart
-
+                DataBarChart(data: data, goal: goal, selector: graphSelector), // Pass the goal to DataBarChart
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      selectorBox('Sessions', graphSelector == 'sessions'),
+                      selectorBox('Duration', graphSelector == 'duration'),
+                      selectorBox('Volume', graphSelector == 'volume'),
+                      selectorBox('Weight', graphSelector == 'weight'),
+                      selectorBox('Reps', graphSelector == 'reps'),
+                    ],
+                  ),
+                ),
                 SizedBox(
                   width: double.infinity,
                   child: GridView.builder(
@@ -113,17 +120,17 @@ class _ProfileState extends State<Profile> {
                           child: Container(
                             width: 190,
                             padding: const EdgeInsets.all(8.0),
-                            margin: EdgeInsets.zero, // Remove margin
+                            margin: EdgeInsets.zero,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: Colors.blueAccent, // Border color
-                                width: 2.0, // Border width
+                                color: Colors.blueAccent,
+                                width: 2.0,
                               ),
-                              borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min, // Keeps the column compact
-                              mainAxisAlignment: MainAxisAlignment.center, // Center content vertically
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   messages[index],
@@ -148,21 +155,63 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+  Widget selectorBox(String text, bool selected){
+    return GestureDetector(
+      onTap: () async{
+        setState(() {
+          switch(text){
+            case 'Sessions': graphSelector = 'sessions';
+            case 'Duration': graphSelector = 'duration';
+            case 'Weight': graphSelector = 'weight';
+            case 'Volume': graphSelector = 'volume';
+            case 'Reps': graphSelector = 'reps';
+          }
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: selected ? Colors.blue : Colors.grey,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            child: Text(
+              text
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 
 class DataBarChart extends StatelessWidget {
   final Map data;
   final double goal; // Add this to set the goal
+  final String selector;
+  
   const DataBarChart({
     super.key,
     required this.data,
-    required this.goal, // Set your goal value here
+    required this.goal, 
+    required this.selector, // Set your goal value here
   });
-
+  
   @override
   Widget build(BuildContext context) {
+    String unit = 'days';
     debugPrint(data.toString());
+    switch (selector){
+      case 'sessions': unit = 'days';
+      case 'duration': unit = 'h';
+      case 'volume': unit = 'kg';
+      case 'weight': unit = 'kg';
+      case 'reps': unit = '';
+    }
     return SizedBox(
       height: 200,
       child: Padding(
@@ -170,7 +219,7 @@ class DataBarChart extends StatelessWidget {
         child: BarChart(
           BarChartData(
             alignment: BarChartAlignment.spaceAround,
-            maxY: 7, // Ensure maxY is above your goal
+            maxY: data.values.cast<num>().toList().reduce(max).toDouble() < 7 ? 7 : autoRoundUp(data.values.cast<num>().toList().reduce(max).toDouble()), // Ensure maxY is above your goal
             barTouchData: BarTouchData(enabled: false),
             titlesData: FlTitlesData(
               show: true,
@@ -183,7 +232,7 @@ class DataBarChart extends StatelessWidget {
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  interval: 50,
+                  interval: 50000,
                   reservedSize: 50,
                   getTitlesWidget: (double value, TitleMeta meta) {
                     return Padding(
@@ -191,7 +240,7 @@ class DataBarChart extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          '${value.toInt()} days',
+                          '${value.toInt()} $unit',
                           style: const TextStyle(fontSize: 12),
                         ),
                       ),
@@ -243,6 +292,7 @@ class DataBarChart extends StatelessWidget {
             ),
             extraLinesData: ExtraLinesData(
               horizontalLines: [
+                if (selector == 'sessions')
                 HorizontalLine(
                   y: goal,
                   color: Colors.red, // Color of the goal line
@@ -281,39 +331,88 @@ class DataBarChart extends StatelessWidget {
   }
 }
 
-Future<Map> getData() async {
-  Map data = await readData();
-  Map weeks = {};
+  Future<Map> getData() async {
+    Map data = await readData();
+    Map weeks = {};
 
-  // Preload the last 8 Mondays
-  DateTime today = DateTime.now();
-  DateTime currentMonday = findMonday(today);
-  List last8Mondays = [];
+    // Preload the last 8 Mondays
+    DateTime today = DateTime.now();
+    DateTime currentMonday = findMonday(today);
 
-  for (int i = 0; i < 7; i++) {
-    DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
-    String day = DateFormat('MMM dd').format(monday);
-    weeks[day] = 0;
-    last8Mondays.add(day); // Store these Mondays to check against later
-  }
-  
-  // Process data
-  for (var day in data.keys) {
-    DateTime date = DateTime.parse(day.split(' ')[0]);
-    DateTime monday = findMonday(date); // Get the Monday of that week
-    String newDay = DateFormat('MMM dd').format(monday);
-
-    // Only process if the Monday is within the last 8 weeks
-    if (last8Mondays.contains(newDay)) {
-      weeks[newDay] = (weeks[newDay] ?? 0) + 1;
+    for (int i = 0; i < 7; i++) {
+      DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
+      String day = DateFormat('MMM dd').format(monday);
+      weeks[day] = 0;
     }
+
+
+    Map information = {
+      'sessions': getWeekData(data, Map.from(weeks)),
+      'duration': getDurationData(data, Map.from(weeks)),
+      'volume': getWeigtAndStufftData(data, Map.from(weeks), 'volume'),
+      'weight':getWeigtAndStufftData(data, Map.from(weeks), 'weight'),
+      'reps':getWeigtAndStufftData(data, Map.from(weeks), 'reps')
+    };
+    return information;
   }
 
-  return Map.fromEntries(weeks.entries.toList().reversed);
-}
+  Map getWeekData(Map data, Map weeks){
+    // Process data
+    for (var day in data.keys) {
+      DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
+      String formattedDate = DateFormat('MMM dd').format(monday);
 
-DateTime findMonday(DateTime date) {
-  int daysToSubtract = (date.weekday - DateTime.monday) % 7;
-  return date.subtract(Duration(days: daysToSubtract));
-}
+      // Only process if the Monday is within the last 8 weeks
+      if (weeks.keys.contains(formattedDate)) {
+        weeks[formattedDate] = (weeks[formattedDate] ?? 0) + 1;
+      }
+    }
 
+    return Map.fromEntries(weeks.entries.toList().reversed);
+  }
+
+  DateTime findMonday(DateTime date) {
+    int daysToSubtract = (date.weekday - DateTime.monday) % 7;
+    return date.subtract(Duration(days: daysToSubtract));
+  }
+
+  Map getWeigtAndStufftData(Map data, Map weeks, String selector){
+
+    for (var day in data.keys) {
+      DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
+      String formattedDate = DateFormat('MMM dd').format(monday);
+      // Only process if the Monday is within the last 8 weeks
+      if (weeks.keys.contains(formattedDate)) {
+        double dayWeight = 0;
+        for (String exercise in data[day]['sets'].keys){
+          for (Map set in data[day]['sets'][exercise]){
+            if (selector == 'volume'){
+              dayWeight += (double.parse(set['weight']) * double.parse(set['reps']));
+            }else{
+              dayWeight += double.parse(set[selector]);
+            }
+          }
+        }
+        weeks[formattedDate] = (weeks[formattedDate] ?? 0) + double.parse(dayWeight.toStringAsFixed(2));
+      }
+
+    }
+    return Map.fromEntries(weeks.entries.toList().reversed);
+  }
+
+    Map getDurationData(Map data, Map weeks){
+    // Process data
+    for (var day in data.keys) {
+      DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
+      String formattedDate = DateFormat('MMM dd').format(monday);
+
+      // Only process if the Monday is within the last 8 weeks
+      if (weeks.keys.contains(formattedDate)) {
+        Duration difference = DateTime.parse(data[day]['stats']['endTime']).difference(DateTime.parse(data[day]['stats']['startTime'])); // Calculate the difference
+        double hours = difference.inMinutes.toDouble() / 60;
+        weeks[formattedDate] = (weeks[formattedDate] ?? 0) + hours;
+      }
+    }
+
+    return Map.fromEntries(weeks.entries.toList().reversed);
+  }

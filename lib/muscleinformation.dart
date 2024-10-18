@@ -8,6 +8,7 @@ Map<String, List<String>> muscleGroups = {
   'Legs': ['Quadriceps', 'Hamstrings', 'Glutes', 'Calves'],
   'Core': ['Abdominals', 'Obliques', 'Hip Flexors']
 };
+
 Color getColor(String key) {
   var colors = {
     'Chest': Colors.red,
@@ -34,6 +35,7 @@ Color getColor(String key) {
 
   return colors[key] ?? Colors.grey;
 }
+
 Map exerciseMuscles = {
 "Cable Pushdown": {
         "Primary": {

@@ -1,4 +1,26 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+
+double autoRoundUp(double value) {
+  // Get the order of magnitude of the value
+  int magnitude = value.abs().toStringAsFixed(0).length - 1;
+
+  // Calculate the base factor (10^magnitude)
+  double factor = pow(10, magnitude).toDouble();
+
+  // Auto-detect step as 25% of the factor (this can be adjusted)
+  double step = factor / 4; 
+
+  // Round up to the nearest step
+  return (value / step).ceil() * step;
+}
+
+
+
+
+
+
+
 
 class MyIconButton extends StatefulWidget {
   final IconData icon;
