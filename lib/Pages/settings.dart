@@ -17,18 +17,13 @@ import 'package:share_plus/share_plus.dart';
       return Scaffold(
         appBar: myAppBar(context, 'Settings'),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSettingsBox(
-              icon: Icons.upload,
-              label: 'Export data',
-              function: exportJson,
-            ),
-            setttingDividor(),
+            settingsheader('Preferences'),
             _buildSettingsBox(
               icon: Icons.flag,
               label: 'Days per week goal',
               function: () {
-                // Wrap showBottomSheet in a VoidCallback function
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -37,17 +32,36 @@ import 'package:share_plus/share_plus.dart';
                 );
               },
             ),
-            setttingDividor(),
             _buildSettingsBox(
-              icon: Icons.refresh,
-              label: 'Reset data',
-              function: (){resetDataButton(context);},
+              icon: Icons.accessibility,
+              label: 'Measurements',
+              function: () {
+                
+                // showModalBottomSheet(
+                //   context: context,
+                //   builder: (context) {
+                //     return const GoalOptions();
+                //   },
+                // );
+              },
+            ),
+            // setttingDividor(),
+            settingsheader('Functions'),
+            _buildSettingsBox(
+              icon: Icons.upload,
+              label: 'Export data',
+              function: exportJson,
             ),
             setttingDividor(),
             _buildSettingsBox(
               icon: Icons.download,
               label: 'Import data',
               function: (){importData(context);},
+            ),
+            _buildSettingsBox(
+              icon: Icons.refresh,
+              label: 'Reset data',
+              function: (){resetDataButton(context);},
             ),
             setttingDividor(),
             _buildSettingsBox(
@@ -60,9 +74,25 @@ import 'package:share_plus/share_plus.dart';
       );
     }
 
-    Divider setttingDividor() => const Divider(
-          thickness: 1,
-          color: Colors.grey,
+    Padding settingsheader(String header) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Text(
+          header,
+          textAlign: TextAlign.left,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+            letterSpacing: .8
+          ),
+        ),
+      );
+    }
+
+    Divider setttingDividor() => Divider(
+          thickness: .3,
+          color: Colors.grey.withOpacity(0.5),
           height: 1,
         );
   }

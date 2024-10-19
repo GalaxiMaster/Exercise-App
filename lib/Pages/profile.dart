@@ -21,7 +21,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
   String graphSelector = 'sessions';
-
+  double selectedBarValue = 1; // set to 
+  String selectedBarWeekDistance = 'This week';
   @override
   void initState() {
     super.initState();
@@ -31,11 +32,21 @@ class _ProfileState extends State<Profile> {
   void _loadData() {
     _futureData = Future.wait([getData(), getAllSettings()]);
   }
+  void alterHeadingBar(double value, String week){
+    DateTime te = DateFormat('yyyy MMM dd').parse('2024 $week');
+    var test = DateTime.now().difference(te).inDays;
+    int distanceInWeeks = (test / 7).ceil();
+    setState(() {
+      selectedBarValue = value;
+      selectedBarWeekDistance = distanceInWeeks == 1 ? 'This week' : '$distanceInWeeks weeks';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
     return Scaffold(
+
       appBar: myAppBar(context, 'Profile', 
         button: MyIconButton(
           icon: Icons.settings,
@@ -66,9 +77,51 @@ class _ProfileState extends State<Profile> {
           } else if (snapshot.hasData) {
             final data = snapshot.data![0][graphSelector]; // Extract data
             final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
+            selectedBarValue = data.values.toList()[data.values.toList().length-1].toDouble(); // get most recent week value
             return Column(
               children: [
-                DataBarChart(data: data, goal: goal, selector: graphSelector), // Pass the goal to DataBarChart
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '$selectedBarValue $graphSelector',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              selectedBarWeekDistance,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ]
+                      ),
+                      const Row(
+                        children: [
+                          Text(
+                            'Last 8 weeks',
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                DataBarChart(data: data, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -122,11 +175,12 @@ class _ProfileState extends State<Profile> {
                             padding: const EdgeInsets.all(8.0),
                             margin: EdgeInsets.zero,
                             decoration: BoxDecoration(
+                              color: Colors.blueAccent.withOpacity(0.9),
                               border: Border.all(
-                                color: Colors.blueAccent,
+                                // color: Colors.blueAccent.withOpacity(0.6),
                                 width: 2.0,
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
+                              borderRadius: BorderRadius.circular(50),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -193,12 +247,14 @@ class DataBarChart extends StatelessWidget {
   final Map data;
   final double goal; // Add this to set the goal
   final String selector;
+  final Function alterHeadingBar;
   
   const DataBarChart({
     super.key,
     required this.data,
     required this.goal, 
-    required this.selector, // Set your goal value here
+    required this.selector, 
+    required this.alterHeadingBar,
   });
   
   @override
@@ -220,7 +276,20 @@ class DataBarChart extends StatelessWidget {
           BarChartData(
             alignment: BarChartAlignment.spaceAround,
             maxY: data.values.cast<num>().toList().reduce(max).toDouble() < 7 ? 7 : autoRoundUp(data.values.cast<num>().toList().reduce(max).toDouble()), // Ensure maxY is above your goal
-            barTouchData: BarTouchData(enabled: false),
+            barTouchData: BarTouchData(
+              touchCallback: (FlTouchEvent event, BarTouchResponse? touchResponse) {
+                if (event is FlTapUpEvent && touchResponse != null && touchResponse.spot != null) {
+                  final int index = touchResponse.spot!.touchedBarGroupIndex;
+                  final String weekLabel = data.keys.toList()[index];
+                  final double value = touchResponse.spot!.touchedRodData.toY;
+                  
+                  // Use a post-frame callback to update the state
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    alterHeadingBar(value, weekLabel);
+                  });
+                }
+              },
+            ),
             titlesData: FlTitlesData(
               show: true,
               topTitles: const AxisTitles(
