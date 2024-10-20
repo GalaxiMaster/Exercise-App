@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/muscle_data.dart';
@@ -21,8 +20,9 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
   String graphSelector = 'sessions';
-  double selectedBarValue = 1; // set to 
+  num selectedBarValue = 1; // set to 
   String selectedBarWeekDistance = 'This week';
+  String unit = 'days';
   @override
   void initState() {
     super.initState();
@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
     var test = DateTime.now().difference(te).inDays;
     int distanceInWeeks = (test / 7).ceil();
     setState(() {
-      selectedBarValue = value;
+      selectedBarValue = numParsething(value);
       selectedBarWeekDistance = distanceInWeeks == 1 ? 'This week' : '$distanceInWeeks weeks';
     });
   }
@@ -45,8 +45,14 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
+    switch (graphSelector){
+      case 'sessions': unit = 'days';
+      case 'duration': unit = 'h';
+      case 'volume': unit = 'kg';
+      case 'weight': unit = 'kg';
+      case 'reps': unit = 'reps';
+    }
     return Scaffold(
-
       appBar: myAppBar(context, 'Profile', 
         button: MyIconButton(
           icon: Icons.settings,
@@ -77,7 +83,7 @@ class _ProfileState extends State<Profile> {
           } else if (snapshot.hasData) {
             final data = snapshot.data![0][graphSelector]; // Extract data
             final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
-            selectedBarValue = data.values.toList()[data.values.toList().length-1].toDouble(); // get most recent week value
+            selectedBarValue = numParsething(data.values.toList()[data.values.toList().length-1]); // get most recent week value
             return Column(
               children: [
                 Padding(
@@ -90,7 +96,7 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '$selectedBarValue $graphSelector',
+                            '$selectedBarValue $unit',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -242,6 +248,9 @@ class _ProfileState extends State<Profile> {
   }
 }
 
+num numParsething(var number){
+  return number % 1 == 0 ? number.truncate() : number;
+}
 
 class DataBarChart extends StatelessWidget {
   final Map data;
@@ -266,8 +275,9 @@ class DataBarChart extends StatelessWidget {
       case 'duration': unit = 'h';
       case 'volume': unit = 'kg';
       case 'weight': unit = 'kg';
-      case 'reps': unit = '';
+      case 'reps': unit = 'reps';
     }
+
     return SizedBox(
       height: 200,
       child: Padding(
@@ -285,7 +295,7 @@ class DataBarChart extends StatelessWidget {
                   
                   // Use a post-frame callback to update the state
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    alterHeadingBar(value, weekLabel);
+                    alterHeadingBar(value, weekLabel, unit);
                   });
                 }
               },

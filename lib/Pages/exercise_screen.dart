@@ -1,7 +1,12 @@
+import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:xml/xml.dart' as xml;
 
 // ignore: must_be_immutable
 class ExerciseScreen extends StatefulWidget {
@@ -19,13 +24,20 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Map heaviestWeight = {};
   Map heaviestVolume = {};
   String selector = 'volume';
+  String week = '';
+  num graphvalue = 0;
 
   @override
   void initState() {
     super.initState();
     _loadHighlightedDays();
   }
-
+  void alterHeadingBar(double value, String weekt){
+    setState(() {
+      graphvalue = numParsething(value);
+      week = DateFormat('MMM dd').format(DateTime.parse(weekt.split(' ')[0]));
+    });
+  }
   Future<void> _loadHighlightedDays() async {
     var data = await getStats(widget.exercise);
     debugPrint(data.toString());
@@ -40,7 +52,16 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List dates = exerciseData.map((data) => data['date'].split(' ')[0]).toList();
+    final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+    final List values = exerciseData.map((data) => data[selector]).toList();
+    if (dates.isNotEmpty){
+      if (week == ''){
+        week = DateFormat('MMM dd').format(DateTime.parse(dates[dates.length - 1].split(' ')[0]));
+      }
+      if (graphvalue == 0){
+        graphvalue = numParsething(values[values.length - 1]);
+      }
+    }
     final List<FlSpot> spots = exerciseData
         .asMap()
         .entries
@@ -49,16 +70,103 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               exerciseMuscles[widget.exercise]['type'] != 'bodyweight' ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
             ))
         .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.exercise),
       ),
-      body: Center(
-        child: spots.isNotEmpty
-            ? Padding(
+      body: spots.isNotEmpty
+          ? SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    BodyHeatMap(assetPath: 'Assets/Muscle_heatmap.svg', exercise: widget.exercise,),
+            
+                    const Text(
+                      'Primary muscles:',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal, // Set the direction to horizontal
+                        itemCount: exerciseMuscles[widget.exercise]['Primary'].keys.toList().length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
+                            child: Text('${exerciseMuscles[widget.exercise]['Primary'].values.toList()[index]}% ${exerciseMuscles[widget.exercise]['Primary'].keys.toList()[index]}'),
+                          );
+                        },
+                      ),
+                    ),
+                    const Text(
+                      'Secondary muscles:',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal, // Set the direction to horizontal
+                        itemCount: exerciseMuscles[widget.exercise]['Secondary'].keys.toList().length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
+                            child: Text('${exerciseMuscles[widget.exercise]['Secondary'].values.toList()[index]}% ${exerciseMuscles[widget.exercise]['Secondary'].keys.toList()[index]}'),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '$graphvalue kg',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                  
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text(
+                                    week,
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Last 8 weeks',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                     SizedBox(
                       height: 300,
                       child: LineChart(
@@ -72,6 +180,47 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               belowBarData: BarAreaData(show: false),
                             ),
                           ],
+                          lineTouchData: LineTouchData(  
+                            handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
+                            touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                              debugPrint(touchResponse?.lineBarSpots.toString());
+                              if (event is FlTapUpEvent) {
+                                final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
+                                const double minX = 0;
+                                final double maxX = (dates.length - 1).toDouble(); 
+                                const chartWidth = 420.0;
+                                final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
+                                
+                                debugPrint('Touched X-axis value: $touchedXValue');}
+                              if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
+                                // Find the nearest point (spot) the user interacted with
+                                final touchedSpot = touchResponse.lineBarSpots!.first;
+                  
+                                // Get the index and value of the touched spot
+                                final int index = touchedSpot.spotIndex;
+                                final String weekLabel = dates[index]; // Assuming 'dates' is a list of labels for each X point
+                                final double value = touchedSpot.y; // Y value at the touched point
+                  
+                                // Use post-frame callback to ensure state/UI updates occur after the touch event
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  alterHeadingBar(value, weekLabel); // Trigger your heading update function
+                                });
+                              }
+                            },
+                            getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+                              return spotIndexes.map((index) {
+                                // Draw a vertical line from the top to the bottom of the chart at the X-axis of the touched spot
+                                return const TouchedSpotIndicatorData(
+                                  FlLine(
+                                    color: Colors.blue,      // Vertical line color
+                                    strokeWidth: 2,          // Vertical line thickness
+                                  ),
+                                  FlDotData(show: true),     // Optionally show a dot at the touched point
+                                );
+                              }).toList();
+                            },
+                          ),
+                  
                           titlesData: FlTitlesData(
                             topTitles: const AxisTitles(
                               sideTitles: SideTitles(showTitles: false),
@@ -85,12 +234,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                 getTitlesWidget: (value, _) {
                                   return SideTitleWidget(
                                     axisSide: AxisSide.bottom,
-                                    child: Transform.rotate(
-                                      angle: -40 * 3.14159 / 180, // Tilt by 60 degrees
-                                      child: Text(
-                                        dates[value.toInt()],
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
+                                    child: Text(
+                                      DateFormat('MMM dd').format(DateTime.parse(dates[value.toInt()].split(' ')[0])),
+                                      style: const TextStyle(fontSize: 12),
                                     ),
                                   );
                                 },
@@ -114,6 +260,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         ),
                       ),
                     ),
+                    if (exerciseMuscles[widget.exercise]['type'] != 'bodyweight')
                     Row(
                       children: [
                         selectorBox('Weight', selector == 'weight'),
@@ -122,13 +269,17 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
+                    if (exerciseMuscles[widget.exercise]['type'] != 'bodyweight')
                     Text('Most weight : ${heaviestWeight['weight']}kg x ${heaviestWeight['reps']}'),
+                    if (exerciseMuscles[widget.exercise]['type'] != 'bodyweight')
                     Text('Most volume : ${heaviestVolume['weight']}kg x ${heaviestVolume['reps']}'),
+                    if (exerciseMuscles[widget.exercise]['type'] == 'bodyweight')
+                    Text('Highest reps: ${numParsething(heaviestVolume['reps'])}'),
                   ],
                 ),
-            )
-            : const Text("No data available"),
-      ),
+            ),
+          )
+          : const Text("No data available"),
     );
   }
   Widget selectorBox(String text, bool selected){
@@ -161,6 +312,95 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
 }
+extension ColorExtension on Color {
+  String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
+}
+class BodyHeatMap extends StatefulWidget {
+  final String assetPath;
+  final double width;
+  final String exercise;
+
+  const BodyHeatMap({
+    super.key,
+    required this.assetPath,
+    this.width = 500, 
+    required this.exercise,
+  });
+
+  @override
+  _BodyHeatMapState createState() => _BodyHeatMapState();
+}
+
+class _BodyHeatMapState extends State<BodyHeatMap> {
+  String? modifiedSvgString;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAndModifySvg();
+  }
+
+  Future<void> _loadAndModifySvg() async {
+    try {
+      Map<String, List<dynamic>> musclesMap = {};
+      for (MapEntry muscle in exerciseMuscles[widget.exercise]['Primary'].entries){
+        musclesMap[muscle.key] = [muscle.value/100, Colors.red];
+      }
+      for (MapEntry muscle in exerciseMuscles[widget.exercise]['Secondary'].entries){
+        musclesMap[muscle.key] = [muscle.value/100, Colors.red];
+      }
+      String modifiedSvg = await modifySvgPaths(widget.assetPath, musclesMap);
+      debugPrint(modifiedSvg);
+      setState(() {
+        modifiedSvgString = modifiedSvg;
+      });
+    } catch (e) {
+      debugPrint('Error loading or modifying SVG: $e');
+      // Handle error (e.g., show error message to user)
+    }
+  }
+
+    Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatMap) async {
+    // Load the SVG file
+    String svgString = await rootBundle.loadString(assetPath);
+    
+    // Parse the SVG string
+    final document = xml.XmlDocument.parse(svgString);
+    
+    heatMap.forEach((className, values) {
+      if (values.length != 2 || values[0] is! double || values[1] is! Color) {
+        throw ArgumentError('Invalid heat map data for $className');
+      }
+      
+      double opacity = values[0] as double;
+      Color color = values[1] as Color;
+      
+      // Find all paths with the specified class
+      final paths = document.findAllElements('path')
+          .where((element) => element.getAttribute('class')?.contains(className) ?? false);
+      
+      for (var path in paths) {
+        // Update the fill color and opacity
+        path.setAttribute('fill', color.toHex());
+        path.setAttribute('fill-opacity', opacity.toString());
+      }
+    });
+    
+    // Convert the modified document back to a string
+    return document.toXmlString(pretty: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return modifiedSvgString != null
+        ? SvgPicture.string(
+            modifiedSvgString!,
+            width: widget.width,
+          )
+        : CircularProgressIndicator();
+  }
+}
+
 
 Future<List> getStats(String target) async {
   Map data = await readData();
