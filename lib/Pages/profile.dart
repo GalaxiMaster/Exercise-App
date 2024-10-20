@@ -20,7 +20,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
   String graphSelector = 'sessions';
-  num selectedBarValue = 1; // set to 
+  num? selectedBarValue = 1; // set to 
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
   @override
@@ -38,7 +38,7 @@ class _ProfileState extends State<Profile> {
     int distanceInWeeks = (test / 7).ceil();
     setState(() {
       selectedBarValue = numParsething(value);
-      selectedBarWeekDistance = distanceInWeeks == 1 ? 'This week' : '$distanceInWeeks weeks';
+      selectedBarWeekDistance = distanceInWeeks == 0 ? 'This week' : '$distanceInWeeks weeks ago';
     });
   }
 
@@ -83,7 +83,7 @@ class _ProfileState extends State<Profile> {
           } else if (snapshot.hasData) {
             final data = snapshot.data![0][graphSelector]; // Extract data
             final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
-            selectedBarValue = numParsething(data.values.toList()[data.values.toList().length-1]); // get most recent week value
+            selectedBarValue ??= numParsething(data.values.toList()[data.values.toList().length-1]);
             return Column(
               children: [
                 Padding(
@@ -96,7 +96,7 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '$selectedBarValue $unit',
+                            '${selectedBarValue} $unit',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -295,7 +295,7 @@ class DataBarChart extends StatelessWidget {
                   
                   // Use a post-frame callback to update the state
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    alterHeadingBar(value, weekLabel, unit);
+                    alterHeadingBar(value, weekLabel);
                   });
                 }
               },
