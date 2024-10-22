@@ -304,6 +304,7 @@ class _DayScreenState extends State<DayScreen> {
                           );
                           if (result != null){
                             day['sets'] = result;
+                            editDay(day);
                             setState(() {});
                           }
                         case 'Share':
@@ -396,6 +397,19 @@ class _DayScreenState extends State<DayScreen> {
     if (dayKey == ''){return false;}
     Map data = await readData();
     data.remove(dayKey);
+    writeData(data, append: false);
+    return true;
+  }
+    Future<bool> editDay(Map day) async{
+    String dayKey = '';
+    widget.dayData.forEach((key, value) {
+      if (value == day) {
+        dayKey = key;
+      }
+    });
+    if (dayKey == ''){return false;}
+    Map data = await readData();
+    data[dayKey]['sets'] = day['sets'];
     writeData(data, append: false);
     return true;
   }
