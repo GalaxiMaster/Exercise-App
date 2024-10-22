@@ -76,7 +76,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final List values = exerciseData.map((data) => data[selector]).toList();
     if (dates.isNotEmpty){
       if (week == ''){
-        week = DateFormat('MMM dd').format(DateTime.parse(dates[dates.length - 1].split(' ')[0]));
+        week = dates[dates.length - 1];
       }
       if (graphvalue == 0){
         graphvalue = numParsething(values[values.length - 1]);
