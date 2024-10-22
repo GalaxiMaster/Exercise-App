@@ -24,6 +24,7 @@ class _AddworkoutState extends State<Addworkout> {
   Map records = {};
   Map sets = {};
   Map exerciseNotes = {};
+  Map settings = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   final Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   final Map<String, List<Map<String, TextEditingController>>> _controllers = {};
@@ -114,6 +115,7 @@ class _AddworkoutState extends State<Addworkout> {
   void preLoad() async{
     records = await readData(path: 'records');
     preCsvData = await readData();
+    settings = await getAllSettings();
     setState(() {}); // Update UI after loading data
   }
 
@@ -216,27 +218,28 @@ class _AddworkoutState extends State<Addworkout> {
                         3: FlexColumnWidth(1),
                       },
                       children: [
-                        const TableRow(
+                        TableRow(
                           children: [
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
                                 child: Text('Set'),
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
                                 child: Text('Weight (kg)')
                               ),
                             ), 
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
                                 child: Text('Reps')
                               ),
                             ),
-                            Padding(
+                            if (settings['Tick Boxes'] ?? true)
+                            const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
                                 child: Icon(Icons.check)
@@ -357,6 +360,7 @@ class _AddworkoutState extends State<Addworkout> {
                                 ),
                               ),
                             ),
+                            if (settings['Tick Boxes'] ?? true)
                             Padding(
                               padding: const EdgeInsets.all(2),
                               child: Checkbox(

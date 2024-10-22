@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/Pages/workoutSettings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
@@ -36,13 +37,24 @@ import 'package:share_plus/share_plus.dart';
               icon: Icons.accessibility,
               label: 'Measurements',
               function: () {
-                
                 // showModalBottomSheet(
                 //   context: context,
                 //   builder: (context) {
                 //     return const GoalOptions();
                 //   },
                 // );
+              },
+            ),
+            _buildSettingsBox(
+              icon: Icons.local_activity,
+              label: 'Workout',
+              function: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Workoutsettings(),
+                  ),
+                );              
               },
             ),
             // setttingDividor(),
@@ -97,45 +109,6 @@ import 'package:share_plus/share_plus.dart';
         );
   }
 
-  Widget _buildSettingsBox({
-    required IconData icon,
-    required String label,
-    required VoidCallback? function,
-  }) {
-    return GestureDetector(
-      onTap: function,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withOpacity(0.1), // Background color for the whole box
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Row(
-            children: [
-              Icon(icon),
-              const SizedBox(width: 8.0),
-              Text(
-                label,
-                style: const TextStyle(
-                   fontSize: 23,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(6.0),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.arrow_forward_ios),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   void exportJson() async{
       try {
@@ -397,3 +370,44 @@ if (resultTo != null && resultFrom != null) {
 
   
 }
+  Widget _buildSettingsBox({
+    required IconData icon,
+    required String label,
+    required VoidCallback? function,
+    Widget? rightside
+  }) {
+    return GestureDetector(
+      onTap: function,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 173, 173, 173).withOpacity(0.1), // Background color for the whole box
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Row(
+            children: [
+              Icon(icon),
+              const SizedBox(width: 8.0),
+              Text(
+                label,
+                style: const TextStyle(
+                   fontSize: 23,
+                ),
+              ),
+              const Spacer(),
+              rightside ??
+                Container(
+                  padding: const EdgeInsets.all(6.0),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.arrow_forward_ios),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
