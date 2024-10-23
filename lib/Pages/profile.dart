@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/muscle_data.dart';
+import 'package:exercise_app/Pages/radar_chart.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Pages/stats.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -233,7 +234,7 @@ class _ProfileState extends State<Profile> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? Colors.blue : Colors.grey,
+            color: selected ? Colors.blue : HexColor.fromHex('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
