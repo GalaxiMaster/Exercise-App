@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -185,11 +187,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   currentValue = int.tryParse(value) ?? currentValue;
-                  
-                  setState(() {
-                    settings['Exercise Goals'][result] = currentValue;
-                  });
-                  writeData(settings, path: 'settings',append: false);
+
                 },
               ),
             ),
@@ -200,6 +198,11 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                 onPressed: () {
                   Navigator.of(context).pop(); // Dismiss the dialog
                   debugPrint('$result: $currentValue');
+                  var generatedColor = Random().nextInt(Colors.primaries.length);
+                  var color = Colors.primaries[generatedColor];
+                  setState(() {
+                    settings['Exercise Goals'][result] = currentValue;
+                  });
                   writeData(settings, path: 'settings',append: false);
                 },
               ),
