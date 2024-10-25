@@ -263,7 +263,9 @@ class _AddworkoutState extends State<Addworkout> {
                                         ? 'W'
                                         : sets[exercise]![i]['type'] == 'Failure'
                                             ? 'F'
-                                            : '${_getNormalSetNumber(exercise, i)}',
+                                            : sets[exercise]![i]['type'] == 'Dropset'
+                                              ? 'D'
+                                              : '${_getNormalSetNumber(exercise, i)}',
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
@@ -464,6 +466,7 @@ class _AddworkoutState extends State<Addworkout> {
               _buildSetTypeOption(exercise, setIndex, 'Warmup', 'W'),
               _buildSetTypeOption(exercise, setIndex, 'Normal', (setIndex + 1).toString()),
               _buildSetTypeOption(exercise, setIndex, 'Failure', 'F'),
+              _buildSetTypeOption(exercise, setIndex, 'Dropset', 'D'),
               ListTile(
                 leading: const Icon(Icons.delete, color: Colors.red),
                 title: const Text('Remove Set', style: TextStyle(color: Colors.red)),
