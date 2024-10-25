@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/data_charts.dart';
+import 'package:exercise_app/Pages/exercise_goals.dart';
 import 'package:exercise_app/Pages/main_exercises.dart';
 import 'package:exercise_app/Pages/muscle_tracking.dart';
 import 'package:exercise_app/Pages/radar_chart.dart';
@@ -136,7 +137,8 @@ class MuscleData extends StatelessWidget {
                   box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
                   box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, const MainExercisesPage()),
                   box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking(setData: unscaledMuscleData,)),
-                  
+                  box('trophy', 'Exercise gaols', "Set goals per exercise per week", context, const ExerciseGoals()),
+
                 ],
               ),
             );

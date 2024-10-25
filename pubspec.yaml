@@ -20,6 +20,7 @@ dependencies:
   font_awesome_flutter: ^10.0.0
   gradient_borders: ^1.0.1
   file_picker: ^5.2.3
+  xml: ^6.5.0
 
 dev_dependencies:
   flutter_test:

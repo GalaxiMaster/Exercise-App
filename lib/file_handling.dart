@@ -106,6 +106,9 @@ Future<Map> getAllSettings() async{
       'Back': defaultMuscleGoal,
       'Shoulders': defaultMuscleGoal,
       'Arms': defaultMuscleGoal,
+    },
+    'Exercise Goals': {
+      
     }
   };
   // check if the settings file has all of the right fields
