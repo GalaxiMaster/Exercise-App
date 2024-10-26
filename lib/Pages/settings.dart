@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/workoutSettings.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -325,10 +326,22 @@ void resetDataButton(BuildContext context){
   }
 
 void moveExercises(BuildContext context) async{
+  List problemExercises = [];
+  Map data = await readData();
+  for (String day in data.keys){
+    for (String exercise in data[day]['sets'].keys){
+      if (exerciseMuscles[exercise] == null && !problemExercises.contains(exercise)){
+        problemExercises.add(exercise);
+      }
+    }
+  }
+
+
+
   final resultFrom = await Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => const WorkoutList(setting: 'choose',),
+      builder: (context) =>  WorkoutList(setting: 'choose', problemExercises: problemExercises, problemExercisesTitle: 'Invalid exercises',),
     ),
   );
   final resultTo = await Navigator.push(

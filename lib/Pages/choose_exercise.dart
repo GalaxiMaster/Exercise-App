@@ -7,7 +7,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class WorkoutList extends StatefulWidget {
   final String setting;
-  const WorkoutList({super.key, required this.setting});
+  final List? problemExercises;
+  final String? problemExercisesTitle;
+  const WorkoutList({super.key, required this.setting, this.problemExercises, this.problemExercisesTitle});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -21,23 +23,69 @@ class _WorkoutListState extends State<WorkoutList> {
   @override
   Widget build(BuildContext context) {
     exerciseList.sort();
+    widget.problemExercises?.sort();
     var filteredExercises = exerciseList
         .where((exercise) => containsAllCharacters(exercise, query))
         .toList();
-
+    var filteredProblemExercises = widget.problemExercises
+        ?.where((exercise) => containsAllCharacters(exercise, query))
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),
       ),
-      body: Column(
-        children: [
-          SearchBar(onQueryChanged: (newQuery) {
-            setState(() {
-              query = newQuery;
-            });
-          }),
-          Expanded(
-            child: ListView.builder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SearchBar(onQueryChanged: (newQuery) {
+              setState(() {
+                query = newQuery;
+              });
+            }),
+            if (widget.problemExercises != null)
+            Column(
+              children: [
+                Text(widget.problemExercisesTitle ?? ''),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredProblemExercises?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pop(context, filteredProblemExercises?[index]);
+                      },
+                      child: SizedBox(
+                        height: 60,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: SvgPicture.asset(
+                                "Assets/profile.svg",
+                                height: 35,
+                                width: 35,
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(filteredProblemExercises?[index]),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Text('Normal Exercises')
+              ],
+            ),
+        
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: filteredExercises.length,
               itemBuilder: (context, index) {
                 return InkWell(
@@ -83,7 +131,7 @@ class _WorkoutListState extends State<WorkoutList> {
                             }
                           },
                         ),
-
+                    
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,8 +146,8 @@ class _WorkoutListState extends State<WorkoutList> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
