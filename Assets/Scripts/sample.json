@@ -1,0 +1,3930 @@
+{
+    "2024-05-21 1": {
+      "stats": {
+        "startTime": "2024-05-21 11:04",
+        "endTime": "2024-05-21 12:40"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope)": [
+          {
+            "set": 1,
+            "weight": 36.4,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 31.8,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 35,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 35,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-05-22 1": {
+      "stats": {
+        "startTime": "2024-05-22 19:39",
+        "endTime": "2024-05-22 20:31"
+      },
+      "sets": {
+        "Cable Neutral Grip Lat Pulldown": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Cable seated row": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-05-23 1": {
+      "stats": {
+        "startTime": "2024-05-23 16:20",
+        "endTime": "2024-05-23 17:44"
+      },
+      "sets": {
+        "Dumbbell Seated Shoulder Press": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Lying Leg Raise": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-05-27 1": {
+      "stats": {
+        "startTime": "2024-05-27 18:27",
+        "endTime": "2024-05-27 19:17"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ],
+        "Cable Half Kneeling External Rotation": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 15,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Cable Seated Shoulder Internal Rotation": [
+          {
+            "set": 1,
+            "weight": 13.8,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-05-29 1": {
+      "stats": {
+        "startTime": "2024-05-29 20:14",
+        "endTime": "2024-05-29 21:19"
+      },
+      "sets": {
+        "Pull Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Chin Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Neutral Grip Pull Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Cable Neutral Grip Lat Pulldown": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40.9,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40.9,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-05-28 1": {
+      "stats": {
+        "startTime": "2024-05-28 16:55",
+        "endTime": "2024-05-28 18:06"
+      },
+      "sets": {
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope)": [
+          {
+            "set": 1,
+            "weight": 36.4,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.8,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 31.8,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Triceps Extension (Rope)": [
+          {
+            "set": 1,
+            "weight": 13.6,
+            "reps": 15,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 14.85,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 14.85,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-05-30 1": {
+      "stats": {
+        "startTime": "2024-05-30 16:19",
+        "endTime": "2024-05-30 17:20"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Seated Bicep Curl": [
+          {
+            "set": 1,
+            "weight": 7,
+            "reps": 15,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-03 1": {
+      "stats": {
+        "startTime": "2024-06-03 20:21",
+        "endTime": "2024-06-03 21:44"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 15,
+            "type": "Normal"
+          }
+        ],
+        "Cable Half Kneeling External Rotation": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 8,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope)": [
+          {
+            "set": 1,
+            "weight": 31.8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.8,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-12 1": {
+      "stats": {
+        "startTime": "2024-06-12 12:46",
+        "endTime": "2024-06-12 14:10"
+      },
+      "sets": {
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 4,
+            "reps": 20,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Seated Shoulder Press": [
+          {
+            "set": 1,
+            "weight": 7,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 7,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 7,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 35,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 35,
+            "reps": 16,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-11 1": {
+      "stats": {
+        "startTime": "2024-06-11 22:21",
+        "endTime": "2024-06-11 23:47"
+      },
+      "sets": {
+        "Dumbbell Biceps Curl": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Deadhang": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 30,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 30,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 30,
+            "type": "Normal"
+          }
+        ],
+        "Chin Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 3,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 3,
+            "type": "Normal"
+          }
+        ],
+        "Cable seated row": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40.9,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-13 1": {
+      "stats": {
+        "startTime": "2024-06-13 16:42",
+        "endTime": "2024-06-13 18:23"
+      },
+      "sets": {
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 3,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 3,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 3,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 3,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Biceps Curls supported": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 8,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-16 1": {
+      "stats": {
+        "startTime": "2024-06-16 09:17",
+        "endTime": "2024-06-16 10:56"
+      },
+      "sets": {
+        "Dumbbell Seated Shoulder Press": [
+          {
+            "set": 1,
+            "weight": 7,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 7,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 7,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 7,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 15,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-26 1": {
+      "stats": {
+        "startTime": "2024-06-26 09:57",
+        "endTime": "2024-06-26 11:36"
+      },
+      "sets": {
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-25 1": {
+      "stats": {
+        "startTime": "2024-06-25 16:29",
+        "endTime": "2024-06-25 18:15"
+      },
+      "sets": {
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 8,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope)": [
+          {
+            "set": 1,
+            "weight": 31.8,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.8,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 31.8,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-27 1": {
+      "stats": {
+        "startTime": "2024-06-27 16:07",
+        "endTime": "2024-06-27 17:43"
+      },
+      "sets": {
+        "Seated Overhead Press (Barbell)": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 4,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 4,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 4,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Single Arm Triceps Extension (Rope)": [
+          {
+            "set": 1,
+            "weight": 13.8,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 13.8,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-06-30 1": {
+      "stats": {
+        "startTime": "2024-06-30 12:54",
+        "endTime": "2024-06-30 13:51"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Triceps Extension (Rope)": [
+          {
+            "set": 1,
+            "weight": 22.7,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 27.3,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 27.3,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Assisted Triceps Dip": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-02 1": {
+      "stats": {
+        "startTime": "2024-07-02 20:07",
+        "endTime": "2024-07-02 21:45"
+      },
+      "sets": {
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Cable Neutral Grip Lat Pulldown": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 45.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 45.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Cable seated row": [
+          {
+            "set": 1,
+            "weight": 45.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 45.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40.9,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-04 1": {
+      "stats": {
+        "startTime": "2024-07-04 16:10",
+        "endTime": "2024-07-04 17:28"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Seated cable row": [
+          {
+            "set": 1,
+            "weight": 22.7,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 22.7,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 22.7,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Preacher Curl": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-18 1": {
+      "stats": {
+        "startTime": "2024-07-18 16:45",
+        "endTime": "2024-07-18 18:19"
+      },
+      "sets": {
+        "Machine Lat Pulldowns": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Seated Lever Machine Row": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 13.75,
+            "reps": 13,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 15,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-15 1": {
+      "stats": {
+        "startTime": "2024-07-15 19:04",
+        "endTime": "2024-07-15 19:56"
+      },
+      "sets": {
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 6,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 6,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 6,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Seated Shoulder Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-14 1": {
+      "stats": {
+        "startTime": "2024-07-14 17:09",
+        "endTime": "2024-07-14 18:02"
+      },
+      "sets": {
+        "Machine Lat Pulldowns": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Close grip Cable seated row": [
+          {
+            "set": 1,
+            "weight": 22.7,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 22.7,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 22.7,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Preacher Curl": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-13 1": {
+      "stats": {
+        "startTime": "2024-07-13 16:57",
+        "endTime": "2024-07-13 18:15"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Triceps Extension (Rope)": [
+          {
+            "set": 1,
+            "weight": 27.3,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 27.3,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 27.3,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-09 1": {
+      "stats": {
+        "startTime": "2024-07-09 10:59",
+        "endTime": "2024-07-09 12:46"
+      },
+      "sets": {
+        "Cable Neutral Grip Lat Pulldown": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 45.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Cable seated row": [
+          {
+            "set": 1,
+            "weight": 27,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 27,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-11 1": {
+      "stats": {
+        "startTime": "2024-07-11 16:24",
+        "endTime": "2024-07-11 17:46"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 8,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 12.5,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-22 1": {
+      "stats": {
+        "startTime": "2024-07-22 20:54",
+        "endTime": "2024-07-22 22:40"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 15,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-25 1": {
+      "stats": {
+        "startTime": "2024-07-25 16:32",
+        "endTime": "2024-07-25 17:38"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 15,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 47.5,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 47.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Triceps Extension (Rope) (edge)": [
+          {
+            "set": 1,
+            "weight": 13.6,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 13.6,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 13.6,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-28 1": {
+      "stats": {
+        "startTime": "2024-07-28 16:55",
+        "endTime": "2024-07-28 17:46"
+      },
+      "sets": {
+        "Seated Lever Machine Row": [
+          {
+            "set": 1,
+            "weight": 15,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 16.25,
+            "reps": 14,
+            "type": "Normal"
+          }
+        ],
+        "Machine Lat Pulldowns": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.25,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 31.25,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Neutral Cable Neutral Grip Lat Pulldown": [
+          {
+            "set": 1,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40.9,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-27 1": {
+      "stats": {
+        "startTime": "2024-07-29 03:01",
+        "endTime": "2024-07-29 04:36"
+      },
+      "sets": {
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Seated Shoulder Press": [
+          {
+            "set": 1,
+            "weight": 9,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Pull Ups": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 35,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 13,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-29 1": {
+      "stats": {
+        "startTime": "2024-07-29 20:39",
+        "endTime": "2024-07-29 22:16"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 13,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 15,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Assisted Triceps Dip": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) (edge one)": [
+          {
+            "set": 1,
+            "weight": 18.2,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.2,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-07-31 1": {
+      "stats": {
+        "startTime": "2024-07-31 17:50",
+        "endTime": "2024-07-31 19:20"
+      },
+      "sets": {
+        "Machine Lat Pulldowns": [
+          {
+            "set": 1,
+            "weight": 32.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 32.5,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 32.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Pull Ups": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Seated Lever Machine Row": [
+          {
+            "set": 1,
+            "weight": 17.5,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 17.5,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-01 1": {
+      "stats": {
+        "startTime": "2024-08-01 19:58",
+        "endTime": "2024-08-01 21:33"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 14,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 15,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 47.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 47.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) (edge)": [
+          {
+            "set": 1,
+            "weight": 18.6,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.6,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Assisted Triceps Dip": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-06 1": {
+      "stats": {
+        "startTime": "2024-08-06 18:06",
+        "endTime": "2024-08-06 18:59"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 14,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 17.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) (edge)": [
+          {
+            "set": 1,
+            "weight": 18.2,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.2,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 18.2,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Triceps Extension (Rope)": [
+          {
+            "set": 1,
+            "weight": 27.3,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 27.3,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 27.3,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 35,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 47.5,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 47.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 47.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-07 1": {
+      "stats": {
+        "startTime": "2024-08-07 20:05",
+        "endTime": "2024-08-07 21:43"
+      },
+      "sets": {
+        "Pull Ups": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Standing Overhead Press (Barbell)": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-08 1": {
+      "stats": {
+        "startTime": "2024-08-08 16:15",
+        "endTime": "2024-08-08 17:11"
+      },
+      "sets": {
+        "Pull Ups": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 14,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 47.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 47.5,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Standing Overhead Press (Barbell)": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-09 1": {
+      "stats": {
+        "startTime": "2024-08-09 19:57",
+        "endTime": "2024-08-09 20:47"
+      },
+      "sets": {
+        "Pull Ups": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Seated Lever Machine Row": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-10 1": {
+      "stats": {
+        "startTime": "2024-08-10 10:59",
+        "endTime": "2024-08-10 12:10"
+      },
+      "sets": {
+        "Barbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 35,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 17.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope)": [
+          {
+            "set": 1,
+            "weight": 31.8,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.8,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 31.8,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 47.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 47.5,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Back Extensions": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-13 1": {
+      "stats": {
+        "startTime": "2024-08-13 19:27",
+        "endTime": "2024-08-13 20:34"
+      },
+      "sets": {
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Standing Overhead Press (Barbell)": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Neutral Grip Pull Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Assisted neutral Pull Ups": [
+          {
+            "set": 1,
+            "weight": 15,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-14 1": {
+      "stats": {
+        "startTime": "2024-08-14 20:16",
+        "endTime": "2024-08-14 21:58"
+      },
+      "sets": {
+        "Barbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 30,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Band Assisted Dips": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Barbell Curl": [
+          {
+            "set": 1,
+            "weight": 25,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-15 1": {
+      "stats": {
+        "startTime": "2024-08-16 03:01",
+        "endTime": "2024-08-16 04:16"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 17.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Cable One Arm Lateral Raise": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 13.6,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 13.6,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 47.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 40,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Preacher Curl": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-20 1": {
+      "stats": {
+        "startTime": "2024-08-20 17:05",
+        "endTime": "2024-08-20 18:08"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 17.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) edge": [
+          {
+            "set": 1,
+            "weight": 18.2,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.2,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 18.2,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Negative dips": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 4,
+            "type": "Normal"
+          }
+        ],
+        "Cable Overhead Tricep Single Arm Triceps Extension (Rope)": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 9.1,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 9.1,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-21 1": {
+      "stats": {
+        "startTime": "2024-08-22 03:01",
+        "endTime": "2024-08-22 04:31"
+      },
+      "sets": {
+        "Neutral Grip Pull Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Cable One Arm Lateral Raises": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 13.6,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 13.6,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope)": [
+          {
+            "set": 1,
+            "weight": 36.2,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 31.8,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 31.8,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Standing Overhead Press (Barbell)": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 22.5,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 13.6,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 22.5,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Cable One Arm Biceps Curl": [
+          {
+            "set": 1,
+            "weight": 45,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-22 1": {
+      "stats": {
+        "startTime": "2024-08-22 16:19",
+        "endTime": "2024-08-22 18:07"
+      },
+      "sets": {
+        "Neutral Cable Neutral Grip Lat Pulldown": [
+          {
+            "set": 1,
+            "weight": 50,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 45,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 45,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Finger Curls": [
+          {
+            "set": 1,
+            "weight": 18.2,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.2,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 18.2,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pullover": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bent Over Bench Row": [
+          {
+            "set": 1,
+            "weight": 17.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-23 1": {
+      "stats": {
+        "startTime": "2024-08-23 16:43",
+        "endTime": "2024-08-23 18:20"
+      },
+      "sets": {
+        "Barbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 35,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Band Assisted Dips": [
+          {
+            "set": 1,
+            "weight": 15,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 15,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 40,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-25 1": {
+      "stats": {
+        "startTime": "2024-08-25 13:28",
+        "endTime": "2024-08-25 14:58"
+      },
+      "sets": {
+        "Cable One Arm Lateral Raises": [
+          {
+            "set": 1,
+            "weight": 9.1,
+            "reps": 10,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 13.6,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 13.6,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 9.1,
+            "reps": 13,
+            "type": "Normal"
+          }
+        ],
+        "Finger Curls": [
+          {
+            "set": 1,
+            "weight": 18.2,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.2,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 18.2,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Standing Overhead Press (Barbell)": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 8,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 25,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) edge": [
+          {
+            "set": 1,
+            "weight": 22.7,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 22.7,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 30,
+            "reps": 12,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-26 1": {
+      "stats": {
+        "startTime": "2024-08-26 13:53",
+        "endTime": "2024-08-26 15:03"
+      },
+      "sets": {
+        "Barbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 20,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 35,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 35,
+            "reps": 13,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 35,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Assisted Triceps Dip": [
+          {
+            "set": 1,
+            "weight": 30,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 25,
+            "reps": 5,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) kirrawee": [
+          {
+            "set": 1,
+            "weight": 17.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-28 1": {
+      "stats": {
+        "startTime": "2024-08-29 03:01",
+        "endTime": "2024-08-29 04:20"
+      },
+      "sets": {
+        "Seated Lever Machine Row": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 10,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 20,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 20,
+            "reps": 11,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Concentration Curl": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 6,
+            "type": "Normal"
+          }
+        ],
+        "Neutral Grip Pull Up": [
+          {
+            "set": 1,
+            "weight": 0,
+            "reps": 5,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 0,
+            "reps": 4,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 0,
+            "reps": 3,
+            "type": "Normal"
+          }
+        ],
+        "Assisted Neutral Grip Pull Ups": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 6,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 20,
+            "reps": 7,
+            "type": "Normal"
+          }
+        ]
+      }
+    },
+    "2024-08-29 1": {
+      "stats": {
+        "startTime": "2024-08-29 16:34",
+        "endTime": "2024-08-29 18:13"
+      },
+      "sets": {
+        "Dumbbell Bench Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Warmup"
+          },
+          {
+            "set": 2,
+            "weight": 15,
+            "reps": 14,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 17.5,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 4,
+            "weight": 17.5,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Rear Delt Fly (Machine)": [
+          {
+            "set": 1,
+            "weight": 35,
+            "reps": 10,
+            "type": "Normal"
+          }
+        ],
+        "Machine Chest Fly": [
+          {
+            "set": 1,
+            "weight": 40,
+            "reps": 8,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Seated Shoulder Press": [
+          {
+            "set": 1,
+            "weight": 10,
+            "reps": 12,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 10,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 10,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Cable Pushdown (Rope) (edge)": [
+          {
+            "set": 1,
+            "weight": 18.2,
+            "reps": 9,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 18.2,
+            "reps": 7,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 18.2,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ],
+        "Dumbbell Incline Bench Press": [
+          {
+            "set": 1,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 2,
+            "weight": 12.5,
+            "reps": 10,
+            "type": "Normal"
+          },
+          {
+            "set": 3,
+            "weight": 12.5,
+            "reps": 9,
+            "type": "Normal"
+          }
+        ]
+      }
+    }
+  }
