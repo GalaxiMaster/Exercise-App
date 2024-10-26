@@ -28,7 +28,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   List exerciseData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
-  String selector = 'volume';
+  String selector = 'weight';
   String week = '';
   num graphvalue = 0;
   TabItem _currentTab = TabItem.graph;
@@ -176,7 +176,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '$graphvalue kg',
+                              '${graphvalue.toStringAsFixed(2)} kg',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -473,8 +473,14 @@ Future<List> getStats(String target) async {
   List targetData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
+ var sortedKeys = data.keys.toList()..sort();
 
-  for (var day in data.keys.toList().reversed) {
+  // Create a sorted map by iterating over sorted keys
+  Map<String, dynamic> sortedMap = {
+    for (var key in sortedKeys) key: data[key]!,
+  };
+  data = sortedMap;
+  for (var day in data.keys.toList()) {
     Map dayHeaviestWeight = {};
     Map dayHeaviestVolume = {};
 
@@ -482,11 +488,11 @@ Future<List> getStats(String target) async {
       if (exercise == target) {
         for (var set in data[day]['sets'][exercise]) {
           set = {
-            'weight': double.parse(set['weight']),
-            'reps': double.parse(set['reps']),
+            'weight': double.parse(set['weight'].toString()),
+            'reps': double.parse(set['reps'].toString()),
             'type': set['type'],
             'date': day,
-            'volume': double.parse(set['reps']) * double.parse(set['weight'])
+            'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString())
           };
 
           if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {
