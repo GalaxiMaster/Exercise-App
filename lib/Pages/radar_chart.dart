@@ -20,15 +20,18 @@ class _RadarChartPageState extends State<RadarChartPage> {
 
     Future<void> reloadData(int range) async {
       sets = (await getStuff('Sets', range))[0];
-      data = [];
-      for (String group in muscleGroups.keys){
-        double total = 0;
-        for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-          double muscleNum = (sets[muscleGroups[group]?[i]] ?? 0);
-            total += muscleNum;
+      setState(() {
+        data = [];
+        for (String group in muscleGroups.keys){
+          double total = 0;
+          for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
+            double muscleNum = (sets[muscleGroups[group]?[i]] ?? 0);
+              total += muscleNum;
+          }
+          data.add(RadarEntry(value: total));
         }
-        data.add(RadarEntry(value: total));
-      }
+      });
+
     }
     @override
       initState(){
@@ -259,7 +262,7 @@ Future<List> getStuff(String target, int range) async {
           }
         }
       }else{
-        debugPrint(data[day].toString() + "Out of range");
+        debugPrint("${data[day]}Out of range");
       }
     }
     debugPrint(muscleData.toString());
