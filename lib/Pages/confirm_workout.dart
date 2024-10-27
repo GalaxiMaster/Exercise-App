@@ -23,7 +23,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
       stats['Exercises'] += 1;
       for (var set in widget.sets[exercise]){
         stats['Sets'] += 1;
-        stats['Volume'] += (double.parse(set['weight']) * double.parse(set['reps']));
+        stats['Volume'] += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
       }
     }
     Duration difference = endTime.difference(startTime); // Calculate the difference
@@ -199,7 +199,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
           if (records[exercise] == null){
             records[exercise] = set;
           }
-          else if (double.parse(set['weight']) > double.parse(records[exercise]['weight']) || (double.parse(set['weight']) == double.parse(records[exercise]['weight']) && double.parse(set['reps']) > double.parse(records[exercise]['reps']))){
+          else if (double.parse(set['weight'].toString()) > double.parse(records[exercise]['weight']) || (double.parse(set['weight'].toString()) == double.parse(records[exercise]['weight']) && double.parse(set['reps'].toString()) > double.parse(records[exercise]['reps']))){
             records[exercise] = set;
           }
         }

@@ -431,7 +431,7 @@ class WorkoutStats extends StatelessWidget {
         if (set['PR'] == 'yes'){
           prs++;
         }
-        volume += double.parse(set['weight']) * double.parse(set['reps']);
+        volume += double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
       }
     }
     String sVolume = '';
@@ -475,8 +475,8 @@ class WorkoutStats extends StatelessWidget {
 String getBestSet(List exercise){
   List bestSet = [];
   for (var set in exercise){
-    double weight = double.parse(set['weight']);
-    double reps = double.parse(set['reps']);
+    double weight = double.parse(set['weight'].toString());
+    double reps = double.parse(set['reps'].toString());
     if (bestSet.isEmpty){
       bestSet = [weight, reps];
     }else if (weight > bestSet[0] ||  weight > bestSet[0] && reps > bestSet[1]){

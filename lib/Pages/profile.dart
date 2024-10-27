@@ -467,7 +467,7 @@ class DataBarChart extends StatelessWidget {
         for (String exercise in data[day]['sets'].keys){
           for (Map set in data[day]['sets'][exercise]){
             if (selector == 'volume'){
-              dayWeight += (double.parse(set['weight']) * double.parse(set['reps']));
+              dayWeight += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
             }else{
               dayWeight += double.parse(set[selector]);
             }
