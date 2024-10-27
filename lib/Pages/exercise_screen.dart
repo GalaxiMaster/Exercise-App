@@ -8,6 +8,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:xml/xml.dart' as xml;
 
+import 'radar_chart.dart';
+
 enum TabItem {
   graph,
   info,
@@ -346,7 +348,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? Colors.blue : Colors.grey,
+            color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(

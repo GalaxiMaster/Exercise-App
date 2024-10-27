@@ -21,7 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
   String graphSelector = 'sessions';
-  num? selectedBarValue = 1; // set to 
+  num? selectedBarValue = 0; // TODO set to what it actually is
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
   @override
@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile> {
   void alterHeadingBar(double value, String week){
     DateTime te = DateFormat('yyyy MMM dd').parse('2024 $week');
     var test = DateTime.now().difference(te).inDays;
-    int distanceInWeeks = (test / 7).ceil();
+    int distanceInWeeks = (test / 7).ceil()-1;
     setState(() {
       selectedBarValue = numParsething(value);
       selectedBarWeekDistance = distanceInWeeks == 0 ? 'This week' : '$distanceInWeeks weeks ago';
@@ -234,7 +234,7 @@ class _ProfileState extends State<Profile> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? Colors.blue : HexColor.fromHex('151515'),
+            color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(

@@ -3,6 +3,8 @@ import 'package:exercise_app/muscleinformation.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import 'radar_chart.dart';
+
 // ignore: must_be_immutable
 class DataCharts extends StatefulWidget{
   Map scaledData;
@@ -110,7 +112,7 @@ class _DataChartsState extends State<DataCharts> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? Colors.blue : Colors.grey,
+            color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(

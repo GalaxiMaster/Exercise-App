@@ -76,7 +76,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: HexColor.fromHex('151515'),
+                    color: HexColor.fromHexColor('151515'),
                     borderRadius: BorderRadius.circular(50)
                   ),
                   height: 50,
@@ -149,7 +149,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
 }
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
-  static Color fromHex(String hexString) {
+  static Color fromHexColor(String hexString) {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
     buffer.write(hexString.replaceFirst('#', ''));
@@ -157,7 +157,7 @@ extension HexColor on Color {
   }
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
-  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+  String toHexColor({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
       '${alpha.toRadixString(16).padLeft(2, '0')}'
       '${red.toRadixString(16).padLeft(2, '0')}'
       '${green.toRadixString(16).padLeft(2, '0')}'
@@ -212,7 +212,7 @@ class _TimeSelectorPopupState extends State<TimeSelectorPopup> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
         child: Container(
           decoration: BoxDecoration(
-            color: HexColor.fromHex('262626'),
+            color: HexColor.fromHexColor('262626'),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
