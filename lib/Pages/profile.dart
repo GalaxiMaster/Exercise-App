@@ -21,7 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
   String graphSelector = 'sessions';
-  num? selectedBarValue = 0; // TODO set to what it actually is
+  num? selectedBarValue; // TODO set to what it actually is
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
   @override

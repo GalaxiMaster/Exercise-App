@@ -55,7 +55,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
               complete += data[exercise] ?? 0;
               notComplete += settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0);
             }
-            double percentageComplete = complete/notComplete;
+            double percentageComplete = complete/(notComplete+complete);
             DateTime now = DateTime.now();
             DateTime date = now.subtract(Duration(days: weeksAgo * 7));
             String weekStr = DateFormat('MMM dd').format(findMonday(date));
@@ -98,9 +98,10 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                               if (weeksAgo > 0){weeksAgo -= 1;}
                             });
                           },
-                          child: const Icon(
+                          child: Icon(
                             Icons.arrow_forward_ios,
                             size: 30,
+                            color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
                           ),
                         )
                       ],
