@@ -274,7 +274,7 @@ void resetDataButton(BuildContext context){
     writeData(data, path: 'settings', append: false);
   }
 
-  void importData(BuildContext context) async{
+void importData(BuildContext context) async{
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -293,9 +293,11 @@ void resetDataButton(BuildContext context){
 
         // Parse the JSON content
         Map<String, dynamic> jsonData = jsonDecode(content);
+        // writeData({}, append: false);
         writeData(jsonData, append: true);
         // Map data = await readData();
       showDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -326,7 +328,7 @@ void resetDataButton(BuildContext context){
   }
 
 void moveExercises(BuildContext context) async{
-  List problemExercises = [];
+  List? problemExercises = [];
   Map data = await readData();
   for (String day in data.keys){
     for (String exercise in data[day]['sets'].keys){
@@ -335,9 +337,7 @@ void moveExercises(BuildContext context) async{
       }
     }
   }
-
-
-
+  problemExercises.isEmpty ? problemExercises = null : null;
   final resultFrom = await Navigator.push(
     context,
     MaterialPageRoute(

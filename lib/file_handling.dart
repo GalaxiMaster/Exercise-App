@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<Map<dynamic, dynamic>> readData({String path = 'output'}) async{
+Future<Map> readData({String path = 'output'}) async{
   Map jsonData= {};
   debugPrint("${path}id");
   final dir = await getApplicationDocumentsDirectory();
@@ -35,7 +35,7 @@ Future<void> writeData(Map newData, {String path = 'output', bool append = true}
     // If appending is enabled, merge existing data with new data
     if (append) {
       Map existingData = await readData(path: path);
-      newData.addAll(existingData);
+      newData = Map<String, dynamic>.from(newData)..addAll(Map<String, dynamic>.from(existingData));
     }
 
     // Ensure the directory exists, create it if not
