@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       routines = loadedRoutines;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -283,6 +284,8 @@ class _HomePageState extends State<HomePage> {
   );
 }
 }
+
+
 
 Future<List> getAllRoutines() async {
   List routines = [];

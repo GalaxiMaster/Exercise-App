@@ -33,6 +33,7 @@ class _AddworkoutState extends State<Addworkout> {
   @override
   void initState() {        
     super.initState();
+    reloadRecords();
     if(widget.sets.isEmpty){
       getPreviousWorkout().then((data) {
         setState(() {
@@ -640,4 +641,43 @@ class _AddworkoutState extends State<Addworkout> {
     var data = await readData(path: 'records');
     debugPrint(data.toString());
   }
+}
+void reloadRecords() async {
+  Map data = await readData();
+  var sortedKeys = data.keys.toList()..sort();
+  Map records = await readData(path: 'records');
+  // Create a sorted map by iterating over sorted keys
+  Map<String, dynamic> sortedMap = {
+    for (var key in sortedKeys) key: data[key]!,
+  };
+  Map dataCopy = sortedMap;
+  data = sortedMap;
+  for (String day in data.keys){
+    for (String exercise in data[day]['sets'].keys){
+
+      Map topSet = records[exercise] ?? {'weight': 0, 'reps': 0};
+
+      for (int i = 0; i < data[day]['sets'][exercise].length; i++){
+        Map set = data[day]['sets'][exercise][i];
+        if (double.parse(set['weight'].toString()) > double.parse(topSet['weight'].toString())){
+          topSet = set;
+          dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
+        }
+        else if (double.parse(set['weight'].toString()) == double.parse(topSet['weight'].toString()) && 
+                  double.parse(set['reps'].toString()) > double.parse(topSet['reps'].toString()) 
+                ){
+          topSet = set; 
+          dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
+
+        }
+      }
+      records[exercise] = topSet;
+    }
+
+  }
+  debugPrint('yeah');
+  writeData(records, path: 'records', append: false);
+        // List sets = data[day]['sets'][exercise];
+      // sets.sort((a, b) => a["weight"].compareTo(b["weight"])); wild way to get top set, but i need progressive
+      // debugPrint('yeah');
 }
