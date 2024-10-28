@@ -144,7 +144,14 @@ class _StreakRestRowState extends State<StreakRestRow> {
     if (widget.exerciseData.keys.isEmpty) {
       return [0, 0];
     }
-    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList()[0].split(' ')[0])).inDays;
+    var sortedKeys = widget.exerciseData.keys.toList()..sort();
+
+    // Create a sorted map by iterating over sorted keys
+    Map<String, dynamic> sortedMap = {
+      for (var key in sortedKeys) key: widget.exerciseData[key]!,
+    };
+    Map data = sortedMap;
+    var rest = DateTime.now().difference(DateTime.parse(data.keys.toList()[data.keys.length-1].split(' ')[0])).inDays;
     int streaks = 0;
     int week = weekNumber(DateTime.now());
     for (var day in widget.exerciseData.keys) {
