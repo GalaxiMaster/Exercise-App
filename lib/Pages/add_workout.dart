@@ -275,7 +275,7 @@ class _AddworkoutState extends State<Addworkout> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
-                                child: exerciseMuscles[exercise]['type'] == 'Weighted' ? 
+                                child: (exerciseMuscles[exercise]?['type'] ?? '') != 'bodyweight' ? 
                                   TextFormField(
                                     focusNode: _focusNodes[exercise]![i]['weight'],
                                     controller: _controllers[exercise]![i]['weight'],
@@ -430,9 +430,9 @@ class _AddworkoutState extends State<Addworkout> {
               var set = preCsvData[day]['sets'][exercise][i];
               if (i == setNum-1) {
                 if (target == 'Weight') {
-                  return set['weight'];
+                  return set['weight'].toString();
                 } else if (target == 'Reps') {
-                  return set['reps'];
+                  return set['reps'].toString();
                 }
               }
             }
