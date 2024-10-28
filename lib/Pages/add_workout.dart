@@ -239,7 +239,7 @@ class _AddworkoutState extends State<Addworkout> {
                                 child: Text('Reps')
                               ),
                             ),
-                            if (settings['Tick Boxes'] ?? true)
+                            if (settings['Tick Boxes'] ?? false)
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
@@ -363,7 +363,7 @@ class _AddworkoutState extends State<Addworkout> {
                                 ),
                               ),
                             ),
-                            if (settings['Tick Boxes'] ?? true)
+                            if (settings['Tick Boxes'] ?? false)
                             Padding(
                               padding: const EdgeInsets.all(2),
                               child: Checkbox(

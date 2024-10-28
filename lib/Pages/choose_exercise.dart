@@ -9,145 +9,153 @@ class WorkoutList extends StatefulWidget {
   final String setting;
   final List? problemExercises;
   final String? problemExercisesTitle;
-  const WorkoutList({super.key, required this.setting, this.problemExercises, this.problemExercisesTitle});
+  const WorkoutList({
+    super.key, 
+    required this.setting, 
+    this.problemExercises, 
+    this.problemExercisesTitle
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _WorkoutListState createState() => _WorkoutListState();
+  State<WorkoutList> createState() => _WorkoutListState();
 }
 
 class _WorkoutListState extends State<WorkoutList> {
   String query = '';
-  List exerciseList = exerciseMuscles.keys.toList();
+  late final List exerciseList;
+  final Map<String, bool> _imageExistsCache = {};
+
+  @override
+  void initState() {
+    super.initState();
+    exerciseList = exerciseMuscles.keys.toList()..sort();
+  }
+
+  // Cache the file existence check
+  Future<bool> _checkFileExists(String filePath) async {
+    if (_imageExistsCache.containsKey(filePath)) {
+      return _imageExistsCache[filePath]!;
+    }
+    
+    final exists = await fileExists(filePath);
+    _imageExistsCache[filePath] = exists;
+    return exists;
+  }
+
+  Widget _buildExerciseItem(String exercise, bool isProblemExercise) {
+    return InkWell(
+      onTap: widget.setting == 'choose' 
+        ? () => Navigator.pop(context, exercise)
+        : () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExerciseScreen(exercise: exercise)
+            )
+          ),
+      child: SizedBox(
+        height: 60,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: isProblemExercise 
+                ? Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: SvgPicture.asset(
+                      "Assets/profile.svg",
+                      height: 35,
+                      width: 35,
+                    ),
+                  )
+                : FutureBuilder<bool>(
+                    future: _checkFileExists("Assets/Exercises/$exercise.png"),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      
+                      return snapshot.hasData && snapshot.data! 
+                        ? Image.asset(
+                            "Assets/Exercises/$exercise.png",
+                            height: 50,
+                            width: 50,
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              "Assets/profile.svg",
+                              height: 35,
+                              width: 35,
+                            ),
+                          );
+                    },
+                  ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(exercise),
+                if (!isProblemExercise) Text(getMuscles(exercise))
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    exerciseList.sort();
-    widget.problemExercises?.sort();
-    var filteredExercises = exerciseList
+    final filteredExercises = exerciseList
         .where((exercise) => containsAllCharacters(exercise, query))
         .toList();
-    var filteredProblemExercises = widget.problemExercises
+
+    final filteredProblemExercises = widget.problemExercises
         ?.where((exercise) => containsAllCharacters(exercise, query))
-        .toList();
+        .toList() ?? [];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SearchBar(onQueryChanged: (newQuery) {
-              setState(() {
-                query = newQuery;
-              });
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SearchBar(onQueryChanged: (newQuery) {
+              setState(() => query = newQuery);
             }),
-            if (widget.problemExercises != null)
-            Column(
-              children: [
-                Text(widget.problemExercisesTitle ?? ''),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: filteredProblemExercises?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pop(context, filteredProblemExercises?[index]);
-                      },
-                      child: SizedBox(
-                        height: 60,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: SvgPicture.asset(
-                                "Assets/profile.svg",
-                                height: 35,
-                                width: 35,
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(filteredProblemExercises?[index]),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const Text('Normal Exercises')
-              ],
+          ),
+          if (widget.problemExercises != null) ...[
+            SliverToBoxAdapter(
+              child: Text(widget.problemExercisesTitle ?? ''),
             ),
-        
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: filteredExercises.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: widget.setting == 'choose' ? () {
-                    Navigator.pop(context, filteredExercises[index]);
-                  } : (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => 
-                          ExerciseScreen(exercise: filteredExercises[index])
-                        )
-                      );
-                  }
-                  ,
-                  child: SizedBox(
-                    height: 60,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: FutureBuilder<bool>(
-                          future: fileExists("Assets/Exercises/${filteredExercises[index]}.png"),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const CircularProgressIndicator(); // Loading state
-                            } else if (snapshot.hasError) {
-                              return const Icon(Icons.error); // Show error icon if something went wrong
-                            } else if (snapshot.hasData && snapshot.data!) {
-                              return Image.asset(
-                                "Assets/Exercises/${filteredExercises[index]}.png",
-                                height: 50,
-                                width: 50,
-                              );
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: SvgPicture.asset(
-                                  "Assets/profile.svg",
-                                  height: 35,
-                                  width: 35,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                    
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(filteredExercises[index]),
-                            Text(getMuscles(filteredExercises[index]))
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => _buildExerciseItem(
+                  filteredProblemExercises[index], 
+                  true
+                ),
+                childCount: filteredProblemExercises.length,
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Text('Normal Exercises'),
             ),
           ],
-        ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildExerciseItem(
+                filteredExercises[index], 
+                false
+              ),
+              childCount: filteredExercises.length,
+            ),
+          ),
+        ],
       ),
     );
   }
