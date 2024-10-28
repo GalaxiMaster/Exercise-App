@@ -294,7 +294,7 @@ class WorkoutStats extends StatelessWidget {
   }
 }
 
-String getBestSet(List exercise){
+String getBestSet(List exercise, String type){
   List bestSet = [];
   for (var set in exercise){
     double weight = double.parse(set['weight'].toString());
@@ -305,5 +305,5 @@ String getBestSet(List exercise){
       bestSet = [weight, reps];
     }
   }    
-  return '${bestSet[0]}kg x ${bestSet[1]}';
+  return type == 'bodyweight' ? (int.tryParse(bestSet[1].toString()) ?? bestSet[1]).toStringAsFixed(0) : '${bestSet[0]}kg x ${bestSet[1]}';
 }
