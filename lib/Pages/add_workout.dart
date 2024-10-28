@@ -115,7 +115,14 @@ class _AddworkoutState extends State<Addworkout> {
   
   void preLoad() async{
     records = await readData(path: 'records');
-    preCsvData = await readData();
+    Map data = await readData();
+    var sortedKeys = data.keys.toList()..sort();
+    // Create a sorted map by iterating over sorted keys
+    Map<String, dynamic> sortedMap = {
+      for (var key in sortedKeys) key: data[key]!,
+    };
+    data = sortedMap;
+    preCsvData = data;
     settings = await getAllSettings();
     setState(() {}); // Update UI after loading data
   }
