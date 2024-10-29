@@ -33,6 +33,19 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
     String dateStr = widget.dayData['stats']['startTime'];
     String endTimeStr = widget.dayData['stats']['endTime'];
     List percentageData = getPercentages(widget.dayData);
+    Duration length = DateTime.parse(endTimeStr).difference(DateTime.parse(dateStr));
+    double volume = 0;
+    int sets = 0;
+    int prs = 0;
+    int exercises = 0;
+    for (String exercise in widget.dayData['sets'].keys){
+      exercises++;
+      for (Map set in widget.dayData['sets'][exercise]){
+        sets++;
+        volume += double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
+        if (set['PR'] == 'yes') prs++;
+      }
+    }
     return Scaffold(
       appBar: myAppBar(context, 'Workout Details'),
       body: SingleChildScrollView(
@@ -69,11 +82,11 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      infoBox('Time', '1h 2m'),
-                      infoBox('volume', '2456kg'),
-                      infoBox('Sets', '16'),
-                      infoBox("PR's", '85'),
-                      infoBox('new', '122'),
+                      infoBox('Time', '${length.inHours}h ${length.inMinutes % 60}m'),
+                      infoBox('Volume', '${volume}kg'),
+                      infoBox("PR's", '$prs'),
+                      infoBox('Sets', '$sets'),
+                      infoBox('Exercises', '$exercises'),
                     ],
                   ),
                 ),
