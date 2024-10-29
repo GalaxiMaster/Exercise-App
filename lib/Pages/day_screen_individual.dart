@@ -10,7 +10,8 @@ import 'package:intl/intl.dart';
 
 class IndividualDayScreen extends StatefulWidget {
   final Map dayData;
-  const IndividualDayScreen({super.key, required this.dayData});
+  final String dayKey;
+  const IndividualDayScreen({super.key, required this.dayData, required this.dayKey});
   @override
   // ignore: library_private_types_in_public_api
   _IndividualDayScreenState createState() => _IndividualDayScreenState();
@@ -120,11 +121,11 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                 muscleSplit_stackedBars(percentageData, context),
                 const Divider(height: .1, thickness: 0.5, color: Colors.grey,),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Workout',
                         style: TextStyle(fontSize: 20,),
                       ),
@@ -142,7 +143,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                             setState(() {});
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'Edit workout',
                           style: TextStyle(
                             fontSize: 16,
@@ -194,7 +195,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Text(exerciseName, style: TextStyle(fontSize: 18),),
+                                  child: Text(exerciseName, style: const TextStyle(fontSize: 18),),
                                 ),
                               ],
                             ),
@@ -213,10 +214,10 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                                   padding: const EdgeInsets.all(20),
                                   child: Row(
                                     children: [
-                                      Text(set['type'] == 'Normal' ? (index + 1).toString() : set['type'][0], style: TextStyle(fontSize: 24),),
+                                      Text(set['type'] == 'Normal' ? (index + 1).toString() : set['type'][0], style: const TextStyle(fontSize: 24),),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 25),
-                                        child: Text(exerciseMuscles[exerciseName]['type'] != 'bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: TextStyle(fontSize: 20),),
+                                        child: Text(exerciseMuscles[exerciseName]['type'] != 'bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
                                       ),
                                     ],
                                   ),
@@ -235,15 +236,8 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
     );
   }
     Future<bool> editDay(Map day) async{
-    String dayKey = '';
-    widget.dayData.forEach((key, value) {
-      if (value == day) {
-        dayKey = key;
-      }
-    });
-    if (dayKey == ''){return false;}
     Map data = await readData();
-    data[dayKey]['sets'] = day['sets'];
+    data[widget.dayKey]['sets'] = day['sets'];
     writeData(data, append: false);
     return true;
   }

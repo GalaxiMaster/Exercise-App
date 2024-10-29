@@ -44,7 +44,7 @@ class _DayScreenState extends State<DayScreen> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]]))
+                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], dayKey: dayData.keys.toList()[index]))
                     ).then((_) {
                       reload(dayData.keys.toList()[index]);
                     });

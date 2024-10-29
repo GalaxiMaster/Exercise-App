@@ -193,7 +193,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                 Navigator.push(
                                   // ignore: use_build_context_synchronously
                                   context,
-                                  MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week]))
+                                  MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week], dayKey: week,))
                                 ).then((_) {
                                   _loadHighlightedDays();  // Call the method after returning from Addworkout
                                 });
