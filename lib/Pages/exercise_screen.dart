@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -161,6 +162,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       ]
     );
   }
+  
   Widget graphBody(List<FlSpot> spots, List<dynamic> dates, BuildContext context) {
     return spots.isNotEmpty ? SingleChildScrollView(
           child: Padding(
@@ -185,11 +187,12 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) => DayScreen(date: date, dayData: dayData, reload: reload))
-                                // );
+                              onTap: () async{
+                                Map data = await readData();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week], reload: (){}))
+                                );
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -332,6 +335,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       :
         const Text("No data available");
   }
+  
   Widget selectorBox(String text, bool selected){
     return GestureDetector(
       onTap: () async{
@@ -365,6 +369,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 extension ColorExtension on Color {
   String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
 }
+
 class BodyHeatMap extends StatefulWidget {
   final String assetPath;
   final double width;
