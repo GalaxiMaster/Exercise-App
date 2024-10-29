@@ -17,9 +17,17 @@ class DayScreen extends StatefulWidget {
 }
 
 class _DayScreenState extends State<DayScreen> {
+  Map dayData = {};
+  void reload(date) async{
+    Map data = await readData();
+    setState(() { // who knows if this works
+      dayData = data[date];
+    });
+    
+  }
   @override
   build(BuildContext context) {
-    Map dayData = widget.dayData;
+    dayData = widget.dayData;
     DateTime date = widget.date;
     
     return Scaffold(
@@ -36,8 +44,10 @@ class _DayScreenState extends State<DayScreen> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], reload: (){},))
-                    );
+                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]]))
+                    ).then((_) {
+                      reload(dayData.keys.toList()[index]);
+                    });
                   },
                   child: dayBox(dayData[dayData.keys.toList()[index]])
                 );

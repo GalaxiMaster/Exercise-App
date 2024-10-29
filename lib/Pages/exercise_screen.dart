@@ -47,6 +47,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       week = weekt;
     });
   }
+
   Future<void> _loadHighlightedDays() async {
     var data = await getStats(widget.exercise);
     debugPrint(data.toString());
@@ -190,9 +191,12 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               onTap: () async{
                                 Map data = await readData();
                                 Navigator.push(
+                                  // ignore: use_build_context_synchronously
                                   context,
-                                  MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week], reload: (){}))
-                                );
+                                  MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week]))
+                                ).then((_) {
+                                  _loadHighlightedDays();  // Call the method after returning from Addworkout
+                                });
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5),

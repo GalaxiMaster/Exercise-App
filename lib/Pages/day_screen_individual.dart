@@ -1,4 +1,6 @@
+import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
@@ -8,8 +10,7 @@ import 'package:intl/intl.dart';
 
 class IndividualDayScreen extends StatefulWidget {
   final Map dayData;
-  final Function reload;
-  const IndividualDayScreen({super.key, required this.dayData, required this.reload});
+  const IndividualDayScreen({super.key, required this.dayData});
   @override
   // ignore: library_private_types_in_public_api
   _IndividualDayScreenState createState() => _IndividualDayScreenState();
@@ -17,6 +18,7 @@ class IndividualDayScreen extends StatefulWidget {
 
 class _IndividualDayScreenState extends State<IndividualDayScreen> {
   final Map<String, bool> _imageExistsCache = {};
+  Map dayData = {};
 
     // Cache the file existence check
   Future<bool> _checkFileExists(String filePath) async {
@@ -30,17 +32,18 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
   }
   @override
   build(BuildContext context) {
-    String dateStr = widget.dayData['stats']['startTime'];
-    String endTimeStr = widget.dayData['stats']['endTime'];
-    List percentageData = getPercentages(widget.dayData);
+    dayData = widget.dayData;
+    String dateStr = dayData['stats']['startTime'];
+    String endTimeStr = dayData['stats']['endTime'];
+    List percentageData = getPercentages(dayData);
     Duration length = DateTime.parse(endTimeStr).difference(DateTime.parse(dateStr));
     double volume = 0;
     int sets = 0;
     int prs = 0;
     int exercises = 0;
-    for (String exercise in widget.dayData['sets'].keys){
+    for (String exercise in dayData['sets'].keys){
       exercises++;
-      for (Map set in widget.dayData['sets'][exercise]){
+      for (Map set in dayData['sets'][exercise]){
         sets++;
         volume += double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
         if (set['PR'] == 'yes') prs++;
@@ -116,7 +119,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                 ),
                 muscleSplit_stackedBars(percentageData, context),
                 const Divider(height: .1, thickness: 0.5, color: Colors.grey,),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,10 +128,25 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                         'Workout',
                         style: TextStyle(fontSize: 20,),
                       ),
-                      Text(
-                        'Edit workout',
-                        style: TextStyle(
-                          fontSize: 16,
+                      GestureDetector(
+                        onTap: () async{
+                          final result = await Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => Addworkout(sets: dayData, confirm: true),
+                            ),
+                          );
+                          if (result != null){
+                            dayData['sets'] = result;
+                            editDay(dayData);
+                            setState(() {});
+                          }
+                        },
+                        child: Text(
+                          'Edit workout',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ],
@@ -136,10 +154,10 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                 ),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.dayData['sets'].keys.length,
+                  itemCount: dayData['sets'].keys.length,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index){
-                    String exerciseName = widget.dayData['sets'].keys.toList()[index];
+                    String exerciseName = dayData['sets'].keys.toList()[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Column(
@@ -183,10 +201,10 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                           ),
                           ListView.builder(
                             shrinkWrap: true,
-                            itemCount: widget.dayData['sets'][exerciseName].length,
+                            itemCount: dayData['sets'][exerciseName].length,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index){
-                              Map set = widget.dayData['sets'][exerciseName][index];
+                              Map set = dayData['sets'][exerciseName][index];
                               return Container(
                                 decoration: BoxDecoration(
                                   color: index % 2 == 0 ? ThemeColors.bg : ThemeColors.accent
@@ -216,7 +234,19 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
       )
     );
   }
-
+    Future<bool> editDay(Map day) async{
+    String dayKey = '';
+    widget.dayData.forEach((key, value) {
+      if (value == day) {
+        dayKey = key;
+      }
+    });
+    if (dayKey == ''){return false;}
+    Map data = await readData();
+    data[dayKey]['sets'] = day['sets'];
+    writeData(data, append: false);
+    return true;
+  }
   // ignore: non_constant_identifier_names
   Padding muscleSplit_stackedBars(List dayData, BuildContext context) {
     return Padding(
