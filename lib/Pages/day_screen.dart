@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/calendar.dart';
+import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
@@ -25,19 +26,25 @@ class _DayScreenState extends State<DayScreen> {
       appBar: AppBar(
         title: Text('Workouts for ${date.day}/${date.month}/${date.year}'),
       ),
-      body: GestureDetector(
-        child: Column(
-          children: [
-            Flexible(
-              child: ListView.builder(
-                itemCount: dayData.keys.length,
-                itemBuilder: (context, index){
-                  return dayBox(dayData[dayData.keys.toList()[index]]);
-                }
-              ),
-            )
-          ],
-        ),
+      body: Column(
+        children: [
+          Flexible(
+            child: ListView.builder(
+              itemCount: dayData.keys.length,
+              itemBuilder: (context, index){
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], reload: (){},))
+                    );
+                  },
+                  child: dayBox(dayData[dayData.keys.toList()[index]])
+                );
+              }
+            ),
+          )
+        ],
       )
     );
   }

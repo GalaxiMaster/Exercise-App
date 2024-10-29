@@ -77,7 +77,6 @@ class _WorkoutListState extends State<WorkoutList> {
                           child: Center(child: CircularProgressIndicator()),
                         );
                       }
-                      
                       return snapshot.hasData && snapshot.data! 
                         ? Image.asset(
                             "Assets/Exercises/$exercise.png",
