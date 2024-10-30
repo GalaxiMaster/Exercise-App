@@ -41,21 +41,29 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     super.initState();
     _loadHighlightedDays();
   }
-  void alterHeadingBar(double value, String weekt){
+  void alterHeadingBar(num value, String weekt){
     setState(() {
       graphvalue = numParsething(value);
       week = weekt;
     });
   }
 
-  Future<void> _loadHighlightedDays() async {
+  Future<void> _loadHighlightedDays({reload = false}) async {
     var data = await getStats(widget.exercise);
+    final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+    final List values = exerciseData.map((data) => data[selector]).toList();
+
     debugPrint(data.toString());
     setState(() {
       exerciseData = data[0];
       if (data[0].isNotEmpty){
         heaviestWeight = data[1];
         heaviestVolume = data[2];
+      }
+      if (reload){
+        graphvalue = numParsething(values[values.length - 1]);
+        week = dates[dates.length - 1];
+        alterHeadingBar(graphvalue, week);
       }
     });
   }
@@ -195,7 +203,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                   context,
                                   MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week], dayKey: week,))
                                 ).then((_) {
-                                  _loadHighlightedDays();  // Call the method after returning from Addworkout
+                                  _loadHighlightedDays(reload: true);  // Call the method after returning from Addworkout
                                 });
                               },
                               child: Padding(
@@ -343,12 +351,18 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Widget selectorBox(String text, bool selected){
     return GestureDetector(
       onTap: () async{
+
         setState(() {
           switch(text){
             case 'Weight': selector = 'weight';
             case 'Volume': selector = 'volume';
             case 'Reps': selector = 'reps';
           }
+          final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+          final List values = exerciseData.map((data) => data[selector]).toList();
+          graphvalue = numParsething(values[values.length - 1]);
+          week = dates[dates.length - 1];
+          alterHeadingBar(graphvalue, week);
         });
       },
       child: Padding(
