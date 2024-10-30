@@ -173,6 +173,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
   
   Widget graphBody(List<FlSpot> spots, List<dynamic> dates, BuildContext context) {
+    String unit = 'kg';
+    if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight'){unit = '';}
     return spots.isNotEmpty ? SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -189,7 +191,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${graphvalue.toStringAsFixed(2)} kg',
+                              '${graphvalue.toStringAsFixed(2)} $unit',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
