@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/Pages/importing_page.dart';
 import 'package:exercise_app/Pages/workoutSettings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -69,7 +68,15 @@ import 'package:share_plus/share_plus.dart';
             _buildSettingsBox(
               icon: Icons.download,
               label: 'Import data',
-              function: (){importData(context);},
+              function: (){
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ImportingPage(),
+                  ),
+                );   
+                // importData(context);
+              },
             ),
             _buildSettingsBox(
               icon: Icons.refresh,
@@ -239,7 +246,6 @@ class _GoalOptionsState extends State<GoalOptions> {
 }
 
 void resetDataButton(BuildContext context){
-  debugPrint('hakhj');
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -274,58 +280,6 @@ void resetDataButton(BuildContext context){
     writeData(data, path: 'settings', append: false);
   }
 
-void importData(BuildContext context) async{
-  try {
-    // Open file picker and allow the user to select a JSON file
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom, // Restrict to custom types
-      allowedExtensions: ['json'], // Only allow .json files
-    );
-    
-    if (result != null && result.files.isNotEmpty) {
-      // Get the file path
-      String? filePath = result.files.single.path;
-
-      if (filePath != null) {
-        // Read the content of the file
-        File file = File(filePath);
-        String content = await file.readAsString();
-
-        // Parse the JSON content
-        Map<String, dynamic> jsonData = jsonDecode(content);
-        // writeData({}, append: false);
-        writeData(jsonData, append: true);
-        // Map data = await readData();
-      showDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Data written'),
-            content: Text(jsonData.toString()),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog
-                },
-              ),
-            ],
-          );
-        },
-      );
-        // Do something with the parsed JSON data
-        debugPrint("Parsed JSON data: $jsonData");
-      } else {
-        debugPrint("File path is null");
-      }
-    } else {
-      debugPrint("User canceled the picker");
-    }
-  } catch (e) {
-    debugPrint("Error picking or reading file: $e");
-  }
-  }
 
 void moveExercises(BuildContext context) async{
   List? problemExercises = [];
@@ -370,7 +324,7 @@ if (resultTo != null && resultFrom != null) {
         newData[day]['sets'][resultTo] = data[day]['sets'][exercise];
       } else {
         // Keep the original key and value
-                newData[day]['stats'] = data[day]['stats'];
+        newData[day]['stats'] = data[day]['stats'];
         newData[day]['sets'][exercise] = data[day]['sets'][exercise];
       }
     }
@@ -383,7 +337,9 @@ if (resultTo != null && resultFrom != null) {
 
   
 }
-  Widget _buildSettingsBox({
+
+
+Widget _buildSettingsBox({
     required IconData icon,
     required String label,
     required VoidCallback? function,

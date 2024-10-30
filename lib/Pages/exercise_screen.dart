@@ -99,7 +99,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         .entries
         .map((entry) => FlSpot(
               entry.key.toDouble(), // Use the index as the X value
-              exerciseMuscles[widget.exercise]['type'] != 'bodyweight' ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
+              (exerciseMuscles[widget.exercise]?['type'] ?? 'weighted') != 'bodyweight' ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
             ))
         .toList();
 
@@ -325,7 +325,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       ),
                     ),
                   ),
-                  if (exerciseMuscles[widget.exercise]['type'] != 'bodyweight')
+                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') != 'bodyweight')
                   Row(
                     children: [
                       selectorBox('Weight', selector == 'weight'),
@@ -334,11 +334,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  if (exerciseMuscles[widget.exercise]['type'] != 'bodyweight')
+                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') != 'bodyweight')
                   Text('Most weight : ${heaviestWeight['weight']}kg x ${heaviestWeight['reps']}'),
-                  if (exerciseMuscles[widget.exercise]['type'] != 'bodyweight')
+                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') != 'bodyweight')
                   Text('Most volume : ${heaviestVolume['weight']}kg x ${heaviestVolume['reps']}'),
-                  if (exerciseMuscles[widget.exercise]['type'] == 'bodyweight')
+                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight')
                   Text('Highest reps: ${numParsething(heaviestVolume['reps'])}'),
                 ],
               ),

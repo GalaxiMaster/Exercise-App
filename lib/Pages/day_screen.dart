@@ -170,7 +170,7 @@ class _DayScreenState extends State<DayScreen> {
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                  child: Text(getBestSet(day['sets'][day['sets'].keys.toList()[i]], exerciseMuscles[day['sets'].keys.toList()[i]]['type'])),
+                  child: Text(getBestSet(day['sets'][day['sets'].keys.toList()[i]], exerciseMuscles[day['sets'].keys.toList()[i]]?['type'] ?? 'Weighted')),
                 )
               ],
             ),

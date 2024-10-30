@@ -469,7 +469,7 @@ class DataBarChart extends StatelessWidget {
             if (selector == 'volume'){
               dayWeight += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
             }else{
-              dayWeight += double.parse(set[selector]);
+              dayWeight += double.parse(set[selector].toString());
             }
           }
         }

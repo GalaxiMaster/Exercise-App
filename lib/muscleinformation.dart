@@ -7158,7 +7158,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 30
         },
         "Secondary": {},
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Dead Hang": {
         "Primary": {
@@ -7168,7 +7168,7 @@ Map exerciseMuscles = {
             "Lats": 30,
             "Shoulders": 15
         },
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Farmer Walk": {
         "Primary": {
