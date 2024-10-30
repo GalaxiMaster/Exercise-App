@@ -3,6 +3,7 @@ import 'package:exercise_app/Pages/exercise_goals.dart';
 import 'package:exercise_app/Pages/main_exercises.dart';
 import 'package:exercise_app/Pages/muscle_tracking.dart';
 import 'package:exercise_app/Pages/radar_chart.dart';
+import 'package:exercise_app/Pages/strength_gradient.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -138,7 +139,7 @@ class MuscleData extends StatelessWidget {
                   box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, const MainExercisesPage()),
                   box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking(setData: unscaledMuscleData,)),
                   box('trophy', 'Exercise goals', "Set goals per exercise per week", context, const ExerciseGoals()),
-
+                  box('chart', 'Strength Gradient', "See your strength over a period", context, const StrengthGradiant()),
                 ],
               ),
             );

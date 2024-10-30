@@ -244,8 +244,20 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                             // isCurved: true, // lets the graph be extrapolated, turned off due to incorrect points
                             color: Colors.blue,
                             barWidth: 3,
-                            belowBarData: BarAreaData(show: false),
+                            belowBarData: BarAreaData( // need to be on a toggle?
+                              show: true,
+                              color: Colors.blueAccent.withOpacity(0.2),
+                            ),                            
                           ),
+                          LineChartBarData( // TODO need to be on a toggle?
+                            isStrokeCapRound: false,
+                            dotData: FlDotData(show: false),
+                            spots: calculateBestFitLine(spots),
+                            color: Colors.red,
+                            barWidth: 2,
+                            dashArray: [5, 5],  // Creates a dotted effect
+                            belowBarData: BarAreaData(show: false),
+                          )
                         ],
                         lineTouchData: LineTouchData(  
                           handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
@@ -547,4 +559,28 @@ Future<List> getStats(String target) async {
   }
 
   return [targetData, heaviestWeight, heaviestVolume];
+}
+
+
+List<FlSpot> calculateBestFitLine(List<FlSpot> dataPoints) {
+  int n = dataPoints.length;
+  double sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+
+  for (var point in dataPoints) {
+    sumX += point.x;
+    sumY += point.y;
+    sumXY += point.x * point.y;
+    sumX2 += point.x * point.x;
+  }
+
+  // Calculate slope (m) and y-intercept (b)
+  double m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+  double b = (sumY - m * sumX) / n;
+
+  // Generate the best-fit line points based on the slope and intercept
+  double minX = dataPoints.map((point) => point.x).reduce((a, b) => a < b ? a : b);
+  double maxX = dataPoints.map((point) => point.x).reduce((a, b) => a > b ? a : b);
+
+  // Return two points that represent the start and end of the line of best fit
+  return [FlSpot(minX, m * minX + b), FlSpot(maxX, m * maxX + b)];
 }
