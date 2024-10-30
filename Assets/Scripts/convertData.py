@@ -2,8 +2,10 @@ from datetime import datetime, timedelta
 import json
 import random
 from thefuzz import fuzz
+import csv
+import pandas as pd
 
-
+balls = {'Flat dumbbell chests press': 'Dumbbell Bench Press', 'Lat pull downs (neutral)': 'Cable Neutral Grip Lat Pulldown', 'Lat pull downs': 'Cable Neutral Grip Lat Pulldown', 'Barbell curls': 'Barbell Curl', 'Cable rows': 'Cable seated row', 'Dumbbell shoulder press': 'Dumbbell Seated Shoulder Press', 'Lat raise (cable)': 'Cable One Arm Lateral Raise', 'Leg raise': 'Lying Leg Raise', 'Flat dumbell chests press': 'Dumbbell Bench Press', 'External rotations': 'Cable Half Kneeling External Rotation', 'Internal rotations': 'Cable Seated Shoulder Internal Rotation', 'Pullup': 'Pull Up', 'Chinups': 'Chin Up', 'Neutral grip pullups': 'Neutral Grip Pull Up', 'Incline dumbell chest press': 'Dumbbell Incline Bench Press', 'Tricep pushdowns': 'Cable Pushdown (Rope)', 'Overhead tricep extensions (edge)': 'Cable Overhead Triceps Extension (Rope)', 'Flat dumbell chest press': 'Dumbbell Bench Press', 'Seated bicep curls': 'Dumbbell Seated Bicep Curl', 'Flat dumbbell chest press': 'Dumbbell Bench Press', 'Cable Lat raises': 'Cable One Arm Lateral Raise', 'Shoulder press': 'Dumbbell Seated Shoulder Press', 'Rear felt flies': 'Rear Delt Fly (Machine)', 'Cable Rows': 'Cable seated row', 'Dumbell lat raises': 'Cable One Arm Lateral Raise', 'Flat Dumbbell chest press': 'Dumbbell Bench Press', 'tricep pushdowns': 'Cable Pushdown (Rope)', 'Rear delt flies': 'Rear Delt Fly (Machine)', 'Overhead prsss': 'Seated Overhead Press (Barbell)', 'Lat raise': 'Cable One Arm Lateral Raise', 'Overhead tricep extention': 'Cable Overhead Triceps Extension (Rope)', 'Assisted dips': 'Assisted Triceps Dip', 'Rows': 'Seated cable row', 'Preacher curls': 'Barbell Preacher Curl', 'Machine lat pull downs': 'Machine Lat Pulldowns', 'Machine rows': 'Seated Lever Machine Row', 'dumbbell lat raises': 'Dumbbell Lateral Raise', 'shoulder press': 'Dumbbell Seated Shoulder Press', 'Incline dumbbell chest preds': 'Dumbbell Incline Bench Press', 'Overhead tricep extention (edge)': 'Cable Overhead Triceps Extension (Rope)', 'Barbell bicep curl': 'Barbell Curl', 'Neutral Lat pull downs': 'Cable Neutral Grip Lat Pulldown', 'Cable lat raises': 'Cable One Arm Lateral Raise', 'Pullups': 'Pull Up', 'Tricep pushdowns (edge one)': 'Cable Pushdown (Rope)', 'Tricep pushdowns (edge)': 'Cable Pushdown (Rope)', 'Overhead press': 'Standing Overhead Press (Barbell)', 'Back extentions': 'Back Extensions', 'Assisted neutral Pullups': 'Assisted Neutral Grip Pull Ups', 'Flat Barbell bench': 'Barbell Bench Press', 'Band assisted dips': 'Band Assisted Dips', 'Dumbbell preacher curls': 'Dumbbell Preacher Curl', 'Tricep pushdowns edge': 'Cable Pushdown (Rope)', 'Incline chest press': 'Dumbbell Incline Bench Press', 'Lat raises': 'Cable Single Arm Lateral Raise', 'Cable curls': 'Cable One Arm Biceps Curl', 'Behind curls': 'Finger Curls', 'Lat pullovers': 'Cable Pullover', 'Incline Barbell bench press': 'Barbell Incline Bench Press', 'Banded dips': 'Band Assisted Dips', 'Flat Barbell chests press': 'Barbell Bench Press', 'Tricep pushdowns kirrawee': 'Cable Pushdown (Rope)', 'Concentration curls': 'Dumbbell Concentration Curl', 'Assisted neutral grip pullups': 'Assisted Neutral Grip Pull Ups', 'Tricep push downs': 'Cable Pushdown (Rope)', 'Chests flies': 'Machine Chest Fly', 'Incline dumbbell chest press': 'Dumbbell Incline Bench Press', 'Chest flies': 'Machine Chest Fly', 'Bicep curl': 'Dumbbell Biceps Curl', 'Bicep curls supported': 'Dumbbell Preacher Curl', 'incline dumbbell chest press': 'Dumbbell Incline Bench Press', 'Close grip Cable rows': 'Cable seated row', 'Isolated bicep curls': 'Dumbbell Preacher Curl', 'Incline Barbell chests press': 'Barbell Incline Bench Press', 'Single arm overhead tricep extention': 'Cable Overhead Tricep Single Arm Triceps Extension (Rope)', 'Dumbbell rows': 'Dumbbell Bent Over Bench Row', 'Over head tricep': 'Cable Overhead Single Arm Triceps Extension (Rope)'}
 exerciseMuscles = {
 "Cable Pushdown": {
         "Primary": {
@@ -31,14 +33,14 @@ exerciseMuscles = {
             "Traps": 35
         },
         "Secondary": {
-            "Quadriceps": 10,
+            "Quads": 10,
             "Glutes": 10
         },
         "type": "Weighted"
     },
     "Barbell Overhead Squat": {
         "Primary": {
-            "Quadriceps": 40,
+            "Quads": 40,
             "Front Delts": 20,
             "Side Delts": 10
         },
@@ -47,16 +49,6 @@ exerciseMuscles = {
             "Hamstrings": 15
         },
         "type": "Weighted"
-    },
-    "Reverse Push Up": {
-        "Primary": {
-            "Triceps": 60
-        },
-        "Secondary": {
-            "Chest": 30,
-            "Front Delts": 10
-        },
-        "type": "bodyweight"
     },
     "Dumbbell One Arm Shoulder Press": {
         "Primary": {
@@ -81,7 +73,7 @@ exerciseMuscles = {
     },
     "Squat (arms overhead)": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 30
         },
         "Secondary": {
@@ -248,7 +240,7 @@ exerciseMuscles = {
     },
     "Barbell Thruster": {
         "Primary": {
-            "Quadriceps": 25,
+            "Quads": 25,
             "Front Delts": 15,
             "Side Delts": 10
         },
@@ -268,16 +260,6 @@ exerciseMuscles = {
         "Secondary": {
             "Triceps": 20,
             "Upper Chest": 10
-        },
-        "type": "Weighted"
-    },
-    "Barbell Lying Close Grip Triceps Extension": {
-        "Primary": {
-            "Triceps": 90
-        },
-        "Secondary": {
-            "Chest": 5,
-            "Front Delts": 5
         },
         "type": "Weighted"
     },
@@ -322,7 +304,7 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Elevated Push Up": {
+    "Incline Push up": {
         "Primary": {
             "Chest": 50,
             "Triceps": 30
@@ -341,17 +323,6 @@ exerciseMuscles = {
             "Front Delts": 5
         },
         "type": "Weighted"
-    },
-    "Assisted Pullup (Neutral grip)": {
-        "Primary": {
-            "Lats": 50,
-            "Biceps": 30
-        },
-        "Secondary": {
-            "Rear Delts": 10,
-            "Forearms": 10
-        },
-        "type": "bodyweight"
     },
     "Assisted Triceps Dip": {
         "Primary": {
@@ -485,24 +456,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable Concentration Triceps Extension": {
-        "Primary": {
-            "Triceps": 70
-        },
-        "Secondary": {
-            "Front Delts": 30
-        },
-        "type": "Weighted"
-    },
-    "Cable Incline Triceps Kickback": {
-        "Primary": {
-            "Triceps": 90
-        },
-        "Secondary": {
-            "Front Delts": 10
-        },
-        "type": "Weighted"
-    },
     "Machine Lat Pulldowns": {
         "Primary": {
             "Lats": 70
@@ -514,20 +467,9 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Wide Grip Seated Cable Row": {
-        "Primary": {
-            "Rhomboids": 50,
-            "Traps": 30
-        },
-        "Secondary": {
-            "Biceps": 10,
-            "Lats": 10
-        },
-        "type": "Weighted"
-    },
     "Barbell Wide Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -625,7 +567,7 @@ exerciseMuscles = {
     },
     "Lever Seated Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -644,7 +586,7 @@ exerciseMuscles = {
     },
     "Side Lunge": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -728,16 +670,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Sled 45 Leg Press (Back POV)": {
-        "Primary": {
-            "Quadriceps": 70
-        },
-        "Secondary": {
-            "Glutes": 20,
-            "Hamstrings": 10
-        },
-        "type": "Weighted"
-    },
     "Barbell Hip Thrust": {
         "Primary": {
             "Glutes": 80
@@ -749,7 +681,7 @@ exerciseMuscles = {
     },
     "Weighted Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -759,7 +691,7 @@ exerciseMuscles = {
     },
     "Lever Seated Leg Press": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -787,7 +719,7 @@ exerciseMuscles = {
     },
     "Dumbbell Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -806,7 +738,7 @@ exerciseMuscles = {
     },
     "Smith Front Squat (Clean Grip)": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -952,15 +884,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Hanging Leg Hip Raise": {
-        "Primary": {
-            "Abdominals": 60
-        },
-        "Secondary": {
-            "Hip Flexors": 40
-        },
-        "type": "Weighted"
-    },
     "Leg Raise Hip Lift": {
         "Primary": {
             "Abdominals": 60
@@ -1041,7 +964,7 @@ exerciseMuscles = {
     },
     "Bodyweight Wall Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 30
@@ -1077,7 +1000,7 @@ exerciseMuscles = {
     },
     "Dumbbell Curtsey lunge": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -1087,7 +1010,7 @@ exerciseMuscles = {
     },
     "Dumbbell Step Up Single Leg Balance with Bicep Curl": {
         "Primary": {
-            "Quadriceps": 40,
+            "Quads": 40,
             "Glutes": 30,
             "Biceps": 20
         },
@@ -1252,7 +1175,7 @@ exerciseMuscles = {
     },
     "Dumbbell Goblet Box Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -1262,7 +1185,7 @@ exerciseMuscles = {
     },
     "Split Lateral Squat with Roll": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 30
         },
         "Secondary": {
@@ -1370,7 +1293,7 @@ exerciseMuscles = {
     },
     "Dumbbell Gobelt Curtsey Lunge": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -1380,7 +1303,7 @@ exerciseMuscles = {
     },
     "Safety Bar Front Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -1441,7 +1364,7 @@ exerciseMuscles = {
     },
     "Smith Sumo Squat": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -1545,27 +1468,9 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbell Seated Reverse grip Concentration Curl": {
-        "Primary": {
-            "Biceps": 70
-        },
-        "Secondary": {
-            "Brachialis": 30
-        },
-        "type": "Weighted"
-    },
-    "Cable Straight Arm Pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Triceps": 30
-        },
-        "type": "Weighted"
-    },
     "Bodyweight Kneeling Sissy Squat": {
         "Primary": {
-            "Quadriceps": 80
+            "Quads": 80
         },
         "Secondary": {
             "Knee Joint": 20
@@ -1782,7 +1687,7 @@ exerciseMuscles = {
     },
     "Barbell Single Leg Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -1792,7 +1697,7 @@ exerciseMuscles = {
     },
     "Weighted Sissy Squat": {
         "Primary": {
-            "Quadriceps": 80
+            "Quads": 80
         },
         "Secondary": {
             "Knee Joint": 20
@@ -1814,7 +1719,7 @@ exerciseMuscles = {
             "Calves": 90
         },
         "Secondary": {
-            "Quadriceps": 10
+            "Quads": 10
         },
         "type": "Weighted"
     },
@@ -1830,7 +1735,7 @@ exerciseMuscles = {
     },
     "Trap Bar Deadlift": {
         "Primary": {
-            "Quadriceps": 40,
+            "Quads": 40,
             "Hamstrings": 30,
             "Glutes": 20
         },
@@ -1841,7 +1746,7 @@ exerciseMuscles = {
     },
     "Kettlebell Sumo Squat": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -1860,7 +1765,7 @@ exerciseMuscles = {
     },
     "Sled Lying Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -1889,7 +1794,7 @@ exerciseMuscles = {
     },
     "Lever Chair Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -1928,7 +1833,7 @@ exerciseMuscles = {
     },
     "Weighted Cossack Squats": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -2043,7 +1948,7 @@ exerciseMuscles = {
     },
     "Barbell Lunge": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -2111,7 +2016,7 @@ exerciseMuscles = {
     "Dumbbell Deadlift": {
         "Primary": {
             "Hamstrings": 40,
-            "Quadriceps": 30,
+            "Quads": 30,
             "Glutes": 20
         },
         "Secondary": {
@@ -2131,7 +2036,7 @@ exerciseMuscles = {
     "Lever Deadlift (plate loaded)": {
         "Primary": {
             "Hamstrings": 40,
-            "Quadriceps": 30,
+            "Quads": 30,
             "Glutes": 20
         },
         "Secondary": {
@@ -2150,7 +2055,7 @@ exerciseMuscles = {
     },
     "Lever Horizontal One leg Press": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -2164,13 +2069,13 @@ exerciseMuscles = {
         },
         "Secondary": {
             "Biceps": 30,
-            "Quadriceps": 20
+            "Quads": 20
         },
         "type": "bodyweight"
     },
     "Bodyweight Pulse Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -2180,7 +2085,7 @@ exerciseMuscles = {
     },
     "Curtsey Squat": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -2204,13 +2109,13 @@ exerciseMuscles = {
             "Ankles": 20
         },
         "Secondary": {
-            "Quadriceps": 10
+            "Quads": 10
         },
         "type": "Weighted"
     },
     "Weighted Pistol Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 20,
@@ -2221,7 +2126,7 @@ exerciseMuscles = {
     },
     "Dumbbell Goblet Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -2279,7 +2184,7 @@ exerciseMuscles = {
     },
     "Dumbbell side lunge": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -2337,7 +2242,7 @@ exerciseMuscles = {
     },
     "Step up on Chair": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -2459,7 +2364,7 @@ exerciseMuscles = {
     },
     "Bulgarian Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -2476,7 +2381,7 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable one arm lat pulldown": {
+    "Cable one arm Lateral pulldown": {
         "Primary": {
             "Lats": 70
         },
@@ -2498,7 +2403,7 @@ exerciseMuscles = {
     },
     "Lever Leg Extension (plate loaded)": {
         "Primary": {
-            "Quadriceps": 90
+            "Quads": 90
         },
         "Secondary": {
             "Knee Joint Stability": 10
@@ -2544,7 +2449,7 @@ exerciseMuscles = {
     },
     "Smith Low Bar Squat": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 40
         },
         "Secondary": {
@@ -2566,13 +2471,13 @@ exerciseMuscles = {
             "Calves": 90
         },
         "Secondary": {
-            "Quadriceps": 10
+            "Quads": 10
         },
         "type": "Weighted"
     },
     "Dumbbell Lunge": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -2685,7 +2590,7 @@ exerciseMuscles = {
     },
     "Dumbbell Bar Grip Sumo Squat": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -2735,7 +2640,7 @@ exerciseMuscles = {
     },
     "Squat m": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -2766,7 +2671,7 @@ exerciseMuscles = {
             "Hip Flexors": 70
         },
         "Secondary": {
-            "Quadriceps": 30
+            "Quads": 30
         },
         "type": "Weighted"
     },
@@ -2779,16 +2684,6 @@ exerciseMuscles = {
             "Forearms": 10
         },
         "type": "Weighted"
-    },
-    "Band kneeling one arm pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps": 20,
-            "Rear Delts": 10
-        },
-        "type": "banded"
     },
     "EZ Bar California Skullcrusher": {
         "Primary": {
@@ -2829,7 +2724,7 @@ exerciseMuscles = {
     },
     "One Leg Quarter Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -2856,7 +2751,7 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable One Arm Pulldown": {
+    "Cable one arm Lateral pulldown": {
         "Primary": {
             "Lats": 70
         },
@@ -2877,7 +2772,7 @@ exerciseMuscles = {
     },
     "Barbell Sumo Deadlift": {
         "Primary": {
-            "Quadriceps": 40,
+            "Quads": 40,
             "Hamstrings": 30,
             "Glutes": 20
         },
@@ -2908,7 +2803,7 @@ exerciseMuscles = {
     },
     "Kettlebell Front Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -3003,7 +2898,7 @@ exerciseMuscles = {
     },
     "Dumbbell Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -3105,7 +3000,7 @@ exerciseMuscles = {
     },
     "Smith Chair Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -3153,14 +3048,14 @@ exerciseMuscles = {
     },
     "Sit (wall)": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 30
         },
         "type": "Weighted"
     },
-    "Cable Close Grip Front Lat Pulldown": {
+    "Cable Close Grip Lat Pulldown": {
         "Primary": {
             "Lats": 70
         },
@@ -3204,7 +3099,7 @@ exerciseMuscles = {
     },
     "Smith Lateral Step Up": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -3274,7 +3169,7 @@ exerciseMuscles = {
     "Cable Deadlift": {
         "Primary": {
             "Hamstrings": 40,
-            "Quadriceps": 30,
+            "Quads": 30,
             "Glutes": 20
         },
         "Secondary": {
@@ -3288,7 +3183,7 @@ exerciseMuscles = {
             "Glutes": 30
         },
         "Secondary": {
-            "Quadriceps": 10
+            "Quads": 10
         },
         "type": "Weighted"
     },
@@ -3323,7 +3218,7 @@ exerciseMuscles = {
     },
     "Barbell Front Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -3464,7 +3359,7 @@ exerciseMuscles = {
     "Barbell Deadlift": {
         "Primary": {
             "Hamstrings": 40,
-            "Quadriceps": 30,
+            "Quads": 30,
             "Glutes": 20
         },
         "Secondary": {
@@ -3557,7 +3452,7 @@ exerciseMuscles = {
     },
     "Barbell Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -3576,7 +3471,7 @@ exerciseMuscles = {
     },
     "Barbell High Bar Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -3586,7 +3481,7 @@ exerciseMuscles = {
     },
     "Dumbbell Split Squat Front Foot Elevanted": {
         "Primary": {
-            "Quadriceps": 70,
+            "Quads": 70,
             "Glutes": 20
         },
         "Secondary": {
@@ -3634,7 +3529,7 @@ exerciseMuscles = {
     },
     "Barbell Low Bar Squat": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 40
         },
         "Secondary": {
@@ -3653,7 +3548,7 @@ exerciseMuscles = {
     },
     "Dumbbell one leg squat w": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 20,
@@ -3683,7 +3578,7 @@ exerciseMuscles = {
     },
     "Smith Single Leg Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -3874,7 +3769,7 @@ exerciseMuscles = {
     },
     "Smith Front Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -3884,7 +3779,7 @@ exerciseMuscles = {
     },
     "Sled 45 degrees One Leg Press": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -3903,7 +3798,7 @@ exerciseMuscles = {
     },
     "Smith Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -3949,16 +3844,6 @@ exerciseMuscles = {
             "Forearms": 10
         },
         "type": "Weighted"
-    },
-    "Band kneeling pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps": 20,
-            "Rear Delts": 10
-        },
-        "type": "banded"
     },
     "Cable Lying Triceps Extension (Rope)": {
         "Primary": {
@@ -4020,7 +3905,7 @@ exerciseMuscles = {
     },
     "Dumbbell Front Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -4075,7 +3960,7 @@ exerciseMuscles = {
     },
     "Barbell Front Chest Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 25,
@@ -4159,7 +4044,7 @@ exerciseMuscles = {
     },
     "Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -4216,7 +4101,7 @@ exerciseMuscles = {
     },
     "Lever Seated Horizontal Leg Press": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 20,
@@ -4310,7 +4195,7 @@ exerciseMuscles = {
     },
     "Landmine Front Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 30,
@@ -4320,7 +4205,7 @@ exerciseMuscles = {
     },
     "Plyo Sit Squat (wall)": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -4356,16 +4241,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Sled 45 Leg Press (Side POV)": {
-        "Primary": {
-            "Quadriceps": 70
-        },
-        "Secondary": {
-            "Glutes": 20,
-            "Hamstrings": 10
-        },
-        "type": "Weighted"
-    },
     "Cable Half Kneeling External Rotation": {
         "Primary": {
             "Rotator Cuff": 80
@@ -4395,9 +4270,9 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Sled Wide Hack Squat": {
+    "Sled Hack Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Adductors": 30
         },
         "Secondary": {
@@ -4420,7 +4295,7 @@ exerciseMuscles = {
             "Calves": 90
         },
         "Secondary": {
-            "Quadriceps": 10
+            "Quads": 10
         },
         "type": "Weighted"
     },
@@ -4436,7 +4311,7 @@ exerciseMuscles = {
     },
     "Barbell sumo squat": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -4473,15 +4348,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable Reverse Grip Biceps Curl (EZ bar)": {
-        "Primary": {
-            "Biceps": 70
-        },
-        "Secondary": {
-            "Brachialis": 30
-        },
-        "type": "Weighted"
-    },
     "Dumbbell Lying Elbow Press": {
         "Primary": {
             "Triceps": 80
@@ -4512,7 +4378,7 @@ exerciseMuscles = {
     },
     "Bodyweight Step up on Stepbox": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -4615,7 +4481,7 @@ exerciseMuscles = {
     },
     "Single Leg Step up": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -4654,7 +4520,7 @@ exerciseMuscles = {
     "Smith Deadlift": {
         "Primary": {
             "Hamstrings": 40,
-            "Quadriceps": 30,
+            "Quads": 30,
             "Glutes": 20
         },
         "Secondary": {
@@ -4709,7 +4575,7 @@ exerciseMuscles = {
     },
     "Squat (with band)": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -4731,7 +4597,7 @@ exerciseMuscles = {
     },
     "Kettlebell Gobelt Curtsey Lunge": {
         "Primary": {
-            "Quadriceps": 50
+            "Quads": 50
         },
         "Secondary": {
             "Glutes": 30,
@@ -4768,7 +4634,7 @@ exerciseMuscles = {
     },
     "Barbell One Leg Squat": {
         "Primary": {
-            "Quadriceps": 60
+            "Quads": 60
         },
         "Secondary": {
             "Glutes": 20,
@@ -4923,16 +4789,6 @@ exerciseMuscles = {
         },
         "type": "bodyweight"
     },
-    "Cable Standing Pulldown (Rope)": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps": 15,
-            "Forearms": 15
-        },
-        "type": "Weighted"
-    },
     "Barbell Seated Calf Raise": {
         "Primary": {
             "Calves": 100
@@ -4970,7 +4826,7 @@ exerciseMuscles = {
     },
     "Smith Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 15,
@@ -4987,7 +4843,7 @@ exerciseMuscles = {
     },
     "Weighted Counterbalanced Squat": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 15,
@@ -5037,32 +4893,11 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Sled Closer Hack Squat": {
-        "Primary": {
-            "Quadriceps": 70
-        },
-        "Secondary": {
-            "Glutes": 10,
-            "Hamstrings": 10,
-            "Calves": 10
-        },
-        "type": "Weighted"
-    },
     "Standing Calf Raise (On a staircase)": {
         "Primary": {
             "Calves": 100
         },
         "Secondary": {},
-        "type": "Weighted"
-    },
-    "Cable Pulldown (pro lat bar)": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps": 15,
-            "Forearms": 15
-        },
         "type": "Weighted"
     },
     "Incline Twisting Situp": {
@@ -5072,16 +4907,6 @@ exerciseMuscles = {
         },
         "Secondary": {
             "Hip Flexors": 30
-        },
-        "type": "Weighted"
-    },
-    "Cable Bar Lateral Pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps": 15,
-            "Forearms": 15
         },
         "type": "Weighted"
     },
@@ -5162,7 +4987,7 @@ exerciseMuscles = {
     },
     "Split Squats": {
         "Primary": {
-            "Quadriceps": 35,
+            "Quads": 35,
             "Glutes": 35
         },
         "Secondary": {
@@ -5290,7 +5115,7 @@ exerciseMuscles = {
     },
     "Smith Leg Press": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 10,
@@ -5354,7 +5179,7 @@ exerciseMuscles = {
     },
     "Sled 45 Leg Press": {
         "Primary": {
-            "Quadriceps": 70
+            "Quads": 70
         },
         "Secondary": {
             "Glutes": 10,
@@ -5365,7 +5190,7 @@ exerciseMuscles = {
     },
     "Dumbbell Step up": {
         "Primary": {
-            "Quadriceps": 35,
+            "Quads": 35,
             "Glutes": 35
         },
         "Secondary": {
@@ -5402,15 +5227,6 @@ exerciseMuscles = {
         "Secondary": {
             "Chest": 15,
             "Front Delts": 15
-        },
-        "type": "Weighted"
-    },
-    "Cable Pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps, Forearms": 30
         },
         "type": "Weighted"
     },
@@ -5645,7 +5461,7 @@ exerciseMuscles = {
     },
     "Jump Squat": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 30
         },
         "Secondary": {
@@ -5656,7 +5472,7 @@ exerciseMuscles = {
     },
     "Bulgarian Split Squat with Chair": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -5675,7 +5491,7 @@ exerciseMuscles = {
     },
     "Dumbbell Plyo Squat": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 30
         },
         "Secondary": {
@@ -5725,7 +5541,7 @@ exerciseMuscles = {
     },
     "Sissy Squat Bodyweight": {
         "Primary": {
-            "Quadriceps": 90
+            "Quads": 90
         },
         "Secondary": {
             "Calves": 10
@@ -5797,17 +5613,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-
-    "Cable Rear Pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Rear Delts": 15,
-            "Biceps": 15
-        },
-        "type": "Weighted"
-    },
     "Cable Y raise": {
         "Primary": {
             "Front Delts": 50,
@@ -5818,7 +5623,7 @@ exerciseMuscles = {
     },
     "Dumbbell Single Leg Split Squat": {
         "Primary": {
-            "Quadriceps": 60,
+            "Quads": 60,
             "Glutes": 30
         },
         "Secondary": {
@@ -5857,7 +5662,7 @@ exerciseMuscles = {
     },
     "Sumo Squat": {
         "Primary": {
-            "Quadriceps": 40,
+            "Quads": 40,
             "Glutes": 30,
             "Adductors": 20
         },
@@ -5906,7 +5711,7 @@ exerciseMuscles = {
     },
     "Dumbbell Single Leg Step Up": {
         "Primary": {
-            "Quadriceps": 50,
+            "Quads": 50,
             "Glutes": 40
         },
         "Secondary": {
@@ -5996,14 +5801,6 @@ exerciseMuscles = {
             "Brachialis": 10,
             "Forearms": 10
         },
-        "type": "Weighted"
-    },
-    "Dumbbell Reverse grip Biceps Curl": {
-        "Primary": {
-            "Brachialis": 60,
-            "Biceps": 40
-        },
-        "Secondary": {},
         "type": "Weighted"
     },
     "Cable Forward Raise": {
@@ -6221,7 +6018,7 @@ exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "Weighted"
+        "type": "bodyweight"
     },
     "Commando Pull Up": {
         "Primary": {
@@ -6781,7 +6578,7 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbell Seated Reverse Grip Tricep Extension": {
+    "Dumbbells Seated Triceps Extension": {
         "Primary": {
             "Triceps": 70
         },
@@ -7291,41 +7088,198 @@ exerciseMuscles = {
         "Biceps": 15
     },
     "type": "Weighted"
-  }
-};
+  },
+    "Assault Bike": {
+        "Primary": {
+            "Quads": 35,
+            "Hamstrings": 25,
+            "Glutes": 15,
+            "Calves": 10
+        },
+        "Secondary": {
+            "Forearms": 5,
+            "Biceps": 5,
+            "Rectus Abdominis": 10,
+        },
+        "type": "Cardio"
+    },
+    "Barbell Behind the Back Wrist Curls": {
+        "Primary": {
+            "Forearms": 90
+        },
+        "Secondary": {
+            "Biceps": 10
+        },
+        "type": "Weighted"
+    },
+    "Cable Behind the Back Wrist Curls": {
+        "Primary": {
+            "Forearms": 90
+        },
+        "Secondary": {
+            "Biceps": 10
+        },
+        "type": "Weighted"
+    },
+    "Cable One Arm Row": {
+        "Primary": {
+            "Lats": 40,
+            "Biceps": 20,
+            "Rear Delts": 20
+        },
+        "Secondary": {
+            "Forearms": 10,
+            "Traps": 10,
+            "Obliques": 5,
+            "Rectus Abdominis": 5
+        },
+        "type": "Weighted"
+    },
+    "Cable Wide Grip Neutral Lat Pulldown": {
+        "Primary": {
+            "Lats": 50,
+            "Biceps": 15,
+            "Rear Delts": 15
+        },
+        "Secondary": {
+            "Traps": 10,
+            "Forearms": 10,
+            "Rectus Abdominis": 5,
+            "Obliques": 5
+        },
+        "type": "Weighted"
+    },
+    "Captain Seat Leg Raise": {
+        "Primary": {
+            "Rectus Abdominis": 50,
+            "Obliques": 20,
+            "Hip Flexors": 30
+        },
+        "Secondary": {},
+        "type": "Bodyweight"
+    },
+    "Dead Hang": {
+        "Primary": {
+            "Forearms": 60,
+        },
+        "Secondary": {
+            "Lats": 30,
+            "Shoulders": 15
+        },
+        "type": "Bodyweight"
+    },
+    "Farmer Walk": {
+        "Primary": {
+            "Forearms": 40,
+            "Traps": 20,
+            "Rectus Abdominis": 10,
+            "Obliques": 10
+        },
+        "Secondary": {
+            "Quads": 10,
+            "Glutes": 10
+        },
+        "type": "Weighted"
+    },
+    "Low Cable Fly": {
+        "Primary": {
+            "Lower Chest": 55,
+            "Front Delts": 35
+        },
+        "Secondary": {
+            "Triceps": 10,
+        },
+        "type": "Weighted"
+    },
+    "Smith Machine Bench Press": {
+        "Primary": {
+            "Chest": 60,
+        },
+        "Secondary": {
+            "Front Delts": 20,
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Smith Machine Incline Bench Press": {
+        "Primary": {
+            "Upper Chest": 60,
+        },
+        "Secondary": {
+            "Front Delts": 20,
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Stationary Bike": {
+        "Primary": {
+            "Quads": 40,
+            "Hamstrings": 30,
+            "Glutes": 20
+        },
+        "Secondary": {
+            "Calves": 10,
+            "Rectus Abdominis": 10,
+        },
+        "type": "Cardio"
+    },
+    "Weighted Pull Up": {
+        "Primary": {
+            "Lats": 50
+        },
+        "Secondary": {
+            "Biceps": 25,
+            "Rhomboids": 15,
+            "Traps": 10
+        },
+        "type": "Weighted"
+    },
+    "Wide Grip Overhand Row": {
+        "Primary": {
+            "Rhomboids": 50,
+            "Traps": 30
+        },
+        "Secondary": {
+            "Biceps": 10,
+            "Lats": 10
+        },
+        "type": "Weighted"
+    }
+}
 
-with open('sample.json', 'r') as f:
-    data = json.load(f)
-
+# with open('thomasdata.csv', 'r') as f:
+    # data = csv.reader(f)
+    
+df = pd.read_csv('thomasdata.csv')
 exercises = []
-for day in data:
-    start_time_str = data[day]['stats']['startTime']
+for exercise in df['exercise_title']:
+    if (exercise not in exercises):
+        exercises.append(exercise)
 
-    # Convert 'startTime' to a datetime object
-    start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M')
+print(len(exercises))
+# with open("sample.json", "w") as outfile: 
+#     json.dump(data, outfile)
 
-    # Add a random number of minutes (between 60 and 120)
-    minutes_to_add = random.randint(50, 110)
-    end_time = start_time + timedelta(minutes=minutes_to_add)
-
-    # Convert back to string and assign to 'endTime'
-    data[day]['stats']['endTime'] = end_time.strftime('%Y-%m-%d %H:%M')
-
-with open("sample.json", "w") as outfile: 
-    json.dump(data, outfile)
 matches = {}
-corrections = {'Flat dumbbell chests press': 'Dumbbell Bench Press', 'Lat pull downs (neutral)': 'Cable Neutral Grip Lat Pulldown', 'Lat pull downs': 'Cable Neutral Grip Lat Pulldown', 'Barbell curls': 'Barbell Curl', 'Cable rows': 'Cable seated row', 'Dumbbell shoulder press': 'Dumbbell Seated Shoulder Press', 'Lat raise (cable)': 'Cable One Arm Lateral Raise', 'Leg raise': 'Lying Leg Raise', 'Flat dumbell chests press': 'Dumbbell Bench Press', 'External rotations': 'Cable Half Kneeling External Rotation', 'Internal rotations': 'Cable Seated Shoulder Internal Rotation', 'Pullup': 'Pull Up', 'Chinups': 'Chin Up', 'Neutral grip pullups': 'Neutral Grip Pull Up', 'Incline dumbell chest press': 'Dumbbell Incline Bench Press', 'Tricep pushdowns': 'Cable Pushdown (Rope)', 'Overhead tricep extensions (edge)': 'Cable Overhead Triceps Extension (Rope)', 'Flat dumbell chest press': 'Dumbbell Bench Press', 'Seated bicep curls': 'Dumbbell Seated Bicep Curl', 'Flat dumbbell chest press': 'Dumbbell Bench Press', 'Cable Lat raises': 'Cable One Arm Lateral Raise', 'Shoulder press': 'Dumbbell Seated Shoulder Press', 'Rear felt flies': 'Rear Delt Fly (Machine)', 'Cable Rows': 'Cable seated row', 'Dumbell lat raises': 'Cable One Arm Lateral Raise', 'Flat Dumbbell chest press': 'Dumbbell Bench Press', 'tricep pushdowns': 'Cable Pushdown (Rope)', 'Rear delt flies': 'Rear Delt Fly (Machine)', 'Overhead prsss': 'Seated Overhead Press (Barbell)', 'Lat raise': 'Cable One Arm Lateral Raise', 'Overhead tricep extention': 'Cable Overhead Triceps Extension (Rope)', 'Assisted dips': 'Assisted Triceps Dip', 'Rows': 'Seated cable row', 'Preacher curls': 'Barbell Preacher Curl', 'Machine lat pull downs': 'Machine Lat Pulldowns', 'Machine rows': 'Seated Lever Machine Row', 'dumbbell lat raises': 'Dumbbell Lateral Raise', 'shoulder press': 'Dumbbell Seated Shoulder Press', 'Incline dumbbell chest preds': 'Dumbbell Incline Bench Press', 'Overhead tricep extention (edge)': 'Cable Overhead Triceps Extension (Rope)', 'Barbell bicep curl': 'Barbell Curl', 'Neutral Lat pull downs': 'Cable Neutral Grip Lat Pulldown', 'Cable lat raises': 'Cable One Arm Lateral Raise', 'Pullups': 'Pull Up', 'Tricep pushdowns (edge one)': 'Cable Pushdown (Rope)', 'Tricep pushdowns (edge)': 'Cable Pushdown (Rope)', 'Overhead press': 'Standing Overhead Press (Barbell)', 'Back extentions': 'Back Extensions', 'Assisted neutral Pullups': 'Assisted Neutral Grip Pull Ups', 'Flat Barbell bench': 'Barbell Bench Press', 'Band assisted dips': 'Band Assisted Dips', 'Dumbbell preacher curls': 'Dumbbell Preacher Curl', 'Tricep pushdowns edge': 'Cable Pushdown (Rope)', 'Incline chest press': 'Dumbbell Incline Bench Press', 'Lat raises': 'Cable Single Arm Lateral Raise', 'Cable curls': 'Cable One Arm Biceps Curl', 'Behind curls': 'Finger Curls', 'Lat pullovers': 'Cable Pullover', 'Incline Barbell bench press': 'Barbell Incline Bench Press', 'Banded dips': 'Band Assisted Dips', 'Flat Barbell chests press': 'Barbell Bench Press', 'Tricep pushdowns kirrawee': 'Cable Pushdown (Rope)', 'Concentration curls': 'Dumbbell Concentration Curl', 'Assisted neutral grip pullups': 'Assisted Neutral Grip Pull Ups', 'Tricep push downs': 'Cable Pushdown (Rope)', 'Chests flies': 'Machine Chest Fly', 'Incline dumbbell chest press': 'Dumbbell Incline Bench Press', 'Chest flies': 'Machine Chest Fly', 'Bicep curl': 'Dumbbell Biceps Curl', 'Bicep curls supported': 'Dumbbell Preacher Curl', 'incline dumbbell chest press': 'Dumbbell Incline Bench Press', 'Close grip Cable rows': 'Cable seated row', 'Isolated bicep curls': 'Dumbbell Preacher Curl', 'Incline Barbell chests press': 'Barbell Incline Bench Press', 'Single arm overhead tricep extention': 'Cable Overhead Tricep Single Arm Triceps Extension (Rope)', 'Dumbbell rows': 'Dumbbell Bent Over Bench Row', 'Over head tricep': 'Cable Overhead Single Arm Triceps Extension (Rope)'}
-# for exercise in exercises:
-#     matches[exercise] = {}
-#     for matchingexercise in exerciseMuscles:
-#         similarity = fuzz.ratio(exercise, matchingexercise)
-#         if  similarity > 50:
-#             matches[exercise][matchingexercise] = similarity
-#     matches[exercise] = dict(sorted(matches[exercise].items(), key=lambda item: item[1], reverse=True))
-#     if exercise in corrections: continue
-#     print(f'{exercise} : {matches[exercise]}\n\n')
-#     correct = input(f'Correct exercise for {exercise}: ')
-#     if correct != '':
-#         corrections[exercise] = correct
+needed = []
+corrections = {'Pull Up (Weighted)': 'Weighted Pull Up', 'Iso-Lateral Row (Machine)': 'Seated Lever Machine Row', 'Straight Arm Lat Pulldown (Cable)': 'Cable Pullover', 'Seated Cable Row - V Grip (Cable)': 'Cable seated row', 'Single Arm Curl (Cable)': 'Cable One Arm Biceps Curl', 'Bench Press (Barbell)': 'Barbell Bench Press', 'Triceps Dip (Weighted)': 'Weighted Tricep Dips', 'Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Triceps Rope Pushdown': 'Cable Pushdown (Rope)', 'Incline Bench Press (Dumbbell)': 'Dumbbell Incline Bench Press', 'Cable Wrist Curl (Single)': 'Cable One Arm Wrist Curl', 'Seated Palms Up Wrist Curl': 'Dumbbell Seated Palms Up Wrist Curl', 'Bent Over Row (Barbell)': 'Barbell Bent Over Row', 'Bench Press (Dumbbell)': 'Dumbbell Bench Press', 'Bicep Curl (Dumbbell)': 'Dumbbell Biceps Curl', 'Triceps Dip': 'Tricep Dips', 'Triceps Extension (Cable)': 'Cable Overhead Triceps Extension', 'T Bar Row': 'Lying T-Bar Row', 'Lat Pulldown (Machine)': 'Machine Lat Pulldowns', 'Lateral Raise (Dumbbell)': 'Dumbbell Lateral Raise', 'Standing Calf Raise (Smith)': 'Smith Calf Raise', 'Hip Thrust (Barbell)': 'Barbell Hip Thrust', 'Leg Extension (Machine)': 'Lever Leg Extension', 'Deadlift (Barbell)': 'Barbell Deadlift', 'Back Extension (Weighted Hyperextension)': 'Back Extensions', 'Incline Bench Press (Barbell)': 'Barbell Incline Bench Press', 'Chin Up': 'Chin Up', 'Overhead Press (Barbell)': 'Barbell Overhead press', 'Bicep Curl (Cable)': 'Cable Curl', 'Bicep Curl (Barbell)': 'Barbell Curl', 'Chest Fly (Machine)': 'Machine Chest Fly', 'Pull Up': 'Pull Up', 'Rear Delt Reverse Fly (Machine)': 'Rear Delt Fly (Machine)', 'Hammer Curl (Dumbbell)': 'Dumbell Hammer Curl', 'Leg Press (Machine)': 'Sled 45 Leg Press', 'Shoulder Press (Dumbbell)': 'Dumbbell Seated Shoulder Press', 'Cable Pull Through': 'Cable pull through', 'Cable Fly Crossovers': 'Cable Standing Up Straight Crossovers', 'Preacher Curl (Barbell)': 'Barbell Preacher Curl', 'Single Arm Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Hammer Curl (Cable)': 'Cable Hammer Curl', 'Hack Squat': 'Sled Closer Hack Squat', 'Dead Hang': 'Dead Hang', 'Seated Cable Row - Bar Grip': 'Cable Low Seated Row', 'Seated Cable Row - Bar Wide Grip': 'Wide Grip Overhand Row', 'Single Arm Cable Row': 'Cable One Arm Row', 'Lat Pulldown (Cable)': 'Cable Neutral Grip Lat Pulldown', 'Leg Raise Parallel Bars': 'Captain Seat Leg Raise', 'Hack Squat (Machine)': 'Sled Hack Squat', 'Farmers Walk': 'Farmer Walk', 'Incline Bench Press (Smith Machine)': 'Smith Machine Incline Bench Press', 'Chin Up (Weighted)': 'Weighted Chin Up', 'Low Cable Fly Crossovers': 'Low Cable Fly', 'Behind the Back Bicep Wrist Curl (Barbell)': 'Barbell Behind the Back Wrist Curls', 'Push Up - Close Grip': 'Push Up'}
+i = 1
+for exercise in exercises:
+    matches[exercise] = {}
+    for matchingexercise in exerciseMuscles:
+        similarity = fuzz.ratio(exercise, matchingexercise)
+        if  similarity > 50:
+            matches[exercise][matchingexercise] = similarity
+    matches[exercise] = dict(sorted(matches[exercise].items(), key=lambda item: item[1], reverse=True))
+    if exercise in corrections: continue
+    print(f'{exercise} : {matches[exercise]}\n\n')
+    correct = input(f'Correct exercise for {exercise} ({i}): ')
+    if correct != '':
+        corrections[exercise] = correct
+    else:
+        needed.append(exercise)
+    i+=1
 
 
+print(corrections)
+print(needed)
