@@ -137,11 +137,12 @@ void importDataHevy(BuildContext context) async{
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom, // Restrict to custom types
-      allowedExtensions: ['csv'], // Only allow .csv files
+      // type: FileType.custom,
+      // allowedExtensions: ['csv', 'CSV'],
+      allowMultiple: false, // Add this if you only want single file selection
     );
     
-    if (result != null && result.files.isNotEmpty) {
+    if (result != null && result.files.isNotEmpty && ['csv', 'CSV'].contains(result.files.single.extension)) {
       // Get the file path
       String? filePath = result.files.single.path;
 
@@ -192,12 +193,13 @@ void importDataHevy(BuildContext context) async{
 
 Map formatHevyData(List data, Map records){
   Map formattedData = {};
+  Map dailyExercises = {};
   Map corrections = {'Pull Up (Weighted)': 'Weighted Pull Up', 'Iso-Lateral Row (Machine)': 'Seated Lever Machine Row', 'Straight Arm Lat Pulldown (Cable)': 'Cable Pullover', 'Seated Cable Row - V Grip (Cable)': 'Cable seated row', 'Single Arm Curl (Cable)': 'Cable One Arm Biceps Curl', 'Bench Press (Barbell)': 'Barbell Bench Press', 'Triceps Dip (Weighted)': 'Weighted Tricep Dips', 'Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Triceps Rope Pushdown': 'Cable Pushdown (Rope)', 'Incline Bench Press (Dumbbell)': 'Dumbbell Incline Bench Press', 'Cable Wrist Curl (Single)': 'Cable One Arm Wrist Curl', 'Seated Palms Up Wrist Curl': 'Dumbbell Seated Palms Up Wrist Curl', 'Bent Over Row (Barbell)': 'Barbell Bent Over Row', 'Bench Press (Dumbbell)': 'Dumbbell Bench Press', 'Bicep Curl (Dumbbell)': 'Dumbbell Biceps Curl', 'Triceps Dip': 'Tricep Dips', 'Triceps Extension (Cable)': 'Cable Overhead Triceps Extension', 'T Bar Row': 'Lying T-Bar Row', 'Lat Pulldown (Machine)': 'Machine Lat Pulldowns', 'Lateral Raise (Dumbbell)': 'Dumbbell Lateral Raise', 'Standing Calf Raise (Smith)': 'Smith Calf Raise', 'Hip Thrust (Barbell)': 'Barbell Hip Thrust', 'Leg Extension (Machine)': 'Lever Leg Extension', 'Deadlift (Barbell)': 'Barbell Deadlift', 'Back Extension (Weighted Hyperextension)': 'Back Extensions', 'Incline Bench Press (Barbell)': 'Barbell Incline Bench Press', 'Chin Up': 'Chin Up', 'Overhead Press (Barbell)': 'Barbell Overhead press', 'Bicep Curl (Cable)': 'Cable Curl', 'Bicep Curl (Barbell)': 'Barbell Curl', 'Chest Fly (Machine)': 'Machine Chest Fly', 'Pull Up': 'Pull Up', 'Rear Delt Reverse Fly (Machine)': 'Rear Delt Fly (Machine)', 'Hammer Curl (Dumbbell)': 'Dumbell Hammer Curl', 'Leg Press (Machine)': 'Sled 45 Leg Press', 'Shoulder Press (Dumbbell)': 'Dumbbell Seated Shoulder Press', 'Cable Pull Through': 'Cable pull through', 'Cable Fly Crossovers': 'Cable Standing Up Straight Crossovers', 'Preacher Curl (Barbell)': 'Barbell Preacher Curl', 'Single Arm Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Hammer Curl (Cable)': 'Cable Hammer Curl', 'Hack Squat': 'Sled Closer Hack Squat', 'Dead Hang': 'Dead Hang', 'Seated Cable Row - Bar Grip': 'Cable Low Seated Row', 'Seated Cable Row - Bar Wide Grip': 'Wide Grip Overhand Row', 'Single Arm Cable Row': 'Cable One Arm Row', 'Lat Pulldown (Cable)': 'Cable Neutral Grip Lat Pulldown', 'Leg Raise Parallel Bars': 'Captain Seat Leg Raise', 'Hack Squat (Machine)': 'Sled Hack Squat', 'Farmers Walk': 'Farmer Walk', 'Incline Bench Press (Smith Machine)': 'Smith Machine Incline Bench Press', 'Chin Up (Weighted)': 'Weighted Chin Up', 'Low Cable Fly Crossovers': 'Low Cable Fly', 'Behind the Back Bicep Wrist Curl (Barbell)': 'Barbell Behind the Back Wrist Curls', 'Push Up - Close Grip': 'Push Up'};
   data.removeAt(0);
   for (var entry in data.reversed) {
     List row = entry[0]; // for some reason its nested further
-    String startTime = row[1]; // need to format
-    String endTime = row[2]; // need to format
+    String startTime = row[1];
+    String endTime = row[2];
     String notes = row[3].isNotEmpty ? '${row[0]} | ${row[3]}' : row[0];
     String exercise = corrections[row[4]] ?? row[4];
     String exerciseNote = row[6];
@@ -241,11 +243,22 @@ Map formatHevyData(List data, Map records){
         set['PR'] = 'yes';
       }
     }
-    if (!formattedData[key]['sets'].containsKey(exercise)){
-      formattedData[key]['sets'][exercise] = [];
-    }
-    formattedData[key]['sets'][exercise].add(set);
+    dailyExercises.putIfAbsent(key, () => []).insert(0, {'exercise': exercise, 'set': set}); // TODO understand putifabsent
   }
+    // Reverse order of exercises for each day
+  dailyExercises.forEach((key, exercises) {
+    formattedData[key]['sets'] = {};  // Initialize empty sets map
+
+    // Populate `formattedData` in the correct chronological order
+    for (var exerciseData in exercises) {
+      String exercise = exerciseData['exercise'];
+      Map set = exerciseData['set'];
+      if (!formattedData[key]['sets'].containsKey(exercise)) {
+        formattedData[key]['sets'][exercise] = [];
+      }
+      formattedData[key]['sets'][exercise].add(set);
+    }
+  });
   return formattedData;
 }
 

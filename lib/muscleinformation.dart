@@ -7168,7 +7168,7 @@ Map exerciseMuscles = {
             "Lats": 30,
             "Shoulders": 15
         },
-        "type": "bodyweight"
+        "type": "Timed"
     },
     "Farmer Walk": {
         "Primary": {
@@ -7181,7 +7181,7 @@ Map exerciseMuscles = {
             "Quads": 10,
             "Glutes": 10
         },
-        "type": "Weighted"
+        "type": "Distance"
     },
     "Low Cable Fly": {
         "Primary": {
