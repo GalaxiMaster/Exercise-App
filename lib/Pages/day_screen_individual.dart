@@ -87,7 +87,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       infoBox('Time', '${length.inHours}h ${length.inMinutes % 60}m'),
-                      infoBox('Volume', '${volume}kg'),
+                      infoBox('Volume', '${volume.toStringAsFixed(10)}kg'),
                       infoBox("PR's", '$prs'),
                       infoBox('Sets', '$sets'),
                       infoBox('Exercises', '$exercises'),

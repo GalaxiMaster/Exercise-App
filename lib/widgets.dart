@@ -89,18 +89,20 @@ class _MyIconButtonState extends State<MyIconButton> {
 class MyTextButton extends StatefulWidget {
   final String text;
   final Color pressedColor;
-  final Color color;
+  final Color textColor;
   final double borderRadius;
   final double width;
   final double height;
+  final Color color;
   final String path;
   final VoidCallback? onTap;
 
   const MyTextButton({
     super.key,
+    required this.color,
     required this.text,
     required this.pressedColor,
-    required this.color,
+    required this.textColor,
     required this.borderRadius,
     required this.width,
     required this.height, 
@@ -154,9 +156,32 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
     });
     _controller.reverse();
   }
-
+  Color darkenColor(Color color, double factor) {
+    // Ensure factor is in valid range
+    factor = factor.clamp(0.0, 1.0);
+    
+    // Extract ARGB values
+    int a = color.alpha;
+    int r = (color.red * factor).toInt();
+    int g = (color.green * factor).toInt();
+    int b = (color.blue * factor).toInt();
+    
+    // Return the new darker ARGB color
+    return Color.fromARGB(a, r, g, b);
+  }
+  Color shiftColor(Color color, {int redShift = 0, int greenShift = 0, int blueShift = 0}) {
+    // Extract ARGB values
+    int a = color.alpha;
+    int r = (color.red + redShift).clamp(0, 255).toInt();
+    int g = (color.green + greenShift).clamp(0, 255).toInt();
+    int b = (color.blue + blueShift).clamp(0, 255).toInt();
+    
+    // Return the new shifted ARGB color
+    return Color.fromARGB(a, r, g, b);
+  }
   @override
   Widget build(BuildContext context) {
+    Color darkerColor = darkenColor(widget.color, 0.5); // const Color.fromARGB(112, 157, 206, 255)
     return GestureDetector(
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
@@ -172,17 +197,17 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
                   ? RadialGradient(
                       center: Alignment.center,
                       radius: _controller.value,
-                      colors: const [
-                        Color.fromARGB(112, 157, 206, 255),
-                        Color.fromARGB(112, 146, 164, 253),
+                      colors: [
+                        darkerColor,
+                        darkenColor(darkerColor, 0.8),
                       ],
                     )
-                  : const LinearGradient(
+                  : LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xff9DCEFF),
-                        Color(0xff92A3FD),
+                        widget.color,
+                        shiftColor(darkenColor(widget.color, 0.7), blueShift: 50, redShift: 50),
                       ],
                     ),
               borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -191,7 +216,7 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
               child: Text(
                 widget.text,
                 style: TextStyle(
-                  color: buttonDown ? widget.pressedColor : widget.color,
+                  color: buttonDown ? widget.pressedColor : widget.textColor,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),

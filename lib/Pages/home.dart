@@ -6,6 +6,7 @@ import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -77,8 +78,9 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 5),
               MyTextButton(
                 text: "Start Workout", 
+                color: const Color(0xff9DCEFF),
                 pressedColor: Colors.blue, 
-                color: const Color.fromARGB(255, 0, 0, 0), 
+                textColor: const Color.fromARGB(255, 0, 0, 0), 
                 borderRadius: 15, 
                 width: double.infinity, 
                 height: 50,
@@ -143,8 +145,9 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 5),
               MyTextButton(
                 text: "New routine", 
+                color: const Color(0xff9DCEFF),
                 pressedColor: Colors.blue, 
-                color: const Color.fromARGB(255, 0, 0, 0), 
+                textColor: const Color.fromARGB(255, 0, 0, 0), 
                 borderRadius: 15, 
                 width: double.infinity, 
                 height: 50,
@@ -192,7 +195,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildStreakRestBox({
   required Map data,
 }) {
-  Color color = Colors.blue;
+  Color color = data['data']?['color'] != null ? Color.fromARGB(data['data']?['color']?[0], data['data']?['color']?[1], data['data']?['color']?[2], data['data']?['color']?[3]) : const Color(0xff9DCEFF);
   String label =  data['data']?['name'] ?? 'Unknown Routine';
   String exercises =  data['sets'].keys?.join('\n') ?? 'No exercises';
   return Column(
@@ -201,7 +204,7 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
@@ -227,21 +230,90 @@ class _HomePageState extends State<HomePage> {
                   height: 40,
                   width: 40,
                   child: PopupMenuButton<String>(
-                    onSelected: (value) {
+                    onSelected: (value) async{
                       switch(value){
                         case 'Edit':
                           debugPrint('edit');
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => 
-                              AddRoutine(onRoutineSaved: () {
-                                Navigator.pop(context); // Go back to the previous page
-                                _loadRoutines(); // Reload routines when we come back
-                              }, sets: data,o_name: label,)
+                              AddRoutine(
+                                onRoutineSaved: () {
+                                  Navigator.pop(context); // Go back to the previous page
+                                  _loadRoutines(); // Reload routines when we come back
+                                }, 
+                                sets: data, 
+                                o_name: label,
+                              )
                             ),
                           );
                         case 'Share':
                           debugPrint('share');
+                          _loadRoutines();
+                        case 'Color':
+                        debugPrint('color');
+                      
+                        Color? color = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                              Color tempColor = data['data']['color'] != null
+                            ? Color.fromARGB(
+                                data['data']['color'][0],
+                                data['data']['color'][1],
+                                data['data']['color'][2],
+                                data['data']['color'][3],
+                              )
+                            : Color.fromARGB(255, 255, 255, 255);
+                            return AlertDialog(
+                              title: Text('Pick a color'),
+                              content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor: tempColor,
+                                paletteType: PaletteType.hueWheel, // This is the key fix
+                                enableAlpha: false,
+                                onColorChanged: (color){
+                                  setState(() => tempColor = color);
+                                },  
+                              ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();  // Close without saving
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Reset'),
+                                  onPressed: () {
+                                    data['data']['color'] = null;
+                                    writeData(data, path: 'routines/${data['data']['name']}', append: false);
+                                    _loadRoutines();
+                                    Navigator.of(context).pop();  // Close without saving
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Select'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(tempColor);  // Return selected color
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (color != null) {
+                          // Save selected color to data map
+                          data['data']['color'] = [color.alpha, color.red, color.green, color.blue];
+
+                          // Save the color to storage
+                          await writeData(data, path: 'routines/${data['data']['name']}', append: false);
+
+                          // Reload routines after saving
+                          _loadRoutines();
+                        }
+
                         case 'Delete':
                           deleteRoutine(label);
                       }
@@ -249,7 +321,8 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (BuildContext context) {
                       return [
                         const PopupMenuItem(value: 'Edit', child: Text('Edit')),
-                        const PopupMenuItem(value: 'Share', child: Text('Share')),                        
+                        const PopupMenuItem(value: 'Share', child: Text('Share')),    
+                        const PopupMenuItem(value: 'Color', child: Text('Color')),                    
                         const PopupMenuItem(value: 'Delete', child: Text('Delete')),
                       ];
                     },
@@ -262,8 +335,9 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 15),
             MyTextButton(
               text: 'Start routine',
+              color: color,
               pressedColor: Colors.blue,
-              color: Colors.black,
+              textColor: Colors.black,
               borderRadius: 12.5,
               width: double.infinity,
               height: 40,

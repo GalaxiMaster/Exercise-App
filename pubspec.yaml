@@ -21,6 +21,7 @@ dependencies:
   gradient_borders: ^1.0.1
   file_picker: ^5.2.3
   xml: ^6.5.0
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:
