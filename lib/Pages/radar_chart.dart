@@ -60,7 +60,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
                   var entry = await showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return const TimeSelectorPopup();
+                      return TimeSelectorPopup(options: Options().timeOptions);
                     },
                   );
                   if (entry != null) {
@@ -165,7 +165,8 @@ extension HexColor on Color {
 }
 
 class TimeSelectorPopup extends StatefulWidget {
-  const TimeSelectorPopup({super.key});
+  final Map options;
+  const TimeSelectorPopup({super.key, required this.options});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -173,16 +174,6 @@ class TimeSelectorPopup extends StatefulWidget {
 }
 
 class _TimeSelectorPopupState extends State<TimeSelectorPopup> {
-  // Define the time options map
-  final Map<String, int> timeOptions = {
-    'Past Week': 7,
-    'Past 4 weeks': 28,
-    'Past 8 weeks': 56,
-    'Past 3 months': 90,
-    'Past 6 months': 180,
-    'Past year': 365,
-    'All time': -1,
-  };
 
   void selectTime(MapEntry days) {
     Navigator.pop(context, days);
@@ -195,7 +186,7 @@ class _TimeSelectorPopupState extends State<TimeSelectorPopup> {
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
-          children: timeOptions.entries.map((entry) {
+          children: widget.options.entries.map((entry) {
             return boxThing(entry);
           }).toList(),
         ),

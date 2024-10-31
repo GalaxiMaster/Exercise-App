@@ -3,6 +3,27 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
+class Options {
+  Map<String, int> timeOptions = {
+    'Past Week': 7,
+    'Past 4 weeks': 28,
+    'Past 8 weeks': 56,
+    'Past 3 months': 90,
+    'Past 6 months': 180,
+    'Past year': 365,
+    'All time': -1,
+  };
+  Map<String, String> muscleOptions = {
+    'Chest': 'Chest',
+    'Back': 'Back',
+    'Legs': 'Legs',
+    'Core': 'Core',
+    'Shoulders': 'Shoulders',
+    'All Muscles': 'All Muscles',
+  };
+}
+
+
 Future<Map> readData({String path = 'output'}) async{
   Map jsonData= {};
   debugPrint("${path}id");
