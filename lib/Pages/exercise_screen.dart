@@ -35,6 +35,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   String week = '';
   num graphvalue = 0;
   TabItem _currentTab = TabItem.graph;
+  String weekrangeStr = 'All Time';
+  int range = -1;
 
   @override
   void initState() {
@@ -49,7 +51,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 
   Future<void> _loadHighlightedDays({reload = false}) async {
-    var data = await getStats(widget.exercise);
+    var data = await getStats(widget.exercise, range);
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
     final List values = exerciseData.map((data) => data[selector]).toList();
 
@@ -175,7 +177,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Widget graphBody(List<FlSpot> spots, List<dynamic> dates, BuildContext context) {
     String unit = 'kg';
     if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight'){unit = '';}
-    return spots.isNotEmpty ? SingleChildScrollView(
+    if (spots.isNotEmpty) {
+      return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -220,16 +223,33 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                             ),
                           ]
                         ),
-                        const Row(
-                          children: [
-                            Text(
-                              'Last 8 weeks',
-                              style: TextStyle(
-                                color: Colors.blue,
+                        GestureDetector(
+                          onTap: () async{
+                            var entry = await showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return TimeSelectorPopup(options: Options().timeOptions);
+                              },
+                            );
+                            if(entry != null) {
+                              setState(() {
+                                range = entry.value;
+                                weekrangeStr = entry.key;  
+                              });
+                              _loadHighlightedDays();
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                weekrangeStr,
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                ),
                               ),
-                            ),
-                            Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
-                          ],
+                              const Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -249,6 +269,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               color: Colors.blueAccent.withOpacity(0.2),
                             ),                            
                           ),
+                          if (spots.length > 1)
                           LineChartBarData( // TODO need to be on a toggle?
                             isStrokeCapRound: false,
                             dotData: const FlDotData(show: false),
@@ -356,9 +377,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 ],
               ),
           ),
-        )
-      :
-        const Text("No data available");
+        );
+    } else {
+      return const Text("No data available");
+    }
   }
   double calculateInterval(int itemCount) {
     if (itemCount <= 8) return 1;
@@ -509,12 +531,12 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
 }
 
 
-Future<List> getStats(String target) async {
+Future<List> getStats(String target, range) async {
   Map data = await readData();
   List targetData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
- var sortedKeys = data.keys.toList()..sort();
+  var sortedKeys = data.keys.toList()..sort();
 
   // Create a sorted map by iterating over sorted keys
   Map<String, dynamic> sortedMap = {
@@ -522,41 +544,45 @@ Future<List> getStats(String target) async {
   };
   data = sortedMap;
   for (var day in data.keys.toList()) {
-    Map dayHeaviestWeight = {};
-    Map dayHeaviestVolume = {};
+    Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+    int diff = difference.inDays;
+    if (diff <= range || range == -1){
+      Map dayHeaviestWeight = {};
+      Map dayHeaviestVolume = {};
 
-    for (var exercise in data[day]['sets'].keys) {
-      if (exercise == target) {
-        for (var set in data[day]['sets'][exercise]) {
-          set = {
-            'weight': double.parse(set['weight'].toString()),
-            'reps': double.parse(set['reps'].toString()),
-            'type': set['type'],
-            'date': day,
-            'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString())
-          };
+      for (var exercise in data[day]['sets'].keys) {
+        if (exercise == target) {
+          for (var set in data[day]['sets'][exercise]) {
+            set = {
+              'weight': double.parse(set['weight'].toString()),
+              'reps': double.parse(set['reps'].toString()),
+              'type': set['type'],
+              'date': day,
+              'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString())
+            };
 
-          if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {
-            dayHeaviestWeight = set;
+            if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {
+              dayHeaviestWeight = set;
+            }
+
+            if (dayHeaviestVolume.isEmpty || set['volume'] > dayHeaviestVolume['volume']) {
+              dayHeaviestVolume = set;
+            }
           }
 
-          if (dayHeaviestVolume.isEmpty || set['volume'] > dayHeaviestVolume['volume']) {
-            dayHeaviestVolume = set;
+          if (dayHeaviestWeight.isNotEmpty) {
+            targetData.add(dayHeaviestWeight);
+          }
+
+          if (heaviestWeight.isEmpty || dayHeaviestWeight['weight'] > heaviestWeight['weight']) {
+            heaviestWeight = dayHeaviestWeight;
+          }
+
+          if (heaviestVolume.isEmpty || dayHeaviestVolume['volume'] > heaviestVolume['volume']) {
+            heaviestVolume = dayHeaviestVolume;
           }
         }
-
-        if (dayHeaviestWeight.isNotEmpty) {
-          targetData.add(dayHeaviestWeight);
-        }
-
-        if (heaviestWeight.isEmpty || dayHeaviestWeight['weight'] > heaviestWeight['weight']) {
-          heaviestWeight = dayHeaviestWeight;
-        }
-
-        if (heaviestVolume.isEmpty || dayHeaviestVolume['volume'] > heaviestVolume['volume']) {
-          heaviestVolume = dayHeaviestVolume;
-        }
-      }
+      } 
     }
   }
 
