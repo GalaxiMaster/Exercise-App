@@ -87,7 +87,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       infoBox('Time', '${length.inHours}h ${length.inMinutes % 60}m'),
-                      infoBox('Volume', '${volume.toStringAsFixed(10)}kg'),
+                      infoBox('Volume', '${volume.toStringAsFixed(2)}kg'),
                       infoBox("PR's", '$prs'),
                       infoBox('Sets', '$sets'),
                       infoBox('Exercises', '$exercises'),
@@ -217,7 +217,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                                       Text(set['type'].toLowerCase() == 'normal' ? (index + 1).toString() : set['type'][0], style: const TextStyle(fontSize: 24),),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 25),
-                                        child: Text(exerciseMuscles[exerciseName]['type'] != 'bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
+                                        child: Text((exerciseMuscles[exerciseName]?['type'] ?? 'Weighted') != 'bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
                                       ),
                                     ],
                                   ),
@@ -324,10 +324,10 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
     Map percentages = {};
     Map musclegroups = {};
     for (String exercise in dayData['sets'].keys){
-      for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+      for (var muscle in (exerciseMuscles[exercise]?['Primary']?.keys ?? [])){
         musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseMuscles[exercise]!['Primary']![muscle]!/100*dayData['sets'][exercise].length);
       }
-      for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+      for (var muscle in (exerciseMuscles[exercise]?['Secondary']?.keys ?? [])){
         musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseMuscles[exercise]!['Secondary']![muscle]!/100*dayData['sets'][exercise].length);
       }
     }

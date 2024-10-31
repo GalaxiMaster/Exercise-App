@@ -74,7 +74,7 @@ class _StatsState extends State<Stats> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                statBox('Total volume', '${stats['volume'].fold(0, (p, c) => p + c).toString()}Kg', 2),
+                statBox('Total volume', '${stats['volume'].fold(0, (p, c) => p + c).toStringAsFixed(2)}Kg', 2),
                 statBox('Average volume ', "${(stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)}Kg", 2),
               ],
             ),
