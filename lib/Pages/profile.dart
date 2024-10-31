@@ -21,6 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<List<dynamic>> _futureData;
   String graphSelector = 'sessions';
+  String prevSelector = 'sessions';
   num? selectedBarValue; // TODO set to what it actually is
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
@@ -85,6 +86,12 @@ class _ProfileState extends State<Profile> {
             final data = snapshot.data![0][graphSelector]; // Extract data
             final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
             selectedBarValue ??= numParsething(data.values.toList()[data.values.toList().length-1]);
+            if (prevSelector != graphSelector){
+              prevSelector = graphSelector;
+              selectedBarValue = numParsething(data.values.toList()[data.values.toList().length-1]);
+              selectedBarWeekDistance = 'This week';
+
+            }
             return Column(
               children: [
                 Padding(
@@ -227,6 +234,7 @@ class _ProfileState extends State<Profile> {
             case 'Volume': graphSelector = 'volume';
             case 'Reps': graphSelector = 'reps';
           }
+
         });
       },
       child: Padding(
@@ -250,7 +258,7 @@ class _ProfileState extends State<Profile> {
 }
 
 num numParsething(var number){
-  return number % 1 == 0 ? number.truncate() : number;
+  return number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2));
 }
 
 class DataBarChart extends StatelessWidget {
@@ -457,7 +465,6 @@ class DataBarChart extends StatelessWidget {
   }
 
   Map getWeigtAndStufftData(Map data, Map weeks, String selector){
-
     for (var day in data.keys) {
       DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
       String formattedDate = DateFormat('MMM dd').format(monday);
