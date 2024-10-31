@@ -251,7 +251,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           LineChartBarData( // TODO need to be on a toggle?
                             isStrokeCapRound: false,
-                            dotData: FlDotData(show: false),
+                            dotData: const FlDotData(show: false),
                             spots: calculateBestFitLine(spots),
                             color: Colors.red,
                             barWidth: 2,
@@ -299,7 +299,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                             }).toList();
                           },
                         ),
-                
                         titlesData: FlTitlesData(
                           topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
@@ -309,6 +308,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
+                              interval: calculateInterval(spots.length),
                               showTitles: true,
                               getTitlesWidget: (value, _) {
                                 return SideTitleWidget(
@@ -319,7 +319,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                   ),
                                 );
                               },
-                              interval: 1, // Ensure all dates are shown
                             ),
                           ),
                           leftTitles: AxisTitles(
@@ -361,7 +360,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       :
         const Text("No data available");
   }
-  
+  double calculateInterval(int itemCount) {
+    if (itemCount <= 8) return 1;
+    return 1 + ((itemCount - 8) * 0.125);
+  }
   Widget selectorBox(String text, bool selected){
     return GestureDetector(
       onTap: () async{
