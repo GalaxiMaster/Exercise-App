@@ -191,6 +191,9 @@ class _AddworkoutState extends State<Addworkout> {
                             onTap: (){
                               setState(() {
                                 sets.remove(exercise);
+                                _focusNodes.remove(exercise);
+                                _controllers.remove(exercise);
+                                _checkBoxStates.remove(exercise);
                                 updateExercises();
                               });
                             },
