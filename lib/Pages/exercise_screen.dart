@@ -483,18 +483,18 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
     
     double opacity = values[0] as double;
     Color color = values[1] as Color;
-    
+    debugPrint("${className == 'Upper Chest'}ballsac $className" );
     final paths = document.findAllElements('path')
         .where((element) => element.getAttribute('class')?.contains(className) ?? false);
     
-    debugPrint('Class: $className, Paths found: ${paths.length}');
+    // debugPrint('Class: $className, Paths found: ${paths.length}');
     
     for (var path in paths) {
-      String oldFill = path.getAttribute('fill') ?? 'none';
-      String oldOpacity = path.getAttribute('fill-opacity') ?? '1';
+      // String oldFill = path.getAttribute('fill') ?? 'none';
+      // String oldOpacity = path.getAttribute('fill-opacity') ?? '1';
       
       path.setAttribute('fill', color == Colors.red ? getRedShade(opacity).toHex() : color.toHex());  
-      debugPrint('Path updated - Class: $className, Old fill: $oldFill, New fill: ${color.toHex()}, Old opacity: $oldOpacity, New opacity: $opacity');
+      // debugPrint('Path updated - Class: $className, Old fill: $oldFill, New fill: ${color.toHex()}, Old opacity: $oldOpacity, New opacity: $opacity');
     }
   });
     
