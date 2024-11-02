@@ -251,68 +251,68 @@ class _HomePageState extends State<HomePage> {
                           debugPrint('share');
                           _loadRoutines();
                         case 'Color':
-                        debugPrint('color');
-                      
-                        Color? color = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                              Color tempColor = data['data']['color'] != null
-                            ? Color.fromARGB(
-                                data['data']['color'][0],
-                                data['data']['color'][1],
-                                data['data']['color'][2],
-                                data['data']['color'][3],
-                              )
-                            : Color.fromARGB(255, 255, 255, 255);
-                            return AlertDialog(
-                              title: Text('Pick a color'),
-                              content: SingleChildScrollView(
-                              child: ColorPicker(
-                                pickerColor: tempColor,
-                                paletteType: PaletteType.hueWheel, // This is the key fix
-                                enableAlpha: false,
-                                onColorChanged: (color){
-                                  setState(() => tempColor = color);
-                                },  
-                              ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();  // Close without saving
-                                  },
+                          debugPrint('color');
+                        
+                          Color? color = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                                Color tempColor = data['data']['color'] != null
+                              ? Color.fromARGB(
+                                  data['data']['color'][0],
+                                  data['data']['color'][1],
+                                  data['data']['color'][2],
+                                  data['data']['color'][3],
+                                )
+                              : Color.fromARGB(255, 255, 255, 255);
+                              return AlertDialog(
+                                title: Text('Pick a color'),
+                                content: SingleChildScrollView(
+                                child: ColorPicker(
+                                  pickerColor: tempColor,
+                                  paletteType: PaletteType.hueWheel, // This is the key fix
+                                  enableAlpha: false,
+                                  onColorChanged: (color){
+                                    setState(() => tempColor = color);
+                                  },  
                                 ),
-                                TextButton(
-                                  child: Text('Reset'),
-                                  onPressed: () {
-                                    data['data']['color'] = null;
-                                    writeData(data, path: 'routines/${data['data']['name']}', append: false);
-                                    _loadRoutines();
-                                    Navigator.of(context).pop();  // Close without saving
-                                  },
                                 ),
-                                TextButton(
-                                  child: Text('Select'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(tempColor);  // Return selected color
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();  // Close without saving
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Reset'),
+                                    onPressed: () {
+                                      data['data']['color'] = null;
+                                      writeData(data, path: 'routines/${data['data']['name']}', append: false);
+                                      _loadRoutines();
+                                      Navigator.of(context).pop();  // Close without saving
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Select'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(tempColor);  // Return selected color
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
 
-                        if (color != null) {
-                          // Save selected color to data map
-                          data['data']['color'] = [color.alpha, color.red, color.green, color.blue];
+                          if (color != null) {
+                            // Save selected color to data map
+                            data['data']['color'] = [color.alpha, color.red, color.green, color.blue];
 
-                          // Save the color to storage
-                          await writeData(data, path: 'routines/${data['data']['name']}', append: false);
+                            // Save the color to storage
+                            await writeData(data, path: 'routines/${data['data']['name']}', append: false);
 
-                          // Reload routines after saving
-                          _loadRoutines();
-                        }
+                            // Reload routines after saving
+                            _loadRoutines();
+                          }
 
                         case 'Delete':
                           deleteRoutine(label);

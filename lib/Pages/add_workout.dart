@@ -2,10 +2,10 @@ import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
-import 'package:exercise_app/widgets.dart';
 
 // ignore: must_be_immutable
 class Addworkout extends StatefulWidget {
@@ -19,16 +19,15 @@ class Addworkout extends StatefulWidget {
 }
 
 class _AddworkoutState extends State<Addworkout> {
-  var selectedExercises = [];
   var preCsvData = {};
   Map records = {};
   Map sets = {};
   Map exerciseNotes = {};
   Map settings = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
-  final Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
-  final Map<String, List<Map<String, TextEditingController>>> _controllers = {};
-  final Map<String, List<bool>> _checkBoxStates = {};
+  Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
+  Map<String, List<Map<String, TextEditingController>>> _controllers = {};
+  Map<String, List<bool>> _checkBoxStates = {};
 
   @override
   void initState() {        
@@ -70,48 +69,88 @@ class _AddworkoutState extends State<Addworkout> {
     super.dispose();
   }
   void _initializeFocusNodesAndControllers() {
+    debugPrint('${sets}idsk');
     for (String exercise in sets.keys) {
+      debugPrint('exercise: $exercise idsk');
       _ensureExerciseFocusNodesAndControllers(exercise);
     }
   }
 
  void _ensureExerciseFocusNodesAndControllers(String exercise) {
-    if (!_focusNodes.containsKey(exercise)) {
-      _focusNodes[exercise] = [];
-      _controllers[exercise] = [];
-      _checkBoxStates[exercise] = [];
-    }
-    while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
-      final weightFocusNode = FocusNode();
-      final repsFocusNode = FocusNode();
-      
-      weightFocusNode.addListener(() {
-        if (weightFocusNode.hasFocus) {
-          _controllers[exercise]![_focusNodes[exercise]!.length - 1]['weight']!.selection = 
-              TextSelection(baseOffset: 0, extentOffset: _controllers[exercise]![_focusNodes[exercise]!.length - 1]['weight']!.text.length);
-        }
-      });
-      
-      repsFocusNode.addListener(() {
-        if (repsFocusNode.hasFocus) {
-          _controllers[exercise]![_focusNodes[exercise]!.length - 1]['reps']!.selection = 
-              TextSelection(baseOffset: 0, extentOffset: _controllers[exercise]![_focusNodes[exercise]!.length - 1]['reps']!.text.length);
-        }
-      });
-
-      _focusNodes[exercise]!.add({
-        'weight': weightFocusNode,
-        'reps': repsFocusNode,
-      });
-      _controllers[exercise]!.add({
-        'weight': TextEditingController(text: sets[exercise]![_focusNodes[exercise]!.length - 1]['weight'].toString()),
-        'reps': TextEditingController(text: sets[exercise]![_focusNodes[exercise]!.length - 1]['reps'].toString()),
-      });
-      _checkBoxStates[exercise]!.add(
-        false
-      );
-    }
+  // First cleanup any old controllers/nodes if exercise no longer exists
+  if (!sets.containsKey(exercise)) {
+    // Clean up old controllers and nodes
+    _focusNodes[exercise]?.forEach((nodeMap) {
+      nodeMap['weight']?.dispose();
+      nodeMap['reps']?.dispose();
+    });
+    _controllers[exercise]?.forEach((controllerMap) {
+      controllerMap['weight']?.dispose();
+      controllerMap['reps']?.dispose();
+    });
+    _focusNodes.remove(exercise);
+    _controllers.remove(exercise);
+    _checkBoxStates.remove(exercise);
+    return;
   }
+
+  // Initialize if needed
+  if (!_focusNodes.containsKey(exercise)) {
+    _focusNodes[exercise] = [];
+    _controllers[exercise] = [];
+    _checkBoxStates[exercise] = [];
+  }
+
+  // Now we know exercise exists in sets and all maps
+  while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
+    final weightFocusNode = FocusNode();
+    final repsFocusNode = FocusNode();
+    
+    // Use weak references to controllers to prevent null access if they're disposed
+    final controllerIndex = _focusNodes[exercise]!.length;
+    weightFocusNode.addListener(() {
+      if (weightFocusNode.hasFocus && 
+          _controllers.containsKey(exercise) &&
+          _controllers[exercise]!.length > controllerIndex) {
+        final controller = _controllers[exercise]![controllerIndex]['weight'];
+        if (controller != null) {
+          controller.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: controller.text.length
+          );
+        }
+      }
+    });
+
+    repsFocusNode.addListener(() {
+      if (repsFocusNode.hasFocus && 
+          _controllers.containsKey(exercise) &&
+          _controllers[exercise]!.length > controllerIndex) {
+        final controller = _controllers[exercise]![controllerIndex]['reps'];
+        if (controller != null) {
+          controller.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: controller.text.length
+          );
+        }
+      }
+    });
+
+    _focusNodes[exercise]!.add({
+      'weight': weightFocusNode,
+      'reps': repsFocusNode,
+    });
+    _controllers[exercise]!.add({
+      'weight': TextEditingController(
+        text: sets[exercise]![_focusNodes[exercise]!.length - 1]['weight'].toString()
+      ),
+      'reps': TextEditingController(
+        text: sets[exercise]![_focusNodes[exercise]!.length - 1]['reps'].toString()
+      ),
+    });
+    _checkBoxStates[exercise]!.add(false);
+  }
+}
   
   void preLoad() async{
     records = await readData(path: 'records');
@@ -172,6 +211,7 @@ class _AddworkoutState extends State<Addworkout> {
               itemCount: sets.keys.length,
               itemBuilder: (context, index) {
                 String exercise = sets.keys.toList()[index];
+                debugPrint('$sets${exercise}idsks home ');
                 _ensureExerciseFocusNodesAndControllers(exercise);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
@@ -187,17 +227,55 @@ class _AddworkoutState extends State<Addworkout> {
                               fontSize: 18
                             ),
                           ),
-                          GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                sets.remove(exercise);
-                                _focusNodes.remove(exercise);
-                                _controllers.remove(exercise);
-                                _checkBoxStates.remove(exercise);
-                                updateExercises();
-                              });
+                          PopupMenuButton<String>(
+                            onSelected: (value) async{
+                              switch (value){
+                                case 'Swap': 
+                                  String? newExercise = await Navigator.push(
+                                    context,    
+                                    MaterialPageRoute(
+                                      builder: (context) => const WorkoutList(setting: 'choose')
+                                    )
+                                  );
+                                  if (newExercise != null && !sets.containsKey(newExercise)){
+                                    Map newSets = {};
+                                    final Map<String, List<Map<String, FocusNode>>> newFocusnodes = {};
+                                    final Map<String, List<Map<String, TextEditingController>>> newControllers = {};
+                                    final Map<String, List<bool>> newCheckboxstates = {};
+                                    for (String exerciseEntry in sets.keys){
+                                      newSets[exerciseEntry == exercise ? newExercise : exerciseEntry] = sets[exerciseEntry];
+                                      newFocusnodes[exerciseEntry == exercise ? newExercise : exerciseEntry] = _focusNodes[exerciseEntry]!;
+                                      newControllers[exerciseEntry == exercise ? newExercise : exerciseEntry] = _controllers[exerciseEntry]!;
+                                      newCheckboxstates[exerciseEntry == exercise ? newExercise : exerciseEntry] = _checkBoxStates[exerciseEntry]!;
+                                    }
+                                    setState(() {
+                                      sets = newSets;
+                                      _focusNodes = newFocusnodes;
+                                      _controllers = newControllers;
+                                      _checkBoxStates = newCheckboxstates;
+                                      _initializeFocusNodesAndControllers();
+                                      updateExercises();
+                                    });
+                                  }
+                                case 'delete':
+                                  setState(() {
+                                    sets.remove(exercise);
+                                    _focusNodes.remove(exercise);
+                                    _controllers.remove(exercise);
+                                    _checkBoxStates.remove(exercise);
+                                    updateExercises();
+                                  });
+                              }
                             },
-                            child: const Icon(Icons.delete, color: Colors.red)
+                            itemBuilder: (BuildContext context) {
+                              return [
+                                const PopupMenuItem(value: 'Swap', child: Text('Swap')),
+                                const PopupMenuItem(value: 'Reorder', child: Text('Reorder', style: TextStyle(color: Colors.grey),)),    
+                                const PopupMenuItem(value: 'Delete', child: Text('Delete', style: TextStyle(color: Colors.red),)),
+                              ];
+                            },
+                            elevation: 2, 
+                            child: const Icon(Icons.more_vert, color: Colors.white)
                           ),
                         ],
                       ),
@@ -414,7 +492,7 @@ class _AddworkoutState extends State<Addworkout> {
                   ),
                 );
 
-                if (result != null) {
+                if (result != null && !sets.containsKey(result)) {
                   setState(() {
                     sets[result] = [
                       {'weight': exerciseMuscles[result]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'}
@@ -523,6 +601,7 @@ class _AddworkoutState extends State<Addworkout> {
   void addNewSet(String exercise) {
     setState(() {
       sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
+      debugPrint('idsk set');
       _ensureExerciseFocusNodesAndControllers(exercise);
     });
     
@@ -530,7 +609,7 @@ class _AddworkoutState extends State<Addworkout> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_getLastTextFieldFocus(exercise));
     });
-  }  
+  }
   
   FocusNode _getLastTextFieldFocus(String exercise) {
     final lastSetIndex = sets[exercise]!.length - 1;
