@@ -176,7 +176,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   
   Widget graphBody(List<FlSpot> spots, List<dynamic> dates, BuildContext context) {
     String unit = 'kg';
-    if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight'){unit = '';}
+    if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
     if (spots.isNotEmpty) {
       return SingleChildScrollView(
           child: Padding(

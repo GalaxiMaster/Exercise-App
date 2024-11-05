@@ -5876,7 +5876,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Dumbbell Biceps Curl": {
         "Primary": {
@@ -7273,7 +7273,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Dumbbell Seated Arnold Press": {
         "Primary": {
@@ -7345,7 +7345,7 @@ Map exerciseMuscles = {
             "Front Delts": 15,
             "Glutes": 5
         },
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Reverse Plank": {
         "Primary": {
@@ -7357,7 +7357,7 @@ Map exerciseMuscles = {
             "Front Delts": 10,
             "Triceps": 5
         },
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Side Plank": {
         "Primary": {
@@ -7367,7 +7367,7 @@ Map exerciseMuscles = {
             "Glutes": 20,
             "Side Delts": 20
         },
-        "type": "Bodyweight"
+        "type": "bodyweight"
     }
 };
 

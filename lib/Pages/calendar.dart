@@ -42,14 +42,18 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 @override
 Widget build(BuildContext context) {
+  DateTime firstTime = DateTime.now().subtract(Duration(days: 365));
+  if (exerciseData.keys.isNotEmpty){
+    firstTime = DateTime.parse(exerciseData.keys.toList()[exerciseData.keys.length-1].split(' ')[0]).subtract(const Duration(days: 31));
+  }
   return Column(
     children: [
       if (exerciseData.isNotEmpty) 
         StreakRestRow(exerciseData: exerciseData), // Render only when exerciseData is not empty
       Expanded(
         child: PagedVerticalCalendar(
-          minDate: DateTime(2024, 1, 1), // start date
-          maxDate: DateTime(2024, 12, 31), // year from now
+          minDate: DateTime(firstTime.year, firstTime.month, firstTime.day), // start date
+          maxDate: DateTime.now().add(const Duration(days: 31)), // year from now
           dayBuilder: (context, date) {
             bool isHighlighted = highlightedDays.any((highlightedDay) =>
                 date.year == highlightedDay.year &&
