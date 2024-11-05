@@ -7209,7 +7209,7 @@ exerciseMuscles = {
     },
     "Stationary Bike": {
         "Primary": {
-            "Quads": 40,
+            "Quads": 40 ,
             "Hamstrings": 30,
             "Glutes": 20
         },
@@ -7240,6 +7240,129 @@ exerciseMuscles = {
             "Lats": 10
         },
         "type": "Weighted"
+    },
+    "Assisted Pull Up": {
+        "Primary": {
+            "Lats": 50
+        },
+        "Secondary": {
+            "Biceps": 25,
+            "Rhomboids": 15,
+            "Traps": 10
+        },
+        "type": "Weighted"
+    },
+    "Hip Abductor": {
+        "Primary": {
+            "Glutes": 90
+        },
+        "Secondary": {
+            "Hip Flexors": 10
+        },
+        "type": "Machine"
+    },
+    "Crunch": {
+        "Primary": {
+            "Rectus Abdominis": 80
+        },
+        "Secondary": {
+            "Obliques": 20
+        },
+        "type": "Bodyweight"
+    },
+    "Dumbbell Seated Arnold Press": {
+        "Primary": {
+            "Front Delts": 40,
+            "Side Delts": 40
+        },
+        "Secondary": {
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Dumbbell Seated Reverse Concentration Curl": {
+        "Primary": {
+            "Biceps": 60,
+            "Brachioradialis": 40
+        },
+        "Secondary": {},
+        "type": "Weighted"
+    },
+    "Incline Lever Chest Press": {
+        "Primary": {
+            "Upper Chest": 60
+        },
+        "Secondary": {
+            "Front Delts": 20,
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Jumping Jack": {
+        "Primary": {
+            "Glutes": 30,
+            "Quads": 30
+        },
+        "Secondary": {
+            "Calves": 20,
+            "Shoulders": 20
+        },
+        "type": "Cardio"
+    },
+    "Plank": {
+        "Primary": {
+            "Abdominis": 60,
+        },
+        "Secondary": {
+            "Obliques": 20,
+            "Shoulders": 15,
+            "Glutes": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Reverse Plank": {
+        "Primary": {
+            "Glutes": 40,
+            "Hamstrings": 30
+        },
+        "Secondary": {
+            "Lower Back": 15,
+            "Shoulders": 10,
+            "Triceps": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Running": {
+        "Primary": {
+            "Quads": 30,
+            "Hamstrings": 25,
+            "Glutes": 25
+        },
+        "Secondary": {
+            "Calves": 20
+        },
+        "type": "Cardio"
+    },
+    "Side Plank": {
+        "Primary": {
+            "Obliques": 60
+        },
+        "Secondary": {
+            "Glutes": 20,
+            "Shoulders": 20
+        },
+        "type": "Bodyweight"
+    },
+    "Walking": {
+        "Primary": {
+            "Glutes": 30,
+            "Quads": 30
+        },
+        "Secondary": {
+            "Calves": 20,
+            "Hamstrings": 20
+        },
+        "type": "Cardio"
     }
 }
 
@@ -7252,11 +7375,11 @@ def iterate_through_folders(root_dir):
                 exerciseMuscles[file.split('.')[0]]
             except Exception as e:
                 print(file.split('.')[0])
-                os.remove(os.path.join(root_dir, file))
+                # os.remove(os.path.join(root_dir, file))
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Exercises'))
 print("############# Images that don't have dictionary ###############")
 root_dir = "file"  # replace with the directory you want to iterate through
-iterate_through_folders(base_path)
+iterate_through_folders('C:/Users/User Name/Downloads/compressed')
 
 print("############# Dictionary that don't have images ###############")
 

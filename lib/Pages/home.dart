@@ -263,9 +263,9 @@ class _HomePageState extends State<HomePage> {
                                   data['data']['color'][2],
                                   data['data']['color'][3],
                                 )
-                              : Color.fromARGB(255, 255, 255, 255);
+                              : const Color.fromARGB(255, 255, 255, 255);
                               return AlertDialog(
-                                title: Text('Pick a color'),
+                                title: const Text('Pick a color'),
                                 content: SingleChildScrollView(
                                 child: ColorPicker(
                                   pickerColor: tempColor,
@@ -278,13 +278,13 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 actions: <Widget>[
                                   TextButton(
-                                    child: Text('Cancel'),
+                                    child: const Text('Cancel'),
                                     onPressed: () {
                                       Navigator.of(context).pop();  // Close without saving
                                     },
                                   ),
                                   TextButton(
-                                    child: Text('Reset'),
+                                    child: const Text('Reset'),
                                     onPressed: () {
                                       data['data']['color'] = null;
                                       writeData(data, path: 'routines/${data['data']['name']}', append: false);
@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                                     },
                                   ),
                                   TextButton(
-                                    child: Text('Select'),
+                                    child: const Text('Select'),
                                     onPressed: () {
                                       Navigator.of(context).pop(tempColor);  // Return selected color
                                     },

@@ -2122,17 +2122,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Kettlebell Goblet Squat Mobility": {
-        "Primary": {
-            "Hips": 40,
-            "Thoracic Spine": 30,
-            "Ankles": 20
-        },
-        "Secondary": {
-            "Quads": 10
-        },
-        "type": "Weighted"
-    },
     "Weighted Pistol Squat": {
         "Primary": {
             "Quads": 60
@@ -6772,10 +6761,9 @@ Map exerciseMuscles = {
     },
     "One Leg Floor Calf Raise": {
         "Primary": {
-            "Calves": 80
+            "Calves": 100
         },
         "Secondary": {
-            "Ankles": 20
         },
         "type": "Weighted"
     },
@@ -6896,10 +6884,9 @@ Map exerciseMuscles = {
     },
     "Smith Calf Raise": {
         "Primary": {
-            "Calves": 80
+            "Calves": 100
         },
         "Secondary": {
-            "Ankles": 20
         },
         "type": "Weighted"
     },
@@ -7259,4 +7246,128 @@ Map exerciseMuscles = {
         },
         "type": "Cardio"
     },
+    "Assisted Pull Up": {
+        "Primary": {
+            "Lats": 50
+        },
+        "Secondary": {
+            "Biceps": 25,
+            "Rhomboids": 15,
+            "Traps": 10
+        },
+        "type": "Weighted"
+    },
+    "Hip Abductor": {
+        "Primary": {
+            "Glutes": 90
+        },
+        "Secondary": {
+            "Hip Flexors": 10
+        },
+        "type": "Machine"
+    },
+    "Crunch": {
+        "Primary": {
+            "Rectus Abdominis": 80
+        },
+        "Secondary": {
+            "Obliques": 20
+        },
+        "type": "Bodyweight"
+    },
+    "Dumbbell Seated Arnold Press": {
+        "Primary": {
+            "Front Delts": 40,
+            "Side Delts": 40
+        },
+        "Secondary": {
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Dumbbell Seated Reverse Concentration Curl": {
+        "Primary": {
+            "Biceps": 60,
+            "Brachioradialis": 40
+        },
+        "Secondary": {},
+        "type": "Weighted"
+    },
+    "Incline Lever Chest Press": {
+        "Primary": {
+            "Upper Chest": 60
+        },
+        "Secondary": {
+            "Front Delts": 20,
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Running": {
+        "Primary": {
+            "Quads": 30,
+            "Hamstrings": 25,
+            "Glutes": 25
+        },
+        "Secondary": {
+            "Calves": 20
+        },
+        "type": "Cardio"
+    },
+    "Walking": {
+        "Primary": {
+            "Glutes": 30,
+            "Quads": 30
+        },
+        "Secondary": {
+            "Calves": 20,
+            "Hamstrings": 20
+        },
+        "type": "Cardio"
+    },
+    "Jumping Jack": {
+        "Primary": {
+            "Glutes": 30,
+            "Quads": 30
+        },
+        "Secondary": {
+            "Calves": 20,
+            "Side Delts": 20
+        },
+        "type": "Cardio"
+    },
+    "Plank": {
+        "Primary": {
+            "Abdominis": 60
+        },
+        "Secondary": {
+            "Obliques": 20,
+            "Front Delts": 15,
+            "Glutes": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Reverse Plank": {
+        "Primary": {
+            "Glutes": 40,
+            "Hamstrings": 30
+        },
+        "Secondary": {
+            "Lower Back": 15,
+            "Front Delts": 10,
+            "Triceps": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Side Plank": {
+        "Primary": {
+            "Obliques": 60
+        },
+        "Secondary": {
+            "Glutes": 20,
+            "Side Delts": 20
+        },
+        "type": "Bodyweight"
+    }
 };
+

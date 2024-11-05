@@ -6,7 +6,7 @@ import csv
 import pandas as pd
 
 balls = {'Flat dumbbell chests press': 'Dumbbell Bench Press', 'Lat pull downs (neutral)': 'Cable Neutral Grip Lat Pulldown', 'Lat pull downs': 'Cable Neutral Grip Lat Pulldown', 'Barbell curls': 'Barbell Curl', 'Cable rows': 'Cable seated row', 'Dumbbell shoulder press': 'Dumbbell Seated Shoulder Press', 'Lat raise (cable)': 'Cable One Arm Lateral Raise', 'Leg raise': 'Lying Leg Raise', 'Flat dumbell chests press': 'Dumbbell Bench Press', 'External rotations': 'Cable Half Kneeling External Rotation', 'Internal rotations': 'Cable Seated Shoulder Internal Rotation', 'Pullup': 'Pull Up', 'Chinups': 'Chin Up', 'Neutral grip pullups': 'Neutral Grip Pull Up', 'Incline dumbell chest press': 'Dumbbell Incline Bench Press', 'Tricep pushdowns': 'Cable Pushdown (Rope)', 'Overhead tricep extensions (edge)': 'Cable Overhead Triceps Extension (Rope)', 'Flat dumbell chest press': 'Dumbbell Bench Press', 'Seated bicep curls': 'Dumbbell Seated Bicep Curl', 'Flat dumbbell chest press': 'Dumbbell Bench Press', 'Cable Lat raises': 'Cable One Arm Lateral Raise', 'Shoulder press': 'Dumbbell Seated Shoulder Press', 'Rear felt flies': 'Rear Delt Fly (Machine)', 'Cable Rows': 'Cable seated row', 'Dumbell lat raises': 'Cable One Arm Lateral Raise', 'Flat Dumbbell chest press': 'Dumbbell Bench Press', 'tricep pushdowns': 'Cable Pushdown (Rope)', 'Rear delt flies': 'Rear Delt Fly (Machine)', 'Overhead prsss': 'Seated Overhead Press (Barbell)', 'Lat raise': 'Cable One Arm Lateral Raise', 'Overhead tricep extention': 'Cable Overhead Triceps Extension (Rope)', 'Assisted dips': 'Assisted Triceps Dip', 'Rows': 'Seated cable row', 'Preacher curls': 'Barbell Preacher Curl', 'Machine lat pull downs': 'Machine Lat Pulldowns', 'Machine rows': 'Seated Lever Machine Row', 'dumbbell lat raises': 'Dumbbell Lateral Raise', 'shoulder press': 'Dumbbell Seated Shoulder Press', 'Incline dumbbell chest preds': 'Dumbbell Incline Bench Press', 'Overhead tricep extention (edge)': 'Cable Overhead Triceps Extension (Rope)', 'Barbell bicep curl': 'Barbell Curl', 'Neutral Lat pull downs': 'Cable Neutral Grip Lat Pulldown', 'Cable lat raises': 'Cable One Arm Lateral Raise', 'Pullups': 'Pull Up', 'Tricep pushdowns (edge one)': 'Cable Pushdown (Rope)', 'Tricep pushdowns (edge)': 'Cable Pushdown (Rope)', 'Overhead press': 'Standing Overhead Press (Barbell)', 'Back extentions': 'Back Extensions', 'Assisted neutral Pullups': 'Assisted Neutral Grip Pull Ups', 'Flat Barbell bench': 'Barbell Bench Press', 'Band assisted dips': 'Band Assisted Dips', 'Dumbbell preacher curls': 'Dumbbell Preacher Curl', 'Tricep pushdowns edge': 'Cable Pushdown (Rope)', 'Incline chest press': 'Dumbbell Incline Bench Press', 'Lat raises': 'Cable Single Arm Lateral Raise', 'Cable curls': 'Cable One Arm Biceps Curl', 'Behind curls': 'Finger Curls', 'Lat pullovers': 'Cable Pullover', 'Incline Barbell bench press': 'Barbell Incline Bench Press', 'Banded dips': 'Band Assisted Dips', 'Flat Barbell chests press': 'Barbell Bench Press', 'Tricep pushdowns kirrawee': 'Cable Pushdown (Rope)', 'Concentration curls': 'Dumbbell Concentration Curl', 'Assisted neutral grip pullups': 'Assisted Neutral Grip Pull Ups', 'Tricep push downs': 'Cable Pushdown (Rope)', 'Chests flies': 'Machine Chest Fly', 'Incline dumbbell chest press': 'Dumbbell Incline Bench Press', 'Chest flies': 'Machine Chest Fly', 'Bicep curl': 'Dumbbell Biceps Curl', 'Bicep curls supported': 'Dumbbell Preacher Curl', 'incline dumbbell chest press': 'Dumbbell Incline Bench Press', 'Close grip Cable rows': 'Cable seated row', 'Isolated bicep curls': 'Dumbbell Preacher Curl', 'Incline Barbell chests press': 'Barbell Incline Bench Press', 'Single arm overhead tricep extention': 'Cable Overhead Tricep Single Arm Triceps Extension (Rope)', 'Dumbbell rows': 'Dumbbell Bent Over Bench Row', 'Over head tricep': 'Cable Overhead Single Arm Triceps Extension (Rope)'}
-exerciseMuscles = {
+exerciseMuscles = exerciseMuscles = {
 "Cable Pushdown": {
         "Primary": {
             "Triceps": 80
@@ -1429,16 +1429,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Incline Push up": {
-        "Primary": {
-            "Upper Chest": 60,
-            "Triceps": 30
-        },
-        "Secondary": {
-            "Front Delts": 10
-        },
-        "type": "Weighted"
-    },
     "Barbell Rear Delt Row": {
         "Primary": {
             "Rear Delts": 70
@@ -2102,17 +2092,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Kettlebell Goblet Squat Mobility": {
-        "Primary": {
-            "Hips": 40,
-            "Thoracic Spine": 30,
-            "Ankles": 20
-        },
-        "Secondary": {
-            "Quads": 10
-        },
-        "type": "Weighted"
-    },
     "Weighted Pistol Squat": {
         "Primary": {
             "Quads": 60
@@ -2751,16 +2730,7 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable one arm Lateral pulldown": {
-        "Primary": {
-            "Lats": 70
-        },
-        "Secondary": {
-            "Biceps": 20,
-            "Rear Delts": 10
-        },
-        "type": "Weighted"
-    },
+
     "EZ Barbell Curl": {
         "Primary": {
             "Biceps": 80
@@ -6578,15 +6548,6 @@ exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbells Seated Triceps Extension": {
-        "Primary": {
-            "Triceps": 70
-        },
-        "Secondary": {
-            "Front Delts": 30
-        },
-        "type": "Weighted"
-    },
     "Dumbbell Side Lunge": {
         "Primary": {
             "Quads": 50,
@@ -6770,10 +6731,9 @@ exerciseMuscles = {
     },
     "One Leg Floor Calf Raise": {
         "Primary": {
-            "Calves": 80
+            "Calves": 100
         },
         "Secondary": {
-            "Ankles": 20
         },
         "type": "Weighted"
     },
@@ -6894,10 +6854,9 @@ exerciseMuscles = {
     },
     "Smith Calf Raise": {
         "Primary": {
-            "Calves": 80
+            "Calves": 100
         },
         "Secondary": {
-            "Ankles": 20
         },
         "type": "Weighted"
     },
@@ -7156,7 +7115,7 @@ exerciseMuscles = {
             "Hip Flexors": 30
         },
         "Secondary": {},
-        "type": "Bodyweight"
+        "type": "bodyweight"
     },
     "Dead Hang": {
         "Primary": {
@@ -7166,7 +7125,7 @@ exerciseMuscles = {
             "Lats": 30,
             "Shoulders": 15
         },
-        "type": "Bodyweight"
+        "type": "Timed"
     },
     "Farmer Walk": {
         "Primary": {
@@ -7179,7 +7138,7 @@ exerciseMuscles = {
             "Quads": 10,
             "Glutes": 10
         },
-        "type": "Weighted"
+        "type": "Distance"
     },
     "Low Cable Fly": {
         "Primary": {
@@ -7244,15 +7203,138 @@ exerciseMuscles = {
             "Lats": 10
         },
         "type": "Weighted"
+    },
+    "Stair Master": {
+        "Primary": {
+            "Quads": 40,
+            "Glutes": 30,
+            "Hamstrings": 20
+        },
+        "Secondary": {
+            "Calves": 10,
+            "Rectus Abdominis": 3
+        },
+        "type": "Cardio"
+    },
+    "Hip Abductor": {
+        "Primary": {
+            "Glutes": 90
+        },
+        "Secondary": {
+            "Hip Flexors": 10
+        },
+        "type": "Machine"
+    },
+    "Crunch": {
+        "Primary": {
+            "Rectus Abdominis": 80
+        },
+        "Secondary": {
+            "Obliques": 20
+        },
+        "type": "Bodyweight"
+    },
+    "Dumbbell Seated Arnold Press": {
+        "Primary": {
+            "Front Delts": 40,
+            "Side Delts": 40
+        },
+        "Secondary": {
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Dumbbell Seated Reverse Concentration Curl": {
+        "Primary": {
+            "Biceps": 60,
+            "Brachioradialis": 40
+        },
+        "Secondary": {},
+        "type": "Weighted"
+    },
+    "Incline Lever Chest Press": {
+        "Primary": {
+            "Upper Chest": 60
+        },
+        "Secondary": {
+            "Front Delts": 20,
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Jumping Jack": {
+        "Primary": {
+            "Glutes": 30,
+            "Quads": 30
+        },
+        "Secondary": {
+            "Calves": 20,
+            "Shoulders": 20
+        },
+        "type": "Cardio"
+    },
+    "Plank": {
+        "Primary": {
+            "Abdominis": 60,
+        },
+        "Secondary": {
+            "Obliques": 20,
+            "Shoulders": 15,
+            "Glutes": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Reverse Plank": {
+        "Primary": {
+            "Glutes": 40,
+            "Hamstrings": 30
+        },
+        "Secondary": {
+            "Lower Back": 15,
+            "Shoulders": 10,
+            "Triceps": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Running": {
+        "Primary": {
+            "Quads": 30,
+            "Hamstrings": 25,
+            "Glutes": 25
+        },
+        "Secondary": {
+            "Calves": 20
+        },
+        "type": "Cardio"
+    },
+    "Side Plank": {
+        "Primary": {
+            "Obliques": 60
+        },
+        "Secondary": {
+            "Glutes": 20,
+            "Shoulders": 20
+        },
+        "type": "Bodyweight"
+    },
+    "Walking": {
+        "Primary": {
+            "Glutes": 30,
+            "Quads": 30
+        },
+        "Secondary": {
+            "Calves": 20,
+            "Hamstrings": 20
+        },
+        "type": "Cardio"
     }
 }
-
 # with open('thomasdata.csv', 'r') as f:
     # data = csv.reader(f)
     
-df = pd.read_csv('thomasdata.csv')
+df = pd.read_csv('ROMEFERNLY.csv', sep=';')
 exercises = []
-for exercise in df['exercise_title']:
+for exercise in df['Exercise Name']:
     if (exercise not in exercises):
         exercises.append(exercise)
 
@@ -7262,7 +7344,7 @@ print(len(exercises))
 
 matches = {}
 needed = []
-corrections = {'Pull Up (Weighted)': 'Weighted Pull Up', 'Iso-Lateral Row (Machine)': 'Seated Lever Machine Row', 'Straight Arm Lat Pulldown (Cable)': 'Cable Pullover', 'Seated Cable Row - V Grip (Cable)': 'Cable seated row', 'Single Arm Curl (Cable)': 'Cable One Arm Biceps Curl', 'Bench Press (Barbell)': 'Barbell Bench Press', 'Triceps Dip (Weighted)': 'Weighted Tricep Dips', 'Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Triceps Rope Pushdown': 'Cable Pushdown (Rope)', 'Incline Bench Press (Dumbbell)': 'Dumbbell Incline Bench Press', 'Cable Wrist Curl (Single)': 'Cable One Arm Wrist Curl', 'Seated Palms Up Wrist Curl': 'Dumbbell Seated Palms Up Wrist Curl', 'Bent Over Row (Barbell)': 'Barbell Bent Over Row', 'Bench Press (Dumbbell)': 'Dumbbell Bench Press', 'Bicep Curl (Dumbbell)': 'Dumbbell Biceps Curl', 'Triceps Dip': 'Tricep Dips', 'Triceps Extension (Cable)': 'Cable Overhead Triceps Extension', 'T Bar Row': 'Lying T-Bar Row', 'Lat Pulldown (Machine)': 'Machine Lat Pulldowns', 'Lateral Raise (Dumbbell)': 'Dumbbell Lateral Raise', 'Standing Calf Raise (Smith)': 'Smith Calf Raise', 'Hip Thrust (Barbell)': 'Barbell Hip Thrust', 'Leg Extension (Machine)': 'Lever Leg Extension', 'Deadlift (Barbell)': 'Barbell Deadlift', 'Back Extension (Weighted Hyperextension)': 'Back Extensions', 'Incline Bench Press (Barbell)': 'Barbell Incline Bench Press', 'Chin Up': 'Chin Up', 'Overhead Press (Barbell)': 'Barbell Overhead press', 'Bicep Curl (Cable)': 'Cable Curl', 'Bicep Curl (Barbell)': 'Barbell Curl', 'Chest Fly (Machine)': 'Machine Chest Fly', 'Pull Up': 'Pull Up', 'Rear Delt Reverse Fly (Machine)': 'Rear Delt Fly (Machine)', 'Hammer Curl (Dumbbell)': 'Dumbell Hammer Curl', 'Leg Press (Machine)': 'Sled 45 Leg Press', 'Shoulder Press (Dumbbell)': 'Dumbbell Seated Shoulder Press', 'Cable Pull Through': 'Cable pull through', 'Cable Fly Crossovers': 'Cable Standing Up Straight Crossovers', 'Preacher Curl (Barbell)': 'Barbell Preacher Curl', 'Single Arm Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Hammer Curl (Cable)': 'Cable Hammer Curl', 'Hack Squat': 'Sled Closer Hack Squat', 'Dead Hang': 'Dead Hang', 'Seated Cable Row - Bar Grip': 'Cable Low Seated Row', 'Seated Cable Row - Bar Wide Grip': 'Wide Grip Overhand Row', 'Single Arm Cable Row': 'Cable One Arm Row', 'Lat Pulldown (Cable)': 'Cable Neutral Grip Lat Pulldown', 'Leg Raise Parallel Bars': 'Captain Seat Leg Raise', 'Hack Squat (Machine)': 'Sled Hack Squat', 'Farmers Walk': 'Farmer Walk', 'Incline Bench Press (Smith Machine)': 'Smith Machine Incline Bench Press', 'Chin Up (Weighted)': 'Weighted Chin Up', 'Low Cable Fly Crossovers': 'Low Cable Fly', 'Behind the Back Bicep Wrist Curl (Barbell)': 'Barbell Behind the Back Wrist Curls', 'Push Up - Close Grip': 'Push Up'}
+corrections = {'Pull Up (Weighted)': 'Weighted Pull Up', 'Iso-Lateral Row (Machine)': 'Seated Lever Machine Row', 'Straight Arm Lat Pulldown (Cable)': 'Cable Pullover', 'Seated Cable Row - V Grip (Cable)': 'Cable seated row', 'Single Arm Curl (Cable)': 'Cable One Arm Biceps Curl', 'Bench Press (Barbell)': 'Barbell Bench Press', 'Triceps Dip (Weighted)': 'Weighted Tricep Dips', 'Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Triceps Rope Pushdown': 'Cable Pushdown (Rope)', 'Incline Bench Press (Dumbbell)': 'Dumbbell Incline Bench Press', 'Cable Wrist Curl (Single)': 'Cable One Arm Wrist Curl', 'Seated Palms Up Wrist Curl': 'Dumbbell Seated Palms Up Wrist Curl', 'Bent Over Row (Barbell)': 'Barbell Bent Over Row', 'Bench Press (Dumbbell)': 'Dumbbell Bench Press', 'Bicep Curl (Dumbbell)': 'Dumbbell Biceps Curl', 'Triceps Dip': 'Tricep Dips', 'Triceps Extension (Cable)': 'Cable Overhead Triceps Extension', 'T Bar Row': 'Lying T-Bar Row', 'Lat Pulldown (Machine)': 'Machine Lat Pulldowns', 'Lateral Raise (Dumbbell)': 'Dumbbell Lateral Raise', 'Standing Calf Raise (Smith)': 'Smith Calf Raise', 'Hip Thrust (Barbell)': 'Barbell Hip Thrust', 'Leg Extension (Machine)': 'Lever Leg Extension', 'Deadlift (Barbell)': 'Barbell Deadlift', 'Back Extension (Weighted Hyperextension)': 'Back Extensions', 'Incline Bench Press (Barbell)': 'Barbell Incline Bench Press', 'Chin Up': 'Chin Up', 'Overhead Press (Barbell)': 'Barbell Overhead press', 'Bicep Curl (Cable)': 'Cable Curl', 'Bicep Curl (Barbell)': 'Barbell Curl', 'Chest Fly (Machine)': 'Machine Chest Fly', 'Pull Up': 'Pull Up', 'Rear Delt Reverse Fly (Machine)': 'Rear Delt Fly (Machine)', 'Hammer Curl (Dumbbell)': 'Dumbell Hammer Curl', 'Leg Press (Machine)': 'Sled 45 Leg Press', 'Shoulder Press (Dumbbell)': 'Dumbbell Seated Shoulder Press', 'Cable Pull Through': 'Cable pull through', 'Cable Fly Crossovers': 'Cable Standing Up Straight Crossovers', 'Preacher Curl (Barbell)': 'Barbell Preacher Curl', 'Single Arm Lateral Raise (Cable)': 'Cable One Arm Lateral Raise', 'Hammer Curl (Cable)': 'Cable Hammer Curl', 'Hack Squat': 'Sled Closer Hack Squat', 'Dead Hang': 'Dead Hang', 'Seated Cable Row - Bar Grip': 'Cable Low Seated Row', 'Seated Cable Row - Bar Wide Grip': 'Wide Grip Overhand Row', 'Single Arm Cable Row': 'Cable One Arm Row', 'Lat Pulldown (Cable)': 'Cable Neutral rip Lat Pulldown', 'Leg Raise Parallel Bars': 'Captain Seat Leg Raise', 'Hack Squat (Machine)': 'Sled Hack Squat', 'Farmers Walk': 'Farmer Walk', 'Incline Bench Press (Smith Machine)': 'Smith Machine Incline Bench Press', 'Chin Up (Weighted)': 'Weighted Chin Up', 'Low Cable Fly Crossovers': 'Low Cable Fly', 'Behind the Back Bicep Wrist Curl (Barbell)': 'Barbell Behind the Back Wrist Curls', 'Push Up - Close Grip': 'Push Up', 'Push Up': 'Push up', 'Flat Leg Raise': 'Seated Leg Raise', 'Overhead Press (Dumbbell)': 'Standing Overhead Press (Barbell)', 'Sit Up': 'Sit Up', 'Concentration Curl (Dumbbell)': 'Dumbbell Concentration Curl', 'Front Raise (Dumbbell)': 'Dumbbell Front Raise', 'Triceps Pushdown (Cable - Straight Bar)': 'Cable Pushdown', 'Shoulder Press (Machine)': 'Machine Shoulder Press', 'Chest Dip': 'Chest Dip', 'Incline Curl (Dumbbell)': 'Dumbbell Incline Curl', 'Chest Fly': 'Machine Chest Fly', 'Seated Row (Cable)': 'Seated cable row', 'Triceps Extension (Dumbbell)': 'o', 'Triceps Dip (Assisted)': 'Assisted Tricep Dips', 'Reverse Curl (Barbell)': 'Barbell Reverse Curl', 'Seated Calf Raise (Plate Loaded)': 'Lever Calf Press (plate loaded)', 'Leg Press': 'Sled 45 Leg Press', 'Reverse Fly (Machine)': 'Rear Delt Fly (Machine)', 'Bulgarian Split Squat': 'Bulgarian Split Squat', 'Seated Leg Press (Machine)': 'Lever Seated Leg Press', 'Seated Leg Curl (Machine)': 'Lever Seated Leg Curl', 'Preacher Curl (Machine)': 'Lever Preacher Curl', 'Seated Palms Up Wrist Curl (Dumbbell)': 'Dumbbell Seated Palms Up Wrist Curl', 'flutter kicks': 'Seated Flutter Kick', 'scissors': 'Scissors (advanced)', 'Flutter kicks': 'Seated Flutter Kick', 'Bent Over One Arm Row (Dumbbell)': 'Dumbbell Bent Over Bench Row', 'Bent Over Row (Dumbbell)': 'Dumbbell Bent Over Bench Row', 'Skullcrusher (Dumbbell)': 'Dumbbell Lying Floor Skullcrusher', 'Pullover (Dumbbell)': 'Dumbbell Pullover', 'Reverse Curl (Dumbbell)': 'Dumbbell Bicep Curl Reverse', 'lever Row': 'Seated Lever Machine Row', 'Triceps Extension (Barbell)': 'Barbell Standing Overhead Triceps Extension', 'Skullcrusher (Barbell)': 'Barbell Lying Tricep Extension Skull Crusher', 'Plank': 'Plank', 'Jumping Jack': 'Jumping Jack', 'Crunch': 'Crunch', 'Running': 'Running', 'Reverse Grip Concentration Curl (Dumbbell)': 'Dumbbell Seated Reverse Concentration Curl', 'Arnold Press (Dumbbell)': 'Dumbbell Arnold Press', 'Walking': 'Walking', 'Pull Up (Assisted)': 'Assisted Pull Up', 'Iso-Lateral Chest Press (Machine)': 'Lever Chest Press (plate loaded)', 'Incline Chest Press (Machine)': 'Incline Lever Chest Press', 'Hip Abductor (Machine)': 'Hip Abductor', 'Side Plank': 'Side Plank'}
 i = 1
 for exercise in exercises:
     matches[exercise] = {}
