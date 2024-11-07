@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -321,6 +323,7 @@ class _AddworkoutState extends State<Addworkout> {
                                 child: Text('Weight (kg)')
                               ),
                             ), 
+                            if (exerciseMuscles[exercise]['type'] != 'Timed')
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
@@ -360,10 +363,11 @@ class _AddworkoutState extends State<Addworkout> {
                                 ),
                               ),
                             ),
+                            
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
-                                child: (exerciseMuscles[exercise]?['type'] ?? '') != 'bodyweight' ? 
+                                child: (exerciseMuscles[exercise]?['type'] ?? '') != 'bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
                                   TextFormField(
                                     focusNode: _focusNodes[exercise]![i]['weight'],
                                     controller: _controllers[exercise]![i]['weight'],
@@ -400,7 +404,17 @@ class _AddworkoutState extends State<Addworkout> {
                                         extentOffset: _controllers[exercise]![i]['reps']!.text.length,
                                       );
                                     },
-                                  ) : 
+                                  ) : exerciseMuscles[exercise]['type'] == 'Timed' ? 
+                                    SizedBox(
+                                      height: 50, 
+                                      child: TimerScreen(
+                                        updateVariable: (int seconds){
+                                          sets[exercise]![i]['weight'] = seconds;
+                                          isRecord(exercise, i);
+                                          updateExercises();
+                                        },
+                                      )
+                                    ) :
                                   const Text(
                                     '-',
                                     style: TextStyle(
@@ -408,14 +422,13 @@ class _AddworkoutState extends State<Addworkout> {
                                       fontSize: 30,
                                     ),
                                   )
- 
                               ),
                             ),
+                            if (exerciseMuscles[exercise]['type'] != 'Timed')
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
                                 child: TextFormField(
-                                  // initialValue: sets[exercise]![i]['reps'].toString(),
                                   focusNode: _focusNodes[exercise]![i]['reps'],
                                   controller: _controllers[exercise]![i]['reps'],
                                   keyboardType: TextInputType.number,
@@ -495,7 +508,7 @@ class _AddworkoutState extends State<Addworkout> {
                 if (result != null && !sets.containsKey(result)) {
                   setState(() {
                     sets[result] = [
-                      {'weight': exerciseMuscles[result]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'}
+                      {'weight': exerciseMuscles[result]['type'] == 'bodyweight' ? '1' : '', 'reps': exerciseMuscles[result]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
                     ]; // Initialize sets list for the new exercise
                     updateExercises();
                   });
@@ -615,7 +628,6 @@ class _AddworkoutState extends State<Addworkout> {
     final lastSetIndex = sets[exercise]!.length - 1;
     return _focusNodes[exercise]![lastSetIndex]['weight']!;
   }
-  
   
   void confirmExercises(var sets, Map exerciseNotes){
     bool isNull = checkNulls(sets);
@@ -769,4 +781,104 @@ void reloadRecords() async {
         // List sets = data[day]['sets'][exercise];
       // sets.sort((a, b) => a["weight"].compareTo(b["weight"])); wild way to get top set, but i need progressive
       // debugPrint('yeah');
+}
+
+class TimerScreen extends StatefulWidget {
+  final Function(int seconds)? updateVariable;
+
+  const TimerScreen({super.key, this.updateVariable});
+
+  @override
+  _TimerScreenState createState() => _TimerScreenState();
+}
+
+class _TimerScreenState extends State<TimerScreen> {
+  Timer? _timer;
+  int _seconds = 0;
+  bool isRunning = false;
+
+  // Start the timer
+  void _startTimer() {
+    if (_timer != null) return;
+    
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _seconds++;
+      });
+    });
+
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  // Stop the timer
+  void _stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+    setState(() {
+      isRunning = false;
+    });
+  }
+
+  // Reset the timer
+  void _resetTimer() {
+    _stopTimer();
+    setState(() {
+      _seconds = 0;
+    });
+  }
+
+  // Format seconds into minutes:seconds
+  String _formatTime(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secs = (seconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$secs';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              if (isRunning) {
+                _stopTimer();
+              } else {
+                _seconds == 0 ? _startTimer() : _resetTimer();
+              }
+              if (widget.updateVariable != null){
+                widget.updateVariable!(_seconds);
+              }
+            },
+            child: CircleAvatar(
+              radius: 17,
+              backgroundColor: Colors.blue,
+              child: Icon(
+                isRunning ? Icons.pause : _seconds == 0 ? Icons.play_arrow : Icons.restart_alt_rounded,
+                color: Colors.white,
+                size: 25,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            _formatTime(_seconds),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 }
