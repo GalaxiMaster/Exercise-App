@@ -259,7 +259,7 @@ class _AddworkoutState extends State<Addworkout> {
                                       updateExercises();
                                     });
                                   }
-                                case 'delete':
+                                case 'Delete':
                                   setState(() {
                                     sets.remove(exercise);
                                     _focusNodes.remove(exercise);
@@ -409,7 +409,8 @@ class _AddworkoutState extends State<Addworkout> {
                                       height: 50, 
                                       child: TimerScreen(
                                         updateVariable: (int seconds){
-                                          sets[exercise]![i]['weight'] = seconds;
+                                          String value = seconds.toString();
+                                          sets[exercise]![i]['weight'] = value;
                                           isRecord(exercise, i);
                                           updateExercises();
                                         },
@@ -689,11 +690,11 @@ class _AddworkoutState extends State<Addworkout> {
       if (record['reps'] == '' || record['weight'] == '') {
       }
       else if (best.isEmpty){
-        best = [double.parse(record['weight']), double.parse(record['reps'])];
+        best = [double.parse(record['weight'].toString()), double.parse(record['reps'])];
         topindex = i;
       }
-      else if (double.parse(record['weight']) > best[0] || double.parse(record['weight']) == best[0] && double.parse(record['reps']) > best[1]){
-        best = [double.parse(record['weight']), double.parse(record['reps'])];
+      else if (double.parse(record['weight'].toString()) > best[0] || double.parse(record['weight'].toString()) == best[0] && double.parse(record['reps']) > best[1]){
+        best = [double.parse(record['weight'].toString()), double.parse(record['reps'])];
         topindex = i;
       }
       else {
