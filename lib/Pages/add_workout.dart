@@ -502,7 +502,7 @@ class _AddworkoutState extends State<Addworkout> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const WorkoutList(setting: 'choose',),
+                    builder: (context) => WorkoutList(setting: 'choose', preData: preCsvData),
                   ),
                 );
 

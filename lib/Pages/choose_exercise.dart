@@ -9,11 +9,13 @@ class WorkoutList extends StatefulWidget {
   final String setting;
   final List? problemExercises;
   final String? problemExercisesTitle;
+  final Map? preData;
   const WorkoutList({
     super.key, 
     required this.setting, 
     this.problemExercises, 
-    this.problemExercisesTitle
+    this.problemExercisesTitle,
+    this.preData
   });
 
   @override
@@ -113,6 +115,35 @@ class _WorkoutListState extends State<WorkoutList> {
         .where((exercise) => containsAllCharacters(exercise, query))
         .toList();
 
+    Map filteredExercisesMap = Map.fromEntries(
+      filteredExercises.map((value) => MapEntry(value, 0)),
+    );
+    if (widget.preData != null && query != ''){
+      for (String day in widget.preData!.keys){
+        for (String exercise in widget.preData![day]['sets'].keys){
+          if (filteredExercises.contains(exercise)){
+            filteredExercisesMap[exercise] += 1;
+          }
+        }
+      }
+      var sortedEntries = filteredExercisesMap.entries.toList();
+
+      sortedEntries.sort((a, b) {
+        if (a.value > 0 && b.value > 0) {
+          // Sort numerically where int > 0
+          return b.value.compareTo(a.value);
+        } else if (a.value == 0 && b.value == 0) {
+          // Sort alphabetically where int == 0
+          return a.key.compareTo(b.key);
+        } else {
+          // Keep sections separate: int > 0 before int == 0
+          return b.value.compareTo(a.value);
+        }
+      });
+      filteredExercisesMap = Map.fromEntries(sortedEntries);
+    }
+
+
     final filteredProblemExercises = widget.problemExercises
         ?.where((exercise) => containsAllCharacters(exercise, query))
         .toList() ?? [];
@@ -148,7 +179,7 @@ class _WorkoutListState extends State<WorkoutList> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => _buildExerciseItem(
-                filteredExercises[index], 
+                filteredExercisesMap.keys.toList()[index], 
                 false
               ),
               childCount: filteredExercises.length,
