@@ -7,6 +7,7 @@ import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vibration/vibration.dart';
 import 'choose_exercise.dart';
 
 // ignore: must_be_immutable
@@ -155,7 +156,6 @@ class _AddworkoutState extends State<Addworkout> {
 }
   
   void preLoad() async{
-    records = await readData(path: 'records');
     Map data = await readData();
     var sortedKeys = data.keys.toList()..sort();
     // Create a sorted map by iterating over sorted keys
@@ -476,6 +476,9 @@ class _AddworkoutState extends State<Addworkout> {
                                   setState(() {
                                     _checkBoxStates[exercise]![i] = value!;
                                   });
+                                  if (value ?? false){
+                                    isRecord(exercise, i, mode: 'Ticked');
+                                  }
                                 },
                               ),
                             )
@@ -674,7 +677,7 @@ class _AddworkoutState extends State<Addworkout> {
     return true;
   }
 
-  bool isRecord(String exercise, int index) {
+  bool isRecord(String exercise, int index, {String mode = 'notTick'}) {
     if (sets[exercise][index]['reps'] == '' || sets[exercise][index]['weight'] == ''){ // TODO check if the heaviest set is pr on change
       if (sets[exercise][index]['PR'] == 'yes'){
         setState(() {
@@ -709,10 +712,33 @@ class _AddworkoutState extends State<Addworkout> {
       printRecords();
       List candidate = [sets[exercise]![index]['weight'], sets[exercise]![index]['reps']]; // TODO move the pr to the most recent set, or highlight both
       if (records.containsKey(exercise)){
-        if (double.parse(candidate[0]) > double.parse(records[exercise]['weight']) || double.parse(candidate[0]) == double.parse(records[exercise]['weight']) && double.parse(candidate[1]) > double.parse(records[exercise]['reps'])){
+        if (double.parse(candidate[0]) > double.parse(records[exercise]['weight'])){
           setState(() {
             sets[exercise][index]['PR'] = 'yes';
           });
+          if (!(settings['Tick Boxes'] ?? false) || mode == 'Ticked'){
+            AchievementPopup.show(
+              context,
+              title: exercise,
+              subtitle: "Heaviest Weight - ${sets[exercise][index]['weight']} kg",
+              icon: Icons.emoji_events,  // Trophy or medal icon
+            );
+            Vibration.vibrate();
+          }
+          return true;
+        }else if(double.parse(candidate[0]) == double.parse(records[exercise]['weight']) && double.parse(candidate[1]) > double.parse(records[exercise]['reps'])){
+          setState(() {
+            sets[exercise][index]['PR'] = 'yes';
+          });
+          if (!(settings['Tick Boxes'] ?? false) || mode == 'Ticked'){
+            AchievementPopup.show(
+              context,
+              title: exercise,
+              subtitle: "Highest Reps - ${sets[exercise][index]['reps']}",
+              icon: Icons.emoji_events,  // Trophy or medal icon
+            );
+            Vibration.vibrate();
+          }
           return true;
         }else {
           if (sets[exercise][index]['PR'] == 'yes'){
@@ -743,45 +769,46 @@ class _AddworkoutState extends State<Addworkout> {
     var data = await readData(path: 'records');
     debugPrint(data.toString());
   }
-}
-void reloadRecords() async {
-  Map data = await readData();
-  var sortedKeys = data.keys.toList()..sort();
-  Map records = await readData(path: 'records');
-  // Create a sorted map by iterating over sorted keys
-  Map<String, dynamic> sortedMap = {
-    for (var key in sortedKeys) key: data[key]!,
-  };
-  Map dataCopy = sortedMap;
-  data = sortedMap;
-  for (String day in data.keys){
-    for (String exercise in data[day]['sets'].keys){
+  void reloadRecords() async {
+    Map data = await readData();
+    var sortedKeys = data.keys.toList()..sort();
+    Map recordsTemp = await readData(path: 'records');
+    // Create a sorted map by iterating over sorted keys
+    Map<String, dynamic> sortedMap = {
+      for (var key in sortedKeys) key: data[key]!,
+    };
+    Map dataCopy = sortedMap;
+    data = sortedMap;
+    for (String day in data.keys){
+      for (String exercise in data[day]['sets'].keys){
 
-      Map topSet = records[exercise] ?? {'weight': 0, 'reps': 0};
+        Map topSet = recordsTemp[exercise] ?? {'weight': 0, 'reps': 0};
 
-      for (int i = 0; i < data[day]['sets'][exercise].length; i++){
-        Map set = data[day]['sets'][exercise][i];
-        if (double.parse(set['weight'].toString()) > double.parse(topSet['weight'].toString())){
-          topSet = set;
-          dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
+        for (int i = 0; i < data[day]['sets'][exercise].length; i++){
+          Map set = data[day]['sets'][exercise][i];
+          if (double.parse(set['weight'].toString()) > double.parse(topSet['weight'].toString())){
+            topSet = set;
+            dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
+          }
+          else if (double.parse(set['weight'].toString()) == double.parse(topSet['weight'].toString()) && 
+                    double.parse(set['reps'].toString()) > double.parse(topSet['reps'].toString()) 
+                  ){
+            topSet = set; 
+            dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
+
+          }
         }
-        else if (double.parse(set['weight'].toString()) == double.parse(topSet['weight'].toString()) && 
-                  double.parse(set['reps'].toString()) > double.parse(topSet['reps'].toString()) 
-                ){
-          topSet = set; 
-          dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
-
-        }
+        recordsTemp[exercise] = topSet;
       }
-      records[exercise] = topSet;
-    }
 
+    }
+    debugPrint('yeah');
+    writeData(records, path: 'records', append: false);
+          // List sets = data[day]['sets'][exercise];
+        // sets.sort((a, b) => a["weight"].compareTo(b["weight"])); wild way to get top set, but i need progressive
+        // debugPrint('yeah');
+    records = recordsTemp;
   }
-  debugPrint('yeah');
-  writeData(records, path: 'records', append: false);
-        // List sets = data[day]['sets'][exercise];
-      // sets.sort((a, b) => a["weight"].compareTo(b["weight"])); wild way to get top set, but i need progressive
-      // debugPrint('yeah');
 }
 
 class TimerScreen extends StatefulWidget {
@@ -881,5 +908,88 @@ class _TimerScreenState extends State<TimerScreen> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+}
+
+class AchievementPopup {
+  static void show(BuildContext context, {required String title, required String subtitle, required IconData icon}) {
+    OverlayEntry overlayEntry = _createOverlayEntry(context, title, subtitle, icon);
+    Overlay.of(context).insert(overlayEntry);
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      overlayEntry.markNeedsBuild();  // Trigger animation for expansion
+    });
+
+    // Remove popup after display duration
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
+
+  static OverlayEntry _createOverlayEntry(BuildContext context, String title, String subtitle, IconData icon) {
+    return OverlayEntry(
+      builder: (context) {
+        bool isExpanded = false;
+
+        return Positioned(
+          top: 50.0,
+          left: MediaQuery.of(context).size.width * 0.1,
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: Material(
+            color: Colors.transparent,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                Future.delayed(Duration.zero, () {
+                  setState(() => isExpanded = true);
+                });
+
+                return AnimatedOpacity(
+                  opacity: isExpanded ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 500),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    height: 60,
+                    width: isExpanded ? MediaQuery.of(context).size.width * 0.8 : 60,  // Starts small, expands to wide
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(30),  // Circular shape for initial and expanded view
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 8),
+                        Icon(icon, color: Colors.amber, size: 30),
+                        AnimatedOpacity(
+                          opacity: isExpanded ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 300),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  title,
+                                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                                ),
+                                Text(
+                                  subtitle,
+                                  style: const TextStyle(color: Colors.orangeAccent, fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }
