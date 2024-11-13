@@ -723,7 +723,9 @@ class _AddworkoutState extends State<Addworkout> {
               subtitle: "Heaviest Weight - ${sets[exercise][index]['weight']} kg",
               icon: Icons.emoji_events,  // Trophy or medal icon
             );
-            Vibration.vibrate();
+            if (settings['Vibrations'] ?? true){
+              Vibration.vibrate(duration: 200, amplitude: 150);
+            }
           }
           return true;
         }else if(double.parse(candidate[0]) == double.parse(records[exercise]['weight']) && double.parse(candidate[1]) > double.parse(records[exercise]['reps'])){
@@ -737,7 +739,9 @@ class _AddworkoutState extends State<Addworkout> {
               subtitle: "Highest Reps - ${sets[exercise][index]['reps']}",
               icon: Icons.emoji_events,  // Trophy or medal icon
             );
-            Vibration.vibrate();
+            if (settings['Vibrations'] ?? true){
+              Vibration.vibrate(duration: 200, amplitude: 150);
+            }
           }
           return true;
         }else {

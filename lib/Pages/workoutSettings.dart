@@ -35,6 +35,15 @@ class _WorkoutsettingsState extends State<Workoutsettings> {
                 },
                 ),
               ),
+              _buildSettingsBox(icon: Icons.check, label: 'Vibrations', function: () {}, rightside:  ToggleSwitch(
+                initialValue: settings['Vibrations'] ?? true,
+                onChanged: (value) {
+                  settings['Vibrations'] = value;
+                  writeData(settings, path: 'settings', append: false);
+                  debugPrint('Vibrations slider value changed: $value');
+                },
+                ),
+              ),
             ],
           );
         } else{

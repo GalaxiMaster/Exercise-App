@@ -272,7 +272,6 @@ void resetDataButton(BuildContext context){
   );
 }
 
-
   void updateSettings(String option, String value) async{
     Map data = await readData(path: 'settings');
     data[option] = value;
