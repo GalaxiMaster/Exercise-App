@@ -44,71 +44,6 @@ class _WorkoutListState extends State<WorkoutList> {
     return exists;
   }
 
-  Widget _buildExerciseItem(String exercise, bool isProblemExercise) {
-    return InkWell(
-      onTap: widget.setting == 'choose' 
-        ? () => Navigator.pop(context, exercise)
-        : () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ExerciseScreen(exercise: exercise)
-            )
-          ),
-      child: SizedBox(
-        height: 60,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: isProblemExercise 
-                ? Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      "Assets/profile.svg",
-                      height: 35,
-                      width: 35,
-                    ),
-                  )
-                : FutureBuilder<bool>(
-                    future: _checkFileExists("Assets/Exercises/$exercise.png"),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                      return snapshot.hasData && snapshot.data! 
-                        ? Image.asset(
-                            "Assets/Exercises/$exercise.png",
-                            height: 50,
-                            width: 50,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: SvgPicture.asset(
-                              "Assets/profile.svg",
-                              height: 35,
-                              width: 35,
-                            ),
-                          );
-                    },
-                  ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(exercise),
-                if (!isProblemExercise) Text(getMuscles(exercise))
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final filteredExercises = exerciseList
@@ -165,9 +100,11 @@ class _WorkoutListState extends State<WorkoutList> {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => _buildExerciseItem(
-                  filteredProblemExercises[index], 
-                  true
+                (context, index) => ExerciseBox(
+                  exercise: filteredExercisesMap.keys.toList()[index], 
+                  isProblemExercise: true, 
+                  setting: widget.setting, 
+                  checkFileExists: _checkFileExists,
                 ),
                 childCount: filteredProblemExercises.length,
               ),
@@ -178,9 +115,11 @@ class _WorkoutListState extends State<WorkoutList> {
           ],
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => _buildExerciseItem(
-                filteredExercisesMap.keys.toList()[index], 
-                false
+              (context, index) => ExerciseBox(
+                exercise: filteredExercisesMap.keys.toList()[index], 
+                isProblemExercise: false, 
+                setting: widget.setting, 
+                checkFileExists: _checkFileExists,
               ),
               childCount: filteredExercises.length,
             ),
@@ -234,6 +173,109 @@ bool containsAllCharacters(String exercise, String query) {
 
   return true;
 }
+
+class ExerciseBox extends StatefulWidget{
+  final String exercise;
+  final String setting;
+  final bool isProblemExercise;
+  final Function checkFileExists;
+  const ExerciseBox({super.key, required this.exercise, required this.setting, required this.isProblemExercise, required this.checkFileExists});
+  @override
+  State<ExerciseBox> createState() => _ExerciseBoxState();
+}
+class _ExerciseBoxState extends State<ExerciseBox> {
+  bool multiSelect = false;
+  late bool isProblemExercise = widget.isProblemExercise;
+  late String exercise = widget.exercise;
+  late final Function _checkFileExists = widget.checkFileExists;
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: widget.setting == 'choose' 
+        ? () => Navigator.pop(context, exercise)
+        : () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExerciseScreen(exercise: exercise)
+            )
+          ),
+      onLongPress: (){
+        setState(() {
+          multiSelect = !multiSelect;
+        });
+      },
+      child: SizedBox(
+        height: 60,
+        child: Row(
+          children: [
+            if (multiSelect)
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Container(
+                width: 2,
+                height: 60,
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: isProblemExercise 
+                ? Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: SvgPicture.asset(
+                      "Assets/profile.svg",
+                      height: 35,
+                      width: 35,
+                    ),
+                  )
+                : FutureBuilder<bool>(
+                    future: _checkFileExists("Assets/Exercises/$exercise.png"),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      return snapshot.hasData && snapshot.data! 
+                        ? Image.asset(
+                            "Assets/Exercises/$exercise.png",
+                            height: 50,
+                            width: 50,
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              "Assets/profile.svg",
+                              height: 35,
+                              width: 35,
+                            ),
+                          );
+                    },
+                  ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(exercise),
+                if (!isProblemExercise) Text(getMuscles(exercise))
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+}
+
 
 Future<bool> fileExists(String filePath) async {
   // Load the asset manifest file, which lists all available assets
