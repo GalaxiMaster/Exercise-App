@@ -92,7 +92,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
                             color: Colors.white
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down, color: Colors.white,)
+                        const Icon(Icons.keyboard_arrow_down, color: Colors.white,)
                       ],
                     ),
                   ),

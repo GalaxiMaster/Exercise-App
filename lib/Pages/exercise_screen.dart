@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:xml/xml.dart' as xml;
-
 import 'radar_chart.dart';
 
 enum TabItem {
@@ -18,9 +17,9 @@ enum TabItem {
 
 // ignore: must_be_immutable
 class ExerciseScreen extends StatefulWidget {
-  final String exercise;
+  final List exercises;
 
-  const ExerciseScreen({super.key, required this.exercise});
+  const ExerciseScreen({super.key, required this.exercises});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -37,12 +36,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   TabItem _currentTab = TabItem.graph;
   String weekrangeStr = 'All Time';
   int range = -1;
-
+  
   @override
   void initState() {
     super.initState();
     _loadHighlightedDays();
   }
+ 
   void alterHeadingBar(num value, String weekt){
     setState(() {
       graphvalue = numParsething(value);
@@ -51,7 +51,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 
   Future<void> _loadHighlightedDays({reload = false}) async {
-    var data = await getStats(widget.exercise, range);
+    var data = await getStats(widget.exercises, range);
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
     final List values = exerciseData.map((data) => data[selector]).toList();
 
@@ -69,21 +69,29 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       }
     });
   }
+  
   void _selectTab(TabItem tabItem) {
     setState(() {
       _currentTab = tabItem;
     });
   }
+  
   Widget _buildPageContent(var spots, var dates) {
     switch (_currentTab) {
       case TabItem.info:
-        return infoBody(widget.exercise);
+        return infoBody(widget.exercises);
       case TabItem.graph:
         return graphBody(spots, dates, context);
       default:
         return const Center(child: Text('Unknown Page'));
     }
   }
+  Map scaleMapTo(Map map, num targetSum) {
+    num currentSum = map.values.reduce((a, b) => a + b);
+    num scaleFactor = targetSum / currentSum;
+    return map.map((k, v) => MapEntry(k, double.parse((v * scaleFactor).toStringAsFixed(2))));
+  }
+
   @override
   Widget build(BuildContext context) {
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
@@ -96,20 +104,32 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         graphvalue = numParsething(values[values.length - 1]);
       }
     }
-    final List<FlSpot> spots = exerciseData
-        .asMap()
-        .entries
-        .map((entry) => FlSpot(
-              entry.key.toDouble(), // Use the index as the X value
-              (exerciseMuscles[widget.exercise]?['type'] ?? 'weighted') != 'bodyweight' ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString()), // Parse the weight (Y value)
-            ))
-        .toList();
+    final Map<String, List<FlSpot>> spotsByExercise = {};
+
+    // Iterate through the exercise data
+    exerciseData.asMap().entries.forEach((entry) {
+      final exerciseName = entry.value['exercise'] as String;
+      
+      // Initialize the list for this exercise if it doesn't exist
+      spotsByExercise[exerciseName] ??= [];
+      
+      // Create and add the FlSpot for this entry
+      spotsByExercise[exerciseName]!.add(
+        FlSpot(
+          entry.key.toDouble(), // Use the index as the X value
+          (exerciseMuscles[widget.exercises]?['type'] ?? 'weighted') != 'bodyweight' 
+              ? double.parse(entry.value[selector].toString()) 
+              : double.parse(entry.value['reps'].toString()),
+        ),
+      );
+    });
+
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.exercise),
+        title: Text(widget.exercises.length == 1 ?  widget.exercises[0] : 'Exercises Data'),
       ),
-      body: _buildPageContent(spots, dates),
+      body: _buildPageContent(spotsByExercise, dates),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTab.index, // Convert enum to index
         onTap: (index) {
@@ -130,10 +150,30 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
   
-  Widget infoBody(String exercise){
+  Widget infoBody(List exercise){
+    Map primaryMuscles = {};
+    Map secondaryMuscles = {};
+    for (String exercise in widget.exercises){
+      for (String muscle in exerciseMuscles[exercise]['Primary'].keys){
+        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseMuscles[exercise]['Primary'][muscle];
+      }     
+      for (String muscle in exerciseMuscles[exercise]['Secondary'].keys){
+        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseMuscles[exercise]['Secondary'][muscle];
+      }
+    }
+    num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
+    if (primaryMuscles.isNotEmpty){
+      num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+      primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
+    }
+    if (secondaryMuscles.isNotEmpty){
+      num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+      secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
+    }
+        
     return Column(
        children: [
-        BodyHeatMap(assetPath: 'Assets/Muscle_heatmap.svg', exercise: widget.exercise,),
+        BodyHeatMap(assetPath: 'Assets/Muscle_heatmap.svg', exercises: widget.exercises,),
         const Text(
           'Primary muscles:',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -143,11 +183,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal, // Set the direction to horizontal
-            itemCount: exerciseMuscles[widget.exercise]['Primary'].keys.toList().length,
+            itemCount: primaryMuscles.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
-                child: Text('${exerciseMuscles[widget.exercise]['Primary'].values.toList()[index]}% ${exerciseMuscles[widget.exercise]['Primary'].keys.toList()[index]}'),
+                child: Text('${primaryMuscles.values.toList()[index]}% ${primaryMuscles.keys.toList()[index]}'),
               );
             },
           ),
@@ -161,11 +201,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal, // Set the direction to horizontal
-            itemCount: exerciseMuscles[widget.exercise]['Secondary'].keys.toList().length,
+            itemCount: secondaryMuscles.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
-                child: Text('${exerciseMuscles[widget.exercise]['Secondary'].values.toList()[index]}% ${exerciseMuscles[widget.exercise]['Secondary'].keys.toList()[index]}'),
+                child: Text('${secondaryMuscles.values.toList()[index]}% ${secondaryMuscles.keys.toList()[index]}'),
               );
             },
           ),
@@ -174,9 +214,44 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
   
-  Widget graphBody(List<FlSpot> spots, List<dynamic> dates, BuildContext context) {
+  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, BuildContext context) {
     String unit = 'kg';
-    if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
+    if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
+    final List<LineChartBarData> allLineBarsData = [];
+
+    // Add a line for each exercise
+    for (var entry in spots.entries) {
+      // Add the main line for this exercise
+      allLineBarsData.add(
+        LineChartBarData(
+          spots: entry.value,
+          color: Colors.primaries[allLineBarsData.length % Colors.primaries.length],
+          barWidth: 3,
+          belowBarData: BarAreaData(
+            show: true,
+            color: Colors.primaries[allLineBarsData.length % Colors.primaries.length]
+                .withOpacity(0.2),
+          ),
+        ),
+      );
+
+      // Add best fit line if there are enough points
+      if (entry.value.length > 1) {
+        allLineBarsData.add(
+          LineChartBarData(
+            isStrokeCapRound: false,
+            dotData: const FlDotData(show: false),
+            spots: calculateBestFitLine(entry.value),
+            color: Colors.primaries[allLineBarsData.length % Colors.primaries.length]
+                .withRed(255), // Makes it a reddish version of the main line color
+            barWidth: 2,
+            dashArray: [5, 5],
+            belowBarData: BarAreaData(show: false),
+          ),
+        );
+      }
+    }
+
     if (spots.isNotEmpty) {
       return SingleChildScrollView(
           child: Padding(
@@ -258,28 +333,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     height: 300,
                     child: LineChart(
                       LineChartData(
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: spots,
-                            // isCurved: true, // lets the graph be extrapolated, turned off due to incorrect points
-                            color: Colors.blue,
-                            barWidth: 3,
-                            belowBarData: BarAreaData( // need to be on a toggle?
-                              show: true,
-                              color: Colors.blueAccent.withOpacity(0.2),
-                            ),                            
-                          ),
-                          if (spots.length > 1)
-                          LineChartBarData( // TODO need to be on a toggle?
-                            isStrokeCapRound: false,
-                            dotData: const FlDotData(show: false),
-                            spots: calculateBestFitLine(spots),
-                            color: Colors.red,
-                            barWidth: 2,
-                            dashArray: [5, 5],  // Creates a dotted effect
-                            belowBarData: BarAreaData(show: false),
-                          )
-                        ],
+                        lineBarsData: allLineBarsData,
                         lineTouchData: LineTouchData(  
                           handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
                           touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
@@ -329,7 +383,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
-                              interval: calculateInterval(spots.length),
+                              interval: calculateInterval(spots.values.fold(0, (sum, list) => sum + list.length)),
                               showTitles: true,
                               getTitlesWidget: (value, _) {
                                 return SideTitleWidget(
@@ -359,7 +413,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       ),
                     ),
                   ),
-                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') != 'bodyweight')
                   Row(
                     children: [
                       selectorBox('Weight', selector == 'weight'),
@@ -368,11 +422,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') != 'bodyweight')
                   Text('Most weight : ${heaviestWeight['weight']}kg x ${heaviestWeight['reps']}'),
-                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') != 'bodyweight')
                   Text('Most volume : ${heaviestVolume['weight']}kg x ${heaviestVolume['reps']}'),
-                  if ((exerciseMuscles[widget.exercise]?['type'] ?? 'Weighted') == 'bodyweight')
+                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight')
                   Text('Highest reps: ${numParsething(heaviestVolume['reps'])}'),
                 ],
               ),
@@ -429,13 +483,13 @@ extension ColorExtension on Color {
 class BodyHeatMap extends StatefulWidget {
   final String assetPath;
   final double width;
-  final String exercise;
+  final List exercises;
 
   const BodyHeatMap({
     super.key,
     required this.assetPath,
     this.width = 500, 
-    required this.exercise,
+    required this.exercises,
   });
 
   @override
@@ -454,11 +508,13 @@ class _BodyHeatMapState extends State<BodyHeatMap> {
   Future<void> _loadAndModifySvg() async {
     try {
       Map<String, List<dynamic>> musclesMap = {};
-      for (MapEntry muscle in exerciseMuscles[widget.exercise]['Primary'].entries){
-        musclesMap[muscle.key] = [muscle.value/100, Colors.red];
-      }
-      for (MapEntry muscle in exerciseMuscles[widget.exercise]['Secondary'].entries){
-        musclesMap[muscle.key] = [muscle.value/100, Colors.red];
+      for (String exercise in widget.exercises){
+        for (MapEntry muscle in exerciseMuscles[exercise]['Primary'].entries){
+          musclesMap[muscle.key] = [muscle.value/100, Colors.red];
+        }
+        for (MapEntry muscle in exerciseMuscles[exercise]['Secondary'].entries){
+          musclesMap[muscle.key] = [muscle.value/100, Colors.red];
+        }
       }
       musclesMap['Body'] = [1.0, Colors.grey];
       String modifiedSvg = await modifySvgPaths(widget.assetPath, musclesMap);
@@ -531,7 +587,7 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
 }
 
 
-Future<List> getStats(String target, range) async {
+Future<List> getStats(List targets, range) async {
   Map data = await readData();
   List targetData = [];
   Map heaviestWeight = {};
@@ -551,14 +607,15 @@ Future<List> getStats(String target, range) async {
       Map dayHeaviestVolume = {};
 
       for (var exercise in data[day]['sets'].keys) {
-        if (exercise == target) {
+        if (targets.contains(exercise)) {
           for (var set in data[day]['sets'][exercise]) {
             set = {
               'weight': double.parse(set['weight'].toString()),
               'reps': double.parse(set['reps'].toString()),
               'type': set['type'],
               'date': day,
-              'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString())
+              'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString()),
+              'exercise': exercise
             };
 
             if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {

@@ -42,7 +42,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 @override
 Widget build(BuildContext context) {
-  DateTime firstTime = DateTime.now().subtract(Duration(days: 365));
+  DateTime firstTime = DateTime.now().subtract(const Duration(days: 365));
   if (exerciseData.keys.isNotEmpty){
     firstTime = DateTime.parse(exerciseData.keys.toList()[exerciseData.keys.length-1].split(' ')[0]).subtract(const Duration(days: 31));
   }

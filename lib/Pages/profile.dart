@@ -104,7 +104,7 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '${selectedBarValue} $unit',
+                            '$selectedBarValue $unit',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,

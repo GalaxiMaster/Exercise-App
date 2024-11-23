@@ -32,7 +32,7 @@ class MainExercisesPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ExerciseScreen(exercise: exercise,),
+                                builder: (context) => ExerciseScreen(exercises: [exercise],),
                               ),
                             );
                           },

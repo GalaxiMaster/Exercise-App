@@ -514,7 +514,7 @@ class ExerciseBox extends StatelessWidget {
 class TickFillWidget extends StatelessWidget {
   final double fillPercentage; // Should be between 0.0 and 1.0
 
-  TickFillWidget({required this.fillPercentage});
+  const TickFillWidget({super.key, required this.fillPercentage});
 
   @override
   Widget build(BuildContext context) {

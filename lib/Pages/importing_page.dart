@@ -155,7 +155,7 @@ void importDataHevy(BuildContext context) async{
         List jsonData = await file
             .transform(utf8.decoder) // Decode bytes to UTF-8.
             .transform(const LineSplitter()) // Convert stream to individual lines.
-            .map((line) => CsvToListConverter().convert(line)) // Convert each line to a list.
+            .map((line) => const CsvToListConverter().convert(line)) // Convert each line to a list.
             .toList();
         Map records = await readData(path: 'records');
         Map data = formatHevyData(jsonData, records);
@@ -212,7 +212,7 @@ void importDataStrong(BuildContext context) async{
         List jsonData = await file
             .transform(utf8.decoder) // Decode bytes to UTF-8.
             .transform(const LineSplitter()) // Convert stream to individual lines.
-            .map((line) => CsvToListConverter(fieldDelimiter: ';').convert(line)) // Convert each line to a list.
+            .map((line) => const CsvToListConverter(fieldDelimiter: ';').convert(line)) // Convert each line to a list.
             .toList();
         Map records = await readData(path: 'records');
         Map data = formatStrongData(jsonData, records);
@@ -334,7 +334,7 @@ int parseTime(String time) {
     int minutes = int.parse(match.group(2) ?? '0'); // Use 0 if minutes are not provided
     return hours * 60 + minutes;
   } else {
-    throw FormatException("Invalid time format");
+    throw const FormatException("Invalid time format");
   }
 }
 

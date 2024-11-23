@@ -103,10 +103,10 @@ class ToggleSwitch extends StatefulWidget {
   final ValueChanged<bool> onChanged;
 
   const ToggleSwitch({
-    Key? key,
+    super.key,
     required this.initialValue,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _ToggleSwitchState createState() => _ToggleSwitchState();

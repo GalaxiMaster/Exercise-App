@@ -26,6 +26,8 @@ class _WorkoutListState extends State<WorkoutList> {
   String query = '';
   late final List exerciseList;
   final Map<String, bool> _imageExistsCache = {};
+  final List selectedItems = [];
+  bool multiSelect = false;
 
   @override
   void initState() {
@@ -44,174 +46,57 @@ class _WorkoutListState extends State<WorkoutList> {
     return exists;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final filteredExercises = exerciseList
-        .where((exercise) => containsAllCharacters(exercise, query))
-        .toList();
-
-    Map filteredExercisesMap = Map.fromEntries(
-      filteredExercises.map((value) => MapEntry(value, 0)),
-    );
-    if (widget.preData != null && query != ''){
-      for (String day in widget.preData!.keys){
-        for (String exercise in widget.preData![day]['sets'].keys){
-          if (filteredExercises.contains(exercise)){
-            filteredExercisesMap[exercise] += 1;
+  Widget _buildExerciseItem(String exercise, bool isProblemExercise) {
+    return InkWell(
+      onTap: (){
+        if (multiSelect){
+          setState(() {
+            if (selectedItems.contains(exercise)){
+              selectedItems.remove(exercise);
+              if (selectedItems.isEmpty){
+                multiSelect = false;
+              }
+            }else{
+              if (!multiSelect){
+                multiSelect = true;
+              }
+              selectedItems.add(exercise);
+            }  
+          });
+        }else{
+          if(widget.setting == 'choose' ){
+            Navigator.pop(context, exercise);
+          }
+          else{
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ExerciseScreen(exercises: [exercise])
+                )
+            );
           }
         }
-      }
-      var sortedEntries = filteredExercisesMap.entries.toList();
-
-      sortedEntries.sort((a, b) {
-        if (a.value > 0 && b.value > 0) {
-          // Sort numerically where int > 0
-          return b.value.compareTo(a.value);
-        } else if (a.value == 0 && b.value == 0) {
-          // Sort alphabetically where int == 0
-          return a.key.compareTo(b.key);
-        } else {
-          // Keep sections separate: int > 0 before int == 0
-          return b.value.compareTo(a.value);
-        }
-      });
-      filteredExercisesMap = Map.fromEntries(sortedEntries);
-    }
-
-
-    final filteredProblemExercises = widget.problemExercises
-        ?.where((exercise) => containsAllCharacters(exercise, query))
-        .toList() ?? [];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Exercise List'),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: SearchBar(onQueryChanged: (newQuery) {
-              setState(() => query = newQuery);
-            }),
-          ),
-          if (widget.problemExercises != null) ...[
-            SliverToBoxAdapter(
-              child: Text(widget.problemExercisesTitle ?? ''),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => ExerciseBox(
-                  exercise: filteredExercisesMap.keys.toList()[index], 
-                  isProblemExercise: true, 
-                  setting: widget.setting, 
-                  checkFileExists: _checkFileExists,
-                ),
-                childCount: filteredProblemExercises.length,
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: Text('Normal Exercises'),
-            ),
-          ],
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => ExerciseBox(
-                exercise: filteredExercisesMap.keys.toList()[index], 
-                isProblemExercise: false, 
-                setting: widget.setting, 
-                checkFileExists: _checkFileExists,
-              ),
-              childCount: filteredExercises.length,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  final Function(String) onQueryChanged;
-
-  const SearchBar({super.key, required this.onQueryChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: TextField(
-        onChanged: onQueryChanged,
-        decoration: const InputDecoration(
-          labelText: 'Search',
-          border: OutlineInputBorder(),
-          prefixIcon: Icon(Icons.search),
-        ),
-      ),
-    );
-  }
-}
-
-String getMuscles(String exercise){
-  var muscle = exerciseMuscles[exercise]?['Primary']?.keys.toList()[0];
-  return muscle ?? 'No muscle';
-}
-
-bool containsAllCharacters(String exercise, String query) {
-  if (query.isEmpty) {
-    return true;
-  }
-
-  // Split the query into words
-  List<String> queryWords = query.toLowerCase().split(' ');
-
-  // Check if each word in queryWords exists as a consecutive substring in exercise
-  for (String word in queryWords) {
-    if (!exercise.toLowerCase().contains(word)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-class ExerciseBox extends StatefulWidget{
-  final String exercise;
-  final String setting;
-  final bool isProblemExercise;
-  final Function checkFileExists;
-  const ExerciseBox({super.key, required this.exercise, required this.setting, required this.isProblemExercise, required this.checkFileExists});
-  @override
-  State<ExerciseBox> createState() => _ExerciseBoxState();
-}
-class _ExerciseBoxState extends State<ExerciseBox> {
-  bool multiSelect = false;
-  late bool isProblemExercise = widget.isProblemExercise;
-  late String exercise = widget.exercise;
-  late final Function _checkFileExists = widget.checkFileExists;
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.setting == 'choose' 
-        ? () => Navigator.pop(context, exercise)
-        : () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ExerciseScreen(exercise: exercise)
-            )
-          ),
+      },
       onLongPress: (){
         setState(() {
-          multiSelect = !multiSelect;
+          if (selectedItems.contains(exercise)){
+            selectedItems.remove(exercise);
+            if (selectedItems.isEmpty){
+              multiSelect == false;
+            }
+          }else{
+            if (!multiSelect){
+              multiSelect = true;
+            }
+            selectedItems.add(exercise);
+          }  
         });
       },
       child: SizedBox(
         height: 60,
         child: Row(
           children: [
-            if (multiSelect)
+            if (selectedItems.contains(exercise))
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Container(
@@ -273,9 +158,173 @@ class _ExerciseBoxState extends State<ExerciseBox> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final filteredExercises = exerciseList
+        .where((exercise) => containsAllCharacters(exercise, query))
+        .toList();
 
+    Map filteredExercisesMap = Map.fromEntries(
+      filteredExercises.map((value) => MapEntry(value, 0)),
+    );
+    if (widget.preData != null && query != ''){
+      for (String day in widget.preData!.keys){
+        for (String exercise in widget.preData![day]['sets'].keys){
+          if (filteredExercises.contains(exercise)){
+            filteredExercisesMap[exercise] += 1;
+          }
+        }
+      }
+      var sortedEntries = filteredExercisesMap.entries.toList();
+
+      sortedEntries.sort((a, b) {
+        if (a.value > 0 && b.value > 0) {
+          // Sort numerically where int > 0
+          return b.value.compareTo(a.value);
+        } else if (a.value == 0 && b.value == 0) {
+          // Sort alphabetically where int == 0
+          return a.key.compareTo(b.key);
+        } else {
+          // Keep sections separate: int > 0 before int == 0
+          return b.value.compareTo(a.value);
+        }
+      });
+      filteredExercisesMap = Map.fromEntries(sortedEntries);
+    }
+
+
+    final filteredProblemExercises = widget.problemExercises
+        ?.where((exercise) => containsAllCharacters(exercise, query))
+        .toList() ?? [];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Exercise List'),
+      ),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SearchBar(onQueryChanged: (newQuery) {
+                  setState(() => query = newQuery);
+                }),
+              ),
+              if (widget.problemExercises != null) ...[
+                SliverToBoxAdapter(
+                  child: Text(widget.problemExercisesTitle ?? ''),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _buildExerciseItem(
+                      filteredProblemExercises[index], 
+                      true
+                    ),
+                    childCount: filteredProblemExercises.length,
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: Text('Normal Exercises'),
+                ),
+              ],
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => _buildExerciseItem(
+                    filteredExercisesMap.keys.toList()[index], 
+                    false
+                  ),
+                  childCount: filteredExercises.length,
+                ),
+              ),
+            ],
+          ),
+          if (multiSelect)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: GestureDetector(
+                onTap: (){
+                  if(widget.setting == 'choose' ){
+                    Navigator.pop(context, selectedItems);
+                  }
+                  else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExerciseScreen(exercises: selectedItems)
+                        )
+                    );
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(50)
+                  ),
+                  height: 50,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      'Choose ${selectedItems.length} exercise(s)',
+                      style: const TextStyle(
+                        fontSize: 20
+                      ),
+                    )
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ]
+      ),
+    );
+  }
 }
 
+class SearchBar extends StatelessWidget {
+  final Function(String) onQueryChanged;
+
+  const SearchBar({super.key, required this.onQueryChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: TextField(
+        onChanged: onQueryChanged,
+        decoration: const InputDecoration(
+          labelText: 'Search',
+          border: OutlineInputBorder(),
+          prefixIcon: Icon(Icons.search),
+        ),
+      ),
+    );
+  }
+}
+
+String getMuscles(String exercise){
+  var muscle = exerciseMuscles[exercise]?['Primary']?.keys.toList()[0];
+  return muscle ?? 'No muscle';
+}
+
+bool containsAllCharacters(String exercise, String query) {
+  if (query.isEmpty) {
+    return true;
+  }
+
+  // Split the query into words
+  List<String> queryWords = query.toLowerCase().split(' ');
+
+  // Check if each word in queryWords exists as a consecutive substring in exercise
+  for (String word in queryWords) {
+    if (!exercise.toLowerCase().contains(word)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 Future<bool> fileExists(String filePath) async {
   // Load the asset manifest file, which lists all available assets
