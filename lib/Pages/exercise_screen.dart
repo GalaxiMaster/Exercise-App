@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -76,12 +78,12 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     });
   }
   
-  Widget _buildPageContent(var spots, var dates) {
+  Widget _buildPageContent(var spots, var dates, xValues) {
     switch (_currentTab) {
       case TabItem.info:
         return infoBody(widget.exercises);
       case TabItem.graph:
-        return graphBody(spots, dates, context);
+        return graphBody(spots, dates, xValues, context);
       default:
         return const Center(child: Text('Unknown Page'));
     }
@@ -95,6 +97,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+    final List xValues = exerciseData.map((data) => data['x-value']).toList();
     final List values = exerciseData.map((data) => data[selector]).toList();
     if (dates.isNotEmpty){
       if (week == ''){
@@ -116,7 +119,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       // Create and add the FlSpot for this entry
       spotsByExercise[exerciseName]!.add(
         FlSpot(
-          entry.key.toDouble(), // Use the index as the X value
+          entry.value['x-value'].toDouble(), // Use the index as the X value // TODO this is a problem, using the key as the x value doesnt allow for 2 values on the same x point
           (exerciseMuscles[widget.exercises]?['type'] ?? 'weighted') != 'bodyweight' 
               ? double.parse(entry.value[selector].toString()) 
               : double.parse(entry.value['reps'].toString()),
@@ -129,7 +132,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       appBar: AppBar(
         title: Text(widget.exercises.length == 1 ?  widget.exercises[0] : 'Exercises Data'),
       ),
-      body: _buildPageContent(spotsByExercise, dates),
+      body: _buildPageContent(spotsByExercise, dates, xValues),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTab.index, // Convert enum to index
         onTap: (index) {
@@ -214,7 +217,19 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
   
-  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, BuildContext context) {
+  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context) {
+    final colors = [
+      Colors.blue,
+      Colors.purple,
+      Colors.red,
+      Colors.orange,
+      Colors.amber,
+      Colors.yellow,
+      Colors.green,
+      Colors.teal,
+      Colors.cyan,
+      Colors.indigo,
+    ];
     String unit = 'kg';
     if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
     final List<LineChartBarData> allLineBarsData = [];
@@ -225,11 +240,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       allLineBarsData.add(
         LineChartBarData(
           spots: entry.value,
-          color: Colors.primaries[allLineBarsData.length % Colors.primaries.length],
+          color: colors[allLineBarsData.length~/2 % colors.length],
           barWidth: 3,
           belowBarData: BarAreaData(
             show: true,
-            color: Colors.primaries[allLineBarsData.length % Colors.primaries.length]
+            color: colors[allLineBarsData.length~/2 % colors.length]
                 .withOpacity(0.2),
           ),
         ),
@@ -383,13 +398,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
-                              interval: calculateInterval(spots.values.fold(0, (sum, list) => sum + list.length)),
+                              interval: calculateInterval(spots.values.fold(0, (sum, list) => sum + list.length), spots.values.expand((spots) => spots).map((spot) => spot.x).reduce(max)),
                               showTitles: true,
                               getTitlesWidget: (value, _) {
                                 return SideTitleWidget(
                                   axisSide: AxisSide.bottom,
                                   child: Text(
-                                    DateFormat('MMM dd').format(DateTime.parse(dates[value.toInt()].split(' ')[0])),
+                                    DateFormat('MMM dd').format(DateTime.parse(dates[findClosestIndexInSorted(xValues, value)].split(' ')[0])),
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                 );
@@ -436,9 +451,37 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       return const Text("No data available");
     }
   }
-  double calculateInterval(int itemCount) {
-    if (itemCount <= 8) return 1;
-    return 1 + ((itemCount - 8) * 0.125);
+
+
+int findClosestIndexInSorted(List list, double target) {
+  int left = 0, right = list.length - 1;
+
+  while (left < right) {
+    int mid = (left + right) ~/ 2;
+
+    if (list[mid] == target) {
+      return mid; // Exact match
+    } else if (list[mid] < target) {
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+
+  // Compare the two closest candidates
+  if (left == 0) return left;
+  if (left == list.length) return list.length - 1;
+  
+  return (target - list[left - 1]).abs() <= (list[left] - target).abs()
+      ? left - 1
+      : left;
+}
+
+
+  double calculateInterval(int itemCount, num itemTotal) {
+    itemTotal == 0 ? itemTotal = 1 : null;
+    if (itemCount <= 5) return itemTotal/5 + 1;
+    return itemTotal/5 + 1;
   }
   Widget selectorBox(String text, bool selected){
     return GestureDetector(
@@ -593,14 +636,15 @@ Future<List> getStats(List targets, range) async {
   Map heaviestWeight = {};
   Map heaviestVolume = {};
   var sortedKeys = data.keys.toList()..sort();
-
+  DateTime? startDate;
   // Create a sorted map by iterating over sorted keys
   Map<String, dynamic> sortedMap = {
     for (var key in sortedKeys) key: data[key]!,
   };
   data = sortedMap;
   for (var day in data.keys.toList()) {
-    Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+    DateTime dayDate = DateTime.parse(day.split(' ')[0]);
+    Duration difference = DateTime.now().difference(dayDate); // Calculate the difference
     int diff = difference.inDays;
     if (diff <= range || range == -1){
       Map dayHeaviestWeight = {};
@@ -608,6 +652,7 @@ Future<List> getStats(List targets, range) async {
 
       for (var exercise in data[day]['sets'].keys) {
         if (targets.contains(exercise)) {
+          startDate ??= dayDate;
           for (var set in data[day]['sets'][exercise]) {
             set = {
               'weight': double.parse(set['weight'].toString()),
@@ -615,7 +660,8 @@ Future<List> getStats(List targets, range) async {
               'type': set['type'],
               'date': day,
               'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString()),
-              'exercise': exercise
+              'exercise': exercise,
+              'x-value': dayDate.difference(startDate).inDays,
             };
 
             if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {
