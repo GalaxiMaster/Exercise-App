@@ -271,7 +271,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         );
       }
     }
-    final PageController _pageController = PageController(
+    final PageController pageController = PageController(
       initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
     );
     if (spots.isNotEmpty) {
@@ -449,11 +449,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     child: PageView.builder(
                       physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
                       scrollDirection: Axis.horizontal,
-                      controller: _pageController,
+                      controller: pageController,
                       itemBuilder: (context, index){
                         final itemIndex = index % widget.exercises.length;
                         String exercise = widget.exercises[itemIndex];
-                        return exerciseTile(exercise, itemIndex);
+                        return exerciseTile(exercise, itemIndex, getGradientData(spots[exercise] ?? []));
                       }
                     ),
                   ),
@@ -468,8 +468,14 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       return const Text("No data available");
     }
   }
+  String getGradientData(List<FlSpot> points){
+    FlSpot a = points[0];
+    FlSpot b = points[points.length-1];
 
-  Widget exerciseTile(String exercise ,index) {
+    double gradient = (a.y-b.y)/(0-points.length);
+    return gradient.toStringAsFixed(2);
+  }
+  Widget exerciseTile(String exercise, index, gradient) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
@@ -495,7 +501,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               Text('Most volume : ${heaviestVolume[exercise]['weight']}kg x ${heaviestVolume[exercise]['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'bodyweight')
               Text('Highest reps: ${numParsething(heaviestVolume[exercise]['reps'])}'),
-              const Text('Gradient: -')
+              Text('Gradient: ${gradient}x')
             ],
           ),
         ),
