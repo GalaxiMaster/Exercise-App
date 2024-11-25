@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';

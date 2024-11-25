@@ -232,25 +232,12 @@ Future<double> getGradient(int range, String muscleGroup) async{
 
       int n = x.length;
       if (n != 0){
-        //         // Sum calculations
-        // num sumX = x.reduce((a, b) => a + b);
-        // num sumY = y.reduce((a, b) => a + b);
-        // double sumXY = 0;
-        // double sumXSquare = 0;
+        
+        // num minValue = x.reduce(min);
+        // num maxValue = x.reduce(max);
 
-        // for (int i = 0; i < n; i++) {
-        //   sumXY += x[i] * y[i];
-        //   sumXSquare += x[i] * x[i];
-        // }
+        // double m = minValue/maxValue;
 
-        // // Calculating slope (m) and intercept (b)
-        // var sackball = (n * sumXY - sumX * sumY);
-        // var ballsack = (n * sumXSquare - sumX * sumX);
-        // if (ballsack != 0){
-        //   double m = sackball / ballsack;
-        // // double b = (sumY - m * sumX) / n;
-        //   ms.add(m);
-        // }
         FlSpot a = FlSpot(x[0].toDouble(), y[0].toDouble());
         FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
         double m = (a.y-b.y)/(0-x.length);
