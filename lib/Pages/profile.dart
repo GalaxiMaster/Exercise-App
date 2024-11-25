@@ -257,8 +257,11 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-num numParsething(var number){
-  return number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2));
+numParsething(var number){
+  if (number != null){
+    return number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2));
+  }
+  return null;
 }
 
 class DataBarChart extends StatelessWidget {

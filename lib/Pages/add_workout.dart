@@ -509,11 +509,16 @@ class _AddworkoutState extends State<Addworkout> {
                   ),
                 );
 
-                if (result != null && !sets.containsKey(result)) {
+                if (result != null) {
+                  for (String exercise in result){
+                    if (!sets.containsKey(exercise)) {
+                      sets[exercise] = [
+                        {'weight': exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
+                      ]; // Initialize sets list for the new exercise
+                    }
+                  }
                   setState(() {
-                    sets[result] = [
-                      {'weight': exerciseMuscles[result]['type'] == 'bodyweight' ? '1' : '', 'reps': exerciseMuscles[result]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
-                    ]; // Initialize sets list for the new exercise
+
                     updateExercises();
                   });
                 }

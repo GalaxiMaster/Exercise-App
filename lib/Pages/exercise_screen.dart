@@ -101,7 +101,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final List values = exerciseData.map((data) => data[selector]).toList();
     final Set things = exerciseData.map((data) => data['x-value']).toSet();
 
-    String setting = 'notScale';
+    String setting = 'notScaled';
     if (dates.isNotEmpty){
       if (week == ''){
         week = dates[dates.length - 1];
@@ -274,7 +274,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final PageController pageController = PageController(
       initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
     );
-    if (spots.isNotEmpty) {
+    if (true) {
       return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -311,7 +311,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  DateFormat('MMM dd').format(DateTime.parse(week.split(' ')[0])),
+                                  spots.isNotEmpty ? DateFormat('MMM dd').format(DateTime.parse(week.split(' ')[0])) : '0',
                                   style: const TextStyle(
                                     color: Colors.blue,
                                   ),
@@ -404,13 +404,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
-                              interval: calculateInterval(spots.values.fold(0, (sum, list) => sum + list.length), spots.values.expand((spots) => spots).map((spot) => spot.x).reduce(max)),
+                              interval: spots.isNotEmpty ? calculateInterval(spots.values.fold(0, (sum, list) => sum + list.length), spots.values.expand((spots) => spots).map((spot) => spot.x).reduce(max)) : 9999,
                               showTitles: true,
                               getTitlesWidget: (value, _) {
                                 return SideTitleWidget(
                                   axisSide: AxisSide.bottom,
                                   child: Text(
-                                    DateFormat('MMM dd').format(DateTime.parse(dates[findClosestIndexInSorted(xValues, value)].split(' ')[0])),
+                                    spots.isNotEmpty ? DateFormat('MMM dd').format(DateTime.parse(dates[findClosestIndexInSorted(xValues, value)].split(' ')[0])) : '',
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                 );
@@ -453,7 +453,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       itemBuilder: (context, index){
                         final itemIndex = index % widget.exercises.length;
                         String exercise = widget.exercises[itemIndex];
-                        return exerciseTile(exercise, itemIndex, getGradientData(spots[exercise] ?? []));
+                        return exerciseTile(exercise, itemIndex, spots.isNotEmpty ? getGradientData(spots[exercise] ?? []) : 0);
                       }
                     ),
                   ),
@@ -464,8 +464,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               ),
           ),
         );
-    } else {
-      return const Text("No data available");
     }
   }
   String getGradientData(List<FlSpot> points){
@@ -496,11 +494,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 ),
               ),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
-              Text('Most weight : ${heaviestWeight[exercise]['weight']}kg x ${heaviestWeight[exercise]['reps']}'),
+              Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
-              Text('Most volume : ${heaviestVolume[exercise]['weight']}kg x ${heaviestVolume[exercise]['reps']}'),
+              Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'bodyweight')
-              Text('Highest reps: ${numParsething(heaviestVolume[exercise]['reps'])}'),
+              Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
               Text('Gradient: ${gradient}x')
             ],
           ),
@@ -552,8 +550,8 @@ int findClosestIndexInSorted(List list, double target) {
           }
           final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
           final List values = exerciseData.map((data) => data[selector]).toList();
-          graphvalue = numParsething(values[values.length - 1]);
-          week = dates[dates.length - 1];
+          graphvalue = values.isNotEmpty ? numParsething(values[values.length - 1]) : 0;
+          week = dates.isNotEmpty ? dates[dates.length - 1] : '';
           alterHeadingBar(graphvalue, week);
         });
       },
@@ -730,7 +728,7 @@ Future<List> getStats(List targets, range) async {
               dayHeaviestVolume[exercise] = set;
             }
           }
-          if (dayHeaviestWeight[exercise].isNotEmpty) {
+          if (dayHeaviestWeight[exercise]?.isNotEmpty ?? false) {
             targetData.add(dayHeaviestWeight[exercise]);
           }
 
