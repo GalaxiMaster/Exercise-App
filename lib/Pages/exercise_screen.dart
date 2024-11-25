@@ -99,6 +99,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
     final List xValues = exerciseData.map((data) => data['x-value']).toList();
     final List values = exerciseData.map((data) => data[selector]).toList();
+    final Set things = exerciseData.map((data) => data['x-value']).toSet();
+
+    String setting = 'notScale';
     if (dates.isNotEmpty){
       if (week == ''){
         week = dates[dates.length - 1];
@@ -112,14 +115,16 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     // Iterate through the exercise data
     exerciseData.asMap().entries.forEach((entry) {
       final exerciseName = entry.value['exercise'] as String;
-      
+      if (exerciseName == 'Dumbbell Incline Bench Press'){
+        debugPrint('yes');
+      }
       // Initialize the list for this exercise if it doesn't exist
       spotsByExercise[exerciseName] ??= [];
       
       // Create and add the FlSpot for this entry
       spotsByExercise[exerciseName]!.add(
         FlSpot(
-          entry.value['x-value'].toDouble(), // Use the index as the X value // TODO this is a problem, using the key as the x value doesnt allow for 2 values on the same x point
+          setting == 'notScaled' ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
           (exerciseMuscles[widget.exercises]?['type'] ?? 'weighted') != 'bodyweight' 
               ? double.parse(entry.value[selector].toString()) 
               : double.parse(entry.value['reps'].toString()),
@@ -356,7 +361,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                             if (event is FlTapUpEvent) {
                               final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
                               const double minX = 0;
-                              final double maxX = (dates.length - 1).toDouble(); 
+                              final double maxX = xValues[xValues.length-1].toDouble();
                               const chartWidth = 420.0;
                               final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
                               
@@ -369,7 +374,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               final int index = touchedSpot.spotIndex;
                               final String weekLabel = dates[index]; // Assuming 'dates' is a list of labels for each X point
                               final double value = touchedSpot.y; // Y value at the touched point
-                
                               // Use post-frame callback to ensure state/UI updates occur after the touch event
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 alterHeadingBar(value, weekLabel); // Trigger your heading update function
@@ -652,6 +656,7 @@ Future<List> getStats(List targets, range) async {
 
       for (var exercise in data[day]['sets'].keys) {
         if (targets.contains(exercise)) {
+
           startDate ??= dayDate;
           for (var set in data[day]['sets'][exercise]) {
             set = {
@@ -664,31 +669,34 @@ Future<List> getStats(List targets, range) async {
               'x-value': dayDate.difference(startDate).inDays,
             };
 
-            if (dayHeaviestWeight.isEmpty || set['weight'] > dayHeaviestWeight['weight']) {
-              dayHeaviestWeight = set;
+            if ((dayHeaviestWeight[exercise]?.isEmpty ?? false) || set['weight'] > (dayHeaviestWeight[exercise]?['weight'] ?? 0)) {
+              dayHeaviestWeight[exercise] = set;
             }
 
-            if (dayHeaviestVolume.isEmpty || set['volume'] > dayHeaviestVolume['volume']) {
-              dayHeaviestVolume = set;
+            if ((dayHeaviestVolume[exercise]?.isEmpty ?? false) || set['volume'] > (dayHeaviestWeight[exercise]?['volume'] ?? 0)) {
+              dayHeaviestVolume[exercise] = set;
             }
           }
-
-          if (dayHeaviestWeight.isNotEmpty) {
-            targetData.add(dayHeaviestWeight);
+          if (dayHeaviestWeight[exercise].isNotEmpty) {
+            targetData.add(dayHeaviestWeight[exercise]);
           }
 
-          if (heaviestWeight.isEmpty || dayHeaviestWeight['weight'] > heaviestWeight['weight']) {
-            heaviestWeight = dayHeaviestWeight;
+          if ((heaviestWeight[exercise]?.isEmpty ?? false) || (dayHeaviestWeight[exercise]?['weight'] ?? 0) > (heaviestWeight[exercise]?['weight'] ?? 0)) {
+            heaviestWeight[exercise] = dayHeaviestWeight[exercise];
           }
 
-          if (heaviestVolume.isEmpty || dayHeaviestVolume['volume'] > heaviestVolume['volume']) {
-            heaviestVolume = dayHeaviestVolume;
+          if ((heaviestVolume[exercise]?.isEmpty ?? false) || (dayHeaviestVolume[exercise]?['volume'] ?? 0) > (heaviestVolume[exercise]?['volume'] ?? 0)) {
+            heaviestVolume[exercise] = dayHeaviestVolume[exercise];
           }
         }
       } 
     }
   }
-
+  for (Map set in targetData){
+    if (set['exercise'] == 'Dumbbell Incline Bench Press'){
+      debugPrint('yes');
+    }
+  }
   return [targetData, heaviestWeight, heaviestVolume];
 }
 
