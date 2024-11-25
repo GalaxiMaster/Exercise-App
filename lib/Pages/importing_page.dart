@@ -365,7 +365,7 @@ Map formatHevyData(List data, Map records){
     double? weight = double.tryParse(row[9].toString());
     int? reps = int.tryParse(row[10].toString());
     double? distance = double.tryParse(row[11].toString());
-    double? duration = double.parse(row[12].toString());
+    double? duration = double.tryParse(row[12].toString());
     
     DateTime startDate = DateFormat('dd MMM yyyy, HH:mm').parse(startTime);
     DateTime endDate = DateFormat('dd MMM yyyy, HH:mm').parse(endTime);
