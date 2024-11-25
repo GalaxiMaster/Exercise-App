@@ -221,8 +221,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       ]
     );
   }
-  
-  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context) {
     final colors = [
       Colors.blue,
       Colors.purple,
@@ -234,7 +232,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       Colors.teal,
       Colors.cyan,
       Colors.indigo,
-    ];
+    ]; 
+  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context) {
+
     String unit = 'kg';
     if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
     final List<LineChartBarData> allLineBarsData = [];
@@ -271,7 +271,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         );
       }
     }
-
+    final PageController _pageController = PageController(
+      initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
+    );
     if (spots.isNotEmpty) {
       return SingleChildScrollView(
           child: Padding(
@@ -440,13 +442,24 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       selectorBox('Reps', selector == 'reps'),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') != 'bodyweight')
-                  Text('Most weight : ${heaviestWeight['weight']}kg x ${heaviestWeight['reps']}'),
-                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') != 'bodyweight')
-                  Text('Most volume : ${heaviestVolume['weight']}kg x ${heaviestVolume['reps']}'),
-                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight')
-                  Text('Highest reps: ${numParsething(heaviestVolume['reps'])}'),
+                  const SizedBox(height: 5),
+                  // if (widget.exercises.length > 1)
+                  SizedBox(
+                    height: 150,
+                    child: PageView.builder(
+                      physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
+                      scrollDirection: Axis.horizontal,
+                      controller: _pageController,
+                      itemBuilder: (context, index){
+                        final itemIndex = index % widget.exercises.length;
+                        String exercise = widget.exercises[itemIndex];
+                        return exerciseTile(exercise, itemIndex);
+                      }
+                    ),
+                  ),
+                  // if (widget.exercises.length == 1)
+                  // exerciseTile(widget.exercises[0], 0)
+
                 ],
               ),
           ),
@@ -454,6 +467,40 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     } else {
       return const Text("No data available");
     }
+  }
+
+  Widget exerciseTile(String exercise ,index) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: colors[index % colors.length].withOpacity(.2),
+          borderRadius: BorderRadius.circular(20)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                exercise,
+                style: const TextStyle(
+                  fontSize: 20
+                ),
+              ),
+              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+              Text('Most weight : ${heaviestWeight[exercise]['weight']}kg x ${heaviestWeight[exercise]['reps']}'),
+              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+              Text('Most volume : ${heaviestVolume[exercise]['weight']}kg x ${heaviestVolume[exercise]['reps']}'),
+              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'bodyweight')
+              Text('Highest reps: ${numParsething(heaviestVolume[exercise]['reps'])}'),
+              const Text('Gradient: -')
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
 
