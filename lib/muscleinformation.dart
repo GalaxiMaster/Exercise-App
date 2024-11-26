@@ -186,11 +186,11 @@ Map exerciseMuscles = {
     },
     "Reverse Dip": {
         "Primary": {
-            "Triceps": 60
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 30,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -240,21 +240,21 @@ Map exerciseMuscles = {
     },
     "Ring Dip": {
         "Primary": {
-            "Triceps": 70
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 15,
-            "Front Delts": 15
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
     "Chest Dip on Straight Bar": {
         "Primary": {
-            "Chest": 60
+            "Triceps": 25,
+            "Chest": 65
         },
         "Secondary": {
-            "Triceps": 20,
-            "Front Delts": 20
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -354,16 +354,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Assisted Triceps Dip": {
-        "Primary": {
-            "Triceps": 60
-        },
-        "Secondary": {
-            "Chest": 30,
-            "Front Delts": 10
-        },
-        "type": "Weighted"
-    },
     "Back Lever": {
         "Primary": {
             "Lats": 50,
@@ -376,11 +366,11 @@ Map exerciseMuscles = {
     },
     "Band Assisted Dips": {
         "Primary": {
-            "Triceps": 60
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 30,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "banded"
     },
@@ -4015,15 +4005,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Triceps Dip (bench leg)": {
-        "Primary": {
-            "Triceps": 70
-        },
-        "Secondary": {
-            "Chest": 30
-        },
-        "type": "bodyweight"
-    },
     "Cable Reverse Wrist Curl": {
         "Primary": {
             "Forearms (extensors)": 90
@@ -4700,10 +4681,11 @@ Map exerciseMuscles = {
     },
     "Weighted Tricep Dips": {
         "Primary": {
-            "Triceps": 70
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 30
+          "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -4728,10 +4710,11 @@ Map exerciseMuscles = {
     },
     "Lever Overhand Triceps Dip": {
         "Primary": {
-            "Triceps": 80
+            "Triceps": 70,
+            "Chest": 20
         },
         "Secondary": {
-            "Chest": 20
+          "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -5871,10 +5854,11 @@ Map exerciseMuscles = {
     },
     "Bench dip on floor": {
         "Primary": {
-            "Triceps": 70
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 30
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -5949,41 +5933,41 @@ Map exerciseMuscles = {
     },
     "Chest Dips": {
         "Primary": {
-            "Chest": 60
+            "Triceps": 25,
+            "Chest": 65
         },
         "Secondary": {
-            "Triceps": 30,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
     "Tricep Dips": {
         "Primary": {
-            "Triceps": 70
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 20,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
     "Assisted Chest Dips": {
         "Primary": {
-            "Chest": 60
+            "Triceps": 25,
+            "Chest": 65
         },
         "Secondary": {
-            "Triceps": 30,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "Weighted"
     },
     "Assisted Tricep Dips": {
         "Primary": {
-            "Triceps": 70
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 20,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "Weighted"
     },
@@ -6452,11 +6436,11 @@ Map exerciseMuscles = {
     },
     "Chest Dip": {
         "Primary": {
-            "Chest": 60,
-            "Triceps": 30
+            "Triceps": 25,
+            "Chest": 65
         },
         "Secondary": {
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
@@ -6472,11 +6456,11 @@ Map exerciseMuscles = {
     },
     "Dips between Chairs": {
         "Primary": {
-            "Triceps": 60
+            "Triceps": 65,
+            "Chest": 25
         },
         "Secondary": {
-            "Chest": 30,
-            "Front Delts": 10
+          "Front Delts": 10
         },
         "type": "bodyweight"
     },
