@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/radar_chart.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -5,6 +6,7 @@ import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class StrengthGradiant extends StatefulWidget {
   const StrengthGradiant({super.key});
@@ -35,7 +37,9 @@ class _StrengthGradiantState extends State<StrengthGradiant> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error loading data ${snapshot.error}'));
         } else if (snapshot.hasData) {
-          double gradient = double.parse((snapshot.data ?? 0).toStringAsFixed(2));
+          double msAverage = snapshot.data![0];
+          List msData = snapshot.data![1].reversed.toList();
+          double gradient = double.parse(msAverage.toStringAsFixed(2));
           return Column(
             children: [
               Row(
@@ -45,89 +49,69 @@ class _StrengthGradiantState extends State<StrengthGradiant> {
                   _selectorBox(timeSelected, 'time'),
                 ],
               ),
-              Text('Gradient: ${gradient}x'),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                  height: 200,
-                  child: LineChart(
-                    LineChartData(
-                      minX: 0,
-                      maxX: 1,
-                      minY: -.2,
-                      maxY: (gradient+0.2).clamp(0, 1),
-                      titlesData: FlTitlesData(
-                        show: true,
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 30,
-                            interval: 1,
-                            getTitlesWidget: (value, meta) {
-                              switch (value.toInt()) {
-                                case 0:
-                                  return const Text('0');
-                                case 1:
-                                  return const Text('1');
-                                default:
-                                  return const Text('');
-                              }
-                            },
-                          ),
-                        ),
-                        leftTitles: const AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false
-                          ),
-                        ),
-                        rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false
-                          ),
-                        ),
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(
-                          )
-                        )
+              Container(
+                width: 300,
+                decoration: BoxDecoration(
+                  color: ThemeColors.accent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Center(
+                    child: GradientText(
+                      'Increase: $gradient%',
+                      style: const TextStyle(
+                        fontSize: 24,
                       ),
-                      gridData: FlGridData(
-                        show: true,
-                        drawVerticalLine: true,
-                        horizontalInterval: 2,
-                        verticalInterval: 1,
-                        getDrawingHorizontalLine: (value) => FlLine(
-                          color: Colors.grey.withOpacity(0.2),
-                          strokeWidth: 1,
-                        ),
-                        getDrawingVerticalLine: (value) => FlLine(
-                          color: Colors.grey.withOpacity(0.2),
-                          strokeWidth: 1,
-                        ),
-                      ),
-                      borderData: FlBorderData(
-                        show: true,
-                        border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
-                      ),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: [
-                            const FlSpot(0, 0),
-                            FlSpot(1, gradient),
-                          ],
-                          isCurved: true,
-                          color: Colors.blueAccent,
-                          barWidth: 4,
-                          dotData: const FlDotData(show: false),
-                          belowBarData: BarAreaData(
-                            show: true,
-                            color: Colors.blueAccent.withOpacity(0.2),
-                          ),
-                        ),
+                      colors: const [
+                        Colors.blue,
+                        Colors.yellow,
                       ],
+                      gradientType: GradientType.radial,
+                      radius: 7,
                     ),
                   ),
                 ),
               ),
+              const Divider(thickness: .35,),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: msData.length,
+                  itemBuilder: (context, index){
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(
+                                  builder: (context) => ExerciseScreen(exercises: [msData[index].key])
+                                )
+                              );
+                            },
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 300), // Adjust width as needed
+                              child: Text(
+                                '${msData[index].key}: ',
+                                style: const TextStyle(fontSize: 20),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '${msData[index].value.toStringAsFixed(2)}%',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                ),
+              )
             ],
           );
         } else {
@@ -194,10 +178,9 @@ class _StrengthGradiantState extends State<StrengthGradiant> {
     );
   }
 }
-Future<double> getGradient(int range, String muscleGroup) async{
+Future<List> getGradient(int range, String muscleGroup) async{
   Map data = await readData();
   Map exercisesMap = {};
-  Map stuff = {};
   for (String day in data.keys){
     Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
     int diff = difference.inDays;
@@ -222,7 +205,7 @@ Future<double> getGradient(int range, String muscleGroup) async{
       }
     }
   }
-  List ms = [];
+  Map ms = {};
   for (String exercise in exercisesMap.keys){
     if (exercisesMap[exercise].length > 1){
       List<num> x = [];
@@ -245,36 +228,46 @@ Future<double> getGradient(int range, String muscleGroup) async{
         FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
         double m =  ((b.y-a.y)/a.y.abs())*100;
 
-        ms.add(m);
-        stuff[exercise] = m;
+        ms[exercise] = m;
 
       }
     }
     
   }
-  double mAverage = 0;
-  if (ms.isNotEmpty){
-    // find and remove outliers 
-    ms.sort();
+double mAverage = 0;
+List filteredData = [];
 
-    num q1 = ms[(ms.length * 0.25).floor()];
-    num q3 = ms[(ms.length * 0.75).floor()];
+if (ms.isNotEmpty) {
+  // Sort ms by values
+  var sortedEntries = ms.entries.toList()
+    ..sort((a, b) => a.value.compareTo(b.value));
+  var sortedValues = sortedEntries.map((entry) => entry.value).toList();
 
-    num iqr = q3 - q1;
-    // can change 2.5 to be lower or higher depending on the chosen leniency for outliers //TODO test a bunch of points to see which ones the best range
-    num lowerBound = q1 - 2.5 * iqr;
-    num upperBound = q3 + 2.5 * iqr;
+  // Calculate Q1, Q3, and IQR
+  num q1 = sortedValues[(sortedValues.length * 0.25).floor()];
+  num q3 = sortedValues[(sortedValues.length * 0.75).floor()];
+  num iqr = q3 - q1;
 
-    List filteredData = ms.where((x) => x >= lowerBound && x <= upperBound).toList();
-    // for (num item in ms){
-    //   if (!filteredData.contains(item)){
-    //     debugPrint(item.toString());
-    //   }
-    // }
-    mAverage = filteredData.reduce((a, b) => a + b)/ms.length;
+  // Adjust bounds for outliers
+  num lowerBound = q1 - 2.5 * iqr;
+  num upperBound = q3 + 2.5 * iqr;
+
+  // Filter entries within bounds
+  filteredData = sortedEntries
+      .where((entry) => entry.value >= lowerBound && entry.value <= upperBound)
+      .toList();
+
+  // Calculate the average
+  if (filteredData.isNotEmpty) {
+    mAverage = filteredData
+            .map((entry) => entry.value)
+            .reduce((a, b) => a + b) /
+        ms.length;
   }
+}
 
-  return mAverage;
+
+  return [mAverage, filteredData];
 }
 
 num toNum(weight) {
