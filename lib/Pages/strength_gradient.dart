@@ -197,7 +197,7 @@ class _StrengthGradiantState extends State<StrengthGradiant> {
 Future<double> getGradient(int range, String muscleGroup) async{
   Map data = await readData();
   Map exercisesMap = {};
-  
+  Map stuff = {};
   for (String day in data.keys){
     Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
     int diff = difference.inDays;
@@ -207,12 +207,15 @@ Future<double> getGradient(int range, String muscleGroup) async{
           if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false) || muscleGroup == 'All Muscles'){
             // for (Map set in data[day]['sets'][exercise]){
             List sets = data[day]['sets'][exercise];
+            String target = 'weight';
+            (exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
+            sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
             Map set = sets[sets.length-1];
             if (!exercisesMap.containsKey(exercise)){
               exercisesMap[exercise] = [];
             }
-            Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
-            exercisesMap[exercise].add([difference.inDays, set]);
+            // Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
+            exercisesMap[exercise].add(set);
           // }
           }
         }
@@ -224,13 +227,13 @@ Future<double> getGradient(int range, String muscleGroup) async{
     if (exercisesMap[exercise].length > 1){
       List<num> x = [];
       List<num> y = [];
+      exercisesMap[exercise] = exercisesMap[exercise].reversed.toList();
       for (var pair in exercisesMap[exercise]!) {
-        x.add(pair[0]); // x value is the first element
-        // y.add(toNum(pair[1]['weight'])); // y value is in the 'weight' field of the second element
+        y.add((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'Weighted' ?  double.parse(pair['weight'].toString()) : double.parse(pair['reps'].toString())); // x value is the first element
       }
-      y = List.generate(x.length, (index) => index + 1);
+      x = List.generate(y.length, (index) => index);
 
-      int n = x.length;
+      int n = y.length;
       if (n != 0){
         
         // num minValue = x.reduce(min);
@@ -240,8 +243,10 @@ Future<double> getGradient(int range, String muscleGroup) async{
 
         FlSpot a = FlSpot(x[0].toDouble(), y[0].toDouble());
         FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
-        double m = (a.y-b.y)/(0-x.length);
+        double m =  ((b.y-a.y)/a.y.abs())*100;
+
         ms.add(m);
+        stuff[exercise] = m;
 
       }
     }
@@ -249,10 +254,26 @@ Future<double> getGradient(int range, String muscleGroup) async{
   }
   double mAverage = 0;
   if (ms.isNotEmpty){
-    mAverage = ms.reduce((a, b) => a + b)/ms.length;
+    // find and remove outliers 
+    ms.sort();
+
+    num q1 = ms[(ms.length * 0.25).floor()];
+    num q3 = ms[(ms.length * 0.75).floor()];
+
+    num iqr = q3 - q1;
+    // can change 2.5 to be lower or higher depending on the chosen leniency for outliers //TODO test a bunch of points to see which ones the best range
+    num lowerBound = q1 - 2.5 * iqr;
+    num upperBound = q3 + 2.5 * iqr;
+
+    List filteredData = ms.where((x) => x >= lowerBound && x <= upperBound).toList();
+    // for (num item in ms){
+    //   if (!filteredData.contains(item)){
+    //     debugPrint(item.toString());
+    //   }
+    // }
+    mAverage = filteredData.reduce((a, b) => a + b)/ms.length;
   }
 
-  debugPrint('hi');
   return mAverage;
 }
 

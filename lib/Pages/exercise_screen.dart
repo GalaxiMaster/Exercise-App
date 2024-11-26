@@ -238,18 +238,19 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     String unit = 'kg';
     if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
     final List<LineChartBarData> allLineBarsData = [];
-
+    int exercisesNum = 0;
     // Add a line for each exercise
     for (var entry in spots.entries) {
       // Add the main line for this exercise
+      exercisesNum++;
       allLineBarsData.add(
         LineChartBarData(
           spots: entry.value,
-          color: colors[allLineBarsData.length~/2 % colors.length],
+          color: colors[exercisesNum~/2 % colors.length],
           barWidth: 3,
           belowBarData: BarAreaData(
             show: true,
-            color: colors[allLineBarsData.length~/2 % colors.length]
+            color: colors[exercisesNum~/2 % colors.length]
                 .withOpacity(0.2),
           ),
         ),
@@ -453,7 +454,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       itemBuilder: (context, index){
                         final itemIndex = index % widget.exercises.length;
                         String exercise = widget.exercises[itemIndex];
-                        return exerciseTile(exercise, itemIndex, spots.isNotEmpty ? getGradientData(spots[exercise] ?? []) : 0);
+                        return exerciseTile(exercise, itemIndex, spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0);
                       }
                     ),
                   ),
@@ -473,7 +474,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     double gradient = (a.y-b.y)/(0-points.length);
     return gradient.toStringAsFixed(2);
   }
-  Widget exerciseTile(String exercise, index, gradient) {
+  Widget exerciseTile(String exercise, index, increase) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
@@ -499,7 +500,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'bodyweight')
               Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
-              Text('Gradient: ${gradient}x')
+              Text('Gradient: $increase% increase')
             ],
           ),
         ),
@@ -773,4 +774,11 @@ List<FlSpot> calculateBestFitLine(List<FlSpot> dataPoints) {
 
   // Return two points that represent the start and end of the line of best fit
   return [FlSpot(minX, m * minX + b), FlSpot(maxX, m * maxX + b)];
+}
+
+double findGradient(List<FlSpot> dataPoints){
+  FlSpot a = dataPoints[0];
+  FlSpot b = dataPoints[dataPoints.length-1];
+
+  return (((b.y-a.y)/a.y.abs())*100);
 }
