@@ -446,7 +446,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   const SizedBox(height: 5),
                   // if (widget.exercises.length > 1)
                   SizedBox(
-                    height: 150,
+                    height: 160,
                     child: PageView.builder(
                       physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
                       scrollDirection: Axis.horizontal,
@@ -494,13 +494,16 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   fontSize: 20
                 ),
               ),
+              const Divider(
+                thickness: .2,
+              ),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
               Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
               Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'bodyweight')
               Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
-              Text('Gradient: $increase% increase')
+              Text('Increase: $increase%')
             ],
           ),
         ),
@@ -539,6 +542,7 @@ int findClosestIndexInSorted(List list, double target) {
     if (itemCount <= 5) return itemTotal/5 + 1;
     return itemTotal/5 + 1;
   }
+  
   Widget selectorBox(String text, bool selected){
     return GestureDetector(
       onTap: () async{
@@ -685,7 +689,6 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
   }
 }
 
-
 Future<List> getStats(List targets, range) async {
   Map data = await readData();
   List targetData = [];
@@ -721,11 +724,11 @@ Future<List> getStats(List targets, range) async {
               'x-value': dayDate.difference(startDate).inDays,
             };
 
-            if ((dayHeaviestWeight[exercise]?.isEmpty ?? false) || set['weight'] > (dayHeaviestWeight[exercise]?['weight'] ?? 0)) {
+            if ((dayHeaviestWeight[exercise]?.isEmpty ?? false) || set['weight'] > (dayHeaviestWeight[exercise]?['weight'] ?? -9999)) { // TODO find better wqay of doing htis
               dayHeaviestWeight[exercise] = set;
             }
 
-            if ((dayHeaviestVolume[exercise]?.isEmpty ?? false) || set['volume'] > (dayHeaviestWeight[exercise]?['volume'] ?? 0)) {
+            if ((dayHeaviestVolume[exercise]?.isEmpty ?? false) || set['volume'] > (dayHeaviestWeight[exercise]?['volume'] ?? -9999)) {
               dayHeaviestVolume[exercise] = set;
             }
           }
@@ -733,11 +736,11 @@ Future<List> getStats(List targets, range) async {
             targetData.add(dayHeaviestWeight[exercise]);
           }
 
-          if ((heaviestWeight[exercise]?.isEmpty ?? false) || (dayHeaviestWeight[exercise]?['weight'] ?? 0) > (heaviestWeight[exercise]?['weight'] ?? 0)) {
+          if ((heaviestWeight[exercise]?.isEmpty ?? false) || (dayHeaviestWeight[exercise]?['weight'] ?? -9999) > (heaviestWeight[exercise]?['weight'] ?? -9999)) {
             heaviestWeight[exercise] = dayHeaviestWeight[exercise];
           }
 
-          if ((heaviestVolume[exercise]?.isEmpty ?? false) || (dayHeaviestVolume[exercise]?['volume'] ?? 0) > (heaviestVolume[exercise]?['volume'] ?? 0)) {
+          if ((heaviestVolume[exercise]?.isEmpty ?? false) || (dayHeaviestVolume[exercise]?['volume'] ?? -9999) > (heaviestVolume[exercise]?['volume'] ?? -9999)) {
             heaviestVolume[exercise] = dayHeaviestVolume[exercise];
           }
         }
@@ -751,7 +754,6 @@ Future<List> getStats(List targets, range) async {
   }
   return [targetData, heaviestWeight, heaviestVolume];
 }
-
 
 List<FlSpot> calculateBestFitLine(List<FlSpot> dataPoints) {
   int n = dataPoints.length;
@@ -779,6 +781,8 @@ List<FlSpot> calculateBestFitLine(List<FlSpot> dataPoints) {
 double findGradient(List<FlSpot> dataPoints){
   FlSpot a = dataPoints[0];
   FlSpot b = dataPoints[dataPoints.length-1];
-
-  return (((b.y-a.y)/a.y.abs())*100);
+  if (a.y < 0 && b.y < 0){
+    return ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
+  }
+  return ((b.y-a.y)/a.y.abs())*100;
 }

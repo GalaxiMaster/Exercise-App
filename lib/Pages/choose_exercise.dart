@@ -65,7 +65,7 @@ class _WorkoutListState extends State<WorkoutList> {
           });
         }else{
           if(widget.setting == 'choose' ){
-            Navigator.pop(context, exercise);
+            Navigator.pop(context, [exercise]);
           }
           else{
             Navigator.push(

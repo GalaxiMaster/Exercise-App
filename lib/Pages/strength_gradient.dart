@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/radar_chart.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -187,7 +189,7 @@ Future<List> getGradient(int range, String muscleGroup) async{
     if (diff <= range || range == -1){
       for (String exercise in data[day]['sets'].keys){
         for (String muscle in (muscleGroups[muscleGroup] ?? ['muscle'])){
-          if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false) || muscleGroup == 'All Muscles'){
+          if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || muscleGroup == 'All Muscles'){ //  || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false)
             // for (Map set in data[day]['sets'][exercise]){
             List sets = data[day]['sets'][exercise];
             String target = 'weight';
@@ -218,7 +220,6 @@ Future<List> getGradient(int range, String muscleGroup) async{
 
       int n = y.length;
       if (n != 0){
-        
         // num minValue = x.reduce(min);
         // num maxValue = x.reduce(max);
 
@@ -226,8 +227,12 @@ Future<List> getGradient(int range, String muscleGroup) async{
 
         FlSpot a = FlSpot(x[0].toDouble(), y[0].toDouble());
         FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
-        double m =  ((b.y-a.y)/a.y.abs())*100;
-
+        double m = 0;
+        if (a.y < 0 && b.y < 0){
+          m = ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
+        }else{
+          m = ((b.y-a.y)/a.y.abs())*100;
+        }
         ms[exercise] = m;
 
       }
