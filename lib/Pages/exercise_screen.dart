@@ -238,19 +238,18 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     String unit = 'kg';
     if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
     final List<LineChartBarData> allLineBarsData = [];
-    int exercisesNum = 0;
+    List exercisesOrder = [];
     // Add a line for each exercise
     for (var entry in spots.entries) {
       // Add the main line for this exercise
-      exercisesNum++;
       allLineBarsData.add(
         LineChartBarData(
           spots: entry.value,
-          color: colors[exercisesNum~/2 % colors.length],
+          color: colors[exercisesOrder.length],
           barWidth: 3,
           belowBarData: BarAreaData(
             show: true,
-            color: colors[exercisesNum~/2 % colors.length]
+            color: colors[exercisesOrder.length]
                 .withOpacity(0.2),
           ),
         ),
@@ -271,6 +270,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           ),
         );
       }
+      exercisesOrder.add(entry.key);
     }
     final PageController pageController = PageController(
       initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
@@ -454,7 +454,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       itemBuilder: (context, index){
                         final itemIndex = index % widget.exercises.length;
                         String exercise = widget.exercises[itemIndex];
-                        return exerciseTile(exercise, itemIndex, spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0);
+                        return exerciseTile(exercise, exercisesOrder.indexOf(exercise), spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0);
                       }
                     ),
                   ),
@@ -480,7 +480,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: colors[index % colors.length].withOpacity(.2),
+          color: colors[index].withOpacity(.2),
           borderRadius: BorderRadius.circular(20)
         ),
         child: Padding(
