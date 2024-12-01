@@ -77,7 +77,7 @@ class MuscleData extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error loading data'));
+            return Center(child: Text('Error loading data ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final Map<String, double> scaledMuscleData = Map<String, double>.from(snapshot.data![0]);
             final Map<String, double> unscaledMuscleData = Map<String, double>.from(snapshot.data![1]);

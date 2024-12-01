@@ -10,12 +10,14 @@ class WorkoutList extends StatefulWidget {
   final List? problemExercises;
   final String? problemExercisesTitle;
   final Map? preData;
+  final bool multiSelect;
   const WorkoutList({
     super.key, 
     required this.setting, 
     this.problemExercises, 
     this.problemExercisesTitle,
-    this.preData
+    this.preData, 
+    this.multiSelect = true,
   });
 
   @override
@@ -78,19 +80,21 @@ class _WorkoutListState extends State<WorkoutList> {
         }
       },
       onLongPress: (){
-        setState(() {
-          if (selectedItems.contains(exercise)){
-            selectedItems.remove(exercise);
-            if (selectedItems.isEmpty){
-              multiSelect == false;
-            }
-          }else{
-            if (!multiSelect){
-              multiSelect = true;
-            }
-            selectedItems.add(exercise);
-          }  
-        });
+        if (widget.multiSelect){
+          setState(() {
+            if (selectedItems.contains(exercise)){
+              selectedItems.remove(exercise);
+              if (selectedItems.isEmpty){
+                multiSelect == false;
+              }
+            }else{
+              if (!multiSelect){
+                multiSelect = true;
+              }
+              selectedItems.add(exercise);
+            }  
+          });
+        }
       },
       child: SizedBox(
         height: 60,

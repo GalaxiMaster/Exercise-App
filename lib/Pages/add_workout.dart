@@ -232,13 +232,15 @@ class _AddworkoutState extends State<Addworkout> {
                             onSelected: (value) async{
                               switch (value){
                                 case 'Swap': 
-                                  String? newExercise = await Navigator.push(
+                                  List? newExerciseList = await Navigator.push(
                                     context,    
                                     MaterialPageRoute(
-                                      builder: (context) => const WorkoutList(setting: 'choose')
+                                      builder: (context) => const WorkoutList(setting: 'choose', multiSelect: false)
                                     )
                                   );
-                                  if (newExercise != null && !sets.containsKey(newExercise)){
+
+                                  if (newExerciseList != null && !sets.containsKey(newExerciseList.first)){
+                                    String newExercise = newExerciseList.first;
                                     Map newSets = {};
                                     final Map<String, List<Map<String, FocusNode>>> newFocusnodes = {};
                                     final Map<String, List<Map<String, TextEditingController>>> newControllers = {};
