@@ -6,6 +6,7 @@ import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 import 'choose_exercise.dart';
@@ -379,9 +380,12 @@ class _AddworkoutState extends State<Addworkout> {
                               child: Center(
                                 child: (exerciseMuscles[exercise]?['type'] ?? '') != 'bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
                                   TextFormField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
+                                    ],
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                                     focusNode: _focusNodes[exercise]![i]['weight'],
                                     controller: _controllers[exercise]![i]['weight'],
-                                    keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 18,
@@ -440,9 +444,12 @@ class _AddworkoutState extends State<Addworkout> {
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
+                                  ],
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                                   focusNode: _focusNodes[exercise]![i]['reps'],
                                   controller: _controllers[exercise]![i]['reps'],
-                                  keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
