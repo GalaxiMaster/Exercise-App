@@ -53,6 +53,8 @@ class _ProfileState extends State<Profile> {
       case 'volume': unit = 'kg';
       case 'weight': unit = 'kg';
       case 'reps': unit = 'reps';
+      case 'sets': unit = 'sets';
+
     }
     return Scaffold(
       appBar: myAppBar(context, 'Profile', 
@@ -142,6 +144,7 @@ class _ProfileState extends State<Profile> {
                     children: [
                       selectorBox('Sessions', graphSelector == 'sessions'),
                       selectorBox('Duration', graphSelector == 'duration'),
+                      selectorBox('Sets', graphSelector == 'sets'),
                       selectorBox('Volume', graphSelector == 'volume'),
                       selectorBox('Weight', graphSelector == 'weight'),
                       selectorBox('Reps', graphSelector == 'reps'),
@@ -233,6 +236,7 @@ class _ProfileState extends State<Profile> {
             case 'Weight': graphSelector = 'weight';
             case 'Volume': graphSelector = 'volume';
             case 'Reps': graphSelector = 'reps';
+            case 'Sets': graphSelector = 'sets';
           }
 
         });
@@ -440,9 +444,10 @@ class DataBarChart extends StatelessWidget {
     Map information = {
       'sessions': getWeekData(data, Map.from(weeks)),
       'duration': getDurationData(data, Map.from(weeks)),
-      'volume': getWeigtAndStufftData(data, Map.from(weeks), 'volume'),
-      'weight':getWeigtAndStufftData(data, Map.from(weeks), 'weight'),
-      'reps':getWeigtAndStufftData(data, Map.from(weeks), 'reps')
+      'volume': getWeightAndStufftData(data, Map.from(weeks), 'volume'),
+      'weight':getWeightAndStufftData(data, Map.from(weeks), 'weight'),
+      'reps': getWeightAndStufftData(data, Map.from(weeks), 'reps'),
+      'sets': getWeightAndStufftData(data, Map.from(weeks), 'sets'),
     };
     return information;
   }
@@ -467,7 +472,7 @@ class DataBarChart extends StatelessWidget {
     return date.subtract(Duration(days: daysToSubtract));
   }
 
-  Map getWeigtAndStufftData(Map data, Map weeks, String selector){
+  Map getWeightAndStufftData(Map data, Map weeks, String selector){
     for (var day in data.keys) {
       DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
       String formattedDate = DateFormat('MMM dd').format(monday);
@@ -478,7 +483,9 @@ class DataBarChart extends StatelessWidget {
           for (Map set in data[day]['sets'][exercise]){
             if (selector == 'volume'){
               dayWeight += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
-            }else{
+            }else if (selector == 'sets'){
+              dayWeight++;
+            } else{
               dayWeight += double.parse(set[selector].toString());
             }
           }

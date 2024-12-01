@@ -2,6 +2,7 @@ import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:intl/intl.dart';
 
 class Stats extends StatefulWidget {
   const Stats({super.key});
@@ -59,8 +60,8 @@ class _StatsState extends State<Stats> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 statBox('Sessions done', stats['days'].length.toString(), 3),
-                statBox('Sets done', stats['sets'].toString(), 3),            
-                statBox('Exercises done', stats['exercises'].toString(), 3),
+                statBox('Sets done', NumberFormat('#,###.##').format(stats['sets']).toString(), 3),            
+                statBox('Exercises done', NumberFormat('#,###.##').format(stats['exercises']).toString(), 3),
               ],
             ),
             Row(
@@ -74,14 +75,14 @@ class _StatsState extends State<Stats> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                statBox('Total volume', '${stats['volume'].fold(0, (p, c) => p + c).toStringAsFixed(2)}Kg', 2),
-                statBox('Average volume ', "${(stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)}Kg", 2),
+                statBox('Total volume', '${NumberFormat('#,###.##').format(double.parse(stats['volume'].fold(0, (p, c) => p + c).toStringAsFixed(2)))}Kg', 2),
+                statBox('Average volume ', "${NumberFormat('#,###.##').format(double.parse((stats['volume'].fold(0, (p, c) => p + c)/nonZeroLen(stats['volume'])).toStringAsFixed(1)))}Kg", 2),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                statBox('Total time', "${stats['time'].fold(0, (p, c) => p + c).toString()} mins", 2),
+                statBox('Total time', "${NumberFormat('#,###.##').format(stats['time'].fold(0, (p, c) => p + c))} mins", 2),
                 statBox('Average time', "${(stats['time'].fold(0, (p, c) => p + c)/stats['time'].length).toStringAsFixed(1)} mins", 2),
               ],
             ),
