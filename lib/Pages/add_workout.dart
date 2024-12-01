@@ -463,8 +463,11 @@ class _AddworkoutState extends State<Addworkout> {
                                     updateExercises();
                                   },
                                     onFieldSubmitted: (value) {
-                                    addNewSet(exercise); // Add a new set on pressing "Enter"
-                                    FocusScope.of(context).nextFocus(); // Move focus to the next field
+                                      if (i == sets[exercise]!.length - 1) {
+                                        addNewSet(exercise);
+                                      } else {
+                                        FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
+                                      }
                                   },
                                   onTap: () {
                                     _controllers[exercise]![i]['reps']!.selection = TextSelection(
@@ -630,19 +633,43 @@ class _AddworkoutState extends State<Addworkout> {
     );
   }
 
-  void addNewSet(String exercise) {
-    setState(() {
-      sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
-      debugPrint('idsk set');
-      _ensureExerciseFocusNodesAndControllers(exercise);
-    });
-    
-    // Schedule a callback to set focus after the widget rebuilds
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(_getLastTextFieldFocus(exercise));
-    });
-  }
+void addNewSet(String exercise) {
+  setState(() {
+    sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
+    _ensureExerciseFocusNodesAndControllers(exercise);
+  });
   
+  // Use a more robust method to set focus
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final lastSetIndex = sets[exercise]!.length - 1;
+    FocusNode? focusNodeToUse;
+
+    // Determine which node to focus based on exercise type
+    if (exerciseMuscles[exercise]['type'] == 'bodyweight') {
+      // For bodyweight, focus on reps
+      focusNodeToUse = _focusNodes[exercise]![lastSetIndex]['reps']!;
+    } else if (exerciseMuscles[exercise]['type'] == 'Timed') {
+      // For timed exercises, this will be handled differently
+      return;
+    } else {
+      // Default to weight node for weighted exercises
+      focusNodeToUse = _focusNodes[exercise]![lastSetIndex]['weight']!;
+    }
+    
+    // Ensure the focus node is associated with the widget
+    FocusScope.of(context).requestFocus(focusNodeToUse);
+    
+    // Ensure the text is selected
+    final controllerToUse = exerciseMuscles[exercise]['type'] == 'bodyweight'
+        ? _controllers[exercise]![lastSetIndex]['reps']!
+        : _controllers[exercise]![lastSetIndex]['weight']!;
+    
+    controllerToUse.selection = TextSelection(
+      baseOffset: 0, 
+      extentOffset: controllerToUse.text.length
+    );
+  });
+}
   FocusNode _getLastTextFieldFocus(String exercise) {
     final lastSetIndex = sets[exercise]!.length - 1;
     return _focusNodes[exercise]![lastSetIndex]['weight']!;
