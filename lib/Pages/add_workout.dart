@@ -392,7 +392,7 @@ class _AddworkoutState extends State<Addworkout> {
                                       color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                     ),
                                     decoration: InputDecoration(
-                                      hintText: getPrevious(exercise, i+1, 'Weight'),
+                                      hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type']),
                                       border: InputBorder.none,
                                       hintStyle: const TextStyle(
                                         color: Colors.grey,
@@ -456,7 +456,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                   ),
                                   decoration: InputDecoration(
-                                    hintText: getPrevious(exercise, i+1, 'Reps'),
+                                    hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type']),
                                     border: InputBorder.none,
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
@@ -551,14 +551,14 @@ class _AddworkoutState extends State<Addworkout> {
     );
   }
   
-  String getPrevious(String tExercise, int setNum, String target){
+  String getPrevious(String tExercise, int setNum, String target, String type){
     if (preCsvData.isNotEmpty){
     for (var day in preCsvData.keys.toList().reversed.toList()){
         for (var exercise in preCsvData[day]['sets'].keys){
           if (exercise == tExercise){
             for (var i = 0; i < preCsvData[day]['sets'][exercise].length; i++) {
               var set = preCsvData[day]['sets'][exercise][i];
-              if (i == setNum-1) {
+              if (i == setNum-1 && set['type'] == type) {
                 if (target == 'Weight') {
                   return set['weight'].toString();
                 } else if (target == 'Reps') {
@@ -677,10 +677,6 @@ void addNewSet(String exercise) {
     );
   });
 }
-  FocusNode _getLastTextFieldFocus(String exercise) {
-    final lastSetIndex = sets[exercise]!.length - 1;
-    return _focusNodes[exercise]![lastSetIndex]['weight']!;
-  }
   
   void confirmExercises(var sets, Map exerciseNotes){
     bool isNull = checkNulls(sets);
