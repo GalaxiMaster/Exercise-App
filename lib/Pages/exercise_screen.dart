@@ -454,7 +454,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       itemBuilder: (context, index){
                         final itemIndex = index % widget.exercises.length;
                         String exercise = widget.exercises[itemIndex];
-                        return exerciseTile(exercise, exercisesOrder.indexOf(exercise), spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0);
+                        int orderPos = exercisesOrder.indexOf(exercise);
+                        return exerciseTile(exercise, orderPos != -1 ? orderPos : 0, spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0);
                       }
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/confirm_workout.dart';
+import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
@@ -222,10 +223,18 @@ class _AddworkoutState extends State<Addworkout> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            exercise,
-                            style: const TextStyle(
-                              fontSize: 18
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ExerciseScreen(exercises: [exercise]))
+                              );
+                            },
+                            child: Text(
+                              exercise,
+                              style: const TextStyle(
+                                fontSize: 18
+                              ),
                             ),
                           ),
                           PopupMenuButton<String>(
