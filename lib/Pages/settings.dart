@@ -6,6 +6,7 @@ import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -14,10 +15,20 @@ import 'package:share_plus/share_plus.dart';
 
     @override
     Widget build(BuildContext context) {
-      getAllSettings();
+      
       return Scaffold(
         appBar: myAppBar(context, 'Settings'),
-        body: Column(
+        body: FutureBuilder(
+        future: getAllSettings(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error loading data'));
+          } else if (snapshot.hasData) {
+                          Map? settings = snapshot.data;
+
+            return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             settingsheader('Preferences'),
@@ -36,13 +47,14 @@ import 'package:share_plus/share_plus.dart';
             _buildSettingsBox(
               icon: Icons.accessibility,
               label: 'Measurements',
-              function: () {
-                // showModalBottomSheet(
-                //   context: context,
-                //   builder: (context) {
-                //     return const GoalOptions();
-                //   },
-                // );
+              function: () async{
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return MeasurementPopup(initialMeasurement: settings!['bodyweight'],);
+                  },
+                );
+                settings = await getAllSettings();
               },
             ),
             _buildSettingsBox(
@@ -90,6 +102,11 @@ import 'package:share_plus/share_plus.dart';
               function: (){moveExercises(context);},
             ),
           ],
+        );
+          } else {
+            return const Center(child: Text('No data available'));
+          }
+        },
         ),
       );
     }
@@ -109,7 +126,10 @@ import 'package:share_plus/share_plus.dart';
         ),
       );
     }
-
+  Future<String> getBodyweight() async {
+    Map data = await getAllSettings();
+    return data['bodyweight'] ?? '';
+  }
     Divider setttingDividor() => Divider(
           thickness: .3,
           color: Colors.grey.withOpacity(0.5),
@@ -118,26 +138,25 @@ import 'package:share_plus/share_plus.dart';
   }
 
 
-  void exportJson() async{
-      try {
-        final directory = await getApplicationDocumentsDirectory();
-        final path = '${directory.path}/output.json';
+void exportJson() async{
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/output.json';
 
-        // Only share the file after ensuring it has been written
-        final file = File(path);
-        if (await file.exists()) {
-          await Share.shareXFiles(
-            [XFile(path)],
-            text: 'Check out my workout data',
-          );
-        } else {
-          debugPrint('Error: Json file does not exist for sharing');
-        }
-      } catch (e) {
-        debugPrint('Error sharing Json file: $e');
+      // Only share the file after ensuring it has been written
+      final file = File(path);
+      if (await file.exists()) {
+        await Share.shareXFiles(
+          [XFile(path)],
+          text: 'Check out my workout data',
+        );
+      } else {
+        debugPrint('Error: Json file does not exist for sharing');
       }
-  }
-
+    } catch (e) {
+      debugPrint('Error sharing Json file: $e');
+    }
+}
 
 class GoalOptions extends StatefulWidget {
   const GoalOptions({super.key});
@@ -272,13 +291,12 @@ void resetDataButton(BuildContext context){
   );
 }
 
-  void updateSettings(String option, String value) async{
-    Map data = await readData(path: 'settings');
-    data[option] = value;
-    debugPrint(data.toString());
-    writeData(data, path: 'settings', append: false);
-  }
-
+void updateSettings(String option, String value) async{
+  Map data = await readData(path: 'settings');
+  data[option] = value;
+  debugPrint(data.toString());
+  writeData(data, path: 'settings', append: false);
+}
 
 void moveExercises(BuildContext context) async{
   List? problemExercises = [];
@@ -343,7 +361,61 @@ if (resultFromList != null) {
   
 }
 
+class MeasurementPopup extends StatelessWidget{
+  final String initialMeasurement;
+  const MeasurementPopup({super.key, required this.initialMeasurement});
 
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Bodyweight (kg): ',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  height: 50,
+                  width: 65,
+                  child: TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
+                    ],
+                    initialValue: initialMeasurement,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: false),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                    decoration: const InputDecoration(
+                      // border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16, // Adjust hint text size
+                      ),
+                    ),
+                    onChanged: (value){
+                      updateSettings('bodyweight', value);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}
 Widget _buildSettingsBox({
     required IconData icon,
     required String label,

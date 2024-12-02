@@ -551,7 +551,7 @@ class _AddworkoutState extends State<Addworkout> {
     );
   }
   
-  String getPrevious(String tExercise, int setNum, String target, String type){
+  String getPrevious(String tExercise, int setNum, String target, String type){ // TODO with the matching set types, it could be preferential instead of only. like if theres no sets with that index and set type, it just picks the last of that type
     if (preCsvData.isNotEmpty){
     for (var day in preCsvData.keys.toList().reversed.toList()){
         for (var exercise in preCsvData[day]['sets'].keys){
