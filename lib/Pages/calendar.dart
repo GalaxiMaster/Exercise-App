@@ -250,7 +250,7 @@ class WorkoutStats extends StatelessWidget {
         if (set['PR'] == 'yes'){
           prs++;
         }
-        volume += double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
+        volume += double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs();
       }
     }
     String sVolume = '';

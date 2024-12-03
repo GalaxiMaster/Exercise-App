@@ -23,7 +23,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
       stats['Exercises'] += 1;
       for (var set in widget.sets[exercise]){
         stats['Sets'] += 1;
-        stats['Volume'] += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
+        stats['Volume'] += (double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString())).abs();
       }
     }
     Duration difference = endTime.difference(startTime); // Calculate the difference

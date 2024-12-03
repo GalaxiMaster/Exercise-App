@@ -902,7 +902,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 40
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Leg Raise Hip Lift": {
         "Primary": {
@@ -5959,7 +5959,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Assisted Tricep Dips": {
         "Primary": {
@@ -5969,7 +5969,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Weighted Neutral Grip Pull Up": {
         "Primary": {
@@ -5991,7 +5991,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Neutral Grip Pull Up": {
         "Primary": {
@@ -6101,7 +6101,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Pull Up": {
         "Primary": {
@@ -6156,7 +6156,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Forearms": 10
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Back Extensions": {
         "Primary": {
@@ -7239,7 +7239,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "Weighted"
+        "type": "Assisted"
     },
     "Hip Abductor": {
         "Primary": {

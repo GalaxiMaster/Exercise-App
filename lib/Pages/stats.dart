@@ -36,9 +36,9 @@ class _StatsState extends State<Stats> {
         for (var set in data[day]['sets'][exercise]){
           sets++;
           if (totalVolume.containsKey(day)){
-            totalVolume[day] += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
+            totalVolume[day] += (double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs());
           } else{
-            totalVolume[day] = (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
+            totalVolume[day] = (double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs());
           }
 
         }

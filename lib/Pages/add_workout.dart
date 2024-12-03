@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
+import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
@@ -238,57 +239,80 @@ class _AddworkoutState extends State<Addworkout> {
                               ),
                             ),
                           ),
-                          PopupMenuButton<String>(
-                            onSelected: (value) async{
-                              switch (value){
-                                case 'Swap': 
-                                  List? newExerciseList = await Navigator.push(
-                                    context,    
-                                    MaterialPageRoute(
-                                      builder: (context) => const WorkoutList(setting: 'choose', multiSelect: false)
-                                    )
-                                  );
+                          if (['bodyweight', 'Assisted'].contains(exerciseMuscles[exercise]['type']))
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: GestureDetector(
+                                  onTap: () async{
+                                    await showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return MeasurementPopup(initialMeasurement: settings['bodyweight'],);
+                                      },
+                                    );
+                                    settings = await getAllSettings();
+                                  },
+                                  child: const Icon(
+                                    Icons.person_2_outlined, 
+                                    color: Colors.blueAccent
+                                  ),
+                                ),
+                              ),
+                              PopupMenuButton<String>(
+                                onSelected: (value) async{
+                                  switch (value){
+                                    case 'Swap': 
+                                      List? newExerciseList = await Navigator.push(
+                                        context,    
+                                        MaterialPageRoute(
+                                          builder: (context) => const WorkoutList(setting: 'choose', multiSelect: false)
+                                        )
+                                      );
 
-                                  if (newExerciseList != null && !sets.containsKey(newExerciseList.first)){
-                                    String newExercise = newExerciseList.first;
-                                    Map newSets = {};
-                                    final Map<String, List<Map<String, FocusNode>>> newFocusnodes = {};
-                                    final Map<String, List<Map<String, TextEditingController>>> newControllers = {};
-                                    final Map<String, List<bool>> newCheckboxstates = {};
-                                    for (String exerciseEntry in sets.keys){
-                                      newSets[exerciseEntry == exercise ? newExercise : exerciseEntry] = sets[exerciseEntry];
-                                      newFocusnodes[exerciseEntry == exercise ? newExercise : exerciseEntry] = _focusNodes[exerciseEntry]!;
-                                      newControllers[exerciseEntry == exercise ? newExercise : exerciseEntry] = _controllers[exerciseEntry]!;
-                                      newCheckboxstates[exerciseEntry == exercise ? newExercise : exerciseEntry] = _checkBoxStates[exerciseEntry]!;
-                                    }
-                                    setState(() {
-                                      sets = newSets;
-                                      _focusNodes = newFocusnodes;
-                                      _controllers = newControllers;
-                                      _checkBoxStates = newCheckboxstates;
-                                      _initializeFocusNodesAndControllers();
-                                      updateExercises();
-                                    });
+                                      if (newExerciseList != null && !sets.containsKey(newExerciseList.first)){
+                                        String newExercise = newExerciseList.first;
+                                        Map newSets = {};
+                                        final Map<String, List<Map<String, FocusNode>>> newFocusnodes = {};
+                                        final Map<String, List<Map<String, TextEditingController>>> newControllers = {};
+                                        final Map<String, List<bool>> newCheckboxstates = {};
+                                        for (String exerciseEntry in sets.keys){
+                                          newSets[exerciseEntry == exercise ? newExercise : exerciseEntry] = sets[exerciseEntry];
+                                          newFocusnodes[exerciseEntry == exercise ? newExercise : exerciseEntry] = _focusNodes[exerciseEntry]!;
+                                          newControllers[exerciseEntry == exercise ? newExercise : exerciseEntry] = _controllers[exerciseEntry]!;
+                                          newCheckboxstates[exerciseEntry == exercise ? newExercise : exerciseEntry] = _checkBoxStates[exerciseEntry]!;
+                                        }
+                                        setState(() {
+                                          sets = newSets;
+                                          _focusNodes = newFocusnodes;
+                                          _controllers = newControllers;
+                                          _checkBoxStates = newCheckboxstates;
+                                          _initializeFocusNodesAndControllers();
+                                          updateExercises();
+                                        });
+                                      }
+                                    case 'Delete':
+                                      setState(() {
+                                        sets.remove(exercise);
+                                        _focusNodes.remove(exercise);
+                                        _controllers.remove(exercise);
+                                        _checkBoxStates.remove(exercise);
+                                        updateExercises();
+                                      });
                                   }
-                                case 'Delete':
-                                  setState(() {
-                                    sets.remove(exercise);
-                                    _focusNodes.remove(exercise);
-                                    _controllers.remove(exercise);
-                                    _checkBoxStates.remove(exercise);
-                                    updateExercises();
-                                  });
-                              }
-                            },
-                            itemBuilder: (BuildContext context) {
-                              return [
-                                const PopupMenuItem(value: 'Swap', child: Text('Swap')),
-                                const PopupMenuItem(value: 'Reorder', child: Text('Reorder', style: TextStyle(color: Colors.grey),)),    
-                                const PopupMenuItem(value: 'Delete', child: Text('Delete', style: TextStyle(color: Colors.red),)),
-                              ];
-                            },
-                            elevation: 2, 
-                            child: const Icon(Icons.more_vert, color: Colors.white)
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return [
+                                    const PopupMenuItem(value: 'Swap', child: Text('Swap')),
+                                    const PopupMenuItem(value: 'Reorder', child: Text('Reorder', style: TextStyle(color: Colors.grey),)),    
+                                    const PopupMenuItem(value: 'Delete', child: Text('Delete', style: TextStyle(color: Colors.red),)),
+                                  ];
+                                },
+                                elevation: 2, 
+                                child: const Icon(Icons.more_vert, color: Colors.white)
+                              ),
+                            ]
                           ),
                         ],
                       ),

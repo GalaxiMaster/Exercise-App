@@ -23,7 +23,7 @@ class MuscleData extends StatelessWidget {
           for (var set in data[day]['sets'][exercise]){
             double selector = 0;
             switch(target){
-              case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
+              case 'Volume': selector = double.parse(set['weight'].toString()).abs()*double.parse(set['reps'].toString()).abs();
               case 'Sets' : selector = 1;
             }
             for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){

@@ -46,7 +46,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
       exercises++;
       for (Map set in dayData['sets'][exercise]){
         sets++;
-        volume += double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
+        volume += double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs();
         if (set['PR'] == 'yes') prs++;
       }
     }

@@ -720,7 +720,7 @@ Future<List> getStats(List targets, range) async {
               'reps': double.parse(set['reps'].toString()),
               'type': set['type'],
               'date': day,
-              'volume': double.parse(set['reps'].toString()) * double.parse(set['weight'].toString()),
+              'volume': double.parse(set['reps'].toString()).abs() * double.parse(set['weight'].toString()).abs(),
               'exercise': exercise,
               'x-value': dayDate.difference(startDate).inDays,
             };
