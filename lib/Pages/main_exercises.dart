@@ -36,7 +36,7 @@ void setExerciseData() async {
       return Scaffold(
         appBar: myAppBar(context, 'Exercisess'),
         body: isLoading
-        ? Center(child: CircularProgressIndicator()) // Show loading spinner
+        ? const Center(child: CircularProgressIndicator()) // Show loading spinner
         : Stack(
           children: [
             Column(
@@ -95,7 +95,7 @@ void setExerciseData() async {
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Container(
                                   width: 2,
-                                  height: 60,
+                                  height: 50,
                                   decoration: const BoxDecoration(
                                     color: Colors.blue,
                                   ),
