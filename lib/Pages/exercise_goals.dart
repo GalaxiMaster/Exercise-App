@@ -21,124 +21,178 @@ class ExerciseGoals extends StatefulWidget {
 
 class _ExerciseGoalsState extends State<ExerciseGoals> {
   int weeksAgo = 0;
+  PageController pageController = PageController(
+      initialPage: 99999,
+    );
+  int endPage = 99999;
+  int prevPage = 99999;
 
   @override
+  initState(){
+    super.initState();
+    pageController.addListener(() {
+      if (pageController.page! > endPage) {
+        pageController.jumpToPage(endPage);
+      }
+    });
+
+  }
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    // writeData({}, path: 'settings', append: false);
     return FutureBuilder(
-        future: Future.wait([getExerciseStuff(weeksAgo), getAllSettings()]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading data ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            Map data = snapshot.data![0];
-            Map settings = snapshot.data![1];
-            List<PieChartSectionData> graphSections = [];
-            double notComplete = 0;
-            double complete = 0;
+      future: Future.wait([getExerciseStuff(weeksAgo), getAllSettings()]),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error loading data ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          Map data = snapshot.data![0];
+          Map settings = snapshot.data![1];
+          List<PieChartSectionData> graphSections = [];
+          double notComplete = 0;
+          double complete = 0;
 
-            for (String exercise in settings['Exercise Goals'].keys){
-              graphSections.add(PieChartSectionData(
-                color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0], settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 1),
-                value: clampDouble((data[exercise] ?? 0).toDouble(), 0, settings['Exercise Goals'][exercise][0].toDouble()),
-                radius: 30,
-                titleStyle: const TextStyle(color: Colors.transparent),
-              ));
-              graphSections.add(PieChartSectionData(
-                color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0], settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 0.2),
-                value: clampDouble(settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0), 0, 100),
-                radius: 30,
-                titleStyle: const TextStyle(color: Colors.transparent),
-              ));
-              complete += data[exercise] ?? 0;
-              notComplete += settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0);
-            }
-            double percentageComplete = complete/(notComplete+complete);
-            DateTime now = DateTime.now();
-            DateTime date = now.subtract(Duration(days: weeksAgo * 7));
-            String weekStr = DateFormat('MMM dd').format(findMonday(date));
+          for (String exercise in settings['Exercise Goals'].keys) {
+            graphSections.add(PieChartSectionData(
+              color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0],
+                  settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 1),
+              value: clampDouble(
+                  (data[exercise] ?? 0).toDouble(), 0, settings['Exercise Goals'][exercise][0].toDouble()),
+              radius: 30,
+              titleStyle: const TextStyle(color: Colors.transparent),
+            ));
+            graphSections.add(PieChartSectionData(
+              color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0],
+                  settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 0.2),
+              value: clampDouble(
+                  settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0), 0, 100),
+              radius: 30,
+              titleStyle: const TextStyle(color: Colors.transparent),
+            ));
+            complete += data[exercise] ?? 0;
+            notComplete += settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0);
+          }
+          double percentageComplete = complete / (notComplete + complete);
+          DateTime now = DateTime.now();
+          DateTime date = now.subtract(Duration(days: weeksAgo * 7));
+          String weekStr = DateFormat('MMM dd').format(findMonday(date));
 
-            return Scaffold(
-              appBar: myAppBar(context, 'Exercise goals', button: GestureDetector(
-                onTap: (){addExerciseGoal(settings);},
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Center(child: Icon(Icons.add)),
-                ),
-              )),
-              body: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              weeksAgo += 1;
-                            });
-                          },
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            size: 30,
-                          ),
-                        ),
-                        Text(
-                          weeksAgo == 0 ? 'This week' : weekStr,
-                          style: const TextStyle(
-                            fontSize: 22,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              if (weeksAgo > 0){weeksAgo -= 1;}
-                            });
-                          },
-                          child: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 30,
-                            color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
+          return Scaffold(
+            appBar: myAppBar(context, 'Exercise goals',
+                button: GestureDetector(
+                  onTap: () {
+                    addExerciseGoal(settings);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Center(child: Icon(Icons.add)),
                   ),
-                  Row(
+                )),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          height: 310,
-                          child: Stack(
-                            children: [
-                              PieChart(
-                                PieChartData(
-                                  startDegreeOffset: -87,
-                                  centerSpaceRadius: 100,
-                                  sections: (settings['Exercise Goals'] ?? {}).isNotEmpty 
-                                    ? graphSections.reversed.toList()
-                                    : [PieChartSectionData(
-                                        color: const Color.fromARGB(255, 82, 82, 82),
-                                        value: 100,
-                                        radius: 30,
-                                        titleStyle: const TextStyle(color: Colors.transparent),
-                                      )]
-                                )
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: TickFillWidget(fillPercentage: percentageComplete,)
-                              )
-                            ]
-                          ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            weeksAgo += 1;
+                            pageController.jumpToPage(prevPage - 1); // Move the controller left
+                            prevPage -= 1; // Update prevPage
+                          });
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 30,
                         ),
                       ),
-                    ]
+                      Text(
+                        weeksAgo == 0 ? 'This week' : weekStr,
+                        style: const TextStyle(
+                          fontSize: 22,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (weeksAgo > 0) {
+                            setState(() {
+                              weeksAgo -= 1;
+                              pageController.jumpToPage(prevPage + 1); // Move the controller right
+                              prevPage += 1; // Update prevPage
+                            });
+                          }
+                        },
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 30,
+                          color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
+                        ),
+                      )
+                    ],
                   ),
+                ),
+                SizedBox(
+                  height: 310,
+                  child: PageView.builder(
+                    scrollDirection: Axis.horizontal,
+                    controller: pageController,
+                    onPageChanged: (value) {
+                      setState(() {
+                        int diff = value - prevPage;
+                        if (diff > 0) {
+                          weeksAgo -= 1;
+                        } else if (diff < 0) {
+                          weeksAgo += 1;
+                        }
+                        prevPage = value; // Update prevPage properly
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return Row(children: [
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            height: 300,
+                            child: Stack(
+                              children: [
+                                PieChart(
+                                  PieChartData(
+                                    startDegreeOffset: -87,
+                                    centerSpaceRadius: 100,
+                                    sections: (settings['Exercise Goals'] ?? {}).isNotEmpty
+                                        ? graphSections.reversed.toList()
+                                        : [
+                                            PieChartSectionData(
+                                              color: const Color.fromARGB(255, 30, 25, 25),
+                                              value: 100,
+                                              radius: 30,
+                                              titleStyle: const TextStyle(color: Colors.transparent),
+                                            )
+                                          ],
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: TickFillWidget(
+                                    fillPercentage: percentageComplete,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]);
+                    },
+                  ),
+                ),
                   const Divider(),
                   settings['Exercise Goals'].isNotEmpty ?
                   ListView.builder(

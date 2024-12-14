@@ -256,7 +256,9 @@ Map formatStrongData(List data, Map records){
   data.removeAt(0);
   for (var entry in data.reversed) {
     List row = entry[0]; // for some reason its nested further
-
+    if (row.length != 14){
+      continue;
+    }
     try{
     String startTime = row[0];
     String notes = row[12].isNotEmpty ? '${row[0]} | ${row[12]}' : row[1];
