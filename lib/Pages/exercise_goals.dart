@@ -23,7 +23,11 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
   late PageController pageController;
   final ValueNotifier<int> headerState = ValueNotifier(0);
   final ValueNotifier<Map<String, dynamic>> listState = ValueNotifier({});
+  final ValueNotifier<Map<String, dynamic>> chartState = ValueNotifier({});
+  late Map settings;
 
+  late List<PieChartSectionData> graphSections;
+  late double percentageComplete;
   @override
   initState(){
     super.initState();
@@ -33,6 +37,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
         pageController.jumpToPage(99999);
       }
     });
+
     fetchInitialData();
   }
   @override
@@ -49,22 +54,80 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
   void updateList(Map<String, dynamic> newState) {
     listState.value = newState; // Update ListThing state
   }
-
+  void updateChart(Map<String, dynamic> newState) {
+    chartState.value = newState; // Update chart state
+  }
   Future<void> fetchInitialData() async {
     try {
       final results = await Future.wait([getExerciseStuff(weeksAgo), getAllSettings()]);
+      List result = calculatePieSections( results[1], results[0]);
+      graphSections = result[0];
+      percentageComplete = result[1];
+      settings = results[1];
+
       listState.value = {
         'settings': results[1], // Real settings
         'data': results[0],     // Real data
       };
+      updateChart({
+        'settings': settings,
+        'sections': graphSections,
+        'percent': percentageComplete,
+      });
+
     } catch (e) {
       debugPrint('Error fetching initial data: $e');
       listState.value = {
         'settings': {}, // Fallback empty values
         'data': {},
       };
+      graphSections = [];
+      percentageComplete = 0;
     }
   }
+  List calculatePieSections(settings, data){
+    List<PieChartSectionData> graphSections = [];
+    double notComplete = 0;
+    double complete = 0;
+
+    for (String exercise in settings['Exercise Goals'].keys) {
+      graphSections.add(PieChartSectionData(
+        color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0],
+            settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 1),
+        value: clampDouble(
+            (data[exercise] ?? 0).toDouble(), 0, settings['Exercise Goals'][exercise][0].toDouble()),
+        radius: 30,
+        titleStyle: const TextStyle(color: Colors.transparent),
+      ));
+      graphSections.add(PieChartSectionData(
+        color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0],
+            settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 0.2),
+        value: clampDouble(
+            settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0), 0, 100),
+        radius: 30,
+        titleStyle: const TextStyle(color: Colors.transparent),
+      ));
+      complete += data[exercise] ?? 0;
+      notComplete += settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0);
+    }
+    double percentageComplete = complete / (notComplete + complete);
+    return [graphSections, percentageComplete];
+  }
+
+  void fetchNewData() async{
+    Map<String, dynamic> exerciseData = await getExerciseStuff(weeksAgo) as Map<String, dynamic>;
+    List pieData = calculatePieSections(settings, exerciseData);
+    updateList({
+      'settings': settings,
+      'data': exerciseData,
+    });
+    updateChart({
+      'settings': settings,
+      'sections': pieData[0],
+      'percent': pieData[1],
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -75,37 +138,6 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error loading data ${snapshot.error}'));
         } else if (snapshot.hasData) {
-          Map data = snapshot.data![0];
-          Map settings = snapshot.data![1];
-          List<PieChartSectionData> graphSections = [];
-          double notComplete = 0;
-          double complete = 0;
-
-          for (String exercise in settings['Exercise Goals'].keys) {
-            graphSections.add(PieChartSectionData(
-              color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0],
-                  settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 1),
-              value: clampDouble(
-                  (data[exercise] ?? 0).toDouble(), 0, settings['Exercise Goals'][exercise][0].toDouble()),
-              radius: 30,
-              titleStyle: const TextStyle(color: Colors.transparent),
-            ));
-            graphSections.add(PieChartSectionData(
-              color: Color.fromRGBO(settings['Exercise Goals'][exercise][1][0],
-                  settings['Exercise Goals'][exercise][1][1], settings['Exercise Goals'][exercise][1][2], 0.2),
-              value: clampDouble(
-                  settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0), 0, 100),
-              radius: 30,
-              titleStyle: const TextStyle(color: Colors.transparent),
-            ));
-            complete += data[exercise] ?? 0;
-            notComplete += settings['Exercise Goals'][exercise][0].toDouble() - (data[exercise] ?? 0);
-          }
-          double percentageComplete = complete / (notComplete + complete);
-          DateTime now = DateTime.now();
-          DateTime date = now.subtract(Duration(days: weeksAgo * 7));
-          String weekStr = DateFormat('MMM dd').format(findMonday(date));
-
           return Scaffold(
             appBar: myAppBar(context, 'Exercise goals',
                 button: GestureDetector(
@@ -128,86 +160,45 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                         updateHeader(newWeeksAgo);
                       },
                       pageController: pageController,
-                      weekStr: weekStr,
                     );
                   },
                 ),
-                SizedBox(
-                  height: 310,
-                  child: PageView.builder(
-                    scrollDirection: Axis.horizontal,
-                    controller: pageController,
-                    onPageChanged: (value) {
-                      if (pageController.hasClients && pageController.page != null) {
-                        double diff = pageController.page! % 1;
-                        int direction;
-                        if (diff > 0.5){
-                          direction = -1;
-                        }else{
-                          direction = 1;
-                        }
+                ValueListenableBuilder<Map<String, dynamic>>(
+                  valueListenable: chartState,
+                  builder: (context, chartData, _) {
+                    return CenterChart(
+                      pageController: pageController, 
+                      settings: chartData['settings'], 
+                      graphSections: chartData['sections'], 
+                      percentageComplete: chartData['percent'], 
+                      addWeeksAgo: (direction){
                         weeksAgo += direction;
                         updateHeader(weeksAgo);
-                      }
+                        fetchNewData();
+                      },
+                    );
+                  },
+                ),
+                const Divider(),
+                Expanded(
+                  child: ValueListenableBuilder<Map<String, dynamic>>(
+                    valueListenable: listState,
+                    builder: (context, listData, _) {
+                      return ListThing(
+                        settings: listData['settings'] ?? {},
+                        data: listData['data'] ?? {}, 
+                        upDateSettings: upDateSettings
+                      );
                     },
-                    itemBuilder: (context, index) {
-                      return Row(children: [
-                        Expanded(
-                          flex: 1,
-                          child: SizedBox(
-                            height: 300,
-                            child: Stack(
-                              children: [
-                                PieChart(
-                                  PieChartData(
-                                    startDegreeOffset: -87,
-                                    centerSpaceRadius: 100,
-                                    sections: (settings['Exercise Goals'] ?? {}).isNotEmpty
-                                        ? graphSections.reversed.toList()
-                                        : [
-                                            PieChartSectionData(
-                                              color: const Color.fromARGB(255, 30, 25, 25),
-                                              value: 100,
-                                              radius: 30,
-                                              titleStyle: const TextStyle(color: Colors.transparent),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: TickFillWidget(
-                                          fillPercentage: percentageComplete,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]);
-                          },
-                        ),
-                      ),
-                      const Divider(),
-                      Expanded(
-                        child: ValueListenableBuilder<Map<String, dynamic>>(
-                          valueListenable: listState,
-                          builder: (context, listData, _) {
-                            return ListThing(
-                              settings: listData['settings'] ?? {},
-                              data: listData['data'] ?? {}, 
-                              upDateSettings: upDateSettings
-                            );
-                          },
-                        ),
-                      ),
-                      ],
-                    )
-                  );
-                } else {
-                  return const Center(child: Text('No data available'));
-                }
-              },
+                  ),
+                ),
+                ],
+              )
+            );
+          } else {
+            return const Center(child: Text('No data available'));
+          }
+        },
       );
   }
   void upDateSettings(Map settings){
@@ -318,7 +309,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
     DateTime date = now.subtract(Duration(days: weeksAgo * 7));
     String weekStr = DateFormat('MMM dd').format(findMonday(date));
     Map data = await readData();
-    Map exerciseData = {};
+    Map<String, dynamic> exerciseData = {};
     for (String day in data.keys){
       if (DateFormat('MMM dd').format(findMonday(DateTime.parse(day.split(' ')[0]))) == weekStr){
         for (String exercise in data[day]['sets'].keys){
@@ -328,6 +319,82 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
     }
 
     return exerciseData;
+  }
+}
+
+class CenterChart extends StatelessWidget {
+  const CenterChart({
+    super.key,
+    required this.pageController,
+    required this.settings,
+    required this.graphSections,
+    required this.percentageComplete, 
+    required this.addWeeksAgo,
+  });
+
+  final PageController pageController;
+  final Map settings;
+  final List<PieChartSectionData> graphSections;
+  final double percentageComplete;
+  final ValueChanged<int> addWeeksAgo;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 310,
+      child: PageView.builder(
+        scrollDirection: Axis.horizontal,
+        controller: pageController,
+        onPageChanged: (value) {
+          if (pageController.hasClients && pageController.page != null) {
+            double diff = pageController.page! % 1;
+            int direction;
+            if (diff > 0.5){
+              direction = -1;
+            }else{
+              direction = 1;
+            }
+            addWeeksAgo(direction);
+          }
+        },
+        itemBuilder: (context, index) {
+          return Row(children: [
+            Expanded(
+              flex: 1,
+              child: SizedBox(
+                height: 300,
+                child: Stack(
+                  children: [
+                    PieChart(
+                      PieChartData(
+                        startDegreeOffset: -87,
+                        centerSpaceRadius: 100,
+                        sections: (settings['Exercise Goals'] ?? {}).isNotEmpty
+                            ? graphSections.reversed.toList()
+                            : [
+                                PieChartSectionData(
+                                  color: const Color.fromARGB(255, 30, 25, 25),
+                                  value: 100,
+                                  radius: 30,
+                                  titleStyle: const TextStyle(color: Colors.transparent),
+                                )
+                              ],
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: TickFillWidget(
+                              fillPercentage: percentageComplete,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ]);
+              },
+            ),
+          );
   }
 }
 
@@ -652,18 +719,19 @@ class Header extends StatelessWidget {
   int weeksAgo;
   final ValueChanged<int> onWeeksAgoChanged;
   final PageController pageController;
-  final String weekStr;
 
   Header({
     super.key, 
     required this.weeksAgo,
     required this.onWeeksAgoChanged,
     required this.pageController,
-    required this.weekStr, 
   });
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    DateTime date = now.subtract(Duration(days: weeksAgo * 7));
+    String weekStr = DateFormat('MMM dd').format(findMonday(date));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row( // header
