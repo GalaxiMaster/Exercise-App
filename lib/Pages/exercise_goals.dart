@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -21,26 +20,50 @@ class ExerciseGoals extends StatefulWidget {
 
 class _ExerciseGoalsState extends State<ExerciseGoals> {
   int weeksAgo = 0;
-  PageController pageController = PageController(
-      initialPage: 99999,
-    );
-  int endPage = 99999;
-  int prevPage = 99999;
+  late PageController pageController;
+  final ValueNotifier<int> headerState = ValueNotifier(0);
+  final ValueNotifier<Map<String, dynamic>> listState = ValueNotifier({});
 
   @override
   initState(){
     super.initState();
+    pageController = PageController(initialPage: 99999);
     pageController.addListener(() {
-      if (pageController.page! > endPage) {
-        pageController.jumpToPage(endPage);
+      if (pageController.page! > 99999) {
+        pageController.jumpToPage(99999);
       }
     });
-
+    fetchInitialData();
   }
   @override
   void dispose() {
     pageController.dispose();
     super.dispose();
+    headerState.dispose();
+    listState.dispose();
+  }
+   void updateHeader(int weeks) {
+    headerState.value = weeks; // Update Header state
+  }
+
+  void updateList(Map<String, dynamic> newState) {
+    listState.value = newState; // Update ListThing state
+  }
+
+  Future<void> fetchInitialData() async {
+    try {
+      final results = await Future.wait([getExerciseStuff(weeksAgo), getAllSettings()]);
+      listState.value = {
+        'settings': results[1], // Real settings
+        'data': results[0],     // Real data
+      };
+    } catch (e) {
+      debugPrint('Error fetching initial data: $e');
+      listState.value = {
+        'settings': {}, // Fallback empty values
+        'data': {},
+      };
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -96,48 +119,18 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                 )),
             body: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            weeksAgo += 1;
-                            pageController.jumpToPage(prevPage - 1); // Move the controller left
-                            prevPage -= 1; // Update prevPage
-                          });
-                        },
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                          size: 30,
-                        ),
-                      ),
-                      Text(
-                        weeksAgo == 0 ? 'This week' : weekStr,
-                        style: const TextStyle(
-                          fontSize: 22,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (weeksAgo > 0) {
-                            setState(() {
-                              weeksAgo -= 1;
-                              pageController.jumpToPage(prevPage + 1); // Move the controller right
-                              prevPage += 1; // Update prevPage
-                            });
-                          }
-                        },
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 30,
-                          color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
+                ValueListenableBuilder<int>(
+                  valueListenable: headerState,
+                  builder: (context, value, _) {
+                    return Header(
+                      weeksAgo: value,
+                      onWeeksAgoChanged: (newWeeksAgo) {
+                        updateHeader(newWeeksAgo);
+                      },
+                      pageController: pageController,
+                      weekStr: weekStr,
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 310,
@@ -145,15 +138,17 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                     scrollDirection: Axis.horizontal,
                     controller: pageController,
                     onPageChanged: (value) {
-                      setState(() {
-                        int diff = value - prevPage;
-                        if (diff > 0) {
-                          weeksAgo -= 1;
-                        } else if (diff < 0) {
-                          weeksAgo += 1;
+                      if (pageController.hasClients && pageController.page != null) {
+                        double diff = pageController.page! % 1;
+                        int direction;
+                        if (diff > 0.5){
+                          direction = -1;
+                        }else{
+                          direction = 1;
                         }
-                        prevPage = value; // Update prevPage properly
-                      });
+                        weeksAgo += direction;
+                        updateHeader(weeksAgo);
+                      }
                     },
                     itemBuilder: (context, index) {
                       return Row(children: [
@@ -177,74 +172,58 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                                               titleStyle: const TextStyle(color: Colors.transparent),
                                             )
                                           ],
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: TickFillWidget(
+                                          fillPercentage: percentageComplete,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: TickFillWidget(
-                                    fillPercentage: percentageComplete,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                              ),
+                            ]);
+                          },
                         ),
-                      ]);
-                    },
-                  ),
-                ),
-                  const Divider(),
-                  settings['Exercise Goals'].isNotEmpty ?
-                  ListView.builder(
-                    itemCount: settings['Exercise Goals'].keys.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index){
-                      String exercise = settings['Exercise Goals'].keys.toList()[index];
-                      return ExerciseBox(
-                        exercise: MapEntry(exercise, data[exercise] ?? 0), 
-                        goal: settings['Exercise Goals'][exercise][0], 
-                        color: Color.fromRGBO(
-                          settings['Exercise Goals'][exercise][1][0], 
-                          settings['Exercise Goals'][exercise][1][1], 
-                          settings['Exercise Goals'][exercise][1][2], 1), 
-                        settings: settings, 
-                        functions: {'Edit': editGoal, 'Delete': deleteGoal},
-                      );
-                    }
-                  )
-                  : const Center(child: Text('No goals set')),
-                   
-                ],
-              )
-            );
-          } else {
-            return const Center(child: Text('No data available'));
-          }
-        },
+                      ),
+                      const Divider(),
+                      Expanded(
+                        child: ValueListenableBuilder<Map<String, dynamic>>(
+                          valueListenable: listState,
+                          builder: (context, listData, _) {
+                            return ListThing(
+                              settings: listData['settings'] ?? {},
+                              data: listData['data'] ?? {}, 
+                              upDateSettings: upDateSettings
+                            );
+                          },
+                        ),
+                      ),
+                      ],
+                    )
+                  );
+                } else {
+                  return const Center(child: Text('No data available'));
+                }
+              },
       );
   }
-  void deleteGoal(settings, exercise){
-    setState(() {
-      settings['Exercise Goals'].remove(exercise);
+  void upDateSettings(Map settings){
+    updateList({
+      'settings': settings, // Real settings
+      'data': listState.value['data'],     // Real data
     });
-    writeData(settings, path: 'settings',append: false);
-  }
-  void editGoal(Map settings, String exercise, int currentValue){
-    debugPrint('called');
-    List value = settings['Exercise Goals'][exercise];
-    value[0] = currentValue;
-    setState(() {
-      settings['Exercise Goals'][exercise] = value;
-    });
-    writeData(settings, path: 'settings',append: false);
   }
 
   void addExerciseGoal(settings) async{
-    String? result = await Navigator.push(
+    List? result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const WorkoutList(setting: 'choose'))
     );
     if(result != null){
+      String exercise = result[0];
       int currentValue = 0;
       showDialog(
         // ignore: use_build_context_synchronously
@@ -314,11 +293,15 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                 child: const Center(child: Text('OK', style: TextStyle(color: Colors.blue),)),
                 onPressed: () {
                   Navigator.of(context).pop(); // Dismiss the dialog
-                  debugPrint('$result: $currentValue');
+                  debugPrint('$exercise: $currentValue');
                   var generatedColor = Random().nextInt(Colors.primaries.length);
                   var color = Colors.primaries[generatedColor];
                   setState(() {
-                    settings['Exercise Goals'][result] = [currentValue, [color.red, color.green, color.blue]];
+                    settings['Exercise Goals'][exercise] = [currentValue, [color.red, color.green, color.blue]];
+                    updateList({
+                      'settings': settings, // Real settings
+                      'data': listState.value['data'],     // Real data
+                    });
                   });
                   writeData(settings, path: 'settings',append: false);
                 },
@@ -619,4 +602,118 @@ class TickPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(TickPainter oldDelegate) => oldDelegate.fillPercentage != fillPercentage;
+}
+class ListThing extends StatelessWidget {
+  final Map settings;
+  final Map data;
+  final Function upDateSettings;
+  const ListThing({required this.settings, required this.data, super.key, required this.upDateSettings});
+
+  @override
+  Widget build(BuildContext context) {
+    return settings['Exercise Goals'].isNotEmpty
+        ? ListView.builder(
+            itemCount: settings['Exercise Goals'].keys.length,
+            itemBuilder: (context, index) {
+              String exercise = settings['Exercise Goals'].keys.toList()[index];
+              return ExerciseBox(
+                exercise: MapEntry(exercise, data[exercise] ?? 0),
+                goal: settings['Exercise Goals'][exercise][0],
+                color: Color.fromRGBO(
+                  settings['Exercise Goals'][exercise][1][0],
+                  settings['Exercise Goals'][exercise][1][1],
+                  settings['Exercise Goals'][exercise][1][2],
+                  1,
+                ),
+                settings: settings,
+                functions: {'Edit': editGoal, 'Delete': deleteGoal},
+              );
+            },
+          )
+        : const Center(child: Text('No goals set'));
+  }
+  void deleteGoal(settings, exercise){
+    settings['Exercise Goals'].remove(exercise); // used to be in a setstate
+    upDateSettings(settings);
+    writeData(settings, path: 'settings',append: false);
+  }
+  void editGoal(Map settings, String exercise, int currentValue){
+    debugPrint('called');
+    List value = settings['Exercise Goals'][exercise];
+    value[0] = currentValue; 
+    settings['Exercise Goals'][exercise] = value; // used to be in a setstate
+    upDateSettings(settings);
+    writeData(settings, path: 'settings',append: false);
+  }
+}
+
+// ignore: must_be_immutable
+class Header extends StatelessWidget {
+  int weeksAgo;
+  final ValueChanged<int> onWeeksAgoChanged;
+  final PageController pageController;
+  final String weekStr;
+
+  Header({
+    super.key, 
+    required this.weeksAgo,
+    required this.onWeeksAgoChanged,
+    required this.pageController,
+    required this.weekStr, 
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Row( // header
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+                weeksAgo += 1;
+                onWeeksAgoChanged(weeksAgo + 1);
+                if (pageController.hasClients) {
+                  pageController.animateToPage(
+                    pageController.page!.toInt() - 1, 
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 30,
+            ),
+          ),
+          Text(
+            weeksAgo == 0 ? 'This week' : weekStr,
+            style: const TextStyle(
+              fontSize: 22,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              if (weeksAgo > 0) {
+                weeksAgo -= 1;
+                onWeeksAgoChanged(weeksAgo + 1);
+                if (pageController.hasClients) {
+                  pageController.animateToPage(
+                    pageController.page!.toInt() + 1, 
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }                    
+              }
+            },
+            child: Icon(
+              Icons.arrow_forward_ios,
+              size: 30,
+              color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
