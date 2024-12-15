@@ -156,9 +156,6 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                   builder: (context, value, _) {
                     return Header(
                       weeksAgo: value,
-                      onWeeksAgoChanged: (newWeeksAgo) {
-                        updateHeader(newWeeksAgo);
-                      },
                       pageController: pageController,
                     );
                   },
@@ -670,6 +667,7 @@ class TickPainter extends CustomPainter {
   @override
   bool shouldRepaint(TickPainter oldDelegate) => oldDelegate.fillPercentage != fillPercentage;
 }
+
 class ListThing extends StatelessWidget {
   final Map settings;
   final Map data;
@@ -716,14 +714,12 @@ class ListThing extends StatelessWidget {
 
 // ignore: must_be_immutable
 class Header extends StatelessWidget {
-  int weeksAgo;
-  final ValueChanged<int> onWeeksAgoChanged;
+  final int weeksAgo;
   final PageController pageController;
 
-  Header({
+  const Header({
     super.key, 
     required this.weeksAgo,
-    required this.onWeeksAgoChanged,
     required this.pageController,
   });
 
@@ -739,11 +735,9 @@ class Header extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-                weeksAgo += 1;
-                onWeeksAgoChanged(weeksAgo + 1);
                 if (pageController.hasClients) {
                   pageController.animateToPage(
-                    pageController.page!.toInt() - 1, 
+                    pageController.page!.round() - 1, 
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
@@ -763,11 +757,9 @@ class Header extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (weeksAgo > 0) {
-                weeksAgo -= 1;
-                onWeeksAgoChanged(weeksAgo + 1);
-                if (pageController.hasClients) {
+               if (pageController.hasClients) {
                   pageController.animateToPage(
-                    pageController.page!.toInt() + 1, 
+                    pageController.page!.round() + 1, 
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
