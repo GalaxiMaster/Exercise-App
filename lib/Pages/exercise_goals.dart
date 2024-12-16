@@ -201,7 +201,13 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
   void upDateSettings(Map settings){
     updateList({
       'settings': settings, // Real settings
-      'data': listState.value['data'],     // Real data
+      'data': listState.value['data'],
+    });
+    List results = calculatePieSections(settings, listState.value['data']);
+    updateChart({
+        'settings': settings, // Real settings
+        'sections': results[0],
+        'percent': results[1],    
     });
   }
 
@@ -289,6 +295,12 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                     updateList({
                       'settings': settings, // Real settings
                       'data': listState.value['data'],     // Real data
+                    });
+                    List results = calculatePieSections(settings, listState.value['data']);
+                    updateChart({
+                        'settings': settings, // Real settings
+                        'sections': results[0],
+                        'percent': results[1],    
                     });
                   });
                   writeData(settings, path: 'settings',append: false);
@@ -698,21 +710,19 @@ class ListThing extends StatelessWidget {
         : const Center(child: Text('No goals set'));
   }
   void deleteGoal(settings, exercise){
-    settings['Exercise Goals'].remove(exercise); // used to be in a setstate
+    settings['Exercise Goals'].remove(exercise);
     upDateSettings(settings);
     writeData(settings, path: 'settings',append: false);
   }
   void editGoal(Map settings, String exercise, int currentValue){
     debugPrint('called');
     List value = settings['Exercise Goals'][exercise];
-    value[0] = currentValue; 
-    settings['Exercise Goals'][exercise] = value; // used to be in a setstate
+    settings['Exercise Goals'][exercise] = [currentValue, value[1]];
     upDateSettings(settings);
     writeData(settings, path: 'settings',append: false);
   }
 }
 
-// ignore: must_be_immutable
 class Header extends StatelessWidget {
   final int weeksAgo;
   final PageController pageController;
