@@ -140,15 +140,15 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
         } else if (snapshot.hasData) {
           return Scaffold(
             appBar: myAppBar(context, 'Exercise goals',
-                button: GestureDetector(
-                  onTap: () {
-                    addExerciseGoal(settings);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Center(child: Icon(Icons.add)),
-                  ),
-                )),
+            button: GestureDetector(
+              onTap: () {
+                addExerciseGoal(settings);
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Center(child: Icon(Icons.add)),
+              ),
+            )),
             body: Column(
               children: [
                 ValueListenableBuilder<int>(
