@@ -9,7 +9,7 @@ import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:vibration/vibration.dart';
+// import 'package:vibration/vibration.dart';
 import 'choose_exercise.dart';
 
 // ignore: must_be_immutable
@@ -793,7 +793,7 @@ void addNewSet(String exercise) {
               icon: Icons.emoji_events,  // Trophy or medal icon
             );
             if (settings['Vibrations'] ?? true){
-              Vibration.vibrate(duration: 200, amplitude: 150);
+              // Vibration.vibrate(duration: 200, amplitude: 150);
             }
           }
           return true;
@@ -809,7 +809,7 @@ void addNewSet(String exercise) {
               icon: Icons.emoji_events,  // Trophy or medal icon
             );
             if (settings['Vibrations'] ?? true){
-              Vibration.vibrate(duration: 200, amplitude: 150);
+              // Vibration.vibrate(duration: 200, amplitude: 150);
             }
           }
           return true;

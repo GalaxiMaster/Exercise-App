@@ -94,40 +94,38 @@ void importDataThis(BuildContext context) async{
       // Get the file path
       String? filePath = result.files.single.path;
 
-      if (filePath != null) {
-        // Read the content of the file
-        File file = File(filePath);
-        String content = await file.readAsString();
+      // Read the content of the file
+          if (filePath == null) return; // TODO clean slightly
 
-        // Parse the JSON content
-        Map<String, dynamic> jsonData = jsonDecode(content);
-        // writeData({}, append: false);
-        writeData(jsonData, append: true);
-        // Map data = await readData();
-      showDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Data written'),
-            content: Text(jsonData.toString()),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog
-                },
-              ),
-            ],
-          );
-        },
-      );
-        // Do something with the parsed JSON data
-        debugPrint("Parsed JSON data: $jsonData");
-      } else {
-        debugPrint("File path is null");
-      }
-    } else {
+      File file = File(filePath);
+      String content = await file.readAsString();
+
+      // Parse the JSON content
+      Map<String, dynamic> jsonData = jsonDecode(content);
+      // writeData({}, append: false);
+      writeData(jsonData, append: true);
+      // Map data = await readData();
+    showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Data written'),
+          content: Text(jsonData.toString()),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+      // Do something with the parsed JSON data
+      debugPrint("Parsed JSON data: $jsonData");
+        } else {
       debugPrint("User canceled the picker");
     }
   } catch (e) {
@@ -148,44 +146,42 @@ void importDataHevy(BuildContext context) async{
       // Get the file path
       String? filePath = result.files.single.path;
 
-      if (filePath != null) {
-        // Read the content of the file
-        final file = File(filePath).openRead();
+      // Read the content of the file
+                if (filePath == null) return; // TODO clean slightly
 
-        List jsonData = await file
-            .transform(utf8.decoder) // Decode bytes to UTF-8.
-            .transform(const LineSplitter()) // Convert stream to individual lines.
-            .map((line) => const CsvToListConverter().convert(line)) // Convert each line to a list.
-            .toList();
-        Map records = await readData(path: 'records');
-        Map data = formatHevyData(jsonData, records);
-        // writeData({}, append: false);
-        writeData(data, append: true);
-        // Map data = await readData();
-        showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Data written'),
-              content: Text(data.toString()),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Dismiss the dialog
-                  },
-                ),
-              ],
-            );
-          },
-        );
-        // Do something with the parsed JSON data
-        debugPrint("Parsed JSON data: $data");
-      } else {
-        debugPrint("File path is null");
-      }
-    } else {
+      final file = File(filePath).openRead();
+
+      List jsonData = await file
+          .transform(utf8.decoder) // Decode bytes to UTF-8.
+          .transform(const LineSplitter()) // Convert stream to individual lines.
+          .map((line) => const CsvToListConverter().convert(line)) // Convert each line to a list.
+          .toList();
+      Map records = await readData(path: 'records');
+      Map data = formatHevyData(jsonData, records);
+      // writeData({}, append: false);
+      writeData(data, append: true);
+      // Map data = await readData();
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Data written'),
+            content: Text(data.toString()),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+              ),
+            ],
+          );
+        },
+      );
+      // Do something with the parsed JSON data
+      debugPrint("Parsed JSON data: $data");
+        } else {
       debugPrint("User canceled the picker");
     }
   } catch (e) {
@@ -205,44 +201,42 @@ void importDataStrong(BuildContext context) async{
       // Get the file path
       String? filePath = result.files.single.path;
 
-      if (filePath != null) {
-        // Read the content of the file
-        final file = File(filePath).openRead();
+      // Read the content of the file
+      if (filePath == null) return; // TODO clean slightly
 
-        List jsonData = await file
-            .transform(utf8.decoder) // Decode bytes to UTF-8.
-            .transform(const LineSplitter()) // Convert stream to individual lines.
-            .map((line) => const CsvToListConverter(fieldDelimiter: ';').convert(line)) // Convert each line to a list.
-            .toList();
-        Map records = await readData(path: 'records');
-        Map data = formatStrongData(jsonData, records);
-        // writeData({}, append: false);
-        writeData(data, append: true);
-        // Map data = await readData();
-        showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Data written'),
-              content: Text(data.toString()),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Dismiss the dialog
-                  },
-                ),
-              ],
-            );
-          },
-        );
-        // Do something with the parsed JSON data
-        debugPrint("Parsed JSON data: $data");
-      } else {
-        debugPrint("File path is null");
-      }
-    } else {
+      final file = File(filePath).openRead();
+
+      List jsonData = await file
+          .transform(utf8.decoder) // Decode bytes to UTF-8.
+          .transform(const LineSplitter()) // Convert stream to individual lines.
+          .map((line) => const CsvToListConverter(fieldDelimiter: ';').convert(line)) // Convert each line to a list.
+          .toList();
+      Map records = await readData(path: 'records');
+      Map data = formatStrongData(jsonData, records);
+      // writeData({}, append: false);
+      writeData(data, append: true);
+      // Map data = await readData();
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Data written'),
+            content: Text(data.toString()),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+              ),
+            ],
+          );
+        },
+      );
+      // Do something with the parsed JSON data
+      debugPrint("Parsed JSON data: $data");
+        } else {
       debugPrint("User canceled the picker");
     }
   } catch (e) {

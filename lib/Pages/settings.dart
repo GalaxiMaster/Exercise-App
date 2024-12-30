@@ -316,45 +316,42 @@ void moveExercises(BuildContext context) async{
       builder: (context) =>  WorkoutList(setting: 'choose', problemExercises: problemExercises, problemExercisesTitle: 'Invalid exercises',),
     ),
   );
+if (resultFromList == null) return; // TODO clean slightly
 
-if (resultFromList != null) {
-  String resultFrom = resultFromList[0];
-  List? resultToList = await Navigator.push(
-    // ignore: use_build_context_synchronously
-    context,
-    MaterialPageRoute(
-      builder: (context) => const WorkoutList(setting: 'choose',),
-    ),
-  );
-  if (resultToList != null) {
-    String resultTo = resultToList[0];
-    Map data = await readData();
-    
-    // Create a new map to preserve key order
-    Map newData = {};
+String resultFrom = resultFromList[0];
+List? resultToList = await Navigator.push(
+  // ignore: use_build_context_synchronously
+  context,
+  MaterialPageRoute(
+    builder: (context) => const WorkoutList(setting: 'choose',),
+  ),
+);
+if (resultToList == null) return; // TODO clean slightly
+String resultTo = resultToList[0];
 
-    for (var day in data.keys) {
-      newData[day] = {
-        'stats': {},
-        'sets': {}  // Create an empty 'sets' map to populate later
-      };
-      
-      // Iterate over the original keys in order
-      for (var exercise in data[day]['sets'].keys) {
-        if (exercise == resultFrom) {
-          newData[day]['stats'] = data[day]['stats'];
-          newData[day]['sets'][resultTo] = data[day]['sets'][exercise];
-        } else {
-          // Keep the original key and value
-          newData[day]['stats'] = data[day]['stats'];
-          newData[day]['sets'][exercise] = data[day]['sets'][exercise];
-        }
-      }
+// Create a new map to preserve key order
+Map newData = {};
+
+for (var day in data.keys) {
+  newData[day] = {
+    'stats': {},
+    'sets': {}  // Create an empty 'sets' map to populate later
+  };
+  
+  // Iterate over the original keys in order
+  for (var exercise in data[day]['sets'].keys) {
+    if (exercise == resultFrom) {
+      newData[day]['stats'] = data[day]['stats'];
+      newData[day]['sets'][resultTo] = data[day]['sets'][exercise];
+    } else {
+      // Keep the original key and value
+      newData[day]['stats'] = data[day]['stats'];
+      newData[day]['sets'][exercise] = data[day]['sets'][exercise];
     }
-    resetData(true, false, false);
-    writeData(newData);
   }
 }
+resetData(true, false, false);
+writeData(newData);
 
 
 

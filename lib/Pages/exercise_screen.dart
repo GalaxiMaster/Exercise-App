@@ -84,8 +84,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         return infoBody(widget.exercises);
       case TabItem.graph:
         return graphBody(spots, dates, xValues, context);
-      default:
-        return const Center(child: Text('Unknown Page'));
     }
   }
   Map scaleMapTo(Map map, num targetSum) {

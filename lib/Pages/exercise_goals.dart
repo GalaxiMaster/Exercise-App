@@ -216,102 +216,102 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
       context,
       MaterialPageRoute(builder: (context) => const WorkoutList(setting: 'choose'))
     );
-    if(result != null){
-      String exercise = result[0];
-      int currentValue = 0;
-      showDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Set Goal: '),
-            content: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 100),
-              child: TextFormField(
-                inputFormatters: [
-                  TextInputFormatter.withFunction((oldValue, newValue) {
-                    try {
-                      final text = newValue.text;
-                      if (text.isEmpty) {
-                        return newValue;
-                      }
-                      double? number = double.tryParse(text);
-                      if (number == null) {
-                        return oldValue;
-                      }
-                      if (0 > number  && number > 100) {
-                        return oldValue;
-                      }
-                      if (text.contains('.')) {
-                        return oldValue;
-                      }
+    if (result == null) return;
+
+    String exercise = result[0];
+    int currentValue = 0;
+    showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Set Goal: '),
+          content: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 100),
+            child: TextFormField(
+              inputFormatters: [
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  try {
+                    final text = newValue.text;
+                    if (text.isEmpty) {
                       return newValue;
-                    } catch (e) {
+                    }
+                    double? number = double.tryParse(text);
+                    if (number == null) {
                       return oldValue;
                     }
-                  }),
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a number';
+                    if (0 > number  && number > 100) {
+                      return oldValue;
+                    }
+                    if (text.contains('.')) {
+                      return oldValue;
+                    }
+                    return newValue;
+                  } catch (e) {
+                    return oldValue;
                   }
-                  int? number = int.tryParse(value);
-                  if (number == null) {
-                    return 'Please enter a valid number';
-                  }
-                  if (number < 1 || number > 100) {
-                    return 'Please enter a number between 1 and 100';
-                  }
-                  return null;
-                },                                  
-                initialValue: '',
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(
-                  hintText: 'value...',
-                  hintStyle: TextStyle(
-                    color: Colors.grey
-                  )
-                ),
-                style: const TextStyle(
-                  fontSize: 20,
-                ),
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  currentValue = int.tryParse(value) ?? currentValue;
-                },
+                }),
+              ],
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a number';
+                }
+                int? number = int.tryParse(value);
+                if (number == null) {
+                  return 'Please enter a valid number';
+                }
+                if (number < 1 || number > 100) {
+                  return 'Please enter a number between 1 and 100';
+                }
+                return null;
+              },                                  
+              initialValue: '',
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
+                hintText: 'value...',
+                hintStyle: TextStyle(
+                  color: Colors.grey
+                )
               ),
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                currentValue = int.tryParse(value) ?? currentValue;
+              },
             ),
-            
-            actions: <Widget>[
-              TextButton(
-                child: const Center(child: Text('OK', style: TextStyle(color: Colors.blue),)),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog
-                  debugPrint('$exercise: $currentValue');
-                  var generatedColor = Random().nextInt(Colors.primaries.length);
-                  var color = Colors.primaries[generatedColor];
-                  setState(() {
-                    settings['Exercise Goals'][exercise] = [currentValue, [color.red, color.green, color.blue]];
-                    updateList({
-                      'settings': settings, // Real settings
-                      'data': listState.value['data'],     // Real data
-                    });
-                    List results = calculatePieSections(settings, listState.value['data']);
-                    updateChart({
-                        'settings': settings, // Real settings
-                        'sections': results[0],
-                        'percent': results[1],    
-                    });
+          ),
+          
+          actions: <Widget>[
+            TextButton(
+              child: const Center(child: Text('OK', style: TextStyle(color: Colors.blue),)),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+                debugPrint('$exercise: $currentValue');
+                var generatedColor = Random().nextInt(Colors.primaries.length);
+                var color = Colors.primaries[generatedColor];
+                setState(() {
+                  settings['Exercise Goals'][exercise] = [currentValue, [color.red, color.green, color.blue]];
+                  updateList({
+                    'settings': settings, // Real settings
+                    'data': listState.value['data'],     // Real data
                   });
-                  writeData(settings, path: 'settings',append: false);
-                },
-              ),
-            ],
-          );
-        }
-      );
-    }
-  }
+                  List results = calculatePieSections(settings, listState.value['data']);
+                  updateChart({
+                      'settings': settings, // Real settings
+                      'sections': results[0],
+                      'percent': results[1],    
+                  });
+                });
+                writeData(settings, path: 'settings',append: false);
+              },
+            ),
+          ],
+        );
+      }
+    );
+      }
   
   Future<Map> getExerciseStuff(int weeksAgo) async {
     DateTime now = DateTime.now();
