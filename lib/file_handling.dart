@@ -85,6 +85,7 @@ Future<void> writeData(Map newData, {String path = 'output', bool append = true}
     // Catch and report any errors
     debugPrint('Error writing data: $e');
   }
+  
 }
 
 Future<void> resetData(bool output, bool current, bool records) async {
