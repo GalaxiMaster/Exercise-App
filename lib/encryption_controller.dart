@@ -16,38 +16,45 @@ String encrypt(plainText){
   return encrypted.base64; // encrypted text
 }
 
-Future<void> syncData({data = false, records = false, settings = false}) async {
+Future<void> syncData(user, {data = false, records = false, settings = false}) async {
   if (!data && !records && !settings) {
     data = true;
     records = true;
     settings = true;
   }
-  if (data){
+  if (data) {
     try {
-      Map<String, dynamic> data = (await readData()).cast<String, dynamic>();
-      await FirebaseFirestore.instance.collection('User Data').doc('Data').set(data);
-      debugPrint("Exercise Data synced!");
+      Map<String, dynamic> dataMap = (await readData()).cast<String, dynamic>();
+      await FirebaseFirestore.instance
+        .collection('User Data')
+        .doc(user)
+        .set({'Data': dataMap}, SetOptions(merge: true));
     } catch (e) {
-      debugPrint("Failed to sync Exercise Data: $e");
-    }
-  }
-  if (records){
-    try {
-      Map<String, dynamic> records = (await readData(path: 'records')).cast<String, dynamic>();
-      await FirebaseFirestore.instance.collection('User Data').doc('Records').set(records);
-      debugPrint("Records Data synced!");
-    } catch (e) {
-      debugPrint("Failed to sync Records Data: $e");
+      debugPrint('Failed to sync data: $e');
     }
   }
 
-  if (settings){
+  if (records) {
     try {
-      Map<String, dynamic> settings = (await readData(path: 'settings')).cast<String, dynamic>();
-      await FirebaseFirestore.instance.collection('User Data').doc('Settings').set(settings);
-      debugPrint("Settings Data synced!");
+      Map<String, dynamic> recordsMap = (await readData(path: 'records')).cast<String, dynamic>();
+      await FirebaseFirestore.instance
+        .collection('User Data')
+        .doc(user)
+        .set({'Records': recordsMap}, SetOptions(merge: true));
     } catch (e) {
-      debugPrint("Failed to sync Settings Data: $e");
+      debugPrint('Failed to sync records: $e');
+    }
+  }
+
+  if (settings) {
+    try {
+      Map<String, dynamic> settingsMap = (await readData(path: 'settings')).cast<String, dynamic>();
+      await FirebaseFirestore.instance
+        .collection('User Data')
+        .doc(user)
+        .set({'Settings': settingsMap}, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint('Failed to sync records: $e');
     }
   }
 }

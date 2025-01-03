@@ -83,7 +83,7 @@ Future<void> writeData(Map newData, {String path = 'output', bool append = true}
 
     debugPrint('Data has been written to the file: $filePath');
 
-    syncData();
+    syncData('test');
   } catch (e) {
     // Catch and report any errors
     debugPrint('Error writing data: $e');
