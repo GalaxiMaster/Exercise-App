@@ -1,4 +1,3 @@
-import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    addUser();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(fontFamily: 'Poppins'),
