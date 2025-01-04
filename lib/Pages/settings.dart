@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
+import 'package:exercise_app/Pages/sign_in.dart';
 import 'package:exercise_app/Pages/workoutSettings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -15,7 +16,6 @@ import 'package:share_plus/share_plus.dart';
 
     @override
     Widget build(BuildContext context) {
-      
       return Scaffold(
         appBar: myAppBar(context, 'Settings'),
         body: FutureBuilder(
@@ -26,12 +26,23 @@ import 'package:share_plus/share_plus.dart';
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
-                          Map? settings = snapshot.data;
-
+             Map? settings = snapshot.data;
             return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             settingsheader('Preferences'),
+            _buildSettingsBox(
+              icon: Icons.person,
+              label: 'Account',
+              function: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SignInPage(),
+                  ),
+                );  
+              },
+            ),
             _buildSettingsBox(
               icon: Icons.flag,
               label: 'Days per week goal',
