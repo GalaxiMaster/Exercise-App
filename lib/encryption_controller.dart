@@ -22,6 +22,7 @@ Future<void> syncData(user, {data = false, records = false, settings = false}) a
     records = true;
     settings = true;
   }
+  
   if (data) {
     try {
       Map<String, dynamic> dataMap = (await readData()).cast<String, dynamic>();
