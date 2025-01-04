@@ -1,15 +1,15 @@
 import 'package:exercise_app/Pages/home.dart';
-import 'package:exercise_app/Pages/sign_up.dart';
+import 'package:exercise_app/Pages/sign_in.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,7 +17,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context, 'Sign In'),
+      appBar: myAppBar(context, 'Sign Up'),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -109,18 +109,18 @@ class _SignInPageState extends State<SignInPage> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 100),
-                      child: Text('Sign In'),
+                      child: Text('Sign Up'),
                     ),
                   ),
                   GestureDetector(
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                        MaterialPageRoute(builder: (context) => SignInPage())
                       );
                     },
                     child: const Text(
-                      'Don\'t have an account?',
+                      'Already have an account?',
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 13,
