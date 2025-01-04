@@ -52,95 +52,73 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 obscureText: true,
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  // Input validation
-                  if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please fill in all fields')),
-                    );
-                    return;
-                  }
-
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_usernameController.text)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter a valid email')),
-                    );
-                    return;
-                  }
-                  try {
-                    await _auth.signInWithEmailAndPassword(
-                      email: _usernameController.text.trim(),
-                      password: _passwordController.text,
-                    );
-                    if (!mounted) return;
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
-                  } on FirebaseAuthException catch (e) {
-                    String message;
-                    switch (e.code) {
-                      case 'user-not-found':
-                        try {
-                          await _auth.createUserWithEmailAndPassword(
-                            email: _usernameController.text.trim(),
-                            password: _passwordController.text,
-                          );
-                          if (!mounted) return;
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
-                          );
-                          return;
-                        } catch (e) {
-                          message = 'Error creating account';
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      // Input validation
+                      if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          errorSnackBar('Please fill in all fields'),
+                        );
+                        return;
+                      }
+                  
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_usernameController.text)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          errorSnackBar('Invalid email format'),
+                        );
+                        return;
+                      }
+                      try {
+                        await _auth.signInWithEmailAndPassword(
+                          email: _usernameController.text.trim(),
+                          password: _passwordController.text,
+                        );
+                        if (!mounted) return;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomePage()),
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        String message;
+                        switch (e.code) {
+                          case 'invalid-credential':
+                            message = 'Invalid Email or Password';
+                            break;
+                          case 'invalid-email':
+                            message = 'Invalid email format';
+                            break;
+                          case 'user-disabled':
+                            message = 'This account has been disabled';
+                            break;
+                          default:
+                            message = 'An error occurred: ${e.message}';
                         }
-                        break;
-                      case 'invalid-credential':
-                        message = 'Invalid credential';
-                        break;
-                      case 'invalid-email':
-                        message = 'Invalid email format';
-                        break;
-                      case 'user-disabled':
-                        message = 'This account has been disabled';
-                        break;
-                      default:
-                        message = 'An error occurred: ${e.message}';
-                    }
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red[300],
-                        content: Text(
-                          message,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ),
-                    );
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(
-                        'An unexpected error occurred: $e',
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                    );
-                  }                
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100),
-                  child: Text('Sign In'),
-                ),
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          errorSnackBar(message),
+                        );
+                      } catch (e) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          errorSnackBar('An unexpected error occurred: $e'),
+                        );
+                      }                
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 100),
+                      child: Text('Sign In'),
+                    ),
+                  ),
+                  const Text(
+                    'Don\'t have an account?',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -148,4 +126,16 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
+
+  SnackBar errorSnackBar(text) =>  SnackBar(
+    backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
+    content: Text(
+      text,
+      style: const TextStyle(
+        color: Colors.red,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    )
+  );
 }
