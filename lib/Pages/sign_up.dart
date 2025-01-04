@@ -72,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         return;
                       }
                       try {
-                        await _auth.signInWithEmailAndPassword(
+                        await _auth.createUserWithEmailAndPassword(
                           email: _usernameController.text.trim(),
                           password: _passwordController.text,
                         );
@@ -114,7 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   GestureDetector(
                     onTap: (){
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => SignInPage())
                       );
