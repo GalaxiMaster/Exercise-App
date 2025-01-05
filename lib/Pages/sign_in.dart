@@ -135,8 +135,8 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
-
-  SnackBar errorSnackBar(text) =>  SnackBar(
+}  
+SnackBar errorSnackBar(text) =>  SnackBar(
     backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
     content: Text(
       text,
@@ -147,4 +147,3 @@ class _SignInPageState extends State<SignInPage> {
       ),
     )
   );
-}
