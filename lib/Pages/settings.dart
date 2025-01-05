@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:exercise_app/Pages/account.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
 import 'package:exercise_app/Pages/sign_in.dart';
@@ -6,6 +7,7 @@ import 'package:exercise_app/Pages/workoutSettings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,92 +30,102 @@ import 'package:share_plus/share_plus.dart';
           } else if (snapshot.hasData) {
              Map? settings = snapshot.data;
             return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            settingsheader('Preferences'),
-            _buildSettingsBox(
-              icon: Icons.person,
-              label: 'Account',
-              function: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SignInPage(),
-                  ),
-                );  
-              },
-            ),
-            _buildSettingsBox(
-              icon: Icons.flag,
-              label: 'Days per week goal',
-              function: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return const GoalOptions();
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                settingsheader('Preferences'),
+                _buildSettingsBox(
+                  icon: Icons.person,
+                  label: 'Account',
+                  function: () {
+                    User? user = FirebaseAuth.instance.currentUser;
+                    if (user != null){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AccountPage(accountDetails: user,),
+                        ),
+                      );  
+                    }else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignInPage(),
+                        ),
+                      );  
+                    }
                   },
-                );
-              },
-            ),
-            _buildSettingsBox(
-              icon: Icons.accessibility,
-              label: 'Measurements',
-              function: () async{
-                await showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return MeasurementPopup(initialMeasurement: (settings?['bodyweight'] ?? '0'),);
+                ),
+                _buildSettingsBox(
+                  icon: Icons.flag,
+                  label: 'Days per week goal',
+                  function: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return const GoalOptions();
+                      },
+                    );
                   },
-                );
-                settings = await getAllSettings();
-              },
-            ),
-            _buildSettingsBox(
-              icon: Icons.local_activity,
-              label: 'Workout',
-              function: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Workoutsettings(),
-                  ),
-                );              
-              },
-            ),
-            // setttingDividor(),
-            settingsheader('Functions'),
-            _buildSettingsBox(
-              icon: Icons.upload,
-              label: 'Export data',
-              function: exportJson,
-            ),
-            setttingDividor(),
-            _buildSettingsBox(
-              icon: Icons.download,
-              label: 'Import data',
-              function: (){
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ImportingPage(),
-                  ),
-                );   
-                // importData(context);
-              },
-            ),
-            _buildSettingsBox(
-              icon: Icons.refresh,
-              label: 'Reset data',
-              function: (){resetDataButton(context);},
-            ),
-            setttingDividor(),
-            _buildSettingsBox(
-              icon: Icons.move_down,
-              label: 'Move exercises',
-              function: (){moveExercises(context);},
-            ),
-          ],
-        );
+                ),
+                _buildSettingsBox(
+                  icon: Icons.accessibility,
+                  label: 'Measurements',
+                  function: () async{
+                    await showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return MeasurementPopup(initialMeasurement: (settings?['bodyweight'] ?? '0'),);
+                      },
+                    );
+                    settings = await getAllSettings();
+                  },
+                ),
+                _buildSettingsBox(
+                  icon: Icons.local_activity,
+                  label: 'Workout',
+                  function: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Workoutsettings(),
+                      ),
+                    );              
+                  },
+                ),
+                // setttingDividor(),
+                settingsheader('Functions'),
+                _buildSettingsBox(
+                  icon: Icons.upload,
+                  label: 'Export data',
+                  function: exportJson,
+                ),
+                setttingDividor(),
+                _buildSettingsBox(
+                  icon: Icons.download,
+                  label: 'Import data',
+                  function: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ImportingPage(),
+                      ),
+                    );   
+                    // importData(context);
+                  },
+                ),
+                _buildSettingsBox(
+                  icon: Icons.refresh,
+                  label: 'Reset data',
+                  function: (){resetDataButton(context);},
+                ),
+                setttingDividor(),
+                _buildSettingsBox(
+                  icon: Icons.move_down,
+                  label: 'Move exercises',
+                  function: (){moveExercises(context);},
+                ),
+              ],
+            );
           } else {
             return const Center(child: Text('No data available'));
           }
