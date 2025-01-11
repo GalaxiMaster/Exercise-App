@@ -2,9 +2,11 @@ import 'package:encrypt/encrypt.dart' as encrypts;
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 final key = encrypts.Key.fromUtf8('7uIiZfQbCdjJnDIeTNXvwo7FJgTS/8g5'); // move key to secure location later
 final encrypter = encrypts.Encrypter(encrypts.AES(key));
 final iv = encrypts.IV.fromLength(16);
+const storage = FlutterSecureStorage();
 
 String encrypt(plainText){
   final encrypted = encrypter.encrypt(plainText, iv: iv);
@@ -12,10 +14,18 @@ String encrypt(plainText){
 }
 
 String decrypt(encrypted){
-  final decrypted = encrypter.decrypt(encrypted, iv: iv);
+  final encryptedE = encrypts.Encrypted.fromBase64(encrypted);
+  final decrypted = encrypter.decrypt(encryptedE, iv: iv);
   return decrypted; // decrypted
 }
 
+void writeToSecureStorage(key, value) async{
+  await storage.write(key: key, value: value);
+}
+readFromSecureStorage(key) async{
+  final value = await storage.read(key: key);
+  return value;
+}
 Future<void> syncData(user, {data = false, records = false, settings = false}) async {
   if (!data && !records && !settings) {
     data = true;

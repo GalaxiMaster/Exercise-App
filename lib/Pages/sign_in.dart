@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/home.dart';
 import 'package:exercise_app/Pages/sign_up.dart';
+import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,7 @@ class _SignInPageState extends State<SignInPage> {
                           context,
                           MaterialPageRoute(builder: (context) => const HomePage()),
                         );
+                        writeToSecureStorage('password', encrypt(_passwordController.text));
                       } on FirebaseAuthException catch (e) {
                         String message;
                         switch (e.code) {

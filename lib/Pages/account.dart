@@ -1,9 +1,9 @@
 
 import 'package:exercise_app/Pages/sign_in.dart';
+import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AccountPage extends StatefulWidget {
   final User accountDetails;
@@ -15,7 +15,6 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   late User account;
-  final storage = const FlutterSecureStorage();
 
   @override
   initState(){
@@ -37,11 +36,11 @@ class _AccountPageState extends State<AccountPage> {
                 context: context,
                 builder: (BuildContext context) => ChangePasswordDialog(),
               );
-              String? oldPass = await storage.read(key: 'password');
+              String? oldPass = await readFromSecureStorage('password');
               if (account.email == null) throw 'Somehow your account doesnt have an email'; // really hope this wont happen
               if (oldPass == null) throw 'Failed to fetch auth details'; // could get user to input old password here if fetching fails
 
-              AuthCredential credential = EmailAuthProvider.credential(email: account.email ?? '', password: oldPass);
+              AuthCredential credential = EmailAuthProvider.credential(email: account.email ?? '', password: decrypt(oldPass));
               account.reauthenticateWithCredential(credential);
                
               if (newPass != null) {
