@@ -2,18 +2,18 @@ import 'package:encrypt/encrypt.dart' as encrypts;
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+final key = encrypts.Key.fromUtf8('7uIiZfQbCdjJnDIeTNXvwo7FJgTS/8g5'); // move key to secure location later
+final encrypter = encrypts.Encrypter(encrypts.AES(key));
+final iv = encrypts.IV.fromLength(16);
 
 String encrypt(plainText){
-  final key = encrypts.Key.fromUtf8('7uIiZfQbCdjJnDIeTNXvwo7FJgTS/8g5'); // move key to secure location later
-  final iv = encrypts.IV.fromLength(16);
-
-  final encrypter = encrypts.Encrypter(encrypts.AES(key));
-
   final encrypted = encrypter.encrypt(plainText, iv: iv);
-  // final decrypted = encrypter.decrypt(encrypted, iv: iv);
-
-  // debugPrint(decrypted); // decrypted text
   return encrypted.base64; // encrypted text
+}
+
+String decrypt(encrypted){
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
+  return decrypted; // decrypted
 }
 
 Future<void> syncData(user, {data = false, records = false, settings = false}) async {
