@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:exercise_app/Pages/sign_in.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/widgets.dart';
@@ -16,19 +18,47 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   late User account;
 
+  
   @override
   initState(){
     account = widget.accountDetails;
     super.initState();
   }
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: myAppBar(context, 'Account'),
       body: Column(
         children: [
-          infoBox('Email: ', account.email, Icons.edit, (){
-            
+          infoBox('Email: ', account.email, Icons.edit, () async {
+            try {
+              String? newEmail = await showDialog(
+                context: context,
+                builder: (BuildContext context) => ChangeEmailDialog(),
+              );
+
+              if (newEmail != null) {
+                // If we got here, the email update was successful
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Verification email sent. Please check your email to complete the change.'),
+                    duration: Duration(seconds: 5),
+                  ),
+                );
+
+              }
+            } catch (e) {
+              // This should rarely happen since errors are handled in the dialog
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('An unexpected error occurred: $e')),
+              );
+            }
           }),
           infoBox('Password: ', '***********', Icons.edit, () async{
             try{
@@ -36,15 +66,11 @@ class _AccountPageState extends State<AccountPage> {
                 context: context,
                 builder: (BuildContext context) => ChangePasswordDialog(),
               );
-              String? oldPass = await readFromSecureStorage('password');
-              if (account.email == null) throw 'Somehow your account doesnt have an email'; // really hope this wont happen
-              if (oldPass == null) throw 'Failed to fetch auth details'; // could get user to input old password here if fetching fails
+              await reAuthUser(account);
 
-              AuthCredential credential = EmailAuthProvider.credential(email: account.email ?? '', password: decrypt(oldPass));
-              account.reauthenticateWithCredential(credential);
-               
               if (newPass != null) {
                 await account.updatePassword(newPass);
+                writeToSecureStorage('password', newPass);
               }
             } catch(e){
               ScaffoldMessenger.of(context).showSnackBar(
@@ -86,47 +112,191 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget infoBox(String key, String? value, IconData icon, Function function) {
     return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      spacing: 25,
-                      children: [
-                        Text(
-                          key,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Row(
+                    children: [
+                      Text(
+                        key,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
                         ),
-                        Text(
+                      ),
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Text(
                           value ?? '',
                           style: const TextStyle(
                             color: Colors.white70, 
                             fontSize: 20,
                           ),
-                        )
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () => function(),
-                      child: Icon(icon),
-                    )
-                  ],
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const Divider(color: Colors.white70,),
-            ],
+                GestureDetector(
+                  onTap: () => function(),
+                  child: Icon(icon),
+                )
+              ],
+            ),
           ),
-        );
+          const Divider(color: Colors.white70,),
+        ],
+      ),
+    );
+  }
+}
+
+Future<void> reAuthUser(account, {String? email}) async {
+  try {
+    String? oldPass = await readFromSecureStorage('password');
+    if (account.email == null) throw 'Somehow your account doesnt have an email';
+    if (oldPass == null) throw 'Failed to fetch auth details';
+    
+    String decryptedPass = decrypt(oldPass); // Add error handling here
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: email ?? account.email ?? '', 
+      password: decryptedPass
+    );
+    await account.reauthenticateWithCredential(credential);
+  } catch (e) {
+    throw 'Failed to authenticate: ${e.toString()}';
+  }
+}
+class ChangeEmailDialog extends StatefulWidget {
+  const ChangeEmailDialog({super.key});
+
+  @override
+  _ChangeEmailDialogState createState() => _ChangeEmailDialogState();
+}
+
+class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
+  final TextEditingController newEmail = TextEditingController();
+  String? error;
+  bool isLoading = false;
+  
+  @override
+  void dispose() {
+    newEmail.dispose();
+    super.dispose();
   }
 
+  Future<void> updateEmail() async {
+    // First check email format
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(newEmail.text)) {
+      setState(() {
+        error = 'Invalid email format';
+      });
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
+
+    try {
+      // Get the current user
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        setState(() {
+          error = 'No user signed in';
+          isLoading = false;
+        });
+        return;
+      }
+      reAuthUser(user);
+      await user.verifyBeforeUpdateEmail(newEmail.text);
+      Navigator.pop(context, newEmail.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        switch (e.code) {
+          case 'email-already-in-use':
+            error = 'This email is already in use';
+            break;
+          case 'invalid-email':
+            error = 'Invalid email format';
+            break;
+          case 'requires-recent-login':
+            error = 'Please sign in again to change email';
+            break;
+          default:
+            error = 'Error updating email';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        error = 'An unexpected error occurred';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Change Email'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: TextField(
+          controller: newEmail,
+          enabled: !isLoading,
+          decoration: InputDecoration(
+            labelText: 'New Email',
+            labelStyle: const TextStyle(fontSize: 14),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            errorText: error,
+            suffixIcon: isLoading 
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                )
+              : null,
+          ),
+        ),
+      ),
+      actionsAlignment: MainAxisAlignment.center,
+      actions: [  
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+          ),
+          onPressed: isLoading ? null : updateEmail,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: isLoading 
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : const Text('Change'),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class ChangePasswordDialog extends StatefulWidget {

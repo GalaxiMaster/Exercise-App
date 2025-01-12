@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 final key = encrypts.Key.fromUtf8('7uIiZfQbCdjJnDIeTNXvwo7FJgTS/8g5'); // move key to secure location later
 final encrypter = encrypts.Encrypter(encrypts.AES(key));
-final iv = encrypts.IV.fromLength(16);
+final iv = encrypts.IV.allZerosOfLength(16);
 const storage = FlutterSecureStorage();
 
 String encrypt(plainText){

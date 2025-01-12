@@ -28,7 +28,7 @@ import 'package:share_plus/share_plus.dart';
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
-             Map? settings = snapshot.data;
+            Map? settings = snapshot.data;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,8 +36,9 @@ import 'package:share_plus/share_plus.dart';
                 _buildSettingsBox(
                   icon: Icons.person,
                   label: 'Account',
-                  function: () {
+                  function: () async{
                     User? user = FirebaseAuth.instance.currentUser;
+                    debugPrint(user?.email ?? '');
                     if (user != null){
                       Navigator.push(
                         context,

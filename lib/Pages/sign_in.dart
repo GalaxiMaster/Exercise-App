@@ -89,6 +89,9 @@ class _SignInPageState extends State<SignInPage> {
                           case 'invalid-credential':
                             message = 'Invalid Email or Password';
                             break;
+                          case 'user-not-found':
+                            message = 'Invalid Email or Password';
+                            break;
                           case 'invalid-email':
                             message = 'Invalid email format';
                             break;
