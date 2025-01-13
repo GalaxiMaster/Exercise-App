@@ -81,6 +81,7 @@ class _AccountPageState extends State<AccountPage> {
           GestureDetector(
             onTap: () async {
               await FirebaseAuth.instance.signOut();
+              clearStorage();
               Navigator.pop(context);
             },
             child: const Padding(
@@ -175,6 +176,7 @@ Future<void> reAuthUser(account, {String? email}) async {
     throw 'Failed to authenticate: ${e.toString()}';
   }
 }
+
 class ChangeEmailDialog extends StatefulWidget {
   const ChangeEmailDialog({super.key});
 
