@@ -40,10 +40,13 @@ import 'package:share_plus/share_plus.dart';
                     User? user = FirebaseAuth.instance.currentUser;
                     debugPrint(user?.email ?? '');
                     if (user != null){
+                      await reAuthUser(user, context);
+                      user = FirebaseAuth.instance.currentUser;
+                      if (user == null) return; // TODO find a better way to do this
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AccountPage(accountDetails: user,),
+                          builder: (context) => AccountPage(accountDetails: user!),
                         ),
                       );  
                     }else{

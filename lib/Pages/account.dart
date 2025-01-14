@@ -44,14 +44,13 @@ class _AccountPageState extends State<AccountPage> {
 
               if (newEmail != null) {
                 // If we got here, the email update was successful
-
+                writeToSecureStorage('emailChange', newEmail);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Verification email sent. Please check your email to complete the change.'),
                     duration: Duration(seconds: 5),
                   ),
                 );
-
               }
             } catch (e) {
               // This should rarely happen since errors are handled in the dialog
@@ -66,7 +65,7 @@ class _AccountPageState extends State<AccountPage> {
                 context: context,
                 builder: (BuildContext context) => ChangePasswordDialog(),
               );
-              await reAuthUser(account);
+              await reAuthUser(account, context);
 
               if (newPass != null) {
                 await account.updatePassword(newPass);
@@ -160,20 +159,51 @@ class _AccountPageState extends State<AccountPage> {
   }
 }
 
-Future<void> reAuthUser(account, {String? email}) async {
+Future<void> reAuthUser(User account, context, {String? email}) async {
+  String? emailChange = await readFromSecureStorage('emailChange');
   try {
     String? oldPass = await readFromSecureStorage('password');
     if (account.email == null) throw 'Somehow your account doesnt have an email';
     if (oldPass == null) throw 'Failed to fetch auth details';
-    
+
     String decryptedPass = decrypt(oldPass); // Add error handling here
     AuthCredential credential = EmailAuthProvider.credential(
       email: email ?? account.email ?? '', 
       password: decryptedPass
     );
     await account.reauthenticateWithCredential(credential);
+
   } catch (e) {
-    throw 'Failed to authenticate: ${e.toString()}';
+    if (e is FirebaseAuthException){
+      if (email == null && emailChange != null){
+        if (e.code == "user-not-found"){
+          changeEmail(account, emailChange);
+        }
+      }else{
+        
+      }
+    } else{
+      throw 'Failed to authenticate: ${e.toString()}';
+    }
+  }
+}
+
+Future<bool> changeEmail(User account, String newEmail) async{
+  try{
+    String? pass = await readFromSecureStorage('password');
+    if (account.email == null) throw 'Somehow your account doesnt have an email';
+    if (pass == null) throw 'Failed to fetch auth details';
+
+    String decryptedPass = decrypt(pass);
+    if (FirebaseAuth.instance.currentUser != null){
+      FirebaseAuth.instance.signOut();
+    }
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: newEmail, password: decryptedPass);
+    deleteSecureStorageKey('emailChange');
+    return true;
+  } catch (e){
+    debugPrint('$e');
+    return false;
   }
 }
 
@@ -219,7 +249,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
         });
         return;
       }
-      reAuthUser(user);
+      reAuthUser(user, context);
       await user.verifyBeforeUpdateEmail(newEmail.text);
       Navigator.pop(context, newEmail.text);
     } on FirebaseAuthException catch (e) {

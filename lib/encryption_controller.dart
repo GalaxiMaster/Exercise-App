@@ -30,7 +30,9 @@ readFromSecureStorage(key) async{
 void clearStorage() async{
   await storage.deleteAll();
 }
-
+void deleteSecureStorageKey(key) async{
+  await storage.delete(key: key);
+}
 Future<void> syncData(user, {data = false, records = false, settings = false}) async {
   if (!data && !records && !settings) {
     data = true;
