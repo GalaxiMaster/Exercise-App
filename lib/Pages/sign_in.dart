@@ -11,7 +11,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -28,9 +28,9 @@ class _SignInPageState extends State<SignInPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextField(
-                controller: _usernameController,
+                controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(
@@ -59,14 +59,14 @@ class _SignInPageState extends State<SignInPage> {
                   ElevatedButton(
                     onPressed: () async {
                       // Input validation
-                      if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+                      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           errorSnackBar('Please fill in all fields'),
                         );
                         return;
                       }
                   
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_usernameController.text)) {
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text)) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           errorSnackBar('Invalid email format'),
                         );
@@ -74,7 +74,7 @@ class _SignInPageState extends State<SignInPage> {
                       }
                       try {
                         await _auth.signInWithEmailAndPassword(
-                          email: _usernameController.text.trim(),
+                          email: _emailController.text.trim(),
                           password: _passwordController.text,
                         );
                         if (!mounted) return;

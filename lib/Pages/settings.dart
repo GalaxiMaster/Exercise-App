@@ -36,13 +36,11 @@ import 'package:share_plus/share_plus.dart';
                 _buildSettingsBox(
                   icon: Icons.person,
                   label: 'Account',
-                  function: () async{
+                  function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
                     User? user = FirebaseAuth.instance.currentUser;
-                    debugPrint(user?.email ?? '');
                     if (user != null){
                       await reAuthUser(user, context);
                       user = FirebaseAuth.instance.currentUser;
-                      if (user == null) return; // TODO find a better way to do this
                       Navigator.push(
                         context,
                         MaterialPageRoute(
