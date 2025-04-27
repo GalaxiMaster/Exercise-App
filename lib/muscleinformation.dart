@@ -37,12 +37,23 @@ Color getColor(String key) {
 }
 
 Map exerciseMuscles = {
-"Cable Pushdown": {
+    "Cable Pushdown": {
         "Primary": {
             "Triceps": 80
         },
         "Secondary": {
             "Forearms": 20
+        },
+        "type": "Weighted"
+    },
+    "Lat Pulldown": {
+        "Primary": {
+            "Lats": 70
+        },
+        "Secondary": {
+            "Biceps": 15,
+            "Traps": 10,
+            "Rhomboids": 5
         },
         "type": "Weighted"
     },
