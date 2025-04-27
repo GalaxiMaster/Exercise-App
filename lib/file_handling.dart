@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:exercise_app/encryption_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -83,11 +82,8 @@ Future<void> writeData(Map newData, {String path = 'output', bool append = true}
     await file.writeAsString(jsonString);
 
     debugPrint('Data has been written to the file: $filePath');
-    User? user = FirebaseAuth.instance.currentUser;
 
-    if (user != null){
-      syncData(user.uid);
-    }
+    syncData();
   } catch (e) {
     // Catch and report any errors
     debugPrint('Error writing data: $e');

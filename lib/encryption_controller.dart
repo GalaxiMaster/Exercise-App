@@ -1,5 +1,6 @@
 import 'package:encrypt/encrypt.dart' as encrypts;
 import 'package:exercise_app/file_handling.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -22,6 +23,7 @@ String decrypt(encrypted){
 void writeToSecureStorage(key, value) async{
   await storage.write(key: key, value: value);
 }
+
 readFromSecureStorage(key) async{
   final value = await storage.read(key: key);
   return value;
@@ -30,10 +32,14 @@ readFromSecureStorage(key) async{
 void clearStorage() async{
   await storage.deleteAll();
 }
+
 void deleteSecureStorageKey(key) async{
   await storage.delete(key: key);
 }
-Future<void> syncData(user, {data = false, records = false, settings = false}) async {
+
+Future<void> syncData({String? user, data = false, records = false, settings = false}) async {
+  user ??= FirebaseAuth.instance.currentUser?.uid;
+  if (user == null) return;
   if (!data && !records && !settings) {
     data = true;
     records = true;
@@ -73,6 +79,21 @@ Future<void> syncData(user, {data = false, records = false, settings = false}) a
         .set({'Settings': settingsMap}, SetOptions(merge: true));
     } catch (e) {
       debugPrint('Failed to sync records: $e');
+    }
+  }
+}
+
+void restoreDataFromCloud() async{
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null){
+    String uuid = user.uid;
+    Map? data = (await FirebaseFirestore.instance
+        .collection('User Data')
+        .doc(uuid).get()).data();
+    if (data != null){
+      writeData(data['Data'], append: false);
+      writeData(data['Settings'], path: 'settings', append: false);
+      writeData(data['Records'], path: 'records', append: false);
     }
   }
 }

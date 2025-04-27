@@ -249,7 +249,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     await showModalBottomSheet(
                                       context: context,
                                       builder: (context) {
-                                        return MeasurementPopup(initialMeasurement: settings['bodyweight'],);
+                                        return MeasurementPopup(initialMeasurement: settings['bodyweight'] ?? '0',);
                                       },
                                     );
                                     settings = await getAllSettings();

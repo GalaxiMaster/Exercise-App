@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
@@ -105,24 +106,25 @@ void importDataThis(BuildContext context) async{
       // writeData({}, append: false);
       writeData(jsonData, append: true);
       // Map data = await readData();
-    showDialog(
-      // ignore: use_build_context_synchronously
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Data written'),
-          content: Text(jsonData.toString()),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Data written'),
+            content: Text(jsonData.toString()),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+              ),
+            ],
+          );
+        },
+      );
+      syncData();
       // Do something with the parsed JSON data
       debugPrint("Parsed JSON data: $jsonData");
         } else {
@@ -179,6 +181,7 @@ void importDataHevy(BuildContext context) async{
           );
         },
       );
+      syncData();
       // Do something with the parsed JSON data
       debugPrint("Parsed JSON data: $data");
         } else {
@@ -234,6 +237,7 @@ void importDataStrong(BuildContext context) async{
           );
         },
       );
+      syncData();
       // Do something with the parsed JSON data
       debugPrint("Parsed JSON data: $data");
         } else {

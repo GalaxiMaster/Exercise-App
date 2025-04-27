@@ -83,6 +83,7 @@ class _SignInPageState extends State<SignInPage> {
                           MaterialPageRoute(builder: (context) => const HomePage()),
                         );
                         writeToSecureStorage('password', encrypt(_passwordController.text));
+                        restoreDataFromCloud();
                       } on FirebaseAuthException catch (e) {
                         String message;
                         switch (e.code) {
