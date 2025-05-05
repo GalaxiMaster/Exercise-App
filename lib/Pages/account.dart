@@ -39,7 +39,7 @@ class _AccountPageState extends State<AccountPage> {
             try {
               String? newEmail = await showDialog(
                 context: context,
-                builder: (BuildContext context) => ChangeEmailDialog(),
+                builder: (BuildContext context) => const ChangeEmailDialog(),
               );
 
               if (newEmail != null) {
@@ -309,7 +309,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
       actions: [  
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.black),
+            backgroundColor: WidgetStateProperty.all(Colors.black),
           ),
           onPressed: isLoading ? null : updateEmail,
           child: Padding(
@@ -332,6 +332,8 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
 }
 
 class ChangePasswordDialog extends StatefulWidget {
+  const ChangePasswordDialog({super.key});
+
   @override
   _ChangePasswordDialogState createState() => _ChangePasswordDialogState();
 }

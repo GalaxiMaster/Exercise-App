@@ -45,42 +45,61 @@ Future<void> syncData({String? user, data = false, records = false, settings = f
     records = true;
     settings = true;
   }
-  
-  if (data) {
-    try {
-      Map<String, dynamic> dataMap = (await readData()).cast<String, dynamic>();
-      await FirebaseFirestore.instance
-        .collection('User Data')
-        .doc(user)
-        .set({'Data': dataMap}, SetOptions(merge: true));
-    } catch (e) {
-      debugPrint('Failed to sync data: $e');
+  Map respectiveData = {
+    'Data': data,
+    'Records': records,
+    'Settings': settings,
+  };
+  for (var entry in respectiveData.entries) {
+    if (entry.value) {
+      try {
+        Map<String, dynamic> dataMap = (await readData(path: entry.key != 'Data' ? entry.key.toLowerCase() : null)).cast<String, dynamic>();
+        await FirebaseFirestore.instance
+          .collection('User Data')
+          .doc(user)
+          .set({entry.key: dataMap}, SetOptions(merge: true));
+      } catch (e) {
+        debugPrint('Failed to sync ${entry.key}: $e');
+      }
     }
   }
+  // ! old code
+  // if (data) {
+  //   try {
+  //     Map<String, dynamic> dataMap = (await readData()).cast<String, dynamic>();
+  //     await FirebaseFirestore.instance
+  //       .collection('User Data')
+  //       .doc(user)
+  //       .set({'Data': dataMap}, SetOptions(merge: true));
+  //   } catch (e) {
+  //     debugPrint('Failed to sync data: $e');
+  //   }
+  // }
 
-  if (records) {
-    try {
-      Map<String, dynamic> recordsMap = (await readData(path: 'records')).cast<String, dynamic>();
-      await FirebaseFirestore.instance
-        .collection('User Data')
-        .doc(user)
-        .set({'Records': recordsMap}, SetOptions(merge: true));
-    } catch (e) {
-      debugPrint('Failed to sync records: $e');
-    }
-  }
+  // if (records) {
+  //   try {
+  //     Map<String, dynamic> recordsMap = (await readData(path: 'records')).cast<String, dynamic>();
+  //     await FirebaseFirestore.instance
+  //       .collection('User Data')
+  //       .doc(user)
+  //       .set({'Records': recordsMap}, SetOptions(merge: true));
+  //   } catch (e) {
+  //     debugPrint('Failed to sync records: $e');
+  //   }
+  // }
 
-  if (settings) {
-    try {
-      Map<String, dynamic> settingsMap = (await readData(path: 'settings')).cast<String, dynamic>();
-      await FirebaseFirestore.instance
-        .collection('User Data')
-        .doc(user)
-        .set({'Settings': settingsMap}, SetOptions(merge: true));
-    } catch (e) {
-      debugPrint('Failed to sync records: $e');
-    }
-  }
+  // if (settings) {
+  //   try {
+  //     Map<String, dynamic> settingsMap = (await readData(path: 'settings')).cast<String, dynamic>();
+  //     await FirebaseFirestore.instance
+  //       .collection('User Data')
+  //       .doc(user)
+  //       .set({'Settings': settingsMap}, SetOptions(merge: true));
+  //   } catch (e) {
+  //     debugPrint('Failed to sync records: $e');
+  //   }
+  // }
+
 }
 
 void restoreDataFromCloud() async{
