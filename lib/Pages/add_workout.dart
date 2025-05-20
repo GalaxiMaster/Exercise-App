@@ -239,9 +239,9 @@ class _AddworkoutState extends State<Addworkout> {
                               ),
                             ),
                           ),
-                          if (['bodyweight', 'Assisted'].contains(exerciseMuscles[exercise]['type']))
                           Row(
                             children: [
+                              if (['bodyweight', 'Assisted'].contains(exerciseMuscles[exercise]['type']))
                               Padding(
                                 padding: const EdgeInsets.only(right: 15),
                                 child: GestureDetector(
