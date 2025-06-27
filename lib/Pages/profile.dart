@@ -25,17 +25,19 @@ class _ProfileState extends State<Profile> {
   num? selectedBarValue; // TODO set to what it actually is
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
+  late String year;
   @override
   void initState() {
     super.initState();
     _loadData();
+    year = DateTime.now().year.toString();
   }
 
   void _loadData() {
     _futureData = Future.wait([getData(), getAllSettings()]);
   }
   void alterHeadingBar(double value, String week){
-    DateTime te = DateFormat('yyyy MMM dd').parse('2024 $week');
+    DateTime te = DateFormat('yyyy MMM dd').parse('$year $week');
     var test = DateTime.now().difference(te).inDays;
     int distanceInWeeks = (test / 7).ceil()-1;
     setState(() {
