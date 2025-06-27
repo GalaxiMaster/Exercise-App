@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:exercise_app/Pages/exercise_screen.dart';
-import 'package:exercise_app/Pages/radar_chart.dart';
+import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';

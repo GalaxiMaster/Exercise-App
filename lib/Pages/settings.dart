@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:exercise_app/Pages/account.dart';
+import 'package:exercise_app/Pages/Account/account.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
-import 'package:exercise_app/Pages/sign_in.dart';
-import 'package:exercise_app/Pages/workoutSettings.dart';
+import 'package:exercise_app/Pages/Account/sign_in.dart';
+import 'package:exercise_app/Pages/StatScreens/workoutSettings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
@@ -13,154 +13,154 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-  class Settings extends StatelessWidget {
-    const Settings({super.key});
+class Settings extends StatelessWidget {
+  const Settings({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: myAppBar(context, 'Settings'),
-        body: FutureBuilder(
-        future: getAllSettings(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error loading data'));
-          } else if (snapshot.hasData) {
-            Map? settings = snapshot.data;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                settingsheader('Preferences'),
-                _buildSettingsBox(
-                  icon: Icons.person,
-                  label: 'Account',
-                  function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
-                    User? user = FirebaseAuth.instance.currentUser;
-                    if (user != null){
-                      await reAuthUser(user, context);
-                      user = FirebaseAuth.instance.currentUser;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AccountPage(accountDetails: user!),
-                        ),
-                      );  
-                    }else{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignInPage(),
-                        ),
-                      );  
-                    }
-                  },
-                ),
-                _buildSettingsBox(
-                  icon: Icons.flag,
-                  label: 'Days per week goal',
-                  function: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return const GoalOptions();
-                      },
-                    );
-                  },
-                ),
-                _buildSettingsBox(
-                  icon: Icons.accessibility,
-                  label: 'Measurements',
-                  function: () async{
-                    await showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return MeasurementPopup(initialMeasurement: (settings?['bodyweight'] ?? '0'),);
-                      },
-                    );
-                    settings = await getAllSettings();
-                  },
-                ),
-                _buildSettingsBox(
-                  icon: Icons.local_activity,
-                  label: 'Workout',
-                  function: () {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: myAppBar(context, 'Settings'),
+      body: FutureBuilder(
+      future: getAllSettings(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error loading data'));
+        } else if (snapshot.hasData) {
+          Map? settings = snapshot.data;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              settingsheader('Preferences'),
+              _buildSettingsBox(
+                icon: Icons.person,
+                label: 'Account',
+                function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
+                  User? user = FirebaseAuth.instance.currentUser;
+                  if (user != null){
+                    await reAuthUser(user, context);
+                    user = FirebaseAuth.instance.currentUser;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Workoutsettings(),
+                        builder: (context) => AccountPage(accountDetails: user!),
                       ),
-                    );              
-                  },
-                ),
-                // setttingDividor(),
-                settingsheader('Functions'),
-                _buildSettingsBox(
-                  icon: Icons.upload,
-                  label: 'Export data',
-                  function: exportJson,
-                ),
-                setttingDividor(),
-                _buildSettingsBox(
-                  icon: Icons.download,
-                  label: 'Import data',
-                  function: (){
+                    );  
+                  }else{
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ImportingPage(),
+                        builder: (context) => SignInPage(),
                       ),
-                    );   
-                    // importData(context);
-                  },
-                ),
-                _buildSettingsBox(
-                  icon: Icons.refresh,
-                  label: 'Reset data',
-                  function: (){resetDataButton(context);},
-                ),
-                setttingDividor(),
-                _buildSettingsBox(
-                  icon: Icons.move_down,
-                  label: 'Move exercises',
-                  function: (){moveExercises(context);},
-                ),
-              ],
-            );
-          } else {
-            return const Center(child: Text('No data available'));
-          }
-        },
-        ),
-      );
-    }
+                    );  
+                  }
+                },
+              ),
+              _buildSettingsBox(
+                icon: Icons.flag,
+                label: 'Days per week goal',
+                function: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return const GoalOptions();
+                    },
+                  );
+                },
+              ),
+              _buildSettingsBox(
+                icon: Icons.accessibility,
+                label: 'Measurements',
+                function: () async{
+                  await showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return MeasurementPopup(initialMeasurement: (settings?['bodyweight'] ?? '0'),);
+                    },
+                  );
+                  settings = await getAllSettings();
+                },
+              ),
+              _buildSettingsBox(
+                icon: Icons.local_activity,
+                label: 'Workout',
+                function: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Workoutsettings(),
+                    ),
+                  );              
+                },
+              ),
+              // setttingDividor(),
+              settingsheader('Functions'),
+              _buildSettingsBox(
+                icon: Icons.upload,
+                label: 'Export data',
+                function: exportJson,
+              ),
+              setttingDividor(),
+              _buildSettingsBox(
+                icon: Icons.download,
+                label: 'Import data',
+                function: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ImportingPage(),
+                    ),
+                  );   
+                  // importData(context);
+                },
+              ),
+              _buildSettingsBox(
+                icon: Icons.refresh,
+                label: 'Reset data',
+                function: (){resetDataButton(context);},
+              ),
+              setttingDividor(),
+              _buildSettingsBox(
+                icon: Icons.move_down,
+                label: 'Move exercises',
+                function: (){moveExercises(context);},
+              ),
+            ],
+          );
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
+      ),
+    );
+  }
 
-    Padding settingsheader(String header) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Text(
-          header,
-          textAlign: TextAlign.left,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
-            letterSpacing: .8
-          ),
+  Padding settingsheader(String header) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Text(
+        header,
+        textAlign: TextAlign.left,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.grey,
+          fontWeight: FontWeight.bold,
+          letterSpacing: .8
         ),
+      ),
+    );
+  }
+Future<String> getBodyweight() async {
+  Map data = await getAllSettings();
+  return data['bodyweight'] ?? '';
+}
+  Divider setttingDividor() => Divider(
+        thickness: .3,
+        color: Colors.grey.withOpacity(0.5),
+        height: 1,
       );
-    }
-  Future<String> getBodyweight() async {
-    Map data = await getAllSettings();
-    return data['bodyweight'] ?? '';
-  }
-    Divider setttingDividor() => Divider(
-          thickness: .3,
-          color: Colors.grey.withOpacity(0.5),
-          height: 1,
-        );
-  }
+}
 
 
 void exportJson() async{

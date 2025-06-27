@@ -1,16 +1,16 @@
 import 'package:exercise_app/Pages/home.dart';
-import 'package:exercise_app/Pages/sign_up.dart';
+import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,7 +18,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context, 'Sign In'),
+      appBar: myAppBar(context, 'Sign Up'),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -73,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
                         return;
                       }
                       try {
-                        await _auth.signInWithEmailAndPassword(
+                        await _auth.createUserWithEmailAndPassword(
                           email: _emailController.text.trim(),
                           password: _passwordController.text,
                         );
@@ -83,14 +83,10 @@ class _SignInPageState extends State<SignInPage> {
                           MaterialPageRoute(builder: (context) => const HomePage()),
                         );
                         writeToSecureStorage('password', encrypt(_passwordController.text));
-                        restoreDataFromCloud();
                       } on FirebaseAuthException catch (e) {
                         String message;
-                        switch (e.code) {
+                        switch (e.code) { // "[Password must contain at least 6 characters, Password must contain a numeric character]"
                           case 'invalid-credential':
-                            message = 'Invalid Email or Password';
-                            break;
-                          case 'user-not-found':
                             message = 'Invalid Email or Password';
                             break;
                           case 'invalid-email':
@@ -98,6 +94,9 @@ class _SignInPageState extends State<SignInPage> {
                             break;
                           case 'user-disabled':
                             message = 'This account has been disabled';
+                            break;
+                          case 'email-already-in-use':
+                            message = 'Email already in use';
                             break;
                           default:
                             message = 'An error occurred: ${e.message}';
@@ -115,18 +114,18 @@ class _SignInPageState extends State<SignInPage> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 100),
-                      child: Text('Sign In'),
+                      child: Text('Sign Up'),
                     ),
                   ),
                   GestureDetector(
                     onTap: (){
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                        MaterialPageRoute(builder: (context) => SignInPage())
                       );
                     },
                     child: const Text(
-                      'Don\'t have an account?',
+                      'Already have an account?',
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 13,
@@ -141,8 +140,8 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
-}  
-SnackBar errorSnackBar(text) =>  SnackBar(
+
+  SnackBar errorSnackBar(text) =>  SnackBar(
     backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
     content: Text(
       text,
@@ -153,3 +152,4 @@ SnackBar errorSnackBar(text) =>  SnackBar(
       ),
     )
   );
+}

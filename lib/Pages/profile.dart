@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
-import 'package:exercise_app/Pages/muscle_data.dart';
-import 'package:exercise_app/Pages/radar_chart.dart';
+import 'package:exercise_app/Pages/StatScreens/muscle_data.dart';
+import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/settings.dart';
-import 'package:exercise_app/Pages/stats.dart';
+import 'package:exercise_app/Pages/StatScreens/stats.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';

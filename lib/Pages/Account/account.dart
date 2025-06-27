@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:exercise_app/Pages/sign_in.dart';
+import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';

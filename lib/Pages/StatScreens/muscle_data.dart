@@ -1,9 +1,9 @@
-import 'package:exercise_app/Pages/data_charts.dart';
-import 'package:exercise_app/Pages/exercise_goals.dart';
-import 'package:exercise_app/Pages/main_exercises.dart';
-import 'package:exercise_app/Pages/muscle_tracking.dart';
-import 'package:exercise_app/Pages/radar_chart.dart';
-import 'package:exercise_app/Pages/strength_gradient.dart';
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
+import 'package:exercise_app/Pages/StatScreens/exercise_goals.dart';
+import 'package:exercise_app/Pages/StatScreens/main_exercises.dart';
+import 'package:exercise_app/Pages/StatScreens/muscle_tracking.dart';
+import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
+import 'package:exercise_app/Pages/StatScreens/strength_gradient.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';

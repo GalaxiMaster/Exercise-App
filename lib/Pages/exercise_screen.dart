@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:xml/xml.dart' as xml;
-import 'radar_chart.dart';
+import 'StatScreens/radar_chart.dart';
 
 enum TabItem {
   graph,
