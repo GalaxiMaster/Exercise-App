@@ -79,7 +79,7 @@ class _SignInPageState extends State<SignInPage> {
                           email: _emailController.text.trim(),
                           password: _passwordController.text,
                         );
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => const HomePage()),
@@ -145,13 +145,13 @@ class _SignInPageState extends State<SignInPage> {
   }
 }  
 SnackBar errorSnackBar(text) =>  SnackBar(
-    backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
-    content: Text(
-      text,
-      style: const TextStyle(
-        color: Colors.red,
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-    )
-  );
+  backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
+  content: Text(
+    text,
+    style: const TextStyle(
+      color: Colors.red,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
+  )
+);

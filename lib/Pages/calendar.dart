@@ -40,83 +40,82 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       highlightedDays = data.keys.map((x) => DateTime.parse(x.split(' ')[0])).toList();
     });
   }
-@override
-Widget build(BuildContext context) {
-  DateTime firstTime = DateTime.now().subtract(const Duration(days: 365));
-  if (exerciseData.keys.isNotEmpty){
-    firstTime = DateTime.parse(exerciseData.keys.toList()[exerciseData.keys.length-1].split(' ')[0]).subtract(const Duration(days: 31));
-  }
-  return Column(
-    children: [
-      if (exerciseData.isNotEmpty) 
-        StreakRestRow(exerciseData: exerciseData), // Render only when exerciseData is not empty
-      Expanded(
-        child: PagedVerticalCalendar(
-          minDate: DateTime(firstTime.year, firstTime.month, firstTime.day), // start date
-          maxDate: DateTime.now().add(const Duration(days: 31)), // year from now
-          dayBuilder: (context, date) {
-            bool isHighlighted = highlightedDays.any((highlightedDay) =>
-                date.year == highlightedDay.year &&
-                date.month == highlightedDay.month &&
-                date.day == highlightedDay.day);
-            bool isToday = date.year == DateTime.now().year &&
-                date.month == DateTime.now().month &&
-                date.day == DateTime.now().day;
-            return GestureDetector(
-              onTap: () {
-                if (highlightedDays.any((highlightedDay) =>
-                    date.year == highlightedDay.year &&
-                    date.month == highlightedDay.month &&
-                    date.day == highlightedDay.day)) 
-                  {
-                  Map daysData = {};
-                  for (var day in exerciseData.keys){
-                    if (day.split(' ')[0] == DateFormat('yyy-MM-dd').format(date)){
-                      daysData.addAll({day : exerciseData[day]});
+  @override
+  Widget build(BuildContext context) {
+    DateTime firstTime = DateTime.now().subtract(const Duration(days: 365));
+    if (exerciseData.keys.isNotEmpty){
+      firstTime = DateTime.parse(exerciseData.keys.toList()[exerciseData.keys.length-1].split(' ')[0]).subtract(const Duration(days: 31));
+    }
+    return Column(
+      children: [
+        if (exerciseData.isNotEmpty) 
+          StreakRestRow(exerciseData: exerciseData), // Render only when exerciseData is not empty
+        Expanded(
+          child: PagedVerticalCalendar(
+            minDate: DateTime(firstTime.year, firstTime.month, firstTime.day), // start date
+            maxDate: DateTime.now().add(const Duration(days: 31)), // year from now
+            dayBuilder: (context, date) {
+              bool isHighlighted = highlightedDays.any((highlightedDay) =>
+                  date.year == highlightedDay.year &&
+                  date.month == highlightedDay.month &&
+                  date.day == highlightedDay.day);
+              bool isToday = date.year == DateTime.now().year &&
+                  date.month == DateTime.now().month &&
+                  date.day == DateTime.now().day;
+              return GestureDetector(
+                onTap: () {
+                  if (highlightedDays.any((highlightedDay) =>
+                      date.year == highlightedDay.year &&
+                      date.month == highlightedDay.month &&
+                      date.day == highlightedDay.day)) 
+                    {
+                    Map daysData = {};
+                    for (var day in exerciseData.keys){
+                      if (day.split(' ')[0] == DateFormat('yyy-MM-dd').format(date)){
+                        daysData.addAll({day : exerciseData[day]});
+                      }
                     }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DayScreen(
+                            date: date,
+                            dayData: daysData,
+                            reload: _loadHighlightedDays,
+                      ),
+                    )
+                    );
                   }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DayScreen(
-                          date: date,
-                          dayData: daysData,
-                          reload: _loadHighlightedDays,
+                },
+                child: Transform.scale(
+                  scale: 0.8,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: isToday ? Border.all(
+                        color: Colors.blue,
+                        width: 2,
+                      ) : null,
+                      color:
+                          isHighlighted ? Colors.blue : Colors.transparent,
+                      shape: BoxShape.circle,
                     ),
-                  )
-                  );
-                }
-              },
-              child: Transform.scale(
-                scale: 0.8,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: isToday ? Border.all(
-                      color: Colors.blue,
-                      width: 2,
-                    ) : null,
-                    color:
-                        isHighlighted ? Colors.blue : Colors.transparent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${date.day}',
-                      style: const TextStyle(
-                          fontSize: 19
+                    child: Center(
+                      child: Text(
+                        '${date.day}',
+                        style: const TextStyle(
+                            fontSize: 19
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
-    ],
-  );
-}
-
+      ],
+    );
+  }
 }
 
 class StreakRestRow extends StatefulWidget {

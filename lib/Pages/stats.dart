@@ -18,9 +18,9 @@ class _StatsState extends State<Stats> {
   @override
   initState(){
     super.initState();  
-    _loadHighlightedDays();
+    _loadData();
   }
-  Future<void> _loadHighlightedDays() async {
+  Future<void> _loadData() async {
     var data = await gatherData();
     debugPrint(data.toString());
     Map totalVolume = {};
@@ -40,7 +40,6 @@ class _StatsState extends State<Stats> {
           } else{
             totalVolume[day] = (double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs());
           }
-
         }
       }
     }
