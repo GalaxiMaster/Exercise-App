@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:exercise_app/Pages/home.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -159,10 +158,8 @@ class SignUpPageState extends State<SignUpPage> {
                             });
                             // createUserPermissions(_auth.currentUser!);
                             if (!context.mounted) return;
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => const HomePage()),
-                            );
+                            Navigator.popUntil(context, (route) => route.isFirst);
+
                             _encryptionService.writeToSecureStorage(key: 'password', value: _encryptionService.encrypt(_passwordController.text));
                           } on FirebaseAuthException catch (e) {
                             String message;

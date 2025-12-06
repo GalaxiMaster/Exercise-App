@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:exercise_app/Pages/routines.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
@@ -7,7 +5,6 @@ import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,9 +27,9 @@ class _HomePageState extends State<HomePage> {
     Map data = await readData(path: 'current');
     return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
-  Future<void> _loadRoutines() async {
+  Future<void> _loadRoutines() async { // TODO optomise
     Map<String, dynamic> loadedRoutines = await readData(path: 'routines');
-    debugPrint("${loadedRoutines}identify");
+    debugPrint("$loadedRoutines routines loaded");
     setState(() {
       routines = loadedRoutines;
     });
@@ -171,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(), // Disable scrolling
                   itemBuilder: (context, index) {
-                    Map<String, dynamic> routine = routines.values.toList()[index];
+                    Map<String, dynamic> routine = Map<String, dynamic>.from(routines.values.toList()[index]);
                     return _buildStreakRestBox(data: routine);
                   },
                 )
@@ -184,17 +181,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void deleteRoutine(String name) async{
-    final dir = await getApplicationDocumentsDirectory();
-    String  filepath = '${dir.path}/routines/$name.json';
-    debugPrint(filepath);
-    final File file = File(filepath);
-    if (await file.exists()) {
-      await file.delete();   
-      _loadRoutines();
-    }
+    await deleteKey(name, path: 'routines');
+    _loadRoutines();
   }
   Widget _buildStreakRestBox({
-  required Map<String, dynamic> data,
+  required Map data,
 }) {
   Color color = data['data']?['color'] != null ? Color.fromARGB(data['data']?['color']?[0], data['data']?['color']?[1], data['data']?['color']?[2], data['data']?['color']?[3]) : const Color(0xff9DCEFF);
   String label =  data['data']?['name'] ?? 'Unknown Routine';
@@ -288,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                                     child: const Text('Reset'),
                                     onPressed: () {
                                       data['data']['color'] = null;
-                                      writeData(data, path: 'routines/${data['data']['name']}', append: false);
+                                      writeData(data as Map<String, dynamic>, path: data['data']['name'], append: false);
                                       _loadRoutines();
                                       Navigator.of(context).pop();  // Close without saving
                                     },
@@ -309,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                             data['data']['color'] = [color.alpha, color.red, color.green, color.blue];
 
                             // Save the color to storage
-                            await writeData(data, path: 'routines/${data['data']['name']}', append: false);
+                            await writeData(data as Map<String, dynamic>, path: data['data']['name'], append: false);
 
                             // Reload routines after saving
                             _loadRoutines();

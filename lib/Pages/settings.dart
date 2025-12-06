@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:exercise_app/Pages/Account/account.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
@@ -10,8 +9,6 @@ import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -99,7 +96,7 @@ class Settings extends StatelessWidget {
               _buildSettingsBox(
                 icon: Icons.upload,
                 label: 'Export data',
-                function: exportJson,
+                function: () => exportJson(context),
               ),
               setttingDividor(),
               _buildSettingsBox(
@@ -160,27 +157,6 @@ Future<String> getBodyweight() async {
         color: Colors.grey.withValues(alpha: 0.5),
         height: 1,
       );
-}
-
-
-void exportJson() async{
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final path = '${directory.path}/output.json';
-
-      // Only share the file after ensuring it has been written
-      final file = File(path);
-      if (await file.exists()) {
-        await Share.shareXFiles(
-          [XFile(path)],
-          text: 'Check out my workout data',
-        );
-      } else {
-        debugPrint('Error: Json file does not exist for sharing');
-      }
-    } catch (e) {
-      debugPrint('Error sharing Json file: $e');
-    }
 }
 
 class GoalOptions extends StatefulWidget {

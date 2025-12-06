@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/Account/sign_up.dart';
-import 'package:exercise_app/Pages/home.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +49,7 @@ class SignInPageState extends State<SignInPage> {
                 // TODO createDefaultPermissions(userCredential);
               }
               if (mounted) {
-                Navigator.pushReplacementNamed(context, '/home');
+                Navigator.popUntil(context, (route) => route.isFirst);
               }
             } catch (e, st) {
               debugPrint('Error handling authentication event: $e');
@@ -162,11 +161,8 @@ class SignInPageState extends State<SignInPage> {
                             );
                             // toDO getUserPermissions();
                             if (!context.mounted) return;
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
-                            );
+                            Navigator.popUntil(context, (route) => route.isFirst);
+
                             _encryptionService.writeToSecureStorage(
                                 key: 'password',
                                 value: _encryptionService

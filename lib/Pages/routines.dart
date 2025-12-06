@@ -213,7 +213,7 @@ class _AddRoutineState extends State<AddRoutine> {
     );
   
   }
-     void _showSetTypeMenu(String exercise, int setIndex) {
+  void _showSetTypeMenu(String exercise, int setIndex) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -278,9 +278,9 @@ class _AddRoutineState extends State<AddRoutine> {
   void createRoutine(String name) {
     debugPrint(name + widget.o_name);
     if (name != ''){
-      if (widget.o_name != '' && name != widget.o_name){
-        deleteFile('routines/${widget.o_name}');
-      }
+      // if (widget.o_name != '' && name != widget.o_name){
+      //   deleteFile('routines/${widget.o_name}');
+      // }
       Map<String, dynamic> newData = {
         name: {
           'data' : {
