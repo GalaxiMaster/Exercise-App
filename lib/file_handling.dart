@@ -74,7 +74,7 @@ Future<List?> resetData(BuildContext? context, WidgetRef ref, {String? path}) as
   if (path != null){
     choices = [path];
   } else {
-    choices = await getChoices(context, 'Data to Reset');
+    if (context != null) choices = await getChoices(context, 'Data to Reset');
   }
   if (choices == null || choices.isEmpty) return null;
   if (context != null && context.mounted) {
@@ -172,7 +172,7 @@ Future<void> exportJson(BuildContext context) async {
   }
   loadingOverlay.removeLoadingOverlay();
 }
-Future<List?> getChoices(context, String dialogueTitle) async{
+Future<List?> getChoices(BuildContext context, String dialogueTitle) async{
   final List? choices = await showDialog(
     context: context,
     builder: (context) {

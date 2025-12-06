@@ -168,7 +168,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                             child: Row(
                               children: [
                                 FutureBuilder<bool>(
-                                  future: _checkFileExists("Assets/Exercises/$exerciseName.png"),
+                                  future: _checkFileExists("assets/Exercises/$exerciseName.png"),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting) {
                                       return const SizedBox(
@@ -179,14 +179,14 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                                     }
                                     return snapshot.hasData && snapshot.data! 
                                       ? Image.asset(
-                                          "Assets/Exercises/$exerciseName.png",
+                                          "assets/Exercises/$exerciseName.png",
                                           height: 50,
                                           width: 50,
                                         )
                                       : Padding(
                                           padding: const EdgeInsets.all(8),
                                           child: SvgPicture.asset(
-                                            "Assets/profile.svg",
+                                            "assets/profile.svg",
                                             height: 35,
                                             width: 35,
                                           ),

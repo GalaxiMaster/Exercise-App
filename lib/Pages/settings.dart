@@ -39,7 +39,6 @@ class Settings extends StatelessWidget {
                 function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
                   User? user = FirebaseAuth.instance.currentUser;
                   if (user != null){
-                    await reAuthUser(user, context);
                     user = FirebaseAuth.instance.currentUser;
                     if (!context.mounted) return;
                     Navigator.push(

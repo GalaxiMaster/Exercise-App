@@ -117,13 +117,13 @@ class _WorkoutListState extends State<WorkoutList> {
                 ? Padding(
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
-                      "Assets/profile.svg",
+                      "assets/profile.svg",
                       height: 35,
                       width: 35,
                     ),
                   )
                 : FutureBuilder<bool>(
-                    future: _checkFileExists("Assets/Exercises/$exercise.png"),
+                    future: _checkFileExists("assets/Exercises/$exercise.png"),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const SizedBox(
@@ -134,14 +134,14 @@ class _WorkoutListState extends State<WorkoutList> {
                       }
                       return snapshot.hasData && snapshot.data! 
                         ? Image.asset(
-                            "Assets/Exercises/$exercise.png",
+                            "assets/Exercises/$exercise.png",
                             height: 50,
                             width: 50,
                           )
                         : Padding(
                             padding: const EdgeInsets.all(8),
                             child: SvgPicture.asset(
-                              "Assets/profile.svg",
+                              "assets/profile.svg",
                               height: 35,
                               width: 35,
                             ),

@@ -178,7 +178,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         
     return Column(
        children: [
-        BodyHeatMap(assetPath: 'Assets/Muscle_heatmap.svg', exercises: widget.exercises,),
+        BodyHeatMap(assetPath: 'assets/Muscle_heatmap.svg', exercises: widget.exercises,),
         const Text(
           'Primary muscles:',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

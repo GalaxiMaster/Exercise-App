@@ -560,7 +560,7 @@ class ExerciseBox extends StatelessWidget {
         child: Row(
           children: [
             FutureBuilder<bool>(
-              future: fileExists("Assets/Exercises/${exercise.key}.png"),
+              future: fileExists("assets/Exercises/${exercise.key}.png"),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -568,7 +568,7 @@ class ExerciseBox extends StatelessWidget {
                   return const Icon(Icons.error);
                 } else if (snapshot.hasData && snapshot.data!) {
                   return Image.asset(
-                    "Assets/Exercises/${exercise.key}.png",
+                    "assets/Exercises/${exercise.key}.png",
                     height: 50,
                     width: 50,
                   );
@@ -576,7 +576,7 @@ class ExerciseBox extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
-                      "Assets/profile.svg",
+                      "assets/profile.svg",
                       height: 35,
                       width: 35,
                     ),

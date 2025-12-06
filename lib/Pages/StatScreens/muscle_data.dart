@@ -167,7 +167,7 @@ class MuscleData extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: SvgPicture.asset(
-                  'Assets/$iconPath.svg',
+                  'assets/$iconPath.svg',
                   height: 30,
                   width: 30,
                   colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
