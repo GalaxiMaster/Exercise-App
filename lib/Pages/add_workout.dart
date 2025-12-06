@@ -25,7 +25,7 @@ class Addworkout extends StatefulWidget {
 
 class _AddworkoutState extends State<Addworkout> {
   var preCsvData = {};
-  Map records = {};
+  Map<String, dynamic> records = {};
   Map sets = {};
   Map exerciseNotes = {};
   Map settings = {};
@@ -180,7 +180,7 @@ class _AddworkoutState extends State<Addworkout> {
   void updateExercises() async{
     if (!widget.confirm){
       if (sets.isEmpty){
-        resetData(false, true, false);
+        // resetData(false, true, false); // TODO
       }
       writeData({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets}, path: 'current', append: false);
     }
@@ -845,7 +845,7 @@ void addNewSet(String exercise) {
   void reloadRecords() async {
     Map data = await readData();
     var sortedKeys = data.keys.toList()..sort();
-    Map recordsTemp = await readData(path: 'records');
+    Map<String, dynamic> recordsTemp = await readData(path: 'records');
     // Create a sorted map by iterating over sorted keys
     Map<String, dynamic> sortedMap = {
       for (var key in sortedKeys) key: data[key]!,
@@ -890,10 +890,10 @@ class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key, this.updateVariable});
 
   @override
-  _TimerScreenState createState() => _TimerScreenState();
+  TimerScreenState createState() => TimerScreenState();
 }
 
-class _TimerScreenState extends State<TimerScreen> {
+class TimerScreenState extends State<TimerScreen> {
   Timer? _timer;
   int _seconds = 0;
   bool isRunning = false;

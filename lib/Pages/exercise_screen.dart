@@ -247,7 +247,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           belowBarData: BarAreaData(
             show: true,
             color: colors[exercisesOrder.length]
-                .withOpacity(0.2),
+                .withValues(alpha: 0.2),
           ),
         ),
       );
@@ -478,7 +478,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: colors[index].withOpacity(.2),
+          color: colors[index].withValues(alpha: .2),
           borderRadius: BorderRadius.circular(20)
         ),
         child: Padding(
@@ -594,10 +594,10 @@ class BodyHeatMap extends StatefulWidget {
   });
 
   @override
-  _BodyHeatMapState createState() => _BodyHeatMapState();
+  BodyHeatMapState createState() => BodyHeatMapState();
 }
 
-class _BodyHeatMapState extends State<BodyHeatMap> {
+class BodyHeatMapState extends State<BodyHeatMap> {
   String? modifiedSvgString;
 
   @override

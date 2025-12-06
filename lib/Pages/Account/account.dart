@@ -45,6 +45,8 @@ class _AccountPageState extends State<AccountPage> {
               if (newEmail != null) {
                 // If we got here, the email update was successful
                 writeToSecureStorage('emailChange', newEmail);
+                
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Verification email sent. Please check your email to complete the change.'),
@@ -54,6 +56,7 @@ class _AccountPageState extends State<AccountPage> {
               }
             } catch (e) {
               // This should rarely happen since errors are handled in the dialog
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('An unexpected error occurred: $e')),
               );
@@ -63,8 +66,9 @@ class _AccountPageState extends State<AccountPage> {
             try{
               String? newPass = await showDialog(
                 context: context,
-                builder: (BuildContext context) => ChangePasswordDialog(),
+                builder: (BuildContext context) => const ChangePasswordDialog(),
               );
+              if (!context.mounted) return;
               await reAuthUser(account, context);
 
               if (newPass != null) {
@@ -72,6 +76,7 @@ class _AccountPageState extends State<AccountPage> {
                 writeToSecureStorage('password', newPass);
               }
             } catch(e){
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 errorSnackBar(e),
               );
@@ -81,6 +86,7 @@ class _AccountPageState extends State<AccountPage> {
             onTap: () async {
               await FirebaseAuth.instance.signOut();
               clearStorage();
+              if (!context.mounted) return;
               Navigator.pop(context);
             },
             child: const Padding(
@@ -211,10 +217,10 @@ class ChangeEmailDialog extends StatefulWidget {
   const ChangeEmailDialog({super.key});
 
   @override
-  _ChangeEmailDialogState createState() => _ChangeEmailDialogState();
+  ChangeEmailDialogState createState() => ChangeEmailDialogState();
 }
 
-class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
+class ChangeEmailDialogState extends State<ChangeEmailDialog> {
   final TextEditingController newEmail = TextEditingController();
   String? error;
   bool isLoading = false;
@@ -251,6 +257,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
       }
       reAuthUser(user, context);
       await user.verifyBeforeUpdateEmail(newEmail.text);
+      if (!mounted) return;
       Navigator.pop(context, newEmail.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -335,10 +342,10 @@ class ChangePasswordDialog extends StatefulWidget {
   const ChangePasswordDialog({super.key});
 
   @override
-  _ChangePasswordDialogState createState() => _ChangePasswordDialogState();
+  ChangePasswordDialogState createState() => ChangePasswordDialogState();
 }
 
-class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
+class ChangePasswordDialogState extends State<ChangePasswordDialog> {
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmNewPassword = TextEditingController();
   Set error1Set = {};

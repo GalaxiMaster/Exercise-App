@@ -176,7 +176,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
         num++;
       }
     }
-    Map data = {
+    Map<String, dynamic> data = {
       '$day $num' : {
       'stats' : {
         'startTime' : startTimeStr,
@@ -188,11 +188,11 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
     };
     writeData(await getRecords(exerciseList), path: 'records', append: false);
     writeData(data, append: true);
-    resetData(false, true, false);
+    // resetData(false, true, false); // TODO
   }
   
-  Future<Map> getRecords(Map exercises) async{
-    Map records = await readData(path: 'records');
+  Future<Map<String, dynamic>> getRecords(Map exercises) async{
+    Map<String, dynamic> records = await readData(path: 'records');
     for (var exercise in exercises.keys){
       for (var set in exercises[exercise]){
         if (set['PR'] == 'yes'){       
@@ -224,10 +224,10 @@ class DateTimePickerDialog extends StatefulWidget {
   });
 
   @override
-  _DateTimePickerDialogState createState() => _DateTimePickerDialogState();
+  DateTimePickerDialogState createState() => DateTimePickerDialogState();
 }
 
-class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
+class DateTimePickerDialogState extends State<DateTimePickerDialog> {
   DateTime? fromDate;
   TimeOfDay? fromTime;
   DateTime? toDate;

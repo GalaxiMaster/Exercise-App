@@ -236,7 +236,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
     );
   }
     Future<bool> editDay(Map day) async{
-    Map data = await readData();
+    Map<String, dynamic> data = await readData();
     data[widget.dayKey]['sets'] = day['sets'];
     writeData(data, append: false);
     return true;

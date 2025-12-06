@@ -13,10 +13,10 @@ class MuscleTracking extends StatefulWidget {
   const MuscleTracking({super.key, required this.setData});
 
   @override
-  _MuscleTrackingState createState() => _MuscleTrackingState();
+  MuscleTrackingState createState() => MuscleTrackingState();
 }
 
-class _MuscleTrackingState extends State<MuscleTracking> {
+class MuscleTrackingState extends State<MuscleTracking> {
   Map<String, dynamic>? muscleGoals;
 
   void onGoalUpdate(String muscle, double newGoal) {
@@ -455,7 +455,7 @@ Future<Map> getWeekData(String mainMuscle) async{
 }
 
 void writeMuscleGoal(String muscle, double value) async{
-  Map settings = await getAllSettings();
+  Map<String, dynamic> settings = await getAllSettings();
   settings['Muscle Goals'][muscle] = value;
   writeData(settings, path: 'settings',append: false);
 }
@@ -530,7 +530,7 @@ class CaloriesSpeedometer extends StatelessWidget {
               size: const Size(130, 30),
               painter: SpeedometerPainter(
                 progress: calories / maxCalories,
-                backgroundColor: const Color(0xFF3F51B5).withOpacity(0.3),
+                backgroundColor: const Color(0xFF3F51B5).withValues(alpha: 0.3),
                 progressColor: const Color(0xFF4CAF50),
               ),
             ),

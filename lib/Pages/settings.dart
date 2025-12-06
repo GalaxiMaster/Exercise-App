@@ -3,7 +3,7 @@ import 'package:exercise_app/Pages/Account/account.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
-import 'package:exercise_app/Pages/StatScreens/workoutSettings.dart';
+import 'package:exercise_app/Pages/StatScreens/workout_settings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
@@ -41,6 +41,7 @@ class Settings extends StatelessWidget {
                   if (user != null){
                     await reAuthUser(user, context);
                     user = FirebaseAuth.instance.currentUser;
+                    if (!context.mounted) return;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -51,7 +52,7 @@ class Settings extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignInPage(),
+                        builder: (context) => const SignInPage(),
                       ),
                     );  
                   }
@@ -157,7 +158,7 @@ Future<String> getBodyweight() async {
 }
   Divider setttingDividor() => Divider(
         thickness: .3,
-        color: Colors.grey.withOpacity(0.5),
+        color: Colors.grey.withValues(alpha: 0.5),
         height: 1,
       );
 }
@@ -306,7 +307,7 @@ void resetDataButton(BuildContext context){
           TextButton(
             child: const Text('Delete', style: TextStyle(color: Colors.red),),
             onPressed: () {
-              resetData(true, true, true);
+              // resetData(); // ! todo
               Navigator.of(context).pop(); // Dismiss the dialog
             },
           ),
@@ -317,7 +318,7 @@ void resetDataButton(BuildContext context){
 }
 
 void updateSettings(String option, String value) async{
-  Map data = await readData(path: 'settings');
+  Map<String, dynamic> data = await readData(path: 'settings');
   data[option] = value;
   debugPrint(data.toString());
   writeData(data, path: 'settings', append: false);
@@ -355,7 +356,7 @@ void moveExercises(BuildContext context) async{
   String resultTo = resultToList[0];
 
   // Create a new map to preserve key order
-  Map newData = {};
+  Map<String, dynamic> newData = {};
 
   for (var day in data.keys) {
     newData[day] = {
@@ -375,7 +376,7 @@ void moveExercises(BuildContext context) async{
       }
     }
   }
-  resetData(true, false, false);
+  // resetData(true, false, false); // TODO
   writeData(newData);
 }
 
@@ -446,7 +447,7 @@ Widget _buildSettingsBox({
         width: double.infinity,
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withOpacity(0.1), // Background color for the whole box
+          color: const Color.fromARGB(255, 173, 173, 173).withValues(alpha: 0.1), // Background color for the whole box
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 8),

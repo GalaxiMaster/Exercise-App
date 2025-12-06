@@ -601,7 +601,7 @@ class ExerciseBox extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: exercise.value / goal,
                       minHeight: 5,
-                      backgroundColor: color.withOpacity(.2),
+                      backgroundColor: color.withValues(alpha: .2),
                       valueColor: AlwaysStoppedAnimation<Color>(color),
                       borderRadius: BorderRadius.circular(50),
                     ),
@@ -645,7 +645,7 @@ class TickPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint backgroundPaint = Paint()
-      ..color = Colors.green.shade700.withOpacity(0.3) // Greyed-out green
+      ..color = Colors.green.shade700.withValues(alpha: 0.3) // Greyed-out green
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8.0;
 
@@ -714,7 +714,7 @@ class ListThing extends StatelessWidget {
     upDateSettings(settings);
     writeData(settings, path: 'settings',append: false);
   }
-  void editGoal(Map settings, String exercise, int currentValue){
+  void editGoal(Map<String, dynamic> settings, String exercise, int currentValue){
     debugPrint('called');
     List value = settings['Exercise Goals'][exercise];
     settings['Exercise Goals'][exercise] = [currentValue, value[1]];

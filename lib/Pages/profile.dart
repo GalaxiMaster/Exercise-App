@@ -194,7 +194,7 @@ class _ProfileState extends State<Profile> {
                             padding: const EdgeInsets.all(8.0),
                             margin: EdgeInsets.zero,
                             decoration: BoxDecoration(
-                              color: Colors.blueAccent.withOpacity(0.9),
+                              color: Colors.blueAccent.withValues(alpha: 0.9),
                               border: Border.all(
                                 // color: Colors.blueAccent.withOpacity(0.6),
                                 width: 2.0,

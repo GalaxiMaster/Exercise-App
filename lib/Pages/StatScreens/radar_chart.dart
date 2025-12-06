@@ -105,7 +105,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
                 RadarChartData(
                   dataSets: [
                     RadarDataSet(
-                      fillColor: Colors.blue.withOpacity(0.2),
+                      fillColor: Colors.blue.withValues(alpha: 0.2),
                       borderColor: Colors.blue,
                       borderWidth: 2,
                       entryRadius: 3,

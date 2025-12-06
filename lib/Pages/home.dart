@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                             TextButton(
                               child: const Text('Discard', style: TextStyle(color: Colors.red),),
                               onPressed: () {
-                                resetData(false, true, false);
+                                // resetData(false, true, false); // TODO
                                 Navigator.of(context).pop(); // Dismiss the dialog
                                 Navigator.push(
                                   context,
@@ -125,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   }else{
+                    if (!context.mounted) return;
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Addworkout()),
@@ -193,7 +194,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
   Widget _buildStreakRestBox({
-  required Map data,
+  required Map<String, dynamic> data,
 }) {
   Color color = data['data']?['color'] != null ? Color.fromARGB(data['data']?['color']?[0], data['data']?['color']?[1], data['data']?['color']?[2], data['data']?['color']?[3]) : const Color(0xff9DCEFF);
   String label =  data['data']?['name'] ?? 'Unknown Routine';
@@ -204,7 +205,7 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(

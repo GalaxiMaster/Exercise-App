@@ -63,7 +63,7 @@ class _DayScreenState extends State<DayScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withOpacity(0.1),
+          color: const Color.fromARGB(255, 173, 173, 173).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10)
         ),
         child: Column(
@@ -188,7 +188,7 @@ class _DayScreenState extends State<DayScreen> {
       }
     });
     if (dayKey == ''){return false;}
-    Map data = await readData();
+    Map<String, dynamic> data = await readData();
     data.remove(dayKey);
     writeData(data, append: false);
     return true;
@@ -201,7 +201,7 @@ class _DayScreenState extends State<DayScreen> {
       }
     });
     if (dayKey == ''){return false;}
-    Map data = await readData();
+    Map<String, dynamic> data = await readData();
     data[dayKey]['sets'] = day['sets'];
     writeData(data, append: false);
     return true;

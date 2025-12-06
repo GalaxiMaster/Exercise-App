@@ -275,7 +275,7 @@ class _AddRoutineState extends State<AddRoutine> {
       if (widget.o_name != '' && name != widget.o_name){
         deleteFile('routines/${widget.o_name}');
       }
-      Map newData = {
+      Map<String, dynamic> newData = {
         'data' : {
           'name' : name
         },

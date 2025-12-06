@@ -23,7 +23,7 @@ class _WorkoutsettingsState extends State<Workoutsettings> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error loading data'));
           } else if (snapshot.hasData) {
-          Map settings = snapshot.data!;
+          Map<String, dynamic> settings = snapshot.data!;
           return Column(
             children: [
               _buildSettingsBox(icon: Icons.check, label: 'Tick Boxes', function: () {}, rightside:  ToggleSwitch(
@@ -67,7 +67,7 @@ Widget _buildSettingsBox({
         width: double.infinity,
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withOpacity(0.1), // Background color for the whole box
+          color: const Color.fromARGB(255, 173, 173, 173).withValues(alpha: 0.1), // Background color for the whole box
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 8),
@@ -109,10 +109,10 @@ class ToggleSwitch extends StatefulWidget {
   });
 
   @override
-  _ToggleSwitchState createState() => _ToggleSwitchState();
+  ToggleSwitchState createState() => ToggleSwitchState();
 }
 
-class _ToggleSwitchState extends State<ToggleSwitch> {
+class ToggleSwitchState extends State<ToggleSwitch> {
   bool _value = false;
 
   @override
