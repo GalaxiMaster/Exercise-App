@@ -306,7 +306,7 @@ void resetDataButton(BuildContext context){
           TextButton(
             child: const Text('Delete', style: TextStyle(color: Colors.red),),
             onPressed: () {
-              // resetData(); // ! todo
+              resetData(['current','output', 'records']);
               Navigator.of(context).pop(); // Dismiss the dialog
             },
           ),
@@ -375,7 +375,7 @@ void moveExercises(BuildContext context) async{
       }
     }
   }
-  // resetData(true, false, false); // TODO
+  resetData(['output']); // TODO wtf is this
   writeData(newData);
 }
 

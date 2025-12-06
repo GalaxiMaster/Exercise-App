@@ -180,7 +180,7 @@ class _AddworkoutState extends State<Addworkout> {
   void updateExercises() async{
     if (!widget.confirm){
       if (sets.isEmpty){
-        // resetData(false, true, false); // TODO
+        resetData(['current']);
       }
       writeData({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets}, path: 'current', append: false);
     }

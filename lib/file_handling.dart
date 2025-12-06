@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -69,57 +68,11 @@ Future<dynamic> readKey(String key, {String path = 'words', dynamic defaultValue
   return box.get(key, defaultValue: defaultValue);
 }
 
-Future<List?> resetData(BuildContext? context, WidgetRef ref, {String? path}) async {
-  List? choices;
-  if (path != null){
-    choices = [path];
-  } else {
-    if (context != null) choices = await getChoices(context, 'Data to Reset');
+Future<void> resetData(List<String>? boxes) async {
+  for (String choice in boxes ?? []){
+    final box = await Hive.openBox(choice);
+    await box.clear();
   }
-  if (choices == null || choices.isEmpty) return null;
-  if (context != null && context.mounted) {
-    // Add confirmation dialog
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Reset'),
-        content: Text(
-          'Are you sure you want to reset the following data?\n\n${choices!.join(', ')}\n\nThis action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Reset'),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true) return null;
-  }
-  // final Map refKeys = {
-  //   'words': wordDataFutureProvider,
-  //   'inputs': futureInputDataProvider,
-  //   'settings': futureSettingsDataProvider,
-  //   'archivedWords': archivedWordsDataProvider,
-  // };
-  // for (String choice in choices){
-  //   final box = await Hive.openBox(choice);
-  //   await box.clear();
-  //   if (refKeys.containsKey(choice)){
-  //     try {
-  //       final provider = refKeys[choice];
-  //       // ref.invalidate(provider);
-  //     } catch (e){
-  //       debugPrint(e.toString());
-  //     }
-      
-  //   }
-  // }
-  return choices;
 }
 
 Future<Set> gatherTags() async{

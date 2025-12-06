@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -25,43 +24,43 @@ class SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    // GoogleSignIn.instance
-    //     .initialize(
-    //   serverClientId: dotenv.get('serverClientId'),
-    // ).then((_) {
-    //   _authSub = GoogleSignIn.instance.authenticationEvents.listen(
-    //     (event) async {
-    //       if (event is GoogleSignInAuthenticationEventSignIn) {
-    //         final GoogleSignInAccount user = event.user;
-    //         try {
-    //           // The API surface for the plugin exposes a synchronous
-    //           // `authentication` object on the account in this version.
-    //           final GoogleSignInAuthentication authentication = user.authentication;
+    GoogleSignIn.instance
+        .initialize(
+      serverClientId: dotenv.get('serverClientId'),
+    ).then((_) {
+      _authSub = GoogleSignIn.instance.authenticationEvents.listen(
+        (event) async {
+          if (event is GoogleSignInAuthenticationEventSignIn) {
+            final GoogleSignInAccount user = event.user;
+            try {
+              // The API surface for the plugin exposes a synchronous
+              // `authentication` object on the account in this version.
+              final GoogleSignInAuthentication authentication = user.authentication;
 
-    //           final credential = GoogleAuthProvider.credential(
-    //             idToken: authentication.idToken,
-    //           );
+              final credential = GoogleAuthProvider.credential(
+                idToken: authentication.idToken,
+              );
 
-    //           UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-    //           debugPrint(authentication.idToken);
-    //           debugPrint('Firebase sign-in complete for ${user.email}');
-    //           bool isNew = userCredential.additionalUserInfo?.isNewUser ?? false;
-    //           _encryptionService.writeToSecureStorage(key: 'authIdToken', value: _encryptionService.encrypt(authentication.idToken ?? ''));
-    //           if (isNew) {
-    //             // TODO createDefaultPermissions(userCredential);
-    //           }
-    //           if (mounted) {
-    //             Navigator.pushReplacementNamed(context, '/home');
-    //           }
-    //         } catch (e, st) {
-    //           debugPrint('Error handling authentication event: $e');
-    //           debugPrint('$st');
-    //         }
-    //       }
-    //     },
-    //     onError: (e) => debugPrint('Authentication event error: $e'),
-    //   );
-    // });
+              UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+              debugPrint(authentication.idToken);
+              debugPrint('Firebase sign-in complete for ${user.email}');
+              bool isNew = userCredential.additionalUserInfo?.isNewUser ?? false;
+              _encryptionService.writeToSecureStorage(key: 'authIdToken', value: _encryptionService.encrypt(authentication.idToken ?? ''));
+              if (isNew) {
+                // TODO createDefaultPermissions(userCredential);
+              }
+              if (mounted) {
+                Navigator.pushReplacementNamed(context, '/home');
+              }
+            } catch (e, st) {
+              debugPrint('Error handling authentication event: $e');
+              debugPrint('$st');
+            }
+          }
+        },
+        onError: (e) => debugPrint('Authentication event error: $e'),
+      );
+    });
   }
 
   @override
@@ -265,8 +264,7 @@ class SignInPageState extends State<SignInPage> {
                             );
                             await GoogleSignIn.instance.authenticate();
                           } on GoogleSignInException catch (e) {
-                            debugPrint(
-                                'Error signing in with Google: ${e.code} ${e.description}');
+                            debugPrint('Error signing in with Google: ${e.code} ${e.description}');
                           } catch (e, st) {
                             debugPrint('Unexpected error signing in with Google: $e');
                             debugPrint('$st');

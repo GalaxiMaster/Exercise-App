@@ -164,7 +164,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
     );
   }
 
-  void saveExercises(var exerciseList, DateTime startTime, Map workoutNotes, DateTime endTime) async {
+  void saveExercises(Map exerciseList, DateTime startTime, Map workoutNotes, DateTime endTime) async {
     String day = DateFormat('yyyy-MM-dd').format(startTime);
     String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(startTime);
     String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(endTime);
@@ -188,7 +188,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
     };
     writeData(await getRecords(exerciseList), path: 'records', append: false);
     writeData(data, append: true);
-    // resetData(false, true, false); // TODO
+    resetData(['current']); // TODO
   }
   
   Future<Map<String, dynamic>> getRecords(Map exercises) async{

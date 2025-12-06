@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:exercise_app/Pages/home.dart';
@@ -25,43 +24,43 @@ class SignUpPageState extends State<SignUpPage> {
   @override
   initState() {
     super.initState();
-    // GoogleSignIn.instance
-    //     .initialize(
-    //   serverClientId: dotenv.get('serverClientId'),
-    // ).then((_) {
-    //   _authSub = GoogleSignIn.instance.authenticationEvents.listen(
-    //     (event) async {
-    //       if (event is GoogleSignInAuthenticationEventSignIn) {
-    //         final GoogleSignInAccount user = event.user;
-    //         try {
-    //           // The API surface for the plugin exposes a synchronous
-    //           // `authentication` object on the account in this version.
-    //           final GoogleSignInAuthentication authentication =
-    //               user.authentication;
+    GoogleSignIn.instance
+        .initialize(
+      serverClientId: dotenv.get('serverClientId'),
+    ).then((_) {
+      _authSub = GoogleSignIn.instance.authenticationEvents.listen(
+        (event) async {
+          if (event is GoogleSignInAuthenticationEventSignIn) {
+            final GoogleSignInAccount user = event.user;
+            try {
+              // The API surface for the plugin exposes a synchronous
+              // `authentication` object on the account in this version.
+              final GoogleSignInAuthentication authentication =
+                  user.authentication;
 
-    //           final credential = GoogleAuthProvider.credential(
-    //             idToken: authentication.idToken,
-    //           );
+              final credential = GoogleAuthProvider.credential(
+                idToken: authentication.idToken,
+              );
 
-    //           UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-    //           debugPrint('Firebase sign-in complete for ${user.email}');
-    //           bool isNew = userCredential.additionalUserInfo?.isNewUser ?? false;
-    //           _encryptionService.writeToSecureStorage(key: 'authIdToken', value: authentication.idToken ?? '');
-    //           if (isNew) {
-    //             // TODo createUserPermissions(userCredential.user!);
-    //           }
-    //           if (mounted) {
-    //             Navigator.pushReplacementNamed(context, '/home');
-    //           }
-    //         } catch (e, st) {
-    //           debugPrint('Error handling authentication event: $e');
-    //           debugPrint('$st');
-    //         }
-    //       }
-    //     },
-    //     onError: (e) => debugPrint('Authentication event error: $e'),
-    //   );
-    // });
+              UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+              debugPrint('Firebase sign-in complete for ${user.email}');
+              bool isNew = userCredential.additionalUserInfo?.isNewUser ?? false;
+              _encryptionService.writeToSecureStorage(key: 'authIdToken', value: authentication.idToken ?? '');
+              if (isNew) {
+                // TODo createUserPermissions(userCredential.user!);
+              }
+              if (mounted) {
+                Navigator.pushReplacementNamed(context, '/home');
+              }
+            } catch (e, st) {
+              debugPrint('Error handling authentication event: $e');
+              debugPrint('$st');
+            }
+          }
+        },
+        onError: (e) => debugPrint('Authentication event error: $e'),
+      );
+    });
   }
 
   @override
@@ -293,7 +292,7 @@ class SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  SnackBar errorSnackBar(text) =>  SnackBar(
+  SnackBar errorSnackBar(String text) =>  SnackBar(
     backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
     content: Text(
       text,

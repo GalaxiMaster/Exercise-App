@@ -66,8 +66,6 @@ class EncryptionService {
   }
 }
 
-
-// TODO refactor
 Future<void> syncData({String? user, data = false, records = false, settings = false}) async {
   user ??= FirebaseAuth.instance.currentUser?.uid;
   if (user == null) return;
@@ -104,9 +102,9 @@ void restoreDataFromCloud() async{
         .collection('User Data')
         .doc(uuid).get()).data();
     if (data != null){
-      writeData(data['Data'], append: false);
-      writeData(data['Settings'], path: 'settings', append: false);
-      writeData(data['Records'], path: 'records', append: false);
+      writeData(data['Data']);
+      writeData(data['Settings'], path: 'settings');
+      writeData(data['Records'], path: 'records');
     }
   }
 }

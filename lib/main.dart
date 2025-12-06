@@ -33,7 +33,10 @@ class MainApp extends StatelessWidget {
           primary: Colors.blue,
           surfaceContainer: Color.fromRGBO(32, 32, 32, 1),      
         )
-      )
+      ),
+      routes: {
+        '/home': (context) => const HomePage(),
+      },
     );
   }
 }
