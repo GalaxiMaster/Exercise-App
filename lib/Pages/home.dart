@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List routines = [];
+  Map<String, dynamic> routines = {};
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
   Future<void> _loadRoutines() async {
-    List loadedRoutines = await getAllRoutines();
+    Map<String, dynamic> loadedRoutines = await readData(path: 'routines');
     debugPrint("${loadedRoutines}identify");
     setState(() {
       routines = loadedRoutines;
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                             TextButton(
                               child: const Text('Discard', style: TextStyle(color: Colors.red),),
                               onPressed: () {
-                                // resetData(false, true, false); // TODO
+                                resetData(['current']); // TODO
                                 Navigator.of(context).pop(); // Dismiss the dialog
                                 Navigator.push(
                                   context,
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(), // Disable scrolling
                   itemBuilder: (context, index) {
-                    var routine = routines[index];
+                    Map<String, dynamic> routine = routines.values.toList()[index];
                     return _buildStreakRestBox(data: routine);
                   },
                 )
@@ -358,32 +358,5 @@ class _HomePageState extends State<HomePage> {
     ],
   );
 }
-}
-
-
-
-Future<List> getAllRoutines() async {
-  List routines = [];
-  final dir = await getApplicationDocumentsDirectory();
-  String  filepath = '${dir.path}/routines';
-  final directory = Directory(filepath);
-
-  if (await directory.exists()) {
-    await for (var entity in directory.list()) {
-      if (entity is File) {
-        String contents = await entity.readAsString();
-        // entity.delete();
-        debugPrint('File: ${entity.path} identify');
-        Map jsonData = jsonDecode(contents);
-        routines.add(jsonData);
-      } else if (entity is Directory) {
-        debugPrint('Directory: ${entity.path}');
-      }
-    }
-  } else {
-    debugPrint("Directory does not exist");
-  }
-  debugPrint(routines.toString());
-  return routines;
 }
 

@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
@@ -193,10 +194,15 @@ class _AddRoutineState extends State<AddRoutine> {
 
                 if (result != null) {
                   setState(() {
-                    sets[result] = [
-                      {'weight': '', 'reps': '', 'type': 'Normal'}
-                    ]; // Initialize sets list for the new exercise
+                    for (String exercise in result){
+                      if (!sets.containsKey(exercise)) {
+                        sets[exercise] = [
+                          {'weight': exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
+                        ]; // Initialize sets list for the new exercise
+                      }
+                    }
                   });
+     
                 }
               },
               child: const Text('Select Exercise'),
@@ -276,12 +282,14 @@ class _AddRoutineState extends State<AddRoutine> {
         deleteFile('routines/${widget.o_name}');
       }
       Map<String, dynamic> newData = {
-        'data' : {
-          'name' : name
-        },
-        'sets' : sets
+        name: {
+          'data' : {
+            'name' : name
+          },
+          'sets' : sets
+        }
       };
-      writeData(newData, path: 'routines/$name', append: false);
+      writeData(newData, path: 'routines');
       widget.onRoutineSaved();          
     }
   }
