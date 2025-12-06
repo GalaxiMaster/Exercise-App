@@ -31,14 +31,14 @@ class Options {
   };
 }
 
-Future<Map<String, dynamic>> readData({String path = 'words'}) async {
+Future<Map<String, dynamic>> readData({String path = 'output'}) async {
   final box = await Hive.openBox(path);
   return Map<String, dynamic>.from(box.toMap());
 }
 
 Future<void> writeData(
   Map<String, dynamic> newData, {
-  String path = 'words',
+  String path = 'output',
   bool append = true,
 }) async {
   final box = await Hive.openBox(path);
@@ -51,19 +51,19 @@ Future<void> writeData(
   debugPrint('Data written to Hive box: $path');
 }
 
-Future<void> deleteKey(String word, {String path = 'words'}) async {
+Future<void> deleteKey(String word, {String path = 'output'}) async {
   final box = await Hive.openBox(path);
   await box.delete(word);
   debugPrint('Deleted word "$word" from box "$path"');
 }
 
-Future<void> writeKey(String key, dynamic data, {String path = 'words',}) async {
+Future<void> writeKey(String key, dynamic data, {String path = 'output',}) async {
   final box = await Hive.openBox(path);
   box.put(key, data);
   debugPrint('Writing Key "$key" from box "$path"');
 }
 
-Future<dynamic> readKey(String key, {String path = 'words', dynamic defaultValue}) async {
+Future<dynamic> readKey(String key, {String path = 'output', dynamic defaultValue}) async {
   final box = await Hive.openBox(path);
   return box.get(key, defaultValue: defaultValue);
 }
@@ -91,7 +91,9 @@ Future<void> exportJson(BuildContext context) async {
     List? exportChoices = await getChoices(context, 'Data to Export');
     if (context.mounted) loadingOverlay.showLoadingOverlay(context);
     Map data = {};
-    if (exportChoices == null) return;
+    if (exportChoices == null) {
+      throw 'No choices selected';
+    }
     for (String choice in exportChoices){
       final box = await Hive.openBox(choice);
       final boxData = Map<String, dynamic>.from(box.toMap());
@@ -113,7 +115,7 @@ Future<void> exportJson(BuildContext context) async {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(path)],
-          text: 'Exported data from Wordini',
+          text: 'Exported exercise history and records from Exercise App',
         ),
       );
 
@@ -130,8 +132,8 @@ Future<List?> getChoices(BuildContext context, String dialogueTitle) async{
     context: context,
     builder: (context) {
       Map options = {
-        'words': true,
-        'inputs': true,
+        'output': true,
+        'records': true,
         // 'settings': true
       };
       return StatefulBuilder(

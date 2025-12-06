@@ -1,3 +1,4 @@
+import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -188,6 +189,7 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
     };
     writeData(await getRecords(exerciseList), path: 'records', append: false);
     writeData(data, append: true);
+    syncData();
     resetData(['current']); // TODO
   }
   

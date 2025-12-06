@@ -75,14 +75,14 @@ Future<void> syncData({String? user, data = false, records = false, settings = f
     settings = true;
   }
   Map respectiveData = {
-    'Data': data,
+    'Output': data,
     'Records': records,
     'Settings': settings,
   };
   for (var entry in respectiveData.entries) {
     if (entry.value) {
       try {
-        Map<String, dynamic> dataMap = (await readData(path: entry.key != 'Data' ? entry.key.toLowerCase() : null)).cast<String, dynamic>();
+        Map<String, dynamic> dataMap = (await readData(path: entry.key.toLowerCase())).cast<String, dynamic>();
         await FirebaseFirestore.instance
           .collection('User Data')
           .doc(user)
