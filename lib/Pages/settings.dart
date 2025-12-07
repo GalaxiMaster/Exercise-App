@@ -299,7 +299,7 @@ void updateSettings(String option, String value) async{
   writeData(data, path: 'settings', append: false);
 }
 
-void moveExercises(BuildContext context) async{
+void moveExercises(BuildContext context) async{ // TODO Add move records too?
   List? problemExercises = [];
   Map data = await readData();
   for (String day in data.keys){
@@ -351,7 +351,6 @@ void moveExercises(BuildContext context) async{
       }
     }
   }
-  resetData(['output']); // TODO wtf is this
   writeData(newData);
 }
 
