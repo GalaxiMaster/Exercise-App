@@ -28,32 +28,43 @@ class CalendarWidget extends StatefulWidget {
 class _CalendarWidgetState extends State<CalendarWidget> {
   List<DateTime> highlightedDays = [];
   Map exerciseData = {};
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
     _loadHighlightedDays();
   }
+
   Future<void> _loadHighlightedDays() async {
     var data = await readData();
     setState(() {
       exerciseData = data;
       highlightedDays = data.keys.map((x) => DateTime.parse(x.split(' ')[0])).toList();
+      isLoading = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    DateTime firstTime = DateTime.now().subtract(const Duration(days: 365));
-    if (exerciseData.keys.isNotEmpty){
-      firstTime = DateTime.parse(exerciseData.keys.toList()[exerciseData.keys.length-1].split(' ')[0]).subtract(const Duration(days: 31));
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
     }
+
+    DateTime firstTime = DateTime.now().subtract(Duration(days: 365));
+    if (exerciseData.keys.isNotEmpty){
+      firstTime = DateTime.parse(exerciseData.keys.toList()[0].split(' ')[0]).subtract(const Duration(days: 31));
+    }
+
     return Column(
       children: [
         if (exerciseData.isNotEmpty) 
-          StreakRestRow(exerciseData: exerciseData), // Render only when exerciseData is not empty
+        StreakRestRow(exerciseData: exerciseData),
         Expanded(
           child: PagedVerticalCalendar(
-            minDate: DateTime(firstTime.year, firstTime.month, firstTime.day), // start date
-            maxDate: DateTime.now().add(const Duration(days: 31)), // year from now
+            key: ValueKey(exerciseData.length),
+            minDate: firstTime,
+            maxDate: DateTime.now().add(const Duration(days: 31)),
             dayBuilder: (context, date) {
               bool isHighlighted = highlightedDays.any((highlightedDay) =>
                   date.year == highlightedDay.year &&
@@ -79,11 +90,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DayScreen(
-                            date: date,
-                            dayData: daysData,
-                            reload: _loadHighlightedDays,
-                      ),
-                    )
+                          date: date,
+                          dayData: daysData,
+                          reload: _loadHighlightedDays,
+                        ),
+                      )
                     );
                   }
                 },
@@ -136,6 +147,7 @@ class _StreakRestRowState extends State<StreakRestRow> {
     super.initState();
     stats = getStats();
   }
+
   @override
   void didUpdateWidget(covariant StreakRestRow oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -143,14 +155,15 @@ class _StreakRestRowState extends State<StreakRestRow> {
       stats = getStats();
     }
   }
+
   List getStats() {
     if (widget.exerciseData.keys.isEmpty) {
       return [0, 0];
     }
-    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList()[0].split(' ')[0])).inDays;
+    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList().last.split(' ')[0])).inDays;
     int streaks = 0;
     int week = weekNumber(DateTime.now());
-    for (var day in widget.exerciseData.keys) {
+    for (var day in widget.exerciseData.keys.toList().reversed) {
       debugPrint(day);
       int weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
       debugPrint('${week - weekNum}  $week  $weekNum');
@@ -239,9 +252,10 @@ class WorkoutStats extends StatelessWidget {
     super.key,
     required this.workout,
   });
+
   List workoutData(){
     double volume = 0;
-    Duration difference = DateTime.parse(workout['stats']['endTime']).difference(DateTime.parse(workout['stats']['startTime'])); // Calculate the difference
+    Duration difference = DateTime.parse(workout['stats']['endTime']).difference(DateTime.parse(workout['stats']['startTime']));
     String time = '${difference.inHours != 0 ? '${difference.inHours}h' : ''} ${difference.inMinutes.remainder(60)}m';
     int prs = 0;
     for (var exercise in workout['sets'].keys){
@@ -261,6 +275,7 @@ class WorkoutStats extends StatelessWidget {
     }
     return [sVolume, time, prs];
   }
+
   @override
   Widget build(BuildContext context) {
     List data = workoutData();

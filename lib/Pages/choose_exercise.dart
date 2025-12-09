@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
@@ -331,21 +330,10 @@ bool containsAllCharacters(String exercise, String query) {
 }
 
 Future<bool> fileExists(String filePath) async {
-  // Load the asset manifest file, which lists all available assets
-  final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  final manifestMap = json.decode(manifestContent);
-
-  // Check if the asset is in the manifest (i.e., it exists in the assets)
-  if (manifestMap.containsKey(filePath)) {
-    try {
-      await rootBundle.load(filePath);
-      debugPrint('yeah');
-      return true;
-    } catch (e) {
-      debugPrint('Error while loading asset: $e');
-      return false;
-    }
-  } else {
+  try {
+    await rootBundle.load(filePath);
+    return true;
+  } catch (e) {
     debugPrint('Asset does not exist: $filePath');
     return false;
   }
