@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 class DayScreen extends StatefulWidget {
   final DateTime date;
   final Map dayData;
-  final Function reload;
-  const DayScreen({super.key, required this.date, required this.dayData, required this.reload});
+  final Function? reload;
+  const DayScreen({super.key, required this.date, required this.dayData, this.reload});
   @override
   // ignore: library_private_types_in_public_api
   _DayScreenState createState() => _DayScreenState();
@@ -18,12 +18,11 @@ class DayScreen extends StatefulWidget {
 
 class _DayScreenState extends State<DayScreen> {
   Map dayData = {};
-  void reload(date) async{
+  void reload(String date) async{
     Map data = await readData();
-    setState(() { // who knows if this works
+    setState(() { // who knows if this works // ! WHAT DO YOU MEAN WHO KNOWS IF IT WORKS??
       dayData = data[date];
-    });
-    
+    }); 
   }
   @override
   build(BuildContext context) {
@@ -41,7 +40,7 @@ class _DayScreenState extends State<DayScreen> {
               itemCount: dayData.keys.length,
               itemBuilder: (context, index){
                 return GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], dayKey: dayData.keys.toList()[index]))
@@ -113,7 +112,9 @@ class _DayScreenState extends State<DayScreen> {
                           });            
                           await deleteDay(day);
                           widget.dayData.remove(keyToRemove);
-                          widget.reload();
+                          if (widget.reload != null){
+                            widget.reload!();
+                          }
                           setState(() {});// TODO maybe include the index somewhere later                       
                       }
                     },

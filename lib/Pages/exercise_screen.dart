@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -16,18 +17,21 @@ enum TabItem {
   info,
 }
 
-// ignore: must_be_immutable
+enum ScaleSetting {
+  equalIntervals,
+  scaled,
+}
+
 class ExerciseScreen extends StatefulWidget {
   final List exercises;
 
   const ExerciseScreen({super.key, required this.exercises});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ExerciseScreenState createState() => _ExerciseScreenState();
+  ExerciseScreenState createState() => ExerciseScreenState();
 }
 
-class _ExerciseScreenState extends State<ExerciseScreen> {
+class ExerciseScreenState extends State<ExerciseScreen> {
   List exerciseData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
@@ -37,7 +41,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   TabItem _currentTab = TabItem.graph;
   String weekrangeStr = 'All Time';
   int range = -1;
-  
+  ScaleSetting scaleSetting = ScaleSetting.equalIntervals;
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +56,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     });
   }
 
-  Future<void> _loadHighlightedDays({reload = false}) async {
+  Future<void> _loadHighlightedDays({bool reload = false}) async {
     var data = await getStats(widget.exercises, range);
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
     final List values = exerciseData.map((data) => data[selector]).toList();
@@ -65,7 +70,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       }
       if (reload){
         graphvalue = numParsething(values[values.length - 1]);
-        week = dates[dates.length - 1];
+        week = dates.last.split(' ')[0];
         alterHeadingBar(graphvalue, week);
       }
     });
@@ -77,7 +82,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     });
   }
   
-  Widget _buildPageContent(var spots, var dates, xValues) {
+  Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues) {
     switch (_currentTab) {
       case TabItem.info:
         return infoBody(widget.exercises);
@@ -96,12 +101,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
     final List xValues = exerciseData.map((data) => data['x-value']).toList();
     final List values = exerciseData.map((data) => data[selector]).toList();
-    final Set things = exerciseData.map((data) => data['x-value']).toSet();
+    final Set things = exerciseData.map((data) => data['x-value']).toSet(); // todo rename
 
-    String setting = 'notScaled';
     if (dates.isNotEmpty){
       if (week == ''){
-        week = dates[dates.length - 1];
+        week = dates.last.split(' ')[0];
       }
       if (graphvalue == 0){
         graphvalue = numParsething(values[values.length - 1]);
@@ -112,16 +116,14 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     // Iterate through the exercise data
     exerciseData.asMap().entries.forEach((entry) {
       final exerciseName = entry.value['exercise'] as String;
-      if (exerciseName == 'Dumbbell Incline Bench Press'){
-        debugPrint('yes');
-      }
+
       // Initialize the list for this exercise if it doesn't exist
       spotsByExercise[exerciseName] ??= [];
       
       // Create and add the FlSpot for this entry
       spotsByExercise[exerciseName]!.add(
         FlSpot(
-          setting == 'notScaled' ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
+          scaleSetting == ScaleSetting.equalIntervals ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
           (exerciseMuscles[widget.exercises]?['type'] ?? 'weighted') != 'bodyweight' 
               ? double.parse(entry.value[selector].toString()) 
               : double.parse(entry.value['reps'].toString()),
@@ -231,7 +233,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       Colors.indigo,
     ]; 
   Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context) {
-
     String unit = 'kg';
     if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
     final List<LineChartBarData> allLineBarsData = [];
@@ -259,8 +260,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             isStrokeCapRound: false,
             dotData: const FlDotData(show: false),
             spots: calculateBestFitLine(entry.value),
-            color: Colors.primaries[allLineBarsData.length % Colors.primaries.length]
-                .withRed(255), // Makes it a reddish version of the main line color
+            color: Colors.primaries[allLineBarsData.length % Colors.primaries.length].withRed(255), // Makes it a reddish version of the main line color
             barWidth: 2,
             dashArray: [5, 5],
             belowBarData: BarAreaData(show: false),
@@ -298,10 +298,21 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                             GestureDetector(
                               onTap: () async{
                                 Map data = await readData();
+                                Map keys = {};
+                                for (String key in data.keys) {
+                                  if (key.contains(week)){
+                                    keys[key] = data[key];
+                                  }
+                                }
+                                if (keys.isEmpty || !context.mounted) return;
+
                                 Navigator.push(
-                                  // ignore: use_build_context_synchronously
                                   context,
-                                  MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[week], dayKey: week,))
+                                  MaterialPageRoute(builder: (context) => 
+                                    keys.keys.length > 1 
+                                      ? DayScreen(date: DateTime.parse(week), dayData: keys)
+                                      : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys[0]} 1'))
+
                                 ).then((_) {
                                   _loadHighlightedDays(reload: true);  // Call the method after returning from Addworkout
                                 });
@@ -309,7 +320,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  spots.isNotEmpty ? DateFormat('MMM dd').format(DateTime.parse(week.split(' ')[0])) : '0',
+                                  spots.isNotEmpty ? DateFormat('MMM dd yyyy').format(DateTime.parse(week)) : '0',
                                   style: const TextStyle(
                                     color: Colors.blue,
                                   ),
@@ -357,23 +368,32 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         lineTouchData: LineTouchData(  
                           handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
                           touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                            debugPrint(touchResponse?.lineBarSpots.toString());
-                            if (event is FlTapUpEvent) {
-                              final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
-                              const double minX = 0;
-                              final double maxX = xValues[xValues.length-1].toDouble();
-                              const chartWidth = 420.0;
-                              final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
+                            // debugPrint(touchResponse?.lineBarSpots.toString());
+                            // if (event is FlTapUpEvent) {
+                              // final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
+                              // const double minX = 0;
+                              // final double maxX = xValues[xValues.length-1].toDouble();
+                              // const chartWidth = 420.0;
+                              // final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
                               
-                              debugPrint('Touched X-axis value: $touchedXValue');}
+                              // debugPrint('Touched X-axis value: $touchedXValue');
+                            // }
                             if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
                               // Find the nearest point (spot) the user interacted with
                               final touchedSpot = touchResponse.lineBarSpots!.first;
                 
                               // Get the index and value of the touched spot
-                              final int index = touchedSpot.spotIndex;
-                              final String weekLabel = dates[index]; // Assuming 'dates' is a list of labels for each X point
+                              // final int index = touchedSpot.spotIndex;
+                              final String weekLabel; 
+                              if (scaleSetting ==  ScaleSetting.equalIntervals){
+                                weekLabel =  dates[touchedSpot.x.toInt()].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point
+                              }
+                              else{
+                                weekLabel =  DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt())); // Assuming 'dates' is a list of labels for each X point
+                              }
                               final double value = touchedSpot.y; // Y value at the touched point
+                              final double xVal = touchedSpot.x;
+                              debugPrint('xVal: $xVal, value: $value, weekLabel: $weekLabel');
                               // Use post-frame callback to ensure state/UI updates occur after the touch event
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 alterHeadingBar(value, weekLabel); // Trigger your heading update function
@@ -402,13 +422,16 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
-                              interval: spots.isNotEmpty ? calculateInterval(spots.values.fold(0, (sum, list) => sum + list.length), spots.values.expand((spots) => spots).map((spot) => spot.x).reduce(max)) : 9999,
+                              interval: spots.isNotEmpty ? calculateInterval(
+                                scaleSetting ==  ScaleSetting.scaled ? DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch : 0,
+                                spots.values.expand((spots) => spots).map((spot) => spot.x).reduce(max)
+                              ) : 9999,
                               showTitles: true,
                               getTitlesWidget: (value, _) {
                                 return SideTitleWidget(
                                   axisSide: AxisSide.bottom,
                                   child: Text(
-                                    spots.isNotEmpty ? DateFormat('MMM dd').format(DateTime.parse(dates[findClosestIndexInSorted(xValues, value)].split(' ')[0])) : '',
+                                    spots.isNotEmpty ? getDateValue(dates, value) : '',
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                 );
@@ -509,36 +532,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
 
-
-int findClosestIndexInSorted(List list, double target) {
-  int left = 0, right = list.length - 1;
-
-  while (left < right) {
-    int mid = (left + right) ~/ 2;
-
-    if (list[mid] == target) {
-      return mid; // Exact match
-    } else if (list[mid] < target) {
-      left = mid + 1;
-    } else {
-      right = mid;
-    }
-  }
-
-  // Compare the two closest candidates
-  if (left == 0) return left;
-  if (left == list.length) return list.length - 1;
-  
-  return (target - list[left - 1]).abs() <= (list[left] - target).abs()
-      ? left - 1
-      : left;
-}
-
-
-  double calculateInterval(int itemCount, num itemTotal) {
+  double calculateInterval(int itemStart, num itemTotal) {
     itemTotal == 0 ? itemTotal = 1 : null;
-    if (itemCount <= 5) return itemTotal/5 + 1;
-    return itemTotal/5 + 1;
+    return (itemTotal - itemStart)/4.5;
   }
   
   Widget selectorBox(String text, bool selected){
@@ -575,6 +571,16 @@ int findClosestIndexInSorted(List list, double target) {
         ),
       ),
     );
+  }
+  
+  String getDateValue(List dates, num value) {
+    if (scaleSetting == ScaleSetting.scaled){
+      DateTime target = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+      return DateFormat('MMM dd').format(target);
+    }
+    else{
+      return DateFormat('MMM dd').format(DateTime.parse(dates[value.round()].split(' ')[0]));
+    }
   }
 }
 extension ColorExtension on Color {
@@ -719,7 +725,7 @@ Future<List> getStats(List targets, range) async {
               'date': day,
               'volume': double.parse(set['reps'].toString()).abs() * double.parse(set['weight'].toString()).abs(),
               'exercise': exercise,
-              'x-value': dayDate.difference(startDate).inDays,
+              'x-value': dayDate.millisecondsSinceEpoch, //  'x-value': dayDate.difference(startDate).inDays,
             };
 
             if ((dayHeaviestWeight[exercise]?.isEmpty ?? false) || set['weight'] > (dayHeaviestWeight[exercise]?['weight'] ?? -9999)) { // TODO find better wqay of doing htis

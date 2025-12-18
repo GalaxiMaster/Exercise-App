@@ -96,7 +96,7 @@ void importDataThis(BuildContext context) async{
       String? filePath = result.files.single.path;
 
       // Read the content of the file
-          if (filePath == null) return; // TODO clean slightly
+      if (filePath == null) return; // TODO clean slightly and add  validation
 
       File file = File(filePath);
       String content = await file.readAsString();
