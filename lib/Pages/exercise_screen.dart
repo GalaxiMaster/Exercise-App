@@ -135,6 +135,23 @@ class ExerciseScreenState extends State<ExerciseScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.exercises.length == 1 ?  widget.exercises[0] : 'Exercises Data'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () async{
+              final result = await showSettingToggleDialog(
+                context,
+                scaleSetting,
+              );
+
+              if (result != null) {
+                setState(() {
+                  scaleSetting = result;
+                });
+              }
+            },
+          ),
+        ],
       ),
       body: _buildPageContent(spotsByExercise, dates, xValues),
       bottomNavigationBar: BottomNavigationBar(
@@ -789,4 +806,87 @@ double findGradient(List<FlSpot> dataPoints){
     return ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
   }
   return ((b.y-a.y)/a.y.abs())*100;
+}
+
+Future<ScaleSetting?> showSettingToggleDialog(
+  BuildContext context,
+  ScaleSetting currentValue,
+) {
+  ScaleSetting selectedValue = currentValue;
+
+  return showDialog<ScaleSetting>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Select Scale Setting'),
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return IntrinsicHeight(
+              child: RadioGroup<ScaleSetting>(
+                groupValue: selectedValue,
+                onChanged: (value) {
+                  setState(() {
+                    selectedValue = value!;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        const Text(
+                          'Time Scaled',
+                          textAlign: TextAlign.center,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedValue = ScaleSetting.scaled;
+                            });
+                          },
+                          child: Radio<ScaleSetting>(
+                            value: ScaleSetting.scaled,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Linear',
+                            textAlign: TextAlign.center,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedValue = ScaleSetting.equalIntervals;
+                              });
+                            },
+                            child: Radio<ScaleSetting>(
+                              value: ScaleSetting.equalIntervals,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(null),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(selectedValue),
+            child: const Text('Save'),
+          ),
+        ],
+      );
+    },
+  );
 }
