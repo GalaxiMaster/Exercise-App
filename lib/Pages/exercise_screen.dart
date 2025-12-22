@@ -42,6 +42,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
   String weekrangeStr = 'All Time';
   int range = -1;
   ScaleSetting scaleSetting = ScaleSetting.equalIntervals;
+  Color activeColor = Colors.blue;
 
   @override
   void initState() {
@@ -49,10 +50,11 @@ class ExerciseScreenState extends State<ExerciseScreen> {
     _loadHighlightedDays();
   }
  
-  void alterHeadingBar(num value, String weekt){
+  void alterHeadingBar(num value, String weekt, Color color){
     setState(() {
       graphvalue = numParsething(value);
       week = weekt;
+      activeColor = color;
     });
   }
 
@@ -71,7 +73,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
       if (reload){
         graphvalue = numParsething(values[values.length - 1]);
         week = dates.last.split(' ')[0];
-        alterHeadingBar(graphvalue, week);
+        alterHeadingBar(graphvalue, week, Colors.blue);
       }
     });
   }
@@ -305,6 +307,17 @@ class ExerciseScreenState extends State<ExerciseScreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 12.5,
+                                height: 12.5,
+                                decoration: BoxDecoration(
+                                  color: activeColor,
+                                  border: Border.all(color: Colors.black)
+                                ),
+                              ),
+                            ),
                             Text(
                               '${graphvalue.toStringAsFixed(2)} $unit',
                               style: const TextStyle(
@@ -410,10 +423,11 @@ class ExerciseScreenState extends State<ExerciseScreen> {
                               }
                               final double value = touchedSpot.y; // Y value at the touched point
                               final double xVal = touchedSpot.x;
+                              final Color? color = touchedSpot.bar.color;
                               debugPrint('xVal: $xVal, value: $value, weekLabel: $weekLabel');
                               // Use post-frame callback to ensure state/UI updates occur after the touch event
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                alterHeadingBar(value, weekLabel); // Trigger your heading update function
+                                alterHeadingBar(value, weekLabel, color ?? Colors.blue); // Trigger your heading update function
                               });
                             }
                           },
@@ -439,9 +453,17 @@ class ExerciseScreenState extends State<ExerciseScreen> {
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
-                              interval: spots.isNotEmpty ? calculateInterval(
-                                scaleSetting ==  ScaleSetting.scaled ? DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch : 0,
-                                spots.values.expand((spots) => spots).map((spot) => spot.x).reduce(max)
+                             interval: spots.isNotEmpty ? calculateInterval(
+                                spots.values.expand((spots) => spots).map(
+                                  (spot) {
+                                     double spotVal = spot.x;
+                                     if (scaleSetting ==  ScaleSetting.scaled) {
+                                       spotVal -= DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch.toDouble();
+                                     }
+                                     return spotVal;
+                                  }
+                                ).reduce(max),
+                                5
                               ) : 9999,
                               showTitles: true,
                               getTitlesWidget: (value, _) {
@@ -549,9 +571,19 @@ class ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
 
-  double calculateInterval(int itemStart, num itemTotal) {
-    itemTotal == 0 ? itemTotal = 1 : null;
-    return (itemTotal - itemStart)/4.5;
+  double calculateInterval(num itemTotal, num itemCount) {
+    // If there is 0 or 1 item, return the total (nothing to divide)
+    if (itemCount <= 1) {
+      return itemTotal.toDouble();
+    }
+
+    // Guard against zero total range
+    if (itemTotal == 0) {
+      itemTotal = 1;
+    }
+
+    // There are (N - 1) gaps between N points — divide by N-1
+    return (itemTotal.toDouble()) / (itemCount - 1);
   }
   
   Widget selectorBox(String text, bool selected){
@@ -567,8 +599,8 @@ class ExerciseScreenState extends State<ExerciseScreen> {
           final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
           final List values = exerciseData.map((data) => data[selector]).toList();
           graphvalue = values.isNotEmpty ? numParsething(values[values.length - 1]) : 0;
-          week = dates.isNotEmpty ? dates[dates.length - 1] : '';
-          alterHeadingBar(graphvalue, week);
+          week = dates.isNotEmpty ? dates.last.split(' ')[0] : '';
+          alterHeadingBar(graphvalue, week, Colors.blue);
         });
       },
       child: Padding(
