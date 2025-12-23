@@ -19,6 +19,7 @@ class _MainExercisesPageState extends State<MainExercisesPage> {
   List selectedItems = [];
   late Map exerciseData;
   bool isLoading = true;
+  Map<String, bool> assetExists = {}; // cache for asset existence
 
 
   String timeSelected = 'All Time';
@@ -33,6 +34,16 @@ class _MainExercisesPageState extends State<MainExercisesPage> {
 
 void setExerciseData() async {
   final data = await getExercises(range, muscleSelected);
+  // Build a cache of which exercises have local png assets to avoid per-row async checks
+  final exercises = data.keys.toList();
+  final futures = exercises.map((e) => fileExists("assets/Exercises/$e.png")).toList();
+  final results = await Future.wait(futures);
+  for (int i = 0; i < exercises.length; i++) {
+    assetExists[exercises[i]] = results[i];
+    if (results[i] && mounted) {
+      precacheImage(AssetImage("assets/Exercises/${exercises[i]}.png"), context);
+    }
+  }
   setState(() {
     exerciseData = data; // Store the fetched data
     isLoading = false;   // Mark loading as complete
@@ -136,31 +147,21 @@ void setExerciseData() async {
                                 ),
                               ),
                             ),
-                            FutureBuilder<bool>(
-                              future: fileExists("assets/Exercises/$exercise.png"),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return const CircularProgressIndicator(); // Loading state
-                                } else if (snapshot.hasError) {
-                                  return const Icon(Icons.error); // Show error icon if something went wrong
-                                } else if (snapshot.hasData && snapshot.data!) {
-                                  return Image.asset(
+                            // Use cached existence map (populated in setExerciseData) to avoid per-row async work
+                            assetExists[exercise] == true
+                                ? Image.asset(
                                     "assets/Exercises/$exercise.png",
                                     height: 50,
                                     width: 50,
-                                  );
-                                } else {
-                                  return Padding(
+                                  )
+                                : Padding(
                                     padding: const EdgeInsets.all(8),
                                     child: SvgPicture.asset(
                                       "assets/profile.svg",
                                       height: 35,
                                       width: 35,
                                     ),
-                                  );
-                                }
-                              },
-                            ),
+                                  ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 12),
                               child: Column(

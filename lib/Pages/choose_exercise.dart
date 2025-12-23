@@ -26,25 +26,27 @@ class WorkoutList extends StatefulWidget {
 class _WorkoutListState extends State<WorkoutList> {
   String query = '';
   late final List exerciseList;
-  final Map<String, bool> _imageExistsCache = {};
   final List selectedItems = [];
   bool multiSelect = false;
+  Map<String, bool> assetExists = {}; // cache for asset existence
 
   @override
   void initState() {
     super.initState();
     exerciseList = exerciseMuscles.keys.toList()..sort();
+    checkAssets();
   }
 
-  // Cache the file existence check
-  Future<bool> _checkFileExists(String filePath) async {
-    if (_imageExistsCache.containsKey(filePath)) {
-      return _imageExistsCache[filePath]!;
+  void checkAssets() async {
+    for (String exercise in exerciseList) {
+      String filePath = "assets/Exercises/$exercise.png";
+      bool exists = await fileExists(filePath);
+      assetExists[exercise] = exists;
+      if (mounted){
+        precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
+        setState(() {}); // Trigger rebuild after checking asset TODO optomise?
+      }
     }
-    
-    final exists = await fileExists(filePath);
-    _imageExistsCache[filePath] = exists;
-    return exists;
   }
 
   Widget _buildExerciseItem(String exercise, bool isProblemExercise) {
@@ -121,32 +123,20 @@ class _WorkoutListState extends State<WorkoutList> {
                       width: 35,
                     ),
                   )
-                : FutureBuilder<bool>(
-                    future: _checkFileExists("assets/Exercises/$exercise.png"),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const SizedBox(
-                          width: 50,
+                  : assetExists[exercise] == true
+                      ? Image.asset(
+                          "assets/Exercises/$exercise.png",
                           height: 50,
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                      return snapshot.hasData && snapshot.data! 
-                        ? Image.asset(
-                            "assets/Exercises/$exercise.png",
-                            height: 50,
-                            width: 50,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: SvgPicture.asset(
-                              "assets/profile.svg",
-                              height: 35,
-                              width: 35,
-                            ),
-                          );
-                    },
-                  ),
+                          width: 50,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SvgPicture.asset(
+                            "assets/profile.svg",
+                            height: 35,
+                            width: 35,
+                          ),
+                        ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
