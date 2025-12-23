@@ -52,6 +52,7 @@ class SignUpPageState extends State<SignUpPage> {
                 Navigator.pushReplacementNamed(context, '/home');
               }
             } catch (e, st) {
+              errorSnackBar('Error handling authentication event: $e');
               debugPrint('Error handling authentication event: $e');
               debugPrint('$st');
             }

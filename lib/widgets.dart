@@ -1,3 +1,6 @@
+import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
+import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -15,9 +18,52 @@ double autoRoundUp(double value) {
   return (value / step).ceil() * step;
 }
 
-
-
-
+Widget selectorBox(String text, String type, Function onSubmit, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: GestureDetector(
+      onTap: () async{
+        var entry = await showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            if (type == 'time'){
+              return TimeSelectorPopup(options: Options().timeOptions);
+            }else{
+              return TimeSelectorPopup(options: Options().muscleOptions); 
+            }
+          },
+        );
+        if (entry != null){
+          onSubmit(entry);
+        }
+      },
+      child: Container(
+        width:  MediaQuery.of(context).size.width / 2-16,
+        decoration: BoxDecoration(
+          color: ThemeColors.accent,
+          borderRadius: BorderRadius.circular(10)
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 20
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_down)
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
 
 class LoadingOverlay {

@@ -52,6 +52,7 @@ class SignInPageState extends State<SignInPage> {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }
             } catch (e, st) {
+              errorSnackBar('Error handling authentication event: $e');
               debugPrint('Error handling authentication event: $e');
               debugPrint('$st');
             }

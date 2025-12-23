@@ -109,7 +109,7 @@ class _DayScreenState extends State<DayScreen> {
                             if (value == day) {
                               keyToRemove = key;
                             }
-                          });            
+                          });
                           await deleteDay(day);
                           widget.dayData.remove(keyToRemove);
                           if (widget.reload != null){
