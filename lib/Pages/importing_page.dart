@@ -104,7 +104,9 @@ void importDataThis(BuildContext context) async{
       // Parse the JSON content
       Map<String, dynamic> jsonData = jsonDecode(content);
       // writeData({}, append: false);
-      writeData(jsonData, append: true);
+      for (String key in jsonData.keys){
+        writeData(jsonData[key], append: true, path: key);
+      }
       // Map data = await readData();
       showDialog(
         // ignore: use_build_context_synchronously

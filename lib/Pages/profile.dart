@@ -85,7 +85,7 @@ class _ProfileState extends State<Profile> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error loading data'));
+            return Center(child: Text('Error loading data ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final data = snapshot.data![0][graphSelector]; // Extract data
             final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
@@ -169,7 +169,7 @@ class _ProfileState extends State<Profile> {
                         onTap: () {
                           Widget destination;
                           if (index == 0) {
-                            destination = const CalenderScreen();
+                            destination = CalenderScreen();
                           } else if (index == 1) {
                             destination = const WorkoutList(setting: 'info',);
                           } else if (index == 2) {
