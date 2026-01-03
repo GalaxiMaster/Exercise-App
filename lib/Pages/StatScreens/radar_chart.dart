@@ -60,7 +60,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
                   var entry = await showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return TimeSelectorPopup(options: Options().timeOptions);
+                      return SelectorPopup(options: Options().timeOptions);
                     },
                   );
                   if (entry != null) {
@@ -164,16 +164,16 @@ extension HexColor on Color {
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
-class TimeSelectorPopup extends StatefulWidget {
+class SelectorPopup extends StatefulWidget {
   final Map options;
-  const TimeSelectorPopup({super.key, required this.options});
+  const SelectorPopup({super.key, required this.options});
 
   @override
   // ignore: library_private_types_in_public_api
-  _TimeSelectorPopupState createState() => _TimeSelectorPopupState();
+  _SelectorPopupState createState() => _SelectorPopupState();
 }
 
-class _TimeSelectorPopupState extends State<TimeSelectorPopup> {
+class _SelectorPopupState extends State<SelectorPopup> {
 
   void selectTime(MapEntry days) {
     Navigator.pop(context, days);

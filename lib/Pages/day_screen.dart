@@ -98,6 +98,9 @@ class _DayScreenState extends State<DayScreen> {
                             day['sets'] = result;
                             editDay(day);
                             setState(() {});
+                            if (widget.reload != null){
+                              widget.reload!();
+                            }
                           }
                         case 'Share':
                           debugPrint('share');
@@ -206,5 +209,18 @@ class _DayScreenState extends State<DayScreen> {
     data[dayKey]['sets'] = day['sets'];
     writeData(data, append: false);
     return true;
+  }
+  String getBestSet(List exercise, String type){
+    List bestSet = [];
+    for (var set in exercise){
+      double weight = double.parse(set['weight'].toString());
+      double reps = double.parse(set['reps'].toString());
+      if (bestSet.isEmpty){
+        bestSet = [weight, reps];
+      }else if (weight > bestSet[0] ||  weight >= bestSet[0] && reps > bestSet[1]){
+        bestSet = [weight, reps];
+      }
+    }    
+    return type == 'bodyweight' ? (int.tryParse(bestSet[1].toString()) ?? bestSet[1]).toStringAsFixed(0) : '${bestSet[0]}kg x ${bestSet[1]}';
   }
 }

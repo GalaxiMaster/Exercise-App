@@ -364,7 +364,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
                             var entry = await showModalBottomSheet(
                               context: context,
                               builder: (context) {
-                                return TimeSelectorPopup(options: Options().timeOptions);
+                                return SelectorPopup(options: Options().timeOptions);
                               },
                             );
                             if(entry != null) {
