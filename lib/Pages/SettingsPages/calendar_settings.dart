@@ -28,12 +28,12 @@ class CalendarSettingsState extends ConsumerState<CalendarSettings> {
                 },
                 ),
               ),
-              _buildSettingsBox(icon: Icons.check, label: 'Buffer 1st', rightside: ToggleSwitch(
-                initialValue: settings['CalendarSettings']['MultiYear']['Buffer1st'] ?? false,
+              _buildSettingsBox(icon: Icons.check, label: 'Buffer ends', rightside: ToggleSwitch(
+                initialValue: settings['CalendarSettings']['MultiYear']['bufferEnds'] ?? false,
                 onChanged: (value) {
-                  settings['CalendarSettings']['MultiYear']['Buffer1st'] = value;
+                  settings['CalendarSettings']['MultiYear']['bufferEnds'] = value;
                   ref.read(settingsProvider.notifier).updateValue('CalendarSettings', settings['CalendarSettings']);
-                  debugPrint('Buffer 1st slider value changed: $value');
+                  debugPrint('Buffer ends slider value changed: $value');
                 },
                 ),
               ),

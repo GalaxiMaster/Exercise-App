@@ -574,7 +574,7 @@ class MultiYearCalendar extends StatelessWidget {
                                 );
         
                                 // Skip if date is outside the current year
-                                if (date.year != year && !(settings['startOn1st'] ?? false)) {
+                                if (date.year != year && !(settings['bufferEnds'] ?? false)) {
                                   return SizedBox(width: columnWidth + spacing, height: squareSize);
                                 }
         
