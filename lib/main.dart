@@ -3,6 +3,7 @@ import 'package:exercise_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'Pages/home.dart';
 
@@ -15,7 +16,7 @@ void main() async{
   // Initialize the encryption service
   await EncryptionService.instance.initialize();
   await Hive.initFlutter(); // Initializes Hive using path_provider
-  runApp(const MainApp());
+  runApp(ProviderScope(child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'package:exercise_app/Pages/Account/account.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
-import 'package:exercise_app/Pages/StatScreens/workout_settings.dart';
+import 'package:exercise_app/Pages/SettingsPages/workout_settings.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';

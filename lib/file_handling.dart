@@ -307,7 +307,13 @@ Future<Map<String, dynamic>> getAllSettings() async{
     },
     'Exercise Goals': {
       
-    }
+    },
+    'CalendarSettings': {
+      'MultiYear': {
+        'MultiColor': false,
+        'Buffer1st': false,
+      }
+    },
   };
   // check if the settings file has all of the right fields
   for (String key in defaultSettings.keys){

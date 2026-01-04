@@ -1,18 +1,21 @@
+import 'package:exercise_app/Pages/SettingsPages/calendar_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CalenderScreen extends StatefulWidget {
+class CalenderScreen extends ConsumerStatefulWidget {
   const CalenderScreen({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _CalenderScreenState createState() => _CalenderScreenState();
 }
 
-class _CalenderScreenState extends State<CalenderScreen> {
+class _CalenderScreenState extends ConsumerState<CalenderScreen> {
   MapEntry selection = MapEntry('Month', 'month');
 
   List<DateTime> highlightedDays = [];
@@ -35,11 +38,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    Map calendars = {
-      'month': CalendarWidget(highlightedDays: highlightedDays, exerciseData: exerciseData, reload: _loadHighlightedDays),
-      'year': buildMonthCalendar(highlightedDays),
-      'multiYear': MultiYearCalendar(activeDates: highlightedDays,),
-    };
+    final settingsAsync = ref.watch(settingsProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -66,10 +65,38 @@ class _CalenderScreenState extends State<CalenderScreen> {
           ),
           icon: const Icon(Icons.arrow_drop_down, size: 30, color: Colors.white,),
           iconAlignment: IconAlignment.end, 
-          
-        )
+        ),
+        actions: [
+          if (selection.value == 'multiYear')
+          IconButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarSettings())
+              );
+            },
+            icon: const Icon(Icons.settings),
+          )
+        ],
       ),
-      body: isLoading ? const Center(child: CircularProgressIndicator()) : calendars[selection.value]!,
+      body: isLoading 
+      ? const Center(child: CircularProgressIndicator()) 
+      : settingsAsync.when(
+        data: (map) {
+          return switch (selection.value) {
+            'month' => CalendarWidget(
+                highlightedDays: highlightedDays, 
+                exerciseData: exerciseData, 
+                reload: _loadHighlightedDays
+              ),
+            'year' => buildMonthCalendar(highlightedDays),
+            'multiYear' => MultiYearCalendar(activeDates: highlightedDays, settings: map['CalendarSettings']['MultiYear'],),
+            _ => const SizedBox.shrink(),
+          };
+        },        
+        loading: () => CircularProgressIndicator(),
+        error: (err, stack) => Text('Error: $err'),
+      ),
     );
   }
 }
@@ -343,14 +370,14 @@ class WorkoutStats extends StatelessWidget {
   }
 }
 
-Widget buildDaySquare(bool isActive, double size, {double margin = 0.75, double borderRadius = 1}) {
+Widget buildDaySquare(bool isActive, double size, {double margin = 0.75, double borderRadius = 1, Color activeColor = Colors.blue}) {
   return Container(
     width: size,
     height: size,
     margin: EdgeInsets.all(margin),
     decoration: BoxDecoration(
       color: isActive 
-          ? Colors.blue
+          ? activeColor
           : Colors.grey[900],
       borderRadius: BorderRadius.circular(borderRadius),
     ),
@@ -441,10 +468,12 @@ Widget buildMonthCalendar(List activeDates){
 
 class MultiYearCalendar extends StatelessWidget {
   final List<DateTime> activeDates;
+  final Map settings;
 
   const MultiYearCalendar({
     super.key,
     required this.activeDates,
+    required this.settings,
   });
 
   @override
@@ -458,59 +487,63 @@ class MultiYearCalendar extends StatelessWidget {
     // By going to Jan 1st of the next year, we handle 365 vs 366 days automatically.
     int startYear = activeDates.isNotEmpty ? activeDates.map((d) => d.year).reduce((a, b) => a < b ? a : b) : DateTime.now().year;
     int endYear = activeDates.isNotEmpty ? activeDates.map((d) => d.year).reduce((a, b) => a > b ? a : b) : DateTime.now().year;
-    DateTime firstDayOfYear = DateTime(startYear, 1, 1);
-    final firstDayOfNextYear = DateTime(startYear + 1, 1, 1);
+    DateTime firstDayOfYear = DateTime.utc(startYear, 1, 1);
+    final firstDayOfNextYear = DateTime.utc(startYear + 1, 1, 1);
     final totalDays = firstDayOfNextYear.difference(firstDayOfYear).inDays;
     final totalWeeks = (totalDays / 7).ceil();
 
     const double squareSize = 6.3;
-    const double spacing = 1;
+    const double spacing = .52;
     const double columnWidth = squareSize + spacing;
     const double labelHeight = 16.0; 
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: endYear - startYear + 1,
-            itemBuilder: (context, index) {
-              final year = startYear + index;
-              firstDayOfYear = DateTime(year, 1, 1);
+      padding: const EdgeInsets.all(12),
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: endYear - startYear + 1,
+              itemBuilder: (context, index) {
+                final year = startYear + index;
+                firstDayOfYear = DateTime.utc(year, 1, 1);
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$year',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$year',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // MONTH LABELS ROW
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(totalWeeks, (weekIndex) {
-                            final date = firstDayOfYear.add(Duration(days: weekIndex * 7));
-                            
-                            // Show label if it's the first week of the year OR the month changes
-                            bool isFirstWeekOfMonth = weekIndex == 0 || 
-                                date.month != firstDayOfYear.add(Duration(days: (weekIndex - 1) * 7)).month;
-              
-                            return SizedBox(
-                              width: columnWidth,
-                              height: labelHeight, // Giving the parent a height
-                              child: isFirstWeekOfMonth
+                    const SizedBox(height: 16),
+                    
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      // physics: NeverScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // MONTH LABELS ROW
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(totalWeeks, (weekIndex) {
+                              final date = firstDayOfYear.add(Duration(days: weekIndex * 7));
+                              
+                              // Show label if it's the first week of the year OR the month changes
+                              bool isFirstWeekOfMonth = weekIndex == 0 || 
+                                  date.month != firstDayOfYear.add(Duration(days: (weekIndex - 1) * 7)).month;
+                
+                              return SizedBox(
+                                width: columnWidth + 0.25,
+                                height: labelHeight, // Giving the parent a height
+                                child: isFirstWeekOfMonth
                                   ? OverflowBox(
                                       alignment: Alignment.centerLeft,
                                       maxWidth: 40,
@@ -523,49 +556,107 @@ class MultiYearCalendar extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox.shrink(),
-                            );
-                          }),
-                        ),
-                        const SizedBox(height: 6),
-                        
-                        // THE GRID
-                        Row(
+                              );
+                            }),
+                          ),
+                          const SizedBox(height: 6),
+                          
+                          // THE GRID
+                          Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(totalWeeks, (weekIndex) {
-                            return SizedBox(
-                              width: columnWidth,
-                              child: Column(
-                                children: List.generate(7, (dayIndex) {
-                                  final date = firstDayOfYear.add(
-                                    Duration(days: (weekIndex * 7) + dayIndex),
-                                  );
-              
-                                  if (date.year > year) {
-                                    return const SizedBox(height: squareSize + spacing);
-                                  }
-              
-                                  bool isActive = activeDateStrings.contains(
-                                    DateFormat('yyyy-MM-dd').format(date),
-                                  );
-              
-                                  return Container(
-                                    margin: const EdgeInsets.only(bottom: spacing),
-                                    child: buildDaySquare(isActive, squareSize)
-                                  );
-                                }),
-                              ),
+                          children: List.generate(7, (dayIndex) {
+                            // dayIndex 0 = Monday, 1 = Tuesday, etc.
+                            return Row(
+                              children: List.generate(53, (weekIndex) {
+                                // Calculate the date for this specific weekday in this week
+                                final date = firstDayOfYear.add(
+                                  Duration(days: (weekIndex * 7) + dayIndex - (firstDayOfYear.weekday - 1 )),
+                                );
+        
+                                // Skip if date is outside the current year
+                                if (date.year != year && !(settings['startOn1st'] ?? false)) {
+                                  return SizedBox(width: columnWidth + spacing, height: squareSize);
+                                }
+        
+                                bool isActive = activeDateStrings.contains(
+                                  DateFormat('yyyy-MM-dd').format(date),
+                                );
+                                
+                                final Map<String, Color> dayColorMap = {
+                                  'Monday': Colors.blue,
+                                  'Tuesday': Colors.green,
+                                  'Wednesday': Colors.orange,
+                                  'Thursday': Colors.purple,
+                                  'Friday': Colors.red,
+                                  'Saturday': Colors.teal,
+                                  'Sunday': Colors.limeAccent,
+                                };
+                                
+                                return Container(
+                                  width: columnWidth,
+                                  margin: const EdgeInsets.only(right: spacing),
+                                  child: buildDaySquare(
+                                    isActive, 
+                                    squareSize, 
+                                    activeColor: settings['MultiColor'] ?? false ? 
+                                      dayColorMap[DateFormat('EEEE').format(date.toUtc())]!
+                                      : Colors.blue
+                                  )
+                                );
+                              }),
                             );
                           }),
                         ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+// Row(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: List.generate(totalWeeks, (weekIndex) {
+//                             return SizedBox(
+//                               width: columnWidth,
+//                               child: Column(
+//                                 children: List.generate(7, (dayIndex) {
+//                                   final date = firstDayOfYear.add(
+//                                     Duration(days: (weekIndex * 7) + dayIndex),
+//                                   );
+              
+//                                   if (date.year > year) {
+//                                     return const SizedBox(height: squareSize + spacing);
+//                                   }
+              
+//                                   bool isActive = activeDateStrings.contains(
+//                                     DateFormat('yyyy-MM-dd').format(date),
+//                                   );
+//                                   if (isActive && date.month == 4) {
+//                                     debugPrint('placehokder');
+//                                   }
+//                                   final Map<String, Color> dayColorMap = {
+//                                     'Monday': Colors.blue,
+//                                     'Tuesday': Colors.green,
+//                                     'Wednesday': Colors.orange,
+//                                     'Thursday': Colors.purple,
+//                                     'Friday': Colors.red,
+//                                     'Saturday': Colors.teal,
+//                                     'Sunday': Colors.brown,
+//                                   };                                  
+//                                   return Container(
+//                                     margin: const EdgeInsets.only(bottom: spacing),
+//                                     child: buildDaySquare(isActive, squareSize, activeColor: dayColorMap[DateFormat('EEEE').format(date)]!)
+//                                   );
+//                                 }),
+//                               ),
+//                             );
+//                           }),
+//                         ),
