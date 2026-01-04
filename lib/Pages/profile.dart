@@ -25,19 +25,17 @@ class _ProfileState extends State<Profile> {
   num? selectedBarValue; // TODO set to what it actually is
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
-  late String year;
   @override
   void initState() {
     super.initState();
     _loadData();
-    year = DateTime.now().year.toString();
   }
 
   void _loadData() {
     _futureData = Future.wait([getData(), getAllSettings()]);
   }
   void alterHeadingBar(double value, String week){
-    DateTime te = DateFormat('yyyy MMM dd').parse('$year $week');
+    DateTime te = DateFormat('yyyy MMM dd').parse(week);
     var test = DateTime.now().difference(te).inDays;
     int distanceInWeeks = (test / 7).ceil()-1;
     setState(() {
@@ -94,7 +92,6 @@ class _ProfileState extends State<Profile> {
               prevSelector = graphSelector;
               selectedBarValue = numParsething(data.values.toList()[data.values.toList().length-1]);
               selectedBarWeekDistance = 'This week';
-
             }
             return Column(
               children: [
@@ -263,11 +260,8 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-numParsething(var number){
-  if (number != null){
-    return number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2));
-  }
-  return null;
+num numParsething(num number){
+  return number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2));
 }
 
 class DataBarChart extends StatelessWidget {
@@ -287,14 +281,19 @@ class DataBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String unit = 'days';
-    debugPrint(data.toString());
     switch (selector){
       case 'sessions': unit = 'days';
       case 'duration': unit = 'h';
       case 'volume': unit = 'kg';
       case 'weight': unit = 'kg';
       case 'reps': unit = 'reps';
+      case 'sets': unit = 'sets';
     }
+    final double maxValue = data.values.cast<num>().reduce(max).toDouble();
+
+    final double chartMaxY = max(maxValue, goal) <= 7 ? 7 : autoRoundUp(max(maxValue, goal));
+
+    double interval = selector == 'sessions' ? 1 : chartMaxY / 7;
 
     return SizedBox(
       height: 200,
@@ -303,35 +302,49 @@ class DataBarChart extends StatelessWidget {
         child: BarChart(
           BarChartData(
             alignment: BarChartAlignment.spaceAround,
-            maxY: data.values.cast<num>().toList().reduce(max).toDouble() < 7 ? 7 : autoRoundUp(data.values.cast<num>().toList().reduce(max).toDouble()), // Ensure maxY is above your goal
+            maxY: chartMaxY,
             barTouchData: BarTouchData(
-              touchCallback: (FlTouchEvent event, BarTouchResponse? touchResponse) {
-                if (event is FlTapUpEvent && touchResponse != null && touchResponse.spot != null) {
-                  final int index = touchResponse.spot!.touchedBarGroupIndex;
-                  final String weekLabel = data.keys.toList()[index];
-                  final double value = touchResponse.spot!.touchedRodData.toY;
-                  
-                  // Use a post-frame callback to update the state
+              enabled: true,
+              touchTooltipData: BarTouchTooltipData(
+                getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                  return BarTooltipItem(
+                    '${rod.toY.toInt()} $unit',
+                    const TextStyle(fontWeight: FontWeight.bold),
+                  );
+                },
+              ),
+              touchCallback: (event, response) {
+                if (event is FlTapUpEvent && response?.spot != null) {
+                  final index = response!.spot!.touchedBarGroupIndex;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    alterHeadingBar(value, weekLabel);
+                    alterHeadingBar(
+                      response.spot!.touchedRodData.toY,
+                      data.keys.toList()[index],
+                    );
                   });
                 }
               },
             ),
+
             titlesData: FlTitlesData(
               show: true,
               topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false), // Remove top numbers
+                sideTitles: SideTitles(showTitles: false),
               ),
               rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false), // Remove right numbers
+                sideTitles: SideTitles(showTitles: false),
               ),
+
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  interval: 50000,
+                  interval: interval * (selector == 'sessions' ? 1 : 2.5),
                   reservedSize: 50,
                   getTitlesWidget: (double value, TitleMeta meta) {
+                    // if (value % 1 != 0) return const SizedBox.shrink();
+                    if (![0, 3, 7].contains(value) && selector == 'sessions') {
+                      return const SizedBox.shrink();
+                    }
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Align(
@@ -345,77 +358,85 @@ class DataBarChart extends StatelessWidget {
                   },
                 ),
               ),
+
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
+                  reservedSize: 38,
                   getTitlesWidget: (double value, TitleMeta meta) {
-                    int index = value.toInt();
+                    final index = value.toInt();
                     if (index >= 0 && index < data.keys.length) {
-                      return Text(
-                        data.keys.toList()[index], // Correctly show each week's label
-                        style: const TextStyle(fontSize: 12),
+                      return SideTitleWidget(
+                        axisSide: meta.axisSide,
+                        angle: -0.3,
+                        child: Text( 
+                          data.keys.toList()[index].split(' ').sublist(1, 3).join(' '),
+                          style: const TextStyle(fontSize: 11),
+                        ),
                       );
                     }
-                    return const Text('', style: TextStyle(fontSize: 12));
+                    return const SizedBox.shrink();
                   },
-                  reservedSize: 38,
                 ),
               ),
             ),
+
             borderData: FlBorderData(
               show: true,
               border: Border(
-                left: BorderSide(color: Theme.of(context).colorScheme.onSurface, width: 2),
-                bottom: BorderSide(color: Theme.of(context).colorScheme.onSurface, width: 2),
+                left: BorderSide(
+                  color: Colors.grey.withValues(alpha: 0.6),
+                  width: 1.5,
+                ),
+                bottom: BorderSide(
+                  color: Colors.grey.withValues(alpha: 0.6),
+                  width: 1.5,
+                ),
               ),
             ),
+
             gridData: FlGridData(
-              show: false,
-              drawHorizontalLine: true,
-              getDrawingHorizontalLine: (value) {
-                if (value == goal) {
-                  return const FlLine(
-                    color: Colors.red, // Goal line color
-                    strokeWidth: 2,
-                    dashArray: [5, 5], // Optional: dashed line
-                  );
-                }
-                return const FlLine(
-                  color: Colors.grey, // Other grid lines color
-                  strokeWidth: 0.5,
-                );
-              },
-              // No need for `showVerticalLine`
+              show: true,
+              horizontalInterval: interval,
+              drawVerticalLine: false,
+              getDrawingHorizontalLine: (value) => FlLine(
+                color: Colors.grey.withValues(alpha: 0.15),
+                strokeWidth: 1,
+              ),
             ),
+
             extraLinesData: ExtraLinesData(
               horizontalLines: [
                 if (selector == 'sessions')
-                HorizontalLine(
-                  y: goal,
-                  color: Colors.red, // Color of the goal line
-                  strokeWidth: 2,
-                  dashArray: [5, 5], // Optional: dashed line
-                  label: HorizontalLineLabel(
-                    show: true,
-                    labelResolver: (line) => 'Goal (${goal.toStringAsFixed(0)})', // Label for the goal line
-                    alignment: Alignment.topRight,
-                    padding: const EdgeInsets.only(right: 5),
+                  HorizontalLine(
+                    y: goal,
+                    color: Colors.redAccent,
+                    strokeWidth: 2,
+                    dashArray: [5, 5],
+                    label: HorizontalLineLabel(
+                      show: true,
+                      alignment: Alignment.topRight,
+                      padding: const EdgeInsets.only(right: 5),
+                      labelResolver: (_) => 'Goal (${goal.toStringAsFixed(0)})',
+                    ),
                   ),
-                ),
               ],
             ),
+
             barGroups: List.generate(
               data.length,
               (index) {
-                String key = data.keys.toList()[index];
+                final key = data.keys.toList()[index];
                 return BarChartGroupData(
-                  x: index, // Assign a unique x value for each bar
+                  x: index,
                   barRods: [
                     BarChartRodData(
-                      toY: double.parse(data[key].toString()), // Set bar height based on value
-                      color: Colors.blue,
+                      toY: data[key].toDouble(),
                       width: 20,
-                      borderRadius: BorderRadius.zero,
+                      color: Colors.blue,
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(4),
+                      ),
                     ),
                   ],
                 );
@@ -438,7 +459,7 @@ class DataBarChart extends StatelessWidget {
 
     for (int i = 0; i < 7; i++) {
       DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
-      String day = DateFormat('MMM dd').format(monday);
+      String day = DateFormat('yyyy MMM dd').format(monday);
       weeks[day] = 0;
     }
 
@@ -458,7 +479,7 @@ class DataBarChart extends StatelessWidget {
     // Process data
     for (var day in data.keys) {
       DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
-      String formattedDate = DateFormat('MMM dd').format(monday);
+      String formattedDate = DateFormat('yyyy MMM dd').format(monday);
 
       // Only process if the Monday is within the last 8 weeks
       if (weeks.keys.contains(formattedDate)) {
@@ -477,7 +498,7 @@ class DataBarChart extends StatelessWidget {
   Map getWeightAndStufftData(Map data, Map weeks, String selector){
     for (var day in data.keys) {
       DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
-      String formattedDate = DateFormat('MMM dd').format(monday);
+      String formattedDate = DateFormat('yyyy MMM dd').format(monday);
       // Only process if the Monday is within the last 8 weeks
       if (weeks.keys.contains(formattedDate)) {
         double dayWeight = 0;
@@ -503,7 +524,7 @@ class DataBarChart extends StatelessWidget {
     // Process data
     for (var day in data.keys) {
       DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
-      String formattedDate = DateFormat('MMM dd').format(monday);
+      String formattedDate = DateFormat('yyyy MMM dd').format(monday);
 
       // Only process if the Monday is within the last 8 weeks
       if (weeks.keys.contains(formattedDate)) {
