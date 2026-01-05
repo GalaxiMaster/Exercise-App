@@ -197,7 +197,7 @@ class _AddRoutineState extends State<AddRoutine> {
                     for (String exercise in result){
                       if (!sets.containsKey(exercise)) {
                         sets[exercise] = [
-                          {'weight': exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
+                          {'weight': exerciseMuscles[exercise]['type'] == 'Bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
                         ]; // Initialize sets list for the new exercise
                       }
                     }

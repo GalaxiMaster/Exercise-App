@@ -221,6 +221,6 @@ class _DayScreenState extends State<DayScreen> {
         bestSet = [weight, reps];
       }
     }    
-    return type == 'bodyweight' ? (int.tryParse(bestSet[1].toString()) ?? bestSet[1]).toStringAsFixed(0) : '${bestSet[0]}kg x ${bestSet[1]}';
+    return type == 'Bodyweight' ? (int.tryParse(bestSet[1].toString()) ?? bestSet[1]).toStringAsFixed(0) : '${bestSet[0]}kg x ${bestSet[1]}';
   }
 }

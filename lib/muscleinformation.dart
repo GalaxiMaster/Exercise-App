@@ -203,7 +203,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Standing Biceps Curl to Shoulder Press": {
         "Primary": {
@@ -257,7 +257,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Chest Dip on Straight Bar": {
         "Primary": {
@@ -267,7 +267,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Lying Triceps Extension": {
         "Primary": {
@@ -353,7 +353,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Front Delts": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Lying One Arm Pronated Triceps Extension": {
         "Primary": {
@@ -383,7 +383,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Band Assisted Muscle Up": {
         "Primary": {
@@ -394,7 +394,7 @@ Map exerciseMuscles = {
             "Triceps": 20,
             "Front Delts": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Bar Shoulder Press": {
         "Primary": {
@@ -465,7 +465,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Front Delts": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Bodyweight Standing Military Press": {
         "Primary": {
@@ -476,7 +476,7 @@ Map exerciseMuscles = {
             "Triceps": 30,
             "Upper Chest": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Concentration Extension (on knee)": {
         "Primary": {
@@ -554,7 +554,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Incline Chest Press (plate loaded)": {
         "Primary": {
@@ -689,7 +689,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Abdominals": 40
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Stiff Legged Deadlift": {
         "Primary": {
@@ -885,7 +885,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Full Can Lateral Raise": {
         "Primary": {
@@ -1000,7 +1000,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Glutes": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Resistance Band Seated Biceps Curl": {
         "Primary": {
@@ -1009,7 +1009,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Forearms": 20
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Standing Alternate Low Fly": {
         "Primary": {
@@ -1172,7 +1172,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Seated High Row (V bar)": {
         "Primary": {
@@ -1192,7 +1192,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Traps": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Seated Lateral Raise": {
         "Primary": {
@@ -1232,7 +1232,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Hammer Curl": {
         "Primary": {
@@ -1311,7 +1311,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Forearms": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Incline Pushdown": {
         "Primary": {
@@ -1496,7 +1496,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Knee Joint": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Donkey Calf Raise": {
         "Primary": {
@@ -1534,7 +1534,7 @@ Map exerciseMuscles = {
             "Glutes": 10,
             "Erectors": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Standing Chest Press": {
         "Primary": {
@@ -1880,7 +1880,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Rhomboids": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Superman": {
         "Primary": {
@@ -2092,7 +2092,7 @@ Map exerciseMuscles = {
             "Biceps": 30,
             "Quads": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Bodyweight Pulse Squat": {
         "Primary": {
@@ -2102,7 +2102,7 @@ Map exerciseMuscles = {
             "Glutes": 20,
             "Hamstrings": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Curtsey Squat": {
         "Primary": {
@@ -2428,7 +2428,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Forearms": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Kneeling Crunch": {
         "Primary": {
@@ -2437,7 +2437,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "EZ Bar Standing French Press": {
         "Primary": {
@@ -2665,7 +2665,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Incline Curl": {
         "Primary": {
@@ -2838,7 +2838,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Forearms": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Decline Push Up m": {
         "Primary": {
@@ -2848,7 +2848,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cocoons": {
         "Primary": {
@@ -2997,7 +2997,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Smith Chair Squat": {
         "Primary": {
@@ -3025,7 +3025,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Trap Bar Split Stance RDL": {
         "Primary": {
@@ -3243,7 +3243,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Kneeling One Arm Lat Pulldown": {
         "Primary": {
@@ -3262,7 +3262,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Seated Palms Up Wrist Curl": {
         "Primary": {
@@ -3526,7 +3526,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Low Bar Squat": {
         "Primary": {
@@ -3565,7 +3565,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Balance & Stability": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Alternate Biceps Curl": {
         "Primary": {
@@ -3623,7 +3623,7 @@ Map exerciseMuscles = {
             "Triceps": 20,
             "Front Delts": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Push up": {
         "Primary": {
@@ -3738,7 +3738,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Rope High Pulley Overhead Tricep Extension": {
         "Primary": {
@@ -3766,7 +3766,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Smith Front Squat": {
         "Primary": {
@@ -3930,7 +3930,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Bodyweight Standing Pulse Calf Raise": {
         "Primary": {
@@ -3939,7 +3939,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Balance & Stability": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Hip Thrust": {
         "Primary": {
@@ -4183,7 +4183,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 40
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Landmine Front Squat": {
         "Primary": {
@@ -4249,7 +4249,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable seated row": {
         "Primary": {
@@ -4376,7 +4376,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hamstrings": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell One arm Wrist Curl": {
         "Primary": {
@@ -4527,7 +4527,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "V up": {
         "Primary": {
@@ -4781,7 +4781,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Abdominals": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Seated Calf Raise": {
         "Primary": {
@@ -4807,7 +4807,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Diamond Push up (on knees)": {
         "Primary": {
@@ -4921,7 +4921,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hamstrings": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Hand Opposite Knee Crunch": {
         "Primary": {
@@ -4930,7 +4930,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Abdominals": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Single Leg Calf Raise (on a dumbbell)": {
         "Primary": {
@@ -5006,7 +5006,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Lying Bicep Curl": {
         "Primary": {
@@ -5064,7 +5064,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 15,
             "Obliques": 15
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Incline Biceps Curl": {
         "Primary": {
@@ -5138,7 +5138,7 @@ Map exerciseMuscles = {
             "Forearms": 10,
             "Grip Strength": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Biceps Curl": {
         "Primary": {
@@ -5202,7 +5202,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 10,
             "Obliques": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Tuck Crunch": {
         "Primary": {
@@ -5212,7 +5212,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 10,
             "Obliques": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Close Grip Press": {
         "Primary": {
@@ -5297,7 +5297,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Curl": {
         "Primary": {
@@ -5344,7 +5344,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 15,
             "Obliques": 15
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Incline Bench Row": {
         "Primary": {
@@ -5394,7 +5394,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Abdominals": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "EZ Barbell Close Grip Preacher Curl": {
         "Primary": {
@@ -5540,7 +5540,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Calves": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "EZ Barbell Standing Preacher Curl": {
         "Primary": {
@@ -5566,7 +5566,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Abdominals": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable one arm twisting seated row": {
         "Primary": {
@@ -5586,7 +5586,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Glutes": 30
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "EZ Barbell Spider Curl": {
         "Primary": {
@@ -5701,7 +5701,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Single Leg Step Up": {
         "Primary": {
@@ -5814,7 +5814,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Front Delts": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Incline Two Front Raise with Chest Support": {
         "Primary": {
@@ -5871,7 +5871,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Biceps Curl": {
         "Primary": {
@@ -5900,7 +5900,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 20,
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Preacher Curl": {
         "Primary": {
@@ -5950,7 +5950,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Tricep Dips": {
         "Primary": {
@@ -5960,7 +5960,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Assisted Chest Dips": {
         "Primary": {
@@ -6013,7 +6013,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Commando Pull Up": {
         "Primary": {
@@ -6024,7 +6024,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Band Assisted One Arm Chin Up": {
         "Primary": {
@@ -6035,7 +6035,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Weighted One Handed Pull Up": {
         "Primary": {
@@ -6057,7 +6057,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Archer Pull Up": {
         "Primary": {
@@ -6068,7 +6068,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Chin Up": {
         "Primary": {
@@ -6079,7 +6079,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Close Grip Chin Up": {
         "Primary": {
@@ -6090,7 +6090,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Band Assisted Chin Up": {
         "Primary": {
@@ -6101,7 +6101,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Assisted Close Grip Chin Up": {
         "Primary": {
@@ -6123,7 +6123,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Single Arm Pull Up": {
         "Primary": {
@@ -6134,7 +6134,7 @@ Map exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "L-Pull Ups": {
         "Primary": {
@@ -6256,7 +6256,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Forearms": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Assisted Inverse Leg Curl": {
         "Primary": {
@@ -6453,7 +6453,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cobra Push Up": {
         "Primary": {
@@ -6463,7 +6463,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dips between Chairs": {
         "Primary": {
@@ -6473,7 +6473,7 @@ Map exerciseMuscles = {
         "Secondary": {
           "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Bent Arm Pullover Hold": {
         "Primary": {
@@ -6629,7 +6629,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Triceps": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Landmine Rear Lunge": {
         "Primary": {
@@ -6779,7 +6779,7 @@ Map exerciseMuscles = {
             "Hamstrings": 30,
             "Erectors": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Resistance Band Leg Extension": {
         "Primary": {
@@ -6788,7 +6788,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Resistance Band Leg Lift": {
         "Primary": {
@@ -6798,7 +6798,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hamstrings": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Resistance Band Seated Single Leg Curl": {
         "Primary": {
@@ -6807,7 +6807,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Glutes": 30
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Seated Lever Machine Row": {
         "Primary": {
@@ -6967,7 +6967,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Weighted Push Up": {
         "Primary": {
@@ -6977,7 +6977,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Triceps": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Seated Horizontal Shrug": {
         "Primary": {
@@ -7140,7 +7140,7 @@ Map exerciseMuscles = {
             "Hip Flexors": 30
         },
         "Secondary": {},
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dead Hang": {
         "Primary": {
@@ -7268,7 +7268,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Seated Arnold Press": {
         "Primary": {
@@ -7340,7 +7340,7 @@ Map exerciseMuscles = {
             "Front Delts": 15,
             "Glutes": 5
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Reverse Plank": {
         "Primary": {
@@ -7352,7 +7352,7 @@ Map exerciseMuscles = {
             "Front Delts": 10,
             "Triceps": 5
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Side Plank": {
         "Primary": {
@@ -7362,7 +7362,7 @@ Map exerciseMuscles = {
             "Glutes": 20,
             "Side Delts": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     }
 };
 

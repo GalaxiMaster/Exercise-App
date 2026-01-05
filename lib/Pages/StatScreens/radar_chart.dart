@@ -60,7 +60,7 @@ class _RadarChartPageState extends State<RadarChartPage> {
                   var entry = await showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return SelectorPopup(options: Options().timeOptions);
+                      return SelectorPopupMap(options: Options().timeOptions);
                     },
                   );
                   if (entry != null) {
@@ -164,16 +164,16 @@ extension HexColor on Color {
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
-class SelectorPopup extends StatefulWidget {
+class SelectorPopupMap extends StatefulWidget {
   final Map options;
-  const SelectorPopup({super.key, required this.options});
+  const SelectorPopupMap({super.key, required this.options});
 
   @override
   // ignore: library_private_types_in_public_api
-  _SelectorPopupState createState() => _SelectorPopupState();
+  _SelectorPopupMapState createState() => _SelectorPopupMapState();
 }
 
-class _SelectorPopupState extends State<SelectorPopup> {
+class _SelectorPopupMapState extends State<SelectorPopupMap> {
 
   void selectTime(MapEntry days) {
     Navigator.pop(context, days);
@@ -210,6 +210,62 @@ class _SelectorPopupState extends State<SelectorPopup> {
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Text(entry.key),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class SelectorPopupList extends StatefulWidget {
+  final List options;
+  const SelectorPopupList({super.key, required this.options});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SelectorPopupListState createState() => _SelectorPopupListState();
+}
+
+class _SelectorPopupListState extends State<SelectorPopupList> {
+
+  void selectTime(dynamic days) {
+    Navigator.pop(context, days);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: ListView.builder(
+          itemCount: widget.options.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return boxThing(widget.options[index]);
+          },
+        )
+      ),
+    );
+  }
+
+  Widget boxThing(dynamic entry) {
+    return GestureDetector(
+      onTap: () {
+        selectTime(entry);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: HexColor.fromHexColor('262626'),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Text(entry),
             ),
           ),
         ),

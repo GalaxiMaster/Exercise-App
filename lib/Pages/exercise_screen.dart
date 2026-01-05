@@ -117,7 +117,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
     }
     final Map<String, List<FlSpot>> spotsByExercise = {};
     final bool isBodyWeight = widget.exercises.every((exercise) {
-      return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'bodyweight';
+      return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
     });
     
     // Iterate through the exercise data
@@ -356,7 +356,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
                           var entry = await showModalBottomSheet(
                             context: context,
                             builder: (context) {
-                              return SelectorPopup(options: Options().timeOptions);
+                              return SelectorPopupMap(options: Options().timeOptions);
                             },
                           );
                           if(entry != null) {
@@ -548,11 +548,11 @@ class ExerciseScreenState extends State<ExerciseScreen> {
               const Divider(
                 thickness: .2,
               ),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
               Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
+              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
               Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'bodyweight')
+              if ((exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight')
               Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
               Text('Increase: $increase%')
             ],

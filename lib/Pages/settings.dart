@@ -73,7 +73,7 @@ class Settings extends StatelessWidget {
                   await showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return MeasurementPopup(initialMeasurement: (settings?['bodyweight'] ?? '0'),);
+                      return MeasurementPopup(initialMeasurement: (settings?['Bodyweight'] ?? '0'),);
                     },
                   );
                   settings = await getAllSettings();
@@ -150,7 +150,7 @@ class Settings extends StatelessWidget {
   }
 Future<String> getBodyweight() async {
   Map data = await getAllSettings();
-  return data['bodyweight'] ?? '';
+  return data['Bodyweight'] ?? '';
 }
   Divider setttingDividor() => Divider(
         thickness: .3,
@@ -396,7 +396,7 @@ class MeasurementPopup extends StatelessWidget{
                       ),
                     ),
                     onChanged: (value){
-                      updateSettings('bodyweight', value);
+                      updateSettings('Bodyweight', value);
                     },
                   ),
                 ),

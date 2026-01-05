@@ -47,7 +47,7 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
             final MapEntry? newCal = await showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return SelectorPopup(options: {'Month': 'month', 'Year': 'year', 'Multi Year': 'multiYear'});
+                return SelectorPopupMap(options: {'Month': 'month', 'Year': 'year', 'Multi Year': 'multiYear'});
               },
             );
             if (newCal != null){

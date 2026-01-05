@@ -241,7 +241,7 @@ class _AddworkoutState extends State<Addworkout> {
                           ),
                           Row(
                             children: [
-                              if (['bodyweight', 'Assisted'].contains(exerciseMuscles[exercise]['type']))
+                              if (['Bodyweight', 'Assisted'].contains(exerciseMuscles[exercise]['type']))
                               Padding(
                                 padding: const EdgeInsets.only(right: 15),
                                 child: GestureDetector(
@@ -249,7 +249,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     await showModalBottomSheet(
                                       context: context,
                                       builder: (context) {
-                                        return MeasurementPopup(initialMeasurement: settings['bodyweight'] ?? '0',);
+                                        return MeasurementPopup(initialMeasurement: settings['Bodyweight'] ?? '0',);
                                       },
                                     );
                                     settings = await getAllSettings();
@@ -402,7 +402,7 @@ class _AddworkoutState extends State<Addworkout> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
-                                child: (exerciseMuscles[exercise]?['type'] ?? '') != 'bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
+                                child: (exerciseMuscles[exercise]?['type'] ?? '') != 'Bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
                                   TextFormField(
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
@@ -557,7 +557,7 @@ class _AddworkoutState extends State<Addworkout> {
                   for (String exercise in result){
                     if (!sets.containsKey(exercise)) {
                       sets[exercise] = [
-                        {'weight': exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
+                        {'weight': exerciseMuscles[exercise]['type'] == 'Bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
                       ]; // Initialize sets list for the new exercise
                     }
                   }
@@ -666,7 +666,7 @@ class _AddworkoutState extends State<Addworkout> {
 
 void addNewSet(String exercise) {
   setState(() {
-    sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
+    sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'Bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
     _ensureExerciseFocusNodesAndControllers(exercise);
   });
   
@@ -676,8 +676,8 @@ void addNewSet(String exercise) {
     FocusNode? focusNodeToUse;
 
     // Determine which node to focus based on exercise type
-    if (exerciseMuscles[exercise]['type'] == 'bodyweight') {
-      // For bodyweight, focus on reps
+    if (exerciseMuscles[exercise]['type'] == 'Bodyweight') {
+      // For Bodyweight, focus on reps
       focusNodeToUse = _focusNodes[exercise]![lastSetIndex]['reps']!;
     } else if (exerciseMuscles[exercise]['type'] == 'Timed') {
       // For timed exercises, this will be handled differently
@@ -691,7 +691,7 @@ void addNewSet(String exercise) {
     FocusScope.of(context).requestFocus(focusNodeToUse);
     
     // Ensure the text is selected
-    final controllerToUse = exerciseMuscles[exercise]['type'] == 'bodyweight'
+    final controllerToUse = exerciseMuscles[exercise]['type'] == 'Bodyweight'
         ? _controllers[exercise]![lastSetIndex]['reps']!
         : _controllers[exercise]![lastSetIndex]['weight']!;
     

@@ -217,7 +217,7 @@ class _IndividualDayScreenState extends State<IndividualDayScreen> {
                                       Text(set['type'].toLowerCase() == 'normal' ? (index + 1).toString() : set['type'][0], style: const TextStyle(fontSize: 24),),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 25),
-                                        child: Text((exerciseMuscles[exerciseName]?['type'] ?? 'Weighted') != 'bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
+                                        child: Text((exerciseMuscles[exerciseName]?['type'] ?? 'Weighted') != 'Bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
                                       ),
                                     ],
                                   ),

@@ -27,9 +27,9 @@ Widget selectorBox(String text, String type, Function onSubmit, BuildContext con
           context: context,
           builder: (context) {
             if (type == 'time'){
-              return SelectorPopup(options: Options().timeOptions);
+              return SelectorPopupMap(options: Options().timeOptions);
             }else{
-              return SelectorPopup(options: Options().muscleOptions); 
+              return SelectorPopupMap(options: Options().muscleOptions); 
             }
           },
         );

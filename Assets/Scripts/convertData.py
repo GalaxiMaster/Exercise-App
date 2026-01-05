@@ -162,7 +162,7 @@ exerciseMuscles = exerciseMuscles = {
             "Chest": 30,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Standing Biceps Curl to Shoulder Press": {
         "Primary": {
@@ -216,7 +216,7 @@ exerciseMuscles = exerciseMuscles = {
             "Chest": 15,
             "Front Delts": 15
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Chest Dip on Straight Bar": {
         "Primary": {
@@ -226,7 +226,7 @@ exerciseMuscles = exerciseMuscles = {
             "Triceps": 20,
             "Front Delts": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Lying Triceps Extension": {
         "Primary": {
@@ -312,7 +312,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Lying One Arm Pronated Triceps Extension": {
         "Primary": {
@@ -352,7 +352,7 @@ exerciseMuscles = exerciseMuscles = {
             "Chest": 30,
             "Front Delts": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Band Assisted Muscle Up": {
         "Primary": {
@@ -363,7 +363,7 @@ exerciseMuscles = exerciseMuscles = {
             "Triceps": 20,
             "Front Delts": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Bar Shoulder Press": {
         "Primary": {
@@ -434,7 +434,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Bodyweight Standing Military Press": {
         "Primary": {
@@ -445,7 +445,7 @@ exerciseMuscles = exerciseMuscles = {
             "Triceps": 30,
             "Upper Chest": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Concentration Extension (on knee)": {
         "Primary": {
@@ -523,7 +523,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Incline Chest Press (plate loaded)": {
         "Primary": {
@@ -658,7 +658,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Abdominals": 40
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Stiff Legged Deadlift": {
         "Primary": {
@@ -854,7 +854,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Full Can Lateral Raise": {
         "Primary": {
@@ -969,7 +969,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Glutes": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Resistance Band Seated Biceps Curl": {
         "Primary": {
@@ -978,7 +978,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Forearms": 20
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Standing Alternate Low Fly": {
         "Primary": {
@@ -1141,7 +1141,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Seated High Row (V bar)": {
         "Primary": {
@@ -1161,7 +1161,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Traps": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Seated Lateral Raise": {
         "Primary": {
@@ -1201,7 +1201,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Hammer Curl": {
         "Primary": {
@@ -1280,7 +1280,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Forearms": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Incline Pushdown": {
         "Primary": {
@@ -1465,7 +1465,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Knee Joint": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Donkey Calf Raise": {
         "Primary": {
@@ -1503,7 +1503,7 @@ exerciseMuscles = exerciseMuscles = {
             "Glutes": 10,
             "Erectors": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Standing Chest Press": {
         "Primary": {
@@ -1849,7 +1849,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Rhomboids": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Superman": {
         "Primary": {
@@ -2061,7 +2061,7 @@ exerciseMuscles = exerciseMuscles = {
             "Biceps": 30,
             "Quads": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Bodyweight Pulse Squat": {
         "Primary": {
@@ -2071,7 +2071,7 @@ exerciseMuscles = exerciseMuscles = {
             "Glutes": 20,
             "Hamstrings": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Curtsey Squat": {
         "Primary": {
@@ -2397,7 +2397,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Forearms": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Cable Kneeling Crunch": {
         "Primary": {
@@ -2406,7 +2406,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "EZ Bar Standing French Press": {
         "Primary": {
@@ -2634,7 +2634,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Incline Curl": {
         "Primary": {
@@ -2807,7 +2807,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Forearms": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Decline Push Up m": {
         "Primary": {
@@ -2817,7 +2817,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cocoons": {
         "Primary": {
@@ -2966,7 +2966,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Smith Chair Squat": {
         "Primary": {
@@ -2994,7 +2994,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Trap Bar Split Stance RDL": {
         "Primary": {
@@ -3212,7 +3212,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Kneeling One Arm Lat Pulldown": {
         "Primary": {
@@ -3231,7 +3231,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Seated Palms Up Wrist Curl": {
         "Primary": {
@@ -3495,7 +3495,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Low Bar Squat": {
         "Primary": {
@@ -3534,7 +3534,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Balance & Stability": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Alternate Biceps Curl": {
         "Primary": {
@@ -3592,7 +3592,7 @@ exerciseMuscles = exerciseMuscles = {
             "Triceps": 20,
             "Front Delts": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Push up": {
         "Primary": {
@@ -3707,7 +3707,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Rope High Pulley Overhead Tricep Extension": {
         "Primary": {
@@ -3735,7 +3735,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Smith Front Squat": {
         "Primary": {
@@ -3899,7 +3899,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Bodyweight Standing Pulse Calf Raise": {
         "Primary": {
@@ -3908,7 +3908,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Balance & Stability": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Hip Thrust": {
         "Primary": {
@@ -3992,7 +3992,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Chest": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Reverse Wrist Curl": {
         "Primary": {
@@ -4161,7 +4161,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Biceps": 40
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Landmine Front Squat": {
         "Primary": {
@@ -4227,7 +4227,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable seated row": {
         "Primary": {
@@ -4354,7 +4354,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hamstrings": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell One arm Wrist Curl": {
         "Primary": {
@@ -4505,7 +4505,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "V up": {
         "Primary": {
@@ -4757,7 +4757,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Abdominals": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Seated Calf Raise": {
         "Primary": {
@@ -4783,7 +4783,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Diamond Push up (on knees)": {
         "Primary": {
@@ -4897,7 +4897,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hamstrings": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Hand Opposite Knee Crunch": {
         "Primary": {
@@ -4906,7 +4906,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Abdominals": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Single Leg Calf Raise (on a dumbbell)": {
         "Primary": {
@@ -4982,7 +4982,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Lying Bicep Curl": {
         "Primary": {
@@ -5040,7 +5040,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hip Flexors": 15,
             "Obliques": 15
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Incline Biceps Curl": {
         "Primary": {
@@ -5114,7 +5114,7 @@ exerciseMuscles = exerciseMuscles = {
             "Forearms": 10,
             "Grip Strength": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Lever Biceps Curl": {
         "Primary": {
@@ -5178,7 +5178,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hip Flexors": 10,
             "Obliques": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Tuck Crunch": {
         "Primary": {
@@ -5188,7 +5188,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hip Flexors": 10,
             "Obliques": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Close Grip Press": {
         "Primary": {
@@ -5273,7 +5273,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Barbell Curl": {
         "Primary": {
@@ -5320,7 +5320,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hip Flexors": 15,
             "Obliques": 15
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Incline Bench Row": {
         "Primary": {
@@ -5370,7 +5370,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Abdominals": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "EZ Barbell Close Grip Preacher Curl": {
         "Primary": {
@@ -5516,7 +5516,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Calves": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "EZ Barbell Standing Preacher Curl": {
         "Primary": {
@@ -5542,7 +5542,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Abdominals": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable one arm twisting seated row": {
         "Primary": {
@@ -5562,7 +5562,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Glutes": 30
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "EZ Barbell Spider Curl": {
         "Primary": {
@@ -5677,7 +5677,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Obliques": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Single Leg Step Up": {
         "Primary": {
@@ -5790,7 +5790,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Incline Two Front Raise with Chest Support": {
         "Primary": {
@@ -5875,7 +5875,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hip Flexors": 20,
             "Obliques": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Preacher Curl": {
         "Primary": {
@@ -5925,7 +5925,7 @@ exerciseMuscles = exerciseMuscles = {
             "Triceps": 30,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Tricep Dips": {
         "Primary": {
@@ -5935,7 +5935,7 @@ exerciseMuscles = exerciseMuscles = {
             "Chest": 20,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Assisted Chest Dips": {
         "Primary": {
@@ -5988,7 +5988,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Commando Pull Up": {
         "Primary": {
@@ -5999,7 +5999,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Band Assisted One Arm Chin Up": {
         "Primary": {
@@ -6010,7 +6010,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Weighted One Handed Pull Up": {
         "Primary": {
@@ -6032,7 +6032,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Archer Pull Up": {
         "Primary": {
@@ -6043,7 +6043,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Chin Up": {
         "Primary": {
@@ -6054,7 +6054,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Close Grip Chin Up": {
         "Primary": {
@@ -6065,7 +6065,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Band Assisted Chin Up": {
         "Primary": {
@@ -6076,7 +6076,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Assisted Close Grip Chin Up": {
         "Primary": {
@@ -6098,7 +6098,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Single Arm Pull Up": {
         "Primary": {
@@ -6109,7 +6109,7 @@ exerciseMuscles = exerciseMuscles = {
             "Rhomboids": 15,
             "Traps": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "L-Pull Ups": {
         "Primary": {
@@ -6231,7 +6231,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Forearms": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Assisted Inverse Leg Curl": {
         "Primary": {
@@ -6428,7 +6428,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cobra Push Up": {
         "Primary": {
@@ -6438,7 +6438,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dips between Chairs": {
         "Primary": {
@@ -6448,7 +6448,7 @@ exerciseMuscles = exerciseMuscles = {
             "Chest": 30,
             "Front Delts": 10
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dumbbell Bent Arm Pullover Hold": {
         "Primary": {
@@ -6604,7 +6604,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Triceps": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Landmine Rear Lunge": {
         "Primary": {
@@ -6754,7 +6754,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hamstrings": 30,
             "Erectors": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Resistance Band Leg Extension": {
         "Primary": {
@@ -6763,7 +6763,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Resistance Band Leg Lift": {
         "Primary": {
@@ -6773,7 +6773,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hamstrings": 10
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Resistance Band Seated Single Leg Curl": {
         "Primary": {
@@ -6782,7 +6782,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Glutes": 30
         },
-        "type": "banded"
+        "type": "Banded"
     },
     "Seated Lever Machine Row": {
         "Primary": {
@@ -6942,7 +6942,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Hip Flexors": 30
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Weighted Push Up": {
         "Primary": {
@@ -6952,7 +6952,7 @@ exerciseMuscles = exerciseMuscles = {
         "Secondary": {
             "Triceps": 20
         },
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Cable Seated Horizontal Shrug": {
         "Primary": {
@@ -7115,7 +7115,7 @@ exerciseMuscles = exerciseMuscles = {
             "Hip Flexors": 30
         },
         "Secondary": {},
-        "type": "bodyweight"
+        "type": "Bodyweight"
     },
     "Dead Hang": {
         "Primary": {

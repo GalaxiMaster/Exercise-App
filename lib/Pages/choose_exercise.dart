@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/addCustomExercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
@@ -193,6 +194,19 @@ class _WorkoutListState extends State<WorkoutList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddCustomExercise(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
