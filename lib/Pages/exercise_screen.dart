@@ -4,6 +4,7 @@ import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/theme_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,6 +44,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
   int range = -1;
   ScaleSetting scaleSetting = ScaleSetting.equalIntervals;
   Color activeColor = Colors.blue;
+  bool isBodyWeight = false; // default false
 
   @override
   void initState() {
@@ -89,7 +91,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
       case TabItem.info:
         return infoBody(widget.exercises);
       case TabItem.graph:
-        return graphBody(spots, dates, xValues, context);
+        return graphBody(spots, dates, xValues, context, isBodyWeight);
     }
   }
   Map scaleMapTo(Map map, num targetSum) {
@@ -114,7 +116,10 @@ class ExerciseScreenState extends State<ExerciseScreen> {
       }
     }
     final Map<String, List<FlSpot>> spotsByExercise = {};
-
+    final bool isBodyWeight = widget.exercises.every((exercise) {
+      return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'bodyweight';
+    });
+    
     // Iterate through the exercise data
     exerciseData.asMap().entries.forEach((entry) {
       final exerciseName = entry.value['exercise'] as String;
@@ -126,9 +131,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
       spotsByExercise[exerciseName]!.add(
         FlSpot(
           scaleSetting == ScaleSetting.equalIntervals ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
-          (exerciseMuscles[widget.exercises]?['type'] ?? 'weighted') != 'bodyweight' 
-              ? double.parse(entry.value[selector].toString()) 
-              : double.parse(entry.value['reps'].toString()),
+          (!isBodyWeight ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString())),
         ),
       );
     });
@@ -239,21 +242,11 @@ class ExerciseScreenState extends State<ExerciseScreen> {
       ]
     );
   }
-    final colors = [
-      Colors.blue,
-      Colors.purple,
-      Colors.red,
-      Colors.orange,
-      Colors.amber,
-      Colors.yellow,
-      Colors.green,
-      Colors.teal,
-      Colors.cyan,
-      Colors.indigo,
-    ]; 
-  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context) {
+    
+  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context, bool isBodyWight) {
     String unit = 'kg';
-    if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') == 'bodyweight' || selector == 'reps'){unit = '';}
+    if (isBodyWeight || selector == 'reps'){unit = '';}
+
     final List<LineChartBarData> allLineBarsData = [];
     List exercisesOrder = [];
     // Add a line for each exercise
@@ -262,11 +255,11 @@ class ExerciseScreenState extends State<ExerciseScreen> {
       allLineBarsData.add(
         LineChartBarData(
           spots: entry.value,
-          color: colors[exercisesOrder.length],
+          color: graphColors[exercisesOrder.length],
           barWidth: 3,
           belowBarData: BarAreaData(
             show: true,
-            color: colors[exercisesOrder.length]
+            color: graphColors[exercisesOrder.length]
                 .withValues(alpha: 0.2),
           ),
         ),
@@ -291,241 +284,239 @@ class ExerciseScreenState extends State<ExerciseScreen> {
     final PageController pageController = PageController(
       initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
     );
-    if (true) {
-      return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 12.5,
-                                height: 12.5,
-                                decoration: BoxDecoration(
-                                  color: activeColor,
-                                  border: Border.all(color: Colors.black)
-                                ),
+    return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 12.5,
+                              height: 12.5,
+                              decoration: BoxDecoration(
+                                color: activeColor,
+                                border: Border.all(color: Colors.black)
                               ),
                             ),
-                            Text(
-                              '${graphvalue.toStringAsFixed(2)} $unit',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                          ),
+                          Text(
+                            '${graphvalue.toStringAsFixed(2)} $unit',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
-                            GestureDetector(
-                              onTap: () async{
-                                Map data = await readData();
-                                Map keys = {};
-                                for (String key in data.keys) {
-                                  if (key.contains(week)){
-                                    keys[key] = data[key];
-                                  }
+                          ),
+                          GestureDetector(
+                            onTap: () async{
+                              Map data = await readData();
+                              Map keys = {};
+                              for (String key in data.keys) {
+                                if (key.contains(week)){
+                                  keys[key] = data[key];
                                 }
-                                if (keys.isEmpty || !context.mounted) return;
+                              }
+                              if (keys.isEmpty || !context.mounted) return;
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => 
-                                    keys.keys.length > 1 
-                                      ? DayScreen(date: DateTime.parse(week), dayData: keys)
-                                      : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys[0]} 1'))
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => 
+                                  keys.keys.length > 1 
+                                    ? DayScreen(date: DateTime.parse(week), dayData: keys)
+                                    : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys[0]} 1'))
 
-                                ).then((_) {
-                                  _loadHighlightedDays(reload: true);  // Call the method after returning from Addworkout
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  spots.isNotEmpty ? DateFormat('MMM dd yyyy').format(DateTime.parse(week)) : '0',
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ]
-                        ),
-                        GestureDetector(
-                          onTap: () async{
-                            var entry = await showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return SelectorPopup(options: Options().timeOptions);
-                              },
-                            );
-                            if(entry != null) {
-                              setState(() {
-                                range = entry.value;
-                                weekrangeStr = entry.key;  
+                              ).then((_) {
+                                _loadHighlightedDays(reload: true);  // Call the method after returning from Addworkout
                               });
-                              _loadHighlightedDays();
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                weekrangeStr,
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(
+                                spots.isNotEmpty ? DateFormat('MMM dd yyyy').format(DateTime.parse(week)) : '0',
                                 style: const TextStyle(
                                   color: Colors.blue,
                                 ),
                               ),
-                              const Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 300,
-                    child: LineChart(
-                      LineChartData(
-                        lineBarsData: allLineBarsData,
-                        lineTouchData: LineTouchData(  
-                          handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
-                          touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                            // debugPrint(touchResponse?.lineBarSpots.toString());
-                            // if (event is FlTapUpEvent) {
-                              // final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
-                              // const double minX = 0;
-                              // final double maxX = xValues[xValues.length-1].toDouble();
-                              // const chartWidth = 420.0;
-                              // final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
-                              
-                              // debugPrint('Touched X-axis value: $touchedXValue');
-                            // }
-                            if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
-                              // Find the nearest point (spot) the user interacted with
-                              final touchedSpot = touchResponse.lineBarSpots!.first;
-                
-                              // Get the index and value of the touched spot
-                              // final int index = touchedSpot.spotIndex;
-                              final String weekLabel; 
-                              if (scaleSetting ==  ScaleSetting.equalIntervals){
-                                weekLabel =  dates[touchedSpot.x.toInt()].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point
-                              }
-                              else{
-                                weekLabel =  DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt())); // Assuming 'dates' is a list of labels for each X point
-                              }
-                              final double value = touchedSpot.y; // Y value at the touched point
-                              final double xVal = touchedSpot.x;
-                              final Color? color = touchedSpot.bar.color;
-                              debugPrint('xVal: $xVal, value: $value, weekLabel: $weekLabel');
-                              // Use post-frame callback to ensure state/UI updates occur after the touch event
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                alterHeadingBar(value, weekLabel, color ?? Colors.blue); // Trigger your heading update function
-                              });
-                            }
-                          },
-                          getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
-                            return spotIndexes.map((index) {
-                              // Draw a vertical line from the top to the bottom of the chart at the X-axis of the touched spot
-                              return const TouchedSpotIndicatorData(
-                                FlLine(
-                                  color: Colors.blue,      // Vertical line color
-                                  strokeWidth: 2,          // Vertical line thickness
-                                ),
-                                FlDotData(show: true),     // Optionally show a dot at the touched point
-                              );
-                            }).toList();
-                          },
-                        ),
-                        titlesData: FlTitlesData(
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                             interval: spots.isNotEmpty ? calculateInterval(
-                                spots.values.expand((spots) => spots).map(
-                                  (spot) {
-                                     double spotVal = spot.x;
-                                     if (scaleSetting ==  ScaleSetting.scaled) {
-                                       spotVal -= DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch.toDouble();
-                                     }
-                                     return spotVal;
-                                  }
-                                ).reduce(max),
-                                5
-                              ) : 9999,
-                              showTitles: true,
-                              getTitlesWidget: (value, _) {
-                                return SideTitleWidget(
-                                  axisSide: AxisSide.bottom,
-                                  child: Text(
-                                    spots.isNotEmpty ? getDateValue(dates, value) : '',
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                );
-                              },
                             ),
                           ),
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, _) {
-                                return Text(value.toInt().toString()); // Display as integer
-                              },
-                            ),
-                          ),
-                        ),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(color: Theme.of(context).colorScheme.onSurface),
-                        ),
-                        gridData: const FlGridData(show: true),
+                        ]
                       ),
-                    ),
-                  ),
-                  if ((exerciseMuscles[widget.exercises]?['type'] ?? 'Weighted') != 'bodyweight')
-                  Row(
-                    children: [
-                      selectorBox('Weight', selector == 'weight'),
-                      selectorBox('Volume', selector == 'volume'),
-                      selectorBox('Reps', selector == 'reps'),
+                      GestureDetector(
+                        onTap: () async{
+                          var entry = await showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SelectorPopup(options: Options().timeOptions);
+                            },
+                          );
+                          if(entry != null) {
+                            setState(() {
+                              range = entry.value;
+                              weekrangeStr = entry.key;  
+                            });
+                            _loadHighlightedDays();
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              weekrangeStr,
+                              style: const TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                            const Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                  const SizedBox(height: 5),
-                  // if (widget.exercises.length > 1)
-                  SizedBox(
-                    height: 160,
-                    child: PageView.builder(
-                      physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
-                      scrollDirection: Axis.horizontal,
-                      controller: pageController,
-                      itemBuilder: (context, index){
-                        final itemIndex = index % widget.exercises.length;
-                        String exercise = widget.exercises[itemIndex];
-                        int orderPos = exercisesOrder.indexOf(exercise);
-                        return exerciseTile(exercise, orderPos != -1 ? orderPos : 0, spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0);
-                      }
+                ),
+                SizedBox(
+                  height: 300,
+                  child: LineChart(
+                    LineChartData(
+                      lineBarsData: allLineBarsData,
+                      lineTouchData: LineTouchData(  
+                        handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
+                        touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                          // debugPrint(touchResponse?.lineBarSpots.toString());
+                          // if (event is FlTapUpEvent) {
+                            // final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
+                            // const double minX = 0;
+                            // final double maxX = xValues[xValues.length-1].toDouble();
+                            // const chartWidth = 420.0;
+                            // final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
+                            
+                            // debugPrint('Touched X-axis value: $touchedXValue');
+                          // }
+                          if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
+                            // Find the nearest point (spot) the user interacted with
+                            final touchedSpot = touchResponse.lineBarSpots!.first;
+              
+                            // Get the index and value of the touched spot
+                            // final int index = touchedSpot.spotIndex;
+                            final String weekLabel; 
+                            if (scaleSetting ==  ScaleSetting.equalIntervals){
+                              weekLabel =  dates[touchedSpot.x.toInt()].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point ! DOESNT WORK WITH MULTIPLE GRAPHS
+                            }
+                            else{
+                              weekLabel =  DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt())); // Assuming 'dates' is a list of labels for each X point
+                            }
+                            final double value = touchedSpot.y; // Y value at the touched point
+                            final double xVal = touchedSpot.x;
+                            final Color? color = touchedSpot.bar.color;
+                            debugPrint('xVal: $xVal, value: $value, weekLabel: $weekLabel');
+                            // Use post-frame callback to ensure state/UI updates occur after the touch event
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              alterHeadingBar(value, weekLabel, color ?? Colors.blue); // Trigger your heading update function
+                            });
+                          }
+                        },
+                        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+                          return spotIndexes.map((index) {
+                            // Draw a vertical line from the top to the bottom of the chart at the X-axis of the touched spot
+                            return const TouchedSpotIndicatorData(
+                              FlLine(
+                                color: Colors.blue,      // Vertical line color
+                                strokeWidth: 2,          // Vertical line thickness
+                              ),
+                              FlDotData(show: true),     // Optionally show a dot at the touched point
+                            );
+                          }).toList();
+                        },
+                      ),
+                      titlesData: FlTitlesData(
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            interval: spots.isNotEmpty ? calculateInterval(
+                              spots.values.expand((spots) => spots).map(
+                                (spot) {
+                                    double spotVal = spot.x;
+                                    if (scaleSetting ==  ScaleSetting.scaled) {
+                                      spotVal -= DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch.toDouble();
+                                    }
+                                    return spotVal;
+                                }
+                              ).reduce(max),
+                              5
+                            ) : 9999,
+                            showTitles: true,
+                            getTitlesWidget: (value, _) {
+                              return SideTitleWidget(
+                                axisSide: AxisSide.bottom,
+                                child: Text(
+                                  spots.isNotEmpty ? getDateValue(dates, value) : '',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, _) {
+                              return Text(value.toInt().toString()); // Display as integer
+                            },
+                          ),
+                        ),
+                      ),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                      gridData: const FlGridData(show: true),
                     ),
                   ),
-                  // if (widget.exercises.length == 1)
-                  // exerciseTile(widget.exercises[0], 0)
+                ),
+                if (!isBodyWeight)
+                Row(
+                  children: [
+                    selectorBox('Weight', selector == 'weight'),
+                    selectorBox('Volume', selector == 'volume'),
+                    selectorBox('Reps', selector == 'reps'),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                // if (widget.exercises.length > 1)
+                SizedBox(
+                  height: 160,
+                  child: PageView.builder(
+                    physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
+                    scrollDirection: Axis.horizontal,
+                    controller: pageController,
+                    itemBuilder: (context, index){
+                      final itemIndex = index % widget.exercises.length;
+                      String exercise = widget.exercises[itemIndex];
+                      int orderPos = exercisesOrder.indexOf(exercise);
+                      return exerciseTile(exercise, orderPos != -1 ? orderPos : 0, spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0, isBodyWeight);
+                    }
+                  ),
+                ),
+                // if (widget.exercises.length == 1)
+                // exerciseTile(widget.exercises[0], 0)
 
-                ],
-              ),
-          ),
-        );
-    }
+              ],
+            ),
+        ),
+      );
   }
   String getGradientData(List<FlSpot> points){
     FlSpot a = points[0];
@@ -534,13 +525,13 @@ class ExerciseScreenState extends State<ExerciseScreen> {
     double gradient = (a.y-b.y)/(0-points.length);
     return gradient.toStringAsFixed(2);
   }
-  Widget exerciseTile(String exercise, index, increase) {
+  Widget exerciseTile(String exercise, index, increase, isBodyWeight) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: colors[index].withValues(alpha: .2),
+          color: graphColors[index].withValues(alpha: .2),
           borderRadius: BorderRadius.circular(20)
         ),
         child: Padding(
@@ -561,7 +552,7 @@ class ExerciseScreenState extends State<ExerciseScreen> {
               Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
               if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'bodyweight')
               Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'bodyweight')
+              if ((exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'bodyweight')
               Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
               Text('Increase: $increase%')
             ],
@@ -762,7 +753,7 @@ Future<List> getStats(List targets, range) async {
       Map dayHeaviestWeight = {};
       Map dayHeaviestVolume = {};
 
-      for (var exercise in data[day]['sets'].keys) {
+      for (var exercise in data[day]['sets'].keys) { // TODO add validation rq
         if (targets.contains(exercise)) {
 
           startDate ??= dayDate;
@@ -776,24 +767,30 @@ Future<List> getStats(List targets, range) async {
               'exercise': exercise,
               'x-value': dayDate.millisecondsSinceEpoch, //  'x-value': dayDate.difference(startDate).inDays,
             };
-
-            if ((dayHeaviestWeight[exercise]?.isEmpty ?? false) || set['weight'] > (dayHeaviestWeight[exercise]?['weight'] ?? -9999)) { // TODO find better wqay of doing htis
+            dayHeaviestWeight[exercise] ??= set;
+            if (set['weight'] > dayHeaviestWeight[exercise]?['weight'] 
+              || (set['weight'] == dayHeaviestWeight[exercise]?['weight'] && set['reps'] > dayHeaviestWeight[exercise]?['reps'])
+            ) {
               dayHeaviestWeight[exercise] = set;
             }
 
-            if ((dayHeaviestVolume[exercise]?.isEmpty ?? false) || set['volume'] > (dayHeaviestWeight[exercise]?['volume'] ?? -9999)) {
+            dayHeaviestVolume[exercise] ??= set;
+            if (set['volume'] > dayHeaviestVolume[exercise]?['volume']) {
               dayHeaviestVolume[exercise] = set;
             }
           }
           if (dayHeaviestWeight[exercise]?.isNotEmpty ?? false) {
             targetData.add(dayHeaviestWeight[exercise]);
           }
-
-          if ((heaviestWeight[exercise]?.isEmpty ?? false) || (dayHeaviestWeight[exercise]?['weight'] ?? -9999) > (heaviestWeight[exercise]?['weight'] ?? -9999)) {
+          heaviestWeight[exercise] ??= dayHeaviestWeight[exercise];
+          if (dayHeaviestWeight[exercise]?['weight'] > heaviestWeight[exercise]?['weight'] 
+            || (dayHeaviestWeight[exercise]?['weight'] == heaviestWeight[exercise]?['weight'] && dayHeaviestWeight[exercise]?['reps'] > heaviestWeight[exercise]?['reps'])
+          ) {
             heaviestWeight[exercise] = dayHeaviestWeight[exercise];
           }
 
-          if ((heaviestVolume[exercise]?.isEmpty ?? false) || (dayHeaviestVolume[exercise]?['volume'] ?? -9999) > (heaviestVolume[exercise]?['volume'] ?? -9999)) {
+          heaviestVolume[exercise] ??= dayHeaviestVolume[exercise];
+          if (dayHeaviestVolume[exercise]?['volume'] > heaviestVolume[exercise]?['volume']) {
             heaviestVolume[exercise] = dayHeaviestVolume[exercise];
           }
         }

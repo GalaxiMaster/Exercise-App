@@ -260,8 +260,8 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-num numParsething(num number){
-  return number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2));
+num numParsething(num? number){
+  return number == null ? 0 : (number % 1 == 0 ? number.truncate() : double.parse(number.toStringAsFixed(2)));
 }
 
 class DataBarChart extends StatelessWidget {
