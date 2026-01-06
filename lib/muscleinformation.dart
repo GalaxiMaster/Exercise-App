@@ -7085,7 +7085,7 @@ Map exerciseMuscles = {
             "Biceps": 5,
             "Rectus Abdominis": 10,
         },
-        "type": "Cardio"
+        "type": "Timed"
     },
     "Barbell Behind the Back Wrist Curls": {
         "Primary": {
@@ -7205,7 +7205,7 @@ Map exerciseMuscles = {
             "Calves": 10,
             "Rectus Abdominis": 10,
         },
-        "type": "Cardio"
+        "type": "Timed"
     },
     "Weighted Pull Up": {
         "Primary": {
@@ -7239,7 +7239,7 @@ Map exerciseMuscles = {
             "Calves": 10,
             "Rectus Abdominis": 3
         },
-        "type": "Cardio"
+        "type": "Timed"
     },
     "Assisted Pull Up": {
         "Primary": {
@@ -7307,7 +7307,7 @@ Map exerciseMuscles = {
         "Secondary": {
             "Calves": 20
         },
-        "type": "Cardio"
+        "type": "Timed"
     },
     "Walking": {
         "Primary": {
@@ -7318,7 +7318,7 @@ Map exerciseMuscles = {
             "Calves": 20,
             "Hamstrings": 20
         },
-        "type": "Cardio"
+        "type": "Timed"
     },
     "Jumping Jack": {
         "Primary": {
@@ -7329,7 +7329,7 @@ Map exerciseMuscles = {
             "Calves": 20,
             "Side Delts": 20
         },
-        "type": "Cardio"
+        "type": "Timed"
     },
     "Plank": {
         "Primary": {

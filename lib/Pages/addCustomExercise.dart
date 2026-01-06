@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddCustomExercise extends StatefulWidget {
+class AddCustomExercise extends ConsumerStatefulWidget {
   const AddCustomExercise({super.key});
 
   @override
-  State<AddCustomExercise> createState() => _AddCustomExerciseState();
+  ConsumerState<AddCustomExercise> createState() => _AddCustomExerciseState();
 }
 
-class _AddCustomExerciseState extends State<AddCustomExercise> with TickerProviderStateMixin{
+class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with TickerProviderStateMixin{
   final TextEditingController _exerciseNameController = TextEditingController();
 
   late final List<String> _muscleGroupsAvailable;
@@ -122,10 +124,12 @@ class _AddCustomExerciseState extends State<AddCustomExercise> with TickerProvid
       exerciseName, 
       {
         ...toPrimarySecondary(muscleGroups), 
-        'type': selectedExerciseType
+        'type': selectedExerciseType,
+        'tags': ['custom']
       },
       path: 'customExercises'
     );
+    ref.invalidate(customExercisesProvider);
 
     Navigator.pop(context);
   }

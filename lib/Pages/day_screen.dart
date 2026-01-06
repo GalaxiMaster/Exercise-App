@@ -91,7 +91,7 @@ class _DayScreenState extends State<DayScreen> {
                           final result = await Navigator.push(
                             context, 
                             MaterialPageRoute(
-                              builder: (context) => Addworkout(sets: day, confirm: true),
+                              builder: (context) => Addworkout(sets: day, editing: true),
                             ),
                           );
                           if (result != null){

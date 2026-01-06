@@ -23,3 +23,29 @@ class SettingsNotifier extends AsyncNotifier<Map> {
 }
 
 final settingsProvider = AsyncNotifierProvider<SettingsNotifier, Map>(SettingsNotifier.new);
+
+class CustomExercisesNotifier extends AsyncNotifier<Map> {
+  @override
+  Future<Map<String, dynamic>> build() async {
+    ref.keepAlive();
+    return await readData(path: 'customExercises');
+  }
+
+  void updateValue(String key, dynamic value) {
+    state = AsyncData({
+      ...state.value ?? {},
+      key: value,
+    });
+  }
+  
+  Future<void> deleteExercise(String key) async {
+    Map stateVal = state.value ?? {};
+    stateVal.remove(key);
+    state = AsyncData({
+      ...stateVal
+    });
+    deleteKey(key, path: 'customExercises');
+  }
+}
+
+final customExercisesProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map>(CustomExercisesNotifier.new);

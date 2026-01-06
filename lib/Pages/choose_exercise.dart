@@ -1,11 +1,13 @@
 import 'package:exercise_app/Pages/addCustomExercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class WorkoutList extends StatefulWidget {
+class WorkoutList extends ConsumerStatefulWidget {
   final String setting;
   final List? problemExercises;
   final String? problemExercisesTitle;
@@ -21,10 +23,10 @@ class WorkoutList extends StatefulWidget {
   });
 
   @override
-  State<WorkoutList> createState() => _WorkoutListState();
+  ConsumerState<WorkoutList> createState() => _WorkoutListState();
 }
 
-class _WorkoutListState extends State<WorkoutList> {
+class _WorkoutListState extends ConsumerState<WorkoutList> {
   String query = '';
   late final List exerciseList;
   final List selectedItems = [];
@@ -39,7 +41,8 @@ class _WorkoutListState extends State<WorkoutList> {
   }
 
   void checkAssets() async {
-    for (String exercise in exerciseList) {
+    List exerciseCachedList = List.from(exerciseList);
+    for (String exercise in exerciseCachedList) {
       String filePath = "assets/Exercises/$exercise.png";
       bool exists = await fileExists(filePath);
       assetExists[exercise] = exists;
@@ -50,7 +53,7 @@ class _WorkoutListState extends State<WorkoutList> {
     }
   }
 
-  Widget _buildExerciseItem(String exercise, bool isProblemExercise) {
+  Widget _buildExerciseItem(String exercise, bool isProblemExercise, {Map? customData}) {
     return InkWell(
       onTap: (){
         if (multiSelect){
@@ -73,10 +76,10 @@ class _WorkoutListState extends State<WorkoutList> {
           }
           else{
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ExerciseScreen(exercises: [exercise])
-                )
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExerciseScreen(exercises: [exercise])
+              )
             );
           }
         }
@@ -122,6 +125,7 @@ class _WorkoutListState extends State<WorkoutList> {
                       "assets/profile.svg",
                       height: 35,
                       width: 35,
+                      colorFilter: ColorFilter.mode(Colors.grey.shade700, BlendMode.srcATop),
                     ),
                   )
                   : assetExists[exercise] == true
@@ -136,6 +140,7 @@ class _WorkoutListState extends State<WorkoutList> {
                             "assets/profile.svg",
                             height: 35,
                             width: 35,
+                            colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
                           ),
                         ),
             ),
@@ -143,7 +148,10 @@ class _WorkoutListState extends State<WorkoutList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(exercise),
-                if (!isProblemExercise) Text(getMuscles(exercise))
+                if (!isProblemExercise && customData == null)
+                Text(getMuscles(exercise))
+                else if (customData != null)
+                Text('${customData['Primary'].keys.toList().join(', ')}')
               ],
             ),
           ],
@@ -154,43 +162,7 @@ class _WorkoutListState extends State<WorkoutList> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredExercises = exerciseList
-        .where((exercise) => containsAllCharacters(exercise, query))
-        .toList();
-
-    Map filteredExercisesMap = Map.fromEntries(
-      filteredExercises.map((value) => MapEntry(value, 0)),
-    );
-    if (widget.preData != null && query != ''){
-      for (String day in widget.preData!.keys){
-        for (String exercise in widget.preData![day]['sets'].keys){
-          if (filteredExercises.contains(exercise)){
-            filteredExercisesMap[exercise] += 1;
-          }
-        }
-      }
-      var sortedEntries = filteredExercisesMap.entries.toList();
-
-      sortedEntries.sort((a, b) {
-        if (a.value > 0 && b.value > 0) {
-          // Sort numerically where int > 0
-          return b.value.compareTo(a.value);
-        } else if (a.value == 0 && b.value == 0) {
-          // Sort alphabetically where int == 0
-          return a.key.compareTo(b.key);
-        } else {
-          // Keep sections separate: int > 0 before int == 0
-          return b.value.compareTo(a.value);
-        }
-      });
-      filteredExercisesMap = Map.fromEntries(sortedEntries);
-    }
-
-
-    final filteredProblemExercises = widget.problemExercises
-        ?.where((exercise) => containsAllCharacters(exercise, query))
-        .toList() ?? [];
-
+    final customExercisesAsync = ref.read(customExercisesProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),
@@ -208,83 +180,127 @@ class _WorkoutListState extends State<WorkoutList> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: SearchBar(onQueryChanged: (newQuery) {
-                  setState(() => query = newQuery);
-                }),
-              ),
-              if (widget.problemExercises != null) ...[
-                SliverToBoxAdapter(
-                  child: Text(widget.problemExercisesTitle ?? ''),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _buildExerciseItem(
-                      filteredProblemExercises[index], 
-                      true
+      body: customExercisesAsync.when(
+        data: (data) {
+          exerciseList.addAll(data.keys.toList());
+          exerciseList.sort();
+          final filteredExercises = exerciseList
+              .where((exercise) => containsAllCharacters(exercise, query))
+              .toList();
+
+          Map filteredExercisesMap = Map.fromEntries(
+            filteredExercises.map((value) => MapEntry(value, 0)),
+          );
+          if (widget.preData != null && query != ''){
+            for (String day in widget.preData!.keys){
+              for (String exercise in widget.preData![day]['sets'].keys){
+                if (filteredExercises.contains(exercise)){
+                  filteredExercisesMap[exercise] += 1;
+                }
+              }
+            }
+            var sortedEntries = filteredExercisesMap.entries.toList();
+
+            sortedEntries.sort((a, b) {
+              if (a.value > 0 && b.value > 0) {
+                // Sort numerically where int > 0
+                return b.value.compareTo(a.value);
+              } else if (a.value == 0 && b.value == 0) {
+                // Sort alphabetically where int == 0
+                return a.key.compareTo(b.key);
+              } else {
+                // Keep sections separate: int > 0 before int == 0
+                return b.value.compareTo(a.value);
+              }
+            });
+            filteredExercisesMap = Map.fromEntries(sortedEntries);
+          }
+
+          final filteredProblemExercises = widget.problemExercises
+              ?.where((exercise) => containsAllCharacters(exercise, query))
+              .toList() ?? [];
+          return Stack(
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SearchBar(onQueryChanged: (newQuery) {
+                      setState(() => query = newQuery);
+                    }),
+                  ),
+                  if (widget.problemExercises != null) ...[
+                    SliverToBoxAdapter(
+                      child: Text(widget.problemExercisesTitle ?? ''),
                     ),
-                    childCount: filteredProblemExercises.length,
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: Text('Normal Exercises'),
-                ),
-              ],
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildExerciseItem(
-                    filteredExercisesMap.keys.toList()[index], 
-                    false
-                  ),
-                  childCount: filteredExercises.length,
-                ),
-              ),
-            ],
-          ),
-          if (multiSelect)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: GestureDetector(
-                onTap: (){
-                  if(widget.setting == 'choose' ){
-                    Navigator.pop(context, selectedItems);
-                  }
-                  else{
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExerciseScreen(exercises: selectedItems)
-                        )
-                    );
-                  }
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(50)
-                  ),
-                  height: 50,
-                  width: double.infinity,
-                  child: Center(
-                    child: Text(
-                      'Choose ${selectedItems.length} exercise(s)',
-                      style: const TextStyle(
-                        fontSize: 20
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => _buildExerciseItem(
+                          filteredProblemExercises[index], 
+                          true
+                        ),
+                        childCount: filteredProblemExercises.length,
                       ),
-                    )
+                    ),
+                    const SliverToBoxAdapter(
+                      child: Text('Normal Exercises'),
+                    ),
+                  ],
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => _buildExerciseItem(
+                        filteredExercisesMap.keys.toList()[index], 
+                        false,
+                        customData: data[filteredExercisesMap.keys.toList()[index]]
+                      ),
+                      childCount: filteredExercisesMap.length,
+                    ),
+                  ),
+                ],
+              ),
+              if (multiSelect)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: GestureDetector(
+                    onTap: (){
+                      if(widget.setting == 'choose' ){
+                        Navigator.pop(context, selectedItems);
+                      }
+                      else{
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseScreen(exercises: selectedItems)
+                            )
+                        );
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                      height: 50,
+                      width: double.infinity,
+                      child: Center(
+                        child: Text(
+                          'Choose ${selectedItems.length} exercise(s)',
+                          style: const TextStyle(
+                            fontSize: 20
+                          ),
+                        )
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ]
-      ),
+            ]
+          );
+        },
+        loading: () => CircularProgressIndicator(),
+        error: (err, stack) => Text('Error: $err'),
+      )
     );
   }
 }

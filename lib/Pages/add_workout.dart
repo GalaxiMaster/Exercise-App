@@ -2,28 +2,29 @@ import 'dart:async';
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/settings.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 // import 'package:vibration/vibration.dart';
 import 'choose_exercise.dart';
 
-// ignore: must_be_immutable
-class Addworkout extends StatefulWidget {
-  Map sets;
-  final bool confirm;
-  Addworkout({super.key, sets, this.confirm = false}) 
+class Addworkout extends ConsumerStatefulWidget {
+  final Map sets;
+  final bool editing;
+  Addworkout({super.key, sets, this.editing = false}) 
     : sets = sets ?? {};
     @override
   // ignore: library_private_types_in_public_api
   _AddworkoutState createState() => _AddworkoutState();
 }
 
-class _AddworkoutState extends State<Addworkout> {
+class _AddworkoutState extends ConsumerState<Addworkout> {
   var preCsvData = {};
   Map<String, dynamic> records = {};
   Map sets = {};
@@ -33,11 +34,14 @@ class _AddworkoutState extends State<Addworkout> {
   Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   Map<String, List<Map<String, TextEditingController>>> _controllers = {};
   Map<String, List<bool>> _checkBoxStates = {};
+  Map exerciseTypeAccess = {};
+  bool loading = false;
 
   @override
   void initState() {        
     super.initState();
-    reloadRecords();
+    loading = true;
+    reloadRecords();    
     if(widget.sets.isEmpty){
       getPreviousWorkout().then((data) {
         setState(() {
@@ -47,7 +51,6 @@ class _AddworkoutState extends State<Addworkout> {
             startTime = data['stats']['startTime'];
           }
         });
-        debugPrint('tessst sets ${sets.toString()}');
       });
     }else {
       sets = widget.sets['sets'];
@@ -55,6 +58,8 @@ class _AddworkoutState extends State<Addworkout> {
     }
     preLoad();
     _initializeFocusNodesAndControllers();
+    repopulateExerciseTypeAccess();
+    loading = false;
   }
   @override
   void dispose() {
@@ -73,6 +78,23 @@ class _AddworkoutState extends State<Addworkout> {
     }
     super.dispose();
   }
+
+  Future<void> repopulateExerciseTypeAccess() async{
+    final customExerciseAsync = ref.read(customExercisesProvider);
+    for (String exercise in sets.keys){
+      String? type = exerciseMuscles[exercise]?['type'];
+      if (type == null){
+        customExerciseAsync.whenData((data){
+          if (data.containsKey(exercise)){
+            type = data[exercise]['type'];
+          }
+        });
+      }
+      type ??= 'Weighted';
+      exerciseTypeAccess[exercise] = type;
+    }
+  }
+
   void _initializeFocusNodesAndControllers() {
     debugPrint('${sets}idsk');
     for (String exercise in sets.keys) {
@@ -178,7 +200,7 @@ class _AddworkoutState extends State<Addworkout> {
   }
 
   void updateExercises() async{
-    if (!widget.confirm){
+    if (!widget.editing){
       if (sets.isEmpty){
         resetData(['current']);
       }
@@ -188,6 +210,11 @@ class _AddworkoutState extends State<Addworkout> {
 
   @override
   Widget build(BuildContext context) {
+    final customExerciseAsync = ref.read(customExercisesProvider);
+
+    if (loading){
+      return CircularProgressIndicator();
+    }
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
         button: MyIconButton(
@@ -197,13 +224,7 @@ class _AddworkoutState extends State<Addworkout> {
           borderRadius: 10,
           iconHeight: 20,
           iconWidth: 20,
-          onTap: () {
-            if (!widget.confirm){
-              confirmExercises(sets, exerciseNotes);
-            } else{
-              Navigator.pop(context, sets);
-            }
-          },
+          onTap: () => confirmExercises(sets, exerciseNotes),
         ),
       ),
       body: SingleChildScrollView(
@@ -215,7 +236,6 @@ class _AddworkoutState extends State<Addworkout> {
               itemCount: sets.keys.length,
               itemBuilder: (context, index) {
                 String exercise = sets.keys.toList()[index];
-                debugPrint('$sets${exercise}idsks home ');
                 _ensureExerciseFocusNodesAndControllers(exercise);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
@@ -241,7 +261,7 @@ class _AddworkoutState extends State<Addworkout> {
                           ),
                           Row(
                             children: [
-                              if (['Bodyweight', 'Assisted'].contains(exerciseMuscles[exercise]['type']))
+                              if (['Bodyweight', 'Assisted'].contains(exerciseTypeAccess[exercise]))
                               Padding(
                                 padding: const EdgeInsets.only(right: 15),
                                 child: GestureDetector(
@@ -358,7 +378,7 @@ class _AddworkoutState extends State<Addworkout> {
                                 child: Text('Weight (kg)')
                               ),
                             ), 
-                            if (exerciseMuscles[exercise]['type'] != 'Timed')
+                            if (exerciseTypeAccess[exercise] != 'Timed')
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 3),
                               child: Center(
@@ -431,7 +451,7 @@ class _AddworkoutState extends State<Addworkout> {
                                     },
                                     onFieldSubmitted: (value) {
                                       if (i == sets[exercise]!.length - 1) {
-                                        addNewSet(exercise);
+                                        addNewSet(exercise, exerciseTypeAccess[exercise]);
                                       } else {
                                         FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
                                       }
@@ -442,7 +462,7 @@ class _AddworkoutState extends State<Addworkout> {
                                         extentOffset: _controllers[exercise]![i]['reps']!.text.length,
                                       );
                                     },
-                                  ) : exerciseMuscles[exercise]['type'] == 'Timed' ? 
+                                  ) : exerciseTypeAccess[exercise] == 'Timed' ? 
                                     SizedBox(
                                       height: 50, 
                                       child: TimerScreen(
@@ -463,7 +483,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   )
                               ),
                             ),
-                            if (exerciseMuscles[exercise]['type'] != 'Timed')
+                            if (exerciseTypeAccess[exercise] != 'Timed')
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
                               child: Center(
@@ -495,7 +515,7 @@ class _AddworkoutState extends State<Addworkout> {
                                   },
                                     onFieldSubmitted: (value) {
                                       if (i == sets[exercise]!.length - 1) {
-                                        addNewSet(exercise);
+                                        addNewSet(exercise, exerciseTypeAccess[exercise]);
                                       } else {
                                         FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
                                       }
@@ -533,7 +553,7 @@ class _AddworkoutState extends State<Addworkout> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          addNewSet(exercise);
+                          addNewSet(exercise, exerciseTypeAccess[exercise]);
                         },
                         child: const Text('Add Set'),
                       ),
@@ -556,9 +576,27 @@ class _AddworkoutState extends State<Addworkout> {
                 if (result != null) {
                   for (String exercise in result){
                     if (!sets.containsKey(exercise)) {
+                      String? type = exerciseMuscles[exercise]?['type'];
+                      if (type == null){
+                        customExerciseAsync.whenData((data){
+                          if (data.containsKey(exercise)){
+                            type = data[exercise]['type'];
+                          }
+                        });
+                      }
+                      type ??= 'Weighted';
                       sets[exercise] = [
-                        {'weight': exerciseMuscles[exercise]['type'] == 'Bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
+                        {
+                          'weight': type == 'Bodyweight' 
+                            ? '1' 
+                            : '', 
+                          'reps': type == 'Timed' 
+                            ? '1' 
+                            : '' , 
+                          'type': 'Normal'
+                        }
                       ]; // Initialize sets list for the new exercise
+                      exerciseTypeAccess[exercise] = type;
                     }
                   }
                   setState(() {
@@ -664,9 +702,9 @@ class _AddworkoutState extends State<Addworkout> {
     );
   }
 
-void addNewSet(String exercise) {
+void addNewSet(String exercise, String type) {
   setState(() {
-    sets[exercise]?.add({'weight':  exerciseMuscles[exercise]['type'] == 'Bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
+    sets[exercise]?.add({'weight':  type == 'Bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
     _ensureExerciseFocusNodesAndControllers(exercise);
   });
   
@@ -676,10 +714,10 @@ void addNewSet(String exercise) {
     FocusNode? focusNodeToUse;
 
     // Determine which node to focus based on exercise type
-    if (exerciseMuscles[exercise]['type'] == 'Bodyweight') {
+    if (type == 'Bodyweight') {
       // For Bodyweight, focus on reps
       focusNodeToUse = _focusNodes[exercise]![lastSetIndex]['reps']!;
-    } else if (exerciseMuscles[exercise]['type'] == 'Timed') {
+    } else if (type == 'Timed') {
       // For timed exercises, this will be handled differently
       return;
     } else {
@@ -691,7 +729,7 @@ void addNewSet(String exercise) {
     FocusScope.of(context).requestFocus(focusNodeToUse);
     
     // Ensure the text is selected
-    final controllerToUse = exerciseMuscles[exercise]['type'] == 'Bodyweight'
+    final controllerToUse = type== 'Bodyweight'
         ? _controllers[exercise]![lastSetIndex]['reps']!
         : _controllers[exercise]![lastSetIndex]['weight']!;
     
@@ -702,15 +740,19 @@ void addNewSet(String exercise) {
   });
 }
   
-  void confirmExercises(var sets, Map exerciseNotes){
-    bool isNull = checkNulls(sets);
-    if (isNull){
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ConfirmWorkout(sets: sets, startTime: startTime, exerciseNotes: exerciseNotes,),
-        ),
-      );
+  void confirmExercises(Map sets, Map exerciseNotes){
+    bool isValidWorkout = checkValidWorkout(sets);
+    if (isValidWorkout){
+      if (!widget.editing){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfirmWorkout(sets: sets, startTime: startTime, exerciseNotes: exerciseNotes,),
+          ),
+        );
+      } else{
+        Navigator.pop(context, sets);
+      }
     } else {
       showDialog(
         context: context,
@@ -732,8 +774,8 @@ void addNewSet(String exercise) {
     }
   }
 
-  bool checkNulls(var sets){ // could even put this in the save function maybe
-    for (String exercise in sets?.keys){
+  bool checkValidWorkout(Map sets){ // could even put this in the save function maybe
+    for (String exercise in sets.keys){
       for (var set in sets[exercise]!) {
         debugPrint(set.toString());
         if (set['reps'] == ''){
@@ -875,7 +917,6 @@ void addNewSet(String exercise) {
       }
 
     }
-    debugPrint('yeah');
     writeData(records, path: 'records', append: false);
           // List sets = data[day]['sets'][exercise];
         // sets.sort((a, b) => a["weight"].compareTo(b["weight"])); wild way to get top set, but i need progressive

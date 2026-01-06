@@ -1,12 +1,14 @@
 import 'package:exercise_app/Pages/routines.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
@@ -14,7 +16,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   Map<String, dynamic> routines = {};
 
   @override
@@ -22,17 +24,22 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadRoutines();
     getIsCurrent();
+    preCacheProviders();
   }
   Future<bool> getIsCurrent() async{
     Map data = await readData(path: 'current');
     return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
-  Future<void> _loadRoutines() async { // TODO optomise
+  Future<void> _loadRoutines() async {
     Map<String, dynamic> loadedRoutines = await readData(path: 'routines');
     debugPrint("$loadedRoutines routines loaded");
     setState(() {
       routines = loadedRoutines;
     });
+  }
+
+  void preCacheProviders(){
+    ref.read(customExercisesProvider);
   }
 
   @override
