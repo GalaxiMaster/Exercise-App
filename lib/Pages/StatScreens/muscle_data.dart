@@ -8,71 +8,19 @@ import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class MuscleData extends StatelessWidget {
+class MuscleData extends ConsumerWidget {
   const MuscleData({super.key});
-
-  Future<List> getStuff(String target) async {
-    Map muscleData = {};
-    Map data = await readData();
-    for (var day in data.keys){
-      for (var exercise in data[day]['sets'].keys){
-        if (exerciseMuscles.containsKey(exercise)){
-          for (var set in data[day]['sets'][exercise]){
-            double selector = 0;
-            switch(target){
-              case 'Volume': selector = double.parse(set['weight'].toString()).abs()*double.parse(set['reps'].toString()).abs();
-              case 'Sets' : selector = 1;
-            }
-            for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
-              if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-              } else{
-                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-              }
-            }
-            for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
-              if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-              } else{
-                muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-              }
-            }
-          }
-        } else{
-          debugPrint('Unknown exercise: $exercise');
-        }
-      }
-    }
-    debugPrint(muscleData.toString());
-    // Scale results to 100
-    double total = muscleData.values.fold(0.0, (p, c) => p + c);
-    debugPrint(total.toString());
-    Map scaledMuscleData = {};
-    for (String muscle in muscleData.keys){
-      scaledMuscleData[muscle] = ((muscleData[muscle] / total * 100.0) * 100).roundToDouble() / 100;
-    }
-    List<MapEntry> entries = muscleData.entries.toList();
-    entries.sort((a, b) => a.value.compareTo(b.value));
-    muscleData = Map.fromEntries(entries);
-    debugPrint(muscleData.toString());
-    entries = scaledMuscleData.entries.toList();
-    entries.sort((a, b) => a.value.compareTo(b.value));
-    scaledMuscleData = Map.fromEntries(entries);
-    debugPrint(scaledMuscleData.toString());
-    return [scaledMuscleData, muscleData].toList();
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double radius = 125;
 
     return Scaffold(
       appBar: myAppBar(context, 'Muscle data'),
       body: FutureBuilder<List>(
-        future: getStuff('Sets'),
+        future: getPercentageData('Sets', -1, ref),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

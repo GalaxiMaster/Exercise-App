@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:exercise_app/Pages/SettingsPages/custom_exercises_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
@@ -139,6 +140,17 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Custom Exercise'),
+        actions: [
+          IconButton(
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CustomExerciseSettings())
+              );
+            }, 
+            icon: Icon(Icons.settings)
+          )
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -189,13 +201,15 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
     );
   }
   Widget _buildExerciseTypeSelection() {
-    List exerciseTypes = ['Weighted', 'Banded', 'Bodyweight'];
+    List exerciseTypes = ['Weighted', 'Banded', 'Bodyweight', 'Timed'];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Exercise type',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        const Text(
+          'Exercise type',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)
+        ),
         const SizedBox(height: 8),
         SizedBox(
           height: 55,
@@ -211,7 +225,7 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
                           ? AnimatedBorderPainter(_borderController.value)
                           : null,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        padding: const EdgeInsets.symmetric(vertical: 2),
                         child: GestureDetector(
                           onTap: () {
                             if (!isSelected) {
@@ -361,6 +375,7 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
                   onPressed: () {
                     setState(() {
                       _percentageControllers[key]?.dispose();
+                      percentageRemaining += _selectedMuscleGroups[key] ?? 0;
                       _percentageControllers.remove(key);
                       _selectedMuscleGroups.remove(key);
                     });

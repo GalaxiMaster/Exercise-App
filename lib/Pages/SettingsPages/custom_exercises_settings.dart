@@ -17,17 +17,6 @@ class CustomExerciseSettingsState extends ConsumerState<CustomExerciseSettings> 
     return Scaffold(
       appBar: myAppBar(
         context, 'Custom Exercise Settings',
-        button: IconButton(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CustomExerciseSettings(),
-              ),
-            );
-          }, 
-          icon: Icon(Icons.settings)
-        )
       ),
       body: customExercisesAsync.when(
         data: (map) {

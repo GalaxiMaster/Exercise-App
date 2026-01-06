@@ -2,12 +2,14 @@ import 'dart:math';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:xml/xml.dart' as xml;
@@ -23,7 +25,7 @@ enum ScaleSetting {
   scaled,
 }
 
-class ExerciseScreen extends StatefulWidget {
+class ExerciseScreen extends ConsumerStatefulWidget {
   final List exercises;
 
   const ExerciseScreen({super.key, required this.exercises});
@@ -32,7 +34,7 @@ class ExerciseScreen extends StatefulWidget {
   ExerciseScreenState createState() => ExerciseScreenState();
 }
 
-class ExerciseScreenState extends State<ExerciseScreen> {
+class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   List exerciseData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
@@ -182,64 +184,95 @@ class ExerciseScreenState extends State<ExerciseScreen> {
   Widget infoBody(List exercise){
     Map primaryMuscles = {};
     Map secondaryMuscles = {};
-    for (String exercise in widget.exercises){
-      for (String muscle in exerciseMuscles[exercise]['Primary'].keys){
-        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseMuscles[exercise]['Primary'][muscle];
-      }     
-      for (String muscle in exerciseMuscles[exercise]['Secondary'].keys){
-        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseMuscles[exercise]['Secondary'][muscle];
+
+    Future<bool> getMusclePercentages() async {
+      final Map customExercisesData = await ref.read(customExercisesProvider.future);
+
+      for (String exercise in widget.exercises){
+        bool isCustom = customExercisesData.containsKey(exercise);
+        Map exerciseData = {};
+
+        if (isCustom && customExercisesData.containsKey(exercise)){
+          exerciseData = customExercisesData[exercise];
+        } else {
+          exercise = exerciseMuscles[exercise] ?? {};
+        }
+
+        if (exerciseData.isEmpty) continue;
+
+        for (String muscle in exerciseData['Primary'].keys){
+          primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseData['Primary'][muscle];
+        }     
+        for (String muscle in exerciseData['Secondary'].keys){
+          secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseData['Secondary'][muscle];
+        }
       }
+      num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
+      if (primaryMuscles.isNotEmpty){
+        num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+        primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
+      }
+      if (secondaryMuscles.isNotEmpty){
+        num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+        secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
+      }
+      return true;
     }
-    num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
-    if (primaryMuscles.isNotEmpty){
-      num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
-      primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
-    }
-    if (secondaryMuscles.isNotEmpty){
-      num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
-      secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
-    }
-        
-    return Column(
-       children: [
-        BodyHeatMap(assetPath: 'assets/Muscle_heatmap.svg', exercises: widget.exercises,),
-        const Text(
-          'Primary muscles:',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 20,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal, // Set the direction to horizontal
-            itemCount: primaryMuscles.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
-                child: Text('${primaryMuscles.values.toList()[index]}% ${primaryMuscles.keys.toList()[index]}'),
-              );
-            },
-          ),
-        ),
-        const Text(
-          'Secondary muscles:',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 20,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal, // Set the direction to horizontal
-            itemCount: secondaryMuscles.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
-                child: Text('${secondaryMuscles.values.toList()[index]}% ${secondaryMuscles.keys.toList()[index]}'),
-              );
-            },
-          ),
-        ),
-      ]
+
+
+    return FutureBuilder(
+    future: getMusclePercentages(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error loading data'));
+        } else if (snapshot.hasData) {
+          return Column(
+            children: [
+              BodyHeatMap(assetPath: 'assets/Muscle_heatmap.svg', exercises: widget.exercises,),
+              const Text(
+                'Primary muscles:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal, // Set the direction to horizontal
+                  itemCount: primaryMuscles.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
+                      child: Text('${primaryMuscles.values.toList()[index]}% ${primaryMuscles.keys.toList()[index]}'),
+                    );
+                  },
+                ),
+              ),
+              const Text(
+                'Secondary muscles:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal, // Set the direction to horizontal
+                  itemCount: secondaryMuscles.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
+                      child: Text('${secondaryMuscles.values.toList()[index]}% ${secondaryMuscles.keys.toList()[index]}'),
+                    );
+                  },
+                ),
+              ),
+            ]
+          );
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
     );
   }
     
@@ -627,7 +660,7 @@ extension ColorExtension on Color {
   String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
 }
 
-class BodyHeatMap extends StatefulWidget {
+class BodyHeatMap extends ConsumerStatefulWidget {
   final String assetPath;
   final double width;
   final List exercises;
@@ -643,7 +676,7 @@ class BodyHeatMap extends StatefulWidget {
   BodyHeatMapState createState() => BodyHeatMapState();
 }
 
-class BodyHeatMapState extends State<BodyHeatMap> {
+class BodyHeatMapState extends ConsumerState<BodyHeatMap> {
   String? modifiedSvgString;
 
   @override
@@ -655,17 +688,29 @@ class BodyHeatMapState extends State<BodyHeatMap> {
   Future<void> _loadAndModifySvg() async {
     try {
       Map<String, List<dynamic>> musclesMap = {};
-      for (String exercise in widget.exercises){
-        for (MapEntry muscle in exerciseMuscles[exercise]['Primary'].entries){
+      final Map customExercisesData = await ref.read(customExercisesProvider.future);
+
+      for (String exercise in widget.exercises) {
+        bool isCustom = customExercisesData.containsKey(exercise);
+        Map exerciseData = {};
+
+        if (isCustom && customExercisesData.containsKey(exercise)){
+          exerciseData = customExercisesData[exercise];
+        } else {
+          exercise = exerciseMuscles[exercise] ?? {};
+        }
+
+        if (exerciseData.isEmpty) continue;
+
+        for (MapEntry muscle in exerciseData['Primary'].entries){
           musclesMap[muscle.key] = [muscle.value/100, Colors.red];
         }
-        for (MapEntry muscle in exerciseMuscles[exercise]['Secondary'].entries){
+        for (MapEntry muscle in exerciseData['Secondary'].entries){
           musclesMap[muscle.key] = [muscle.value/100, Colors.red];
         }
       }
       musclesMap['Body'] = [1.0, Colors.grey];
       String modifiedSvg = await modifySvgPaths(widget.assetPath, musclesMap);
-      debugPrint(modifiedSvg);
       setState(() {
         modifiedSvgString = modifiedSvg;
       });

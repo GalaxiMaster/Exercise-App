@@ -1,11 +1,13 @@
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ignore: must_be_immutable
-class RadarChartPage extends StatefulWidget {
+class RadarChartPage extends ConsumerStatefulWidget {
   Map sets;
   RadarChartPage({super.key, required this.sets});   
     @override
@@ -13,13 +15,13 @@ class RadarChartPage extends StatefulWidget {
   _RadarChartPageState createState() => _RadarChartPageState();
 }
 
-class _RadarChartPageState extends State<RadarChartPage> {
+class _RadarChartPageState extends ConsumerState<RadarChartPage> {
     Map sets = {};
     List<RadarEntry> data = [];
     String timeSelection = 'All time';
 
     Future<void> reloadData(int range) async {
-      sets = (await getStuff('Sets', range))[0];
+      sets = (await getPercentageData('Sets', range, ref))[0];
       setState(() {
         data = [];
         for (String group in muscleGroups.keys){
@@ -274,38 +276,47 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   }
 }
 
-Future<List> getStuff(String target, int range) async {
+  Future<List> getPercentageData(String target, int range, WidgetRef ref) async {
     Map muscleData = {};
     Map data = await readData();
+    final Map customExercisesData = await ref.read(customExercisesProvider.future);
+
     for (var day in data.keys){
       Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
       int diff = difference.inDays;
       if (diff <= range || range == -1){
         for (var exercise in data[day]['sets'].keys){
-          if (exerciseMuscles.containsKey(exercise)){
-            for (var set in data[day]['sets'][exercise]){
-              double selector = 0;
-              switch(target){
-                case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
-                case 'Sets' : selector = 1;
-              }
-              for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
-                if (muscleData.containsKey(muscle)){
-                  muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-                } else{
-                  muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-                }
-              }
-              for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
-                if (muscleData.containsKey(muscle)){
-                  muscleData[muscle] += selector*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-                } else{
-                  muscleData[muscle] = selector*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-                }
+          bool isCustom = customExercisesData.containsKey(exercise);
+          Map exerciseData = {};
+
+          if (isCustom && customExercisesData.containsKey(exercise)){
+            exerciseData = customExercisesData[exercise];
+          } else {
+            exercise = exerciseMuscles[exercise] ?? {};
+          }
+
+          if (exerciseData.isEmpty) continue;
+
+          for (var set in data[day]['sets'][exercise]){
+            double selector = 0;
+            switch(target){
+              case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
+              case 'Sets' : selector = 1;
+            }
+            for (var muscle in exerciseData['Primary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += selector*(exerciseData['Primary']![muscle]!/100);
+              } else{
+                muscleData[muscle] = selector*(exerciseData['Primary']![muscle]!/100);
               }
             }
-          } else{
-            debugPrint('Unknown exercise: $exercise');
+            for (var muscle in exerciseData['Secondary']!.keys){
+              if (muscleData.containsKey(muscle)){
+                muscleData[muscle] += selector*(exerciseData['Secondary']![muscle]!/100);
+              } else{
+                muscleData[muscle] = selector*(exerciseData['Secondary']![muscle]!/100);
+              }
+            }
           }
         }
       }else{

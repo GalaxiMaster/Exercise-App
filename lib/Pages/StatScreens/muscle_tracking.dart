@@ -1,14 +1,16 @@
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:flutter/services.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
 
-class MuscleTracking extends StatefulWidget {
+class MuscleTracking extends ConsumerStatefulWidget {
   final Map setData;
   const MuscleTracking({super.key, required this.setData});
 
@@ -16,7 +18,7 @@ class MuscleTracking extends StatefulWidget {
   MuscleTrackingState createState() => MuscleTrackingState();
 }
 
-class MuscleTrackingState extends State<MuscleTracking> {
+class MuscleTrackingState extends ConsumerState<MuscleTracking> {
   Map<String, dynamic>? muscleGoals;
 
   void onGoalUpdate(String muscle, double newGoal) {
@@ -32,7 +34,7 @@ class MuscleTrackingState extends State<MuscleTracking> {
     return Scaffold(
       appBar: myAppBar(context, 'Muscle Tracking'),
       body: FutureBuilder(
-        future: getSetAmounts(),
+        future: getSetAmounts(ref),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -364,18 +366,18 @@ class ExpandedSetProgressTile extends StatelessWidget {
   }
 }
 
-class WeeklyProgressChart extends StatelessWidget {
+class WeeklyProgressChart extends ConsumerWidget {
   final String muscle;
   const WeeklyProgressChart({super.key, required this.muscle});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<Map>(
-        future: getWeekData(muscle),
+        future: getWeekData(muscle, ref),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error loading data'));
+            return Center(child: Text('Error loading data ${snapshot.error}'));
           } else if (snapshot.hasData) {
             return SizedBox(
       height: 150,
@@ -426,24 +428,35 @@ class WeeklyProgressChart extends StatelessWidget {
   });
 }
 
-Future<Map> getWeekData(String mainMuscle) async{
+Future<Map> getWeekData(String mainMuscle, WidgetRef ref) async{
   Map weekData = {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0}; // double format
   Map data = await readData();
+  final Map customExercisesData = await ref.read(customExercisesProvider.future);
+
   for (var day in data.keys){
     if (DateTime.now().difference(DateTime.parse(day.split(' ')[0])).inDays < 7){
       String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
       for (var exercise in data[day]['sets'].keys){
-        if(exerciseMuscles.containsKey(exercise))
-        // ignore: unused_local_variable, curly_braces_in_flow_control_structures
-        for (var set in data[day]['sets'][exercise]){
-          for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
+        bool isCustom = customExercisesData.containsKey(exercise);
+        Map exerciseData = {};
+
+        if (isCustom && customExercisesData.containsKey(exercise)){
+          exerciseData = customExercisesData[exercise];
+        } else {
+          exercise = exerciseMuscles[exercise] ?? {};
+        }
+
+        if (exerciseData.isEmpty) continue;
+
+        for (int i = 0; i < data[day]['sets'][exercise].length; i++){
+          for (var muscle in exerciseData['Primary']!.keys){
             if (muscleGroups[mainMuscle]!.contains(muscle)){
-              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseMuscles[exercise]!['Primary']![muscle]!/100);
+              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseData['Primary']![muscle]!/100);
             }
           }
-          for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
+          for (var muscle in exerciseData['Secondary']!.keys){
             if (muscleGroups[mainMuscle]!.contains(muscle)){
-              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
+              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseData['Secondary']![muscle]!/100);
             }
           }
         }
@@ -460,55 +473,64 @@ void writeMuscleGoal(String muscle, double value) async{
   writeData(settings, path: 'settings',append: false);
 }
 
-Future<List> getSetAmounts() async {
+Future<List> getSetAmounts(WidgetRef ref) async {
   Map data = {};
   Map muscleData = {};
-    Map sets = await readData();
-    for (var day in sets.keys){
-      Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+  Map sets = await readData();
+  final Map customExercisesData = await ref.read(customExercisesProvider.future);
 
-      if (difference.inDays < 7){
-        for (var exercise in sets[day]['sets'].keys){
-          if (exerciseMuscles.containsKey(exercise)){
-            for (int i = 0; i < sets[day]['sets'][exercise].length; i++){
-              for (var muscle in exerciseMuscles[exercise]!['Primary']!.keys){
-                if (muscleData.containsKey(muscle)){
-                  muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-                } else{
-                  muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Primary']![muscle]!/100);
-                }
-              }
-              for (var muscle in exerciseMuscles[exercise]!['Secondary']!.keys){
-                if (muscleData.containsKey(muscle)){
-                  muscleData[muscle] += 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-                } else{
-                  muscleData[muscle] = 1*(exerciseMuscles[exercise]!['Secondary']![muscle]!/100);
-                }
-              }
+  for (var day in sets.keys){
+    Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+
+    if (difference.inDays < 7){
+      for (var exercise in sets[day]['sets'].keys){
+        bool isCustom = customExercisesData.containsKey(exercise);
+        Map exerciseData = {};
+
+        if (isCustom && customExercisesData.containsKey(exercise)){
+          exerciseData = customExercisesData[exercise];
+        } else {
+          exercise = exerciseMuscles[exercise] ?? {};
+        }
+
+        if (exerciseData.isEmpty) continue;
+
+        for (int i = 0; i < sets[day]['sets'][exercise].length; i++){
+          for (var muscle in exerciseData['Primary']!.keys){
+            if (muscleData.containsKey(muscle)){
+              muscleData[muscle] += 1*(exerciseData['Primary']![muscle]!/100);
+            } else{
+              muscleData[muscle] = 1*(exerciseData['Primary']![muscle]!/100);
             }
-          } else{
-            debugPrint('Unknown exercise: $exercise');
+          }
+          for (var muscle in exerciseData['Secondary']!.keys){
+            if (muscleData.containsKey(muscle)){
+              muscleData[muscle] += 1*(exerciseData['Secondary']![muscle]!/100);
+            } else{
+              muscleData[muscle] = 1*(exerciseData['Secondary']![muscle]!/100);
+            }
           }
         }
       }
     }
-
-    for (String group in muscleGroups.keys){
-      for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-        double muscleNum = (muscleData[muscleGroups[group]?[i]] ?? 0);
-          if (data[group] == null) {
-            data[group] = 0;
-          }
-          data[group] += muscleNum;
-      }
-    }
-    List<MapEntry> entries = data.entries.toList();
-    entries.sort((a, b) => b.value.compareTo(a.value));
-    data = Map.fromEntries(entries);
-    Map settings = await getAllSettings();
-    return [data,  muscleData, settings];
-
   }
+
+  for (String group in muscleGroups.keys){
+    for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
+      double muscleNum = (muscleData[muscleGroups[group]?[i]] ?? 0);
+        if (data[group] == null) {
+          data[group] = 0;
+        }
+        data[group] += muscleNum;
+    }
+  }
+  List<MapEntry> entries = data.entries.toList();
+  entries.sort((a, b) => b.value.compareTo(a.value));
+  data = Map.fromEntries(entries);
+  Map settings = await getAllSettings();
+  return [data,  muscleData, settings];
+
+}
 
 class CaloriesSpeedometer extends StatelessWidget {
   final double calories;
