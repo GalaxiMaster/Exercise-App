@@ -55,7 +55,7 @@ class _DataChartsState extends ConsumerState<DataCharts> {
         ],
       ),
       body: FutureBuilder(
-      future: getPercentageData(chartTarget, range, ref),
+      future: getPercentageData(chartTarget, range, ref, targetMuscleGroup: muscleSelected),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

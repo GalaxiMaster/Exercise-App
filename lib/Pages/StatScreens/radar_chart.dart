@@ -276,7 +276,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   }
 }
 
-  Future<List> getPercentageData(String target, int range, WidgetRef ref) async {
+  Future<List> getPercentageData(String target, int range, WidgetRef ref, {String? targetMuscleGroup}) async {
     Map muscleData = {};
     Map data = await readData();
     final Map customExercisesData = await ref.read(customExercisesProvider.future);
@@ -294,8 +294,19 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
           } else {
             exerciseData = exerciseMuscles[exercise] ?? {};
           }
-
+          
           if (exerciseData.isEmpty) continue;
+          final Map<String, dynamic> musclesInExercise = {
+            ...?exerciseData['Primary'],
+            ...?exerciseData['Secondary'],
+          };
+          if (targetMuscleGroup != null && targetMuscleGroup != 'All Muscles'){ // DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
+            List muscleGroupMembers = muscleGroups[targetMuscleGroup] ?? [];
+            bool muscleExists = muscleGroupMembers.any((muscle){
+              return musclesInExercise.containsKey(muscle);
+            });
+            if (!muscleExists) continue;
+          }
 
           for (var set in data[day]['sets'][exercise]){
             double selector = 0;
@@ -303,18 +314,11 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
               case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
               case 'Sets' : selector = 1;
             }
-            for (var muscle in (exerciseData['Primary'] ?? {}).keys){
+            for (var muscle in musclesInExercise.keys){
               if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseData['Primary'][muscle]/100);
+                muscleData[muscle] += selector*(musclesInExercise[muscle]/100);
               } else{
-                muscleData[muscle] = selector*(exerciseData['Primary'][muscle]/100);
-              }
-            }
-            for (var muscle in (exerciseData['Secondary'] ?? {}).keys){
-              if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseData['Secondary'][muscle]/100);
-              } else{
-                muscleData[muscle] = selector*(exerciseData['Secondary'][muscle]/100);
+                muscleData[muscle] = selector*(musclesInExercise[muscle]/100);
               }
             }
           }
