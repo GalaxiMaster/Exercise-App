@@ -20,10 +20,40 @@ class _DataChartsState extends ConsumerState<DataCharts> {
   String muscleSelected = 'All Muscles';
   String timeSelected= 'All Time';
   int range = -1;
+  String selectedGraph = 'Pie Chart';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Charts'),),
+      appBar: AppBar(
+        title: Text('Charts'),
+        actions: [
+          TextButton.icon(
+            onPressed: () async {
+              final String? result = await showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return SelectorPopupList(options: ['Pie Chart', '100p Area Chart', 'Spline Area', 'Spline Line', 'Stacked Column', 'Stacked Line', 'Step Area']);
+                },
+              );
+              if (result != null){
+                setState(() {
+                  selectedGraph = result;
+                });
+              }
+            }, 
+            label: Text(
+              selectedGraph,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16
+              ),
+            ),
+            icon: const Icon(Icons.arrow_drop_down, size: 30, color: Colors.white,),
+            iconAlignment: IconAlignment.end, 
+          )
+        ],
+      ),
       body: FutureBuilder(
       future: getPercentageData(chartTarget, range, ref),
       builder: (context, snapshot) {
@@ -74,19 +104,22 @@ class _DataChartsState extends ConsumerState<DataCharts> {
               SizedBox(
                 width: double.infinity,
                 height: 270,
-                child: TimePieChart(
-                  range: range, 
-                  musclesSelected: muscleSelected, 
-                  target: chartTarget,
-                ),
-                // child: PieChart(
-                //   PieChartData(
-                //     sections: sections,
-                //     centerSpaceRadius: 10,
-                //     sectionsSpace: 2,
-                //     startDegreeOffset: -87,
-                //   ),
-                // ),
+                child: switch (selectedGraph) {
+                  'Pie Chart' => PieChart(
+                    PieChartData(
+                      sections: sections,
+                      centerSpaceRadius: 10,
+                      sectionsSpace: 2,
+                      startDegreeOffset: -87,
+                    ),
+                  ),
+                  _ => TimeCharts(
+                    range: range,
+                    musclesSelected: muscleSelected,
+                    target: chartTarget,
+                    selectedGraph: selectedGraph,
+                  ),
+                },
               ),
               Row(
                 children: [

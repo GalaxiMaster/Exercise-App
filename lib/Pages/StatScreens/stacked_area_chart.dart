@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class TimePieChart extends ConsumerWidget {
+class TimeCharts extends ConsumerWidget {
   final int range;
   final String musclesSelected;
   final String target;
-  const TimePieChart({super.key, required this.range, required this.musclesSelected, required this.target});
+  final String selectedGraph;
+  const TimeCharts({super.key, required this.range, required this.musclesSelected, required this.target, required this.selectedGraph});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,15 +33,8 @@ class TimePieChart extends ConsumerWidget {
               legend: const Legend(isVisible: false),
               tooltipBehavior: TooltipBehavior(enable: true),
               series: [
-                for (MapEntry muscleEntry in snapshot.data!.entries)
-                StackedArea100Series<ChartData, DateTime>(
-                  dataSource: muscleEntry.value,
-                  xValueMapper: (ChartData data, _) => data.year,
-                  yValueMapper: (ChartData data, _) => data.value,
-                  name: muscleEntry.key,
-                  selectionBehavior: SelectionBehavior(enable: true),
-                  color: getColor(muscleEntry.key),
-                ),
+                for (MapEntry<String, List<ChartData>> muscleEntry in snapshot.data!.entries)
+                buildSeries(selectedGraph, muscleEntry)
               ],
             ),
           );
@@ -145,4 +139,76 @@ Future<Map<String, List<ChartData>>> setupData(
     ..addEntries(sortedEntries);
 
   return dataset;
+}
+
+CartesianSeries<ChartData, DateTime> buildSeries(
+  String type,
+  MapEntry<String, List<ChartData>> e,
+) {
+  final common = _CommonSeries(
+    data: e.value,
+    name: e.key,
+    color: getColor(e.key),
+  );
+
+  return switch (type) {
+    '100p Area Chart' => StackedArea100Series(
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),
+
+    'Spline Area' => SplineAreaSeries(
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),
+    'Spline Line' => SplineSeries(
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),
+    'Stacked Line' => StackedLineSeries(
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),
+    'Step Area' => StepAreaSeries(
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),
+    _ => StackedColumnSeries(
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),
+  };
+}
+
+class _CommonSeries {
+  final List<ChartData> data;
+  final String name;
+  final Color color;
+
+  const _CommonSeries({
+    required this.data,
+    required this.name,
+    required this.color,
+  });
+
+  DateTime x(ChartData d, _) => d.year;
+  num y(ChartData d, _) => d.value;
 }
