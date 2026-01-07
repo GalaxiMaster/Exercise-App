@@ -5104,7 +5104,7 @@ Map exerciseMuscles = {
             "Trapezius": 10
         },
         "Secondary": {
-            "Rear Delts (Posterior Deltoids)": 10,
+            "Rear Delts": 10,
             "Biceps": 10
         },
         "type": "Weighted"
@@ -5937,7 +5937,7 @@ Map exerciseMuscles = {
             "Biceps": 30
         },
         "Secondary": {
-            "Rear Delts (Posterior Deltoids)": 10
+            "Rear Delts": 10
         },
         "type": "Weighted"
     },
@@ -6874,7 +6874,9 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Lats": 30,
-            "Shoulders": 15
+            "Front Delts": 5,
+            "Side Delts": 5,
+            "Rear Delts": 5
         },
         "type": "Timed"
     },

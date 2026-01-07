@@ -6,12 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TimePieChart extends ConsumerWidget {
-  const TimePieChart({super.key});
+  final int range;
+  final String musclesSelected;
+  final String target;
+  const TimePieChart({super.key, required this.range, required this.musclesSelected, required this.target});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-      future: setupData(ref, range: 365),
+      future: setupData(ref, range: range, target: target),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -84,8 +87,10 @@ Future<Map<String, List<ChartData>>> setupData(
         switch (target) {
           case 'Volume':
             selector = double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
-            break;
+          case 'kg':
+            selector = double.parse(set['weight'].toString());
           case 'Sets':
+            selector = 1;
           default:
             selector = 1;
         }

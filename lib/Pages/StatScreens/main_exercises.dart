@@ -44,6 +44,7 @@ void setExerciseData() async {
       precacheImage(AssetImage("assets/Exercises/${exercises[i]}.png"), context);
     }
   }
+
   setState(() {
     exerciseData = data; // Store the fetched data
     isLoading = false;   // Mark loading as complete
@@ -90,6 +91,7 @@ void setExerciseData() async {
               Flexible(
                 child: ListView.builder(
                   itemCount: exerciseData.keys.length,
+                  reverse: true,
                   itemBuilder:  (context, index) {
                     String exercise = exerciseData.keys.toList()[index];
                     return InkWell(
@@ -110,27 +112,27 @@ void setExerciseData() async {
                           });
                         }else{
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseScreen(exercises: [exercise])
-                              )
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseScreen(exercises: [exercise])
+                            )
                           );
                         }
                       },
                       onLongPress: (){
-                          setState(() {
-                            if (selectedItems.contains(exercise)){
-                              selectedItems.remove(exercise);
-                              if (selectedItems.isEmpty){
-                                multiSelect == false;
-                              }
-                            }else{
-                              if (!multiSelect){
-                                multiSelect = true;
-                              }
-                              selectedItems.add(exercise);
-                            }  
-                          });
+                        setState(() {
+                          if (selectedItems.contains(exercise)){
+                            selectedItems.remove(exercise);
+                            if (selectedItems.isEmpty){
+                              multiSelect == false;
+                            }
+                          }else{
+                            if (!multiSelect){
+                              multiSelect = true;
+                            }
+                            selectedItems.add(exercise);
+                          }  
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

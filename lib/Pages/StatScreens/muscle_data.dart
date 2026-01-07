@@ -52,7 +52,7 @@ class MuscleData extends ConsumerWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DataCharts(scaledData: scaledMuscleData, unscaledData: unscaledMuscleData),
+                            builder: (context) => DataCharts(),
                           ),
                         );
                       },
