@@ -195,7 +195,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
         } else {
-          exercise = exerciseMuscles[exercise] ?? {};
+          exerciseData = exerciseMuscles[exercise] ?? {};
         }
 
         if (exerciseData.isEmpty) continue;
@@ -697,7 +697,7 @@ class BodyHeatMapState extends ConsumerState<BodyHeatMap> {
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
         } else {
-          exercise = exerciseMuscles[exercise] ?? {};
+          exerciseData = exerciseMuscles[exercise] ?? {};
         }
 
         if (exerciseData.isEmpty) continue;

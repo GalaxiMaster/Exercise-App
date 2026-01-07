@@ -1,4 +1,6 @@
+import 'package:exercise_app/Pages/StatScreens/stacked_area_chart.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,11 +17,13 @@ class DataCharts extends ConsumerStatefulWidget{
 }
 
 class _DataChartsState extends ConsumerState<DataCharts> {
-  String units = 'Sets';
+  String units = 'Sets';    
+  double radius = 125;
+  String muscleSelected = 'All Muscles';
+  String timeSelected= 'All Time';
+  int range = -1;
   @override
   Widget build(BuildContext context) {
-
-    double radius = 125;
 
     List<PieChartSectionData> sections = widget.scaledData.entries.map((entry) {
       return PieChartSectionData(
@@ -34,17 +38,44 @@ class _DataChartsState extends ConsumerState<DataCharts> {
       appBar: AppBar(),
       body: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              selectorBox(
+                muscleSelected, 
+                'muscles', 
+                (entry) {
+                  setState(() {
+                    muscleSelected = entry.key;
+                  });
+                }, 
+                context
+              ),
+              selectorBox(
+                timeSelected, 
+                'time', 
+                (entry) {
+                  setState(() {
+                    timeSelected = entry.key;
+                    range = entry.value;
+                  });
+                }, 
+              context
+              ),
+            ],
+          ),
           SizedBox(
             width: double.infinity,
             height: 270,
-            child: PieChart(
-              PieChartData(
-                sections: sections,
-                centerSpaceRadius: 10,
-                sectionsSpace: 2,
-                startDegreeOffset: -87,
-              ),
-            ),
+            child: TimePieChart(),
+            // child: PieChart(
+            //   PieChartData(
+            //     sections: sections,
+            //     centerSpaceRadius: 10,
+            //     sectionsSpace: 2,
+            //     startDegreeOffset: -87,
+            //   ),
+            // ),
           ),
           Row(
             children: [
@@ -58,30 +89,46 @@ class _DataChartsState extends ConsumerState<DataCharts> {
             child: ListView.builder(
               itemCount: widget.scaledData.keys.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Container(
-                          width: 12.5,
-                          height: 12.5,
-                          decoration: BoxDecoration(
-                            color: getColor(widget.scaledData.keys.toList().reversed.toList()[index]),
-                            border: Border.all(color: Colors.black)
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              width: 12.5,
+                              height: 12.5,
+                              decoration: BoxDecoration(
+                                color: getColor(widget.scaledData.keys.toList().reversed.toList()[index]),
+                                border: Border.all(color: Colors.black)
+                              ),
+                            ),
                           ),
-                        ),
+                          Text(
+                            '${widget.scaledData.keys.toList().reversed.toList()[index]} : ',
+                            style: const TextStyle(
+                              fontSize: 20
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${widget.unscaledData.values.toList().reversed.toList()[index].toStringAsFixed(1)} $units : ${widget.scaledData.values.toList().reversed.toList()[index]}%',
+                            style: const TextStyle(
+                              fontSize: 20
+                            ),
+                          )
+                        ]
                       ),
-                      Text(
-                        '${widget.scaledData.keys.toList().reversed.toList()[index]} : ${widget.unscaledData.values.toList().reversed.toList()[index].toStringAsFixed(1)} $units : ${widget.scaledData.values.toList().reversed.toList()[index]}%',
-                        style: const TextStyle(
-                          fontSize: 20
-                        ),
-                      )
-                    ]
-                  ),
+                    ),
+                    Divider(
+                      thickness: .25,
+                      height: 0.2,
+                      color: Colors.grey.withValues(alpha: .5),
+                    )
+                  ],
                 );
               }
             ),

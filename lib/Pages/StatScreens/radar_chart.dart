@@ -292,7 +292,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
           if (isCustom && customExercisesData.containsKey(exercise)){
             exerciseData = customExercisesData[exercise];
           } else {
-            exercise = exerciseMuscles[exercise] ?? {};
+            exerciseData = exerciseMuscles[exercise] ?? {};
           }
 
           if (exerciseData.isEmpty) continue;
@@ -303,18 +303,18 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
               case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
               case 'Sets' : selector = 1;
             }
-            for (var muscle in exerciseData['Primary']!.keys){
+            for (var muscle in (exerciseData['Primary'] ?? {}).keys){
               if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseData['Primary']![muscle]!/100);
+                muscleData[muscle] += selector*(exerciseData['Primary'][muscle]/100);
               } else{
-                muscleData[muscle] = selector*(exerciseData['Primary']![muscle]!/100);
+                muscleData[muscle] = selector*(exerciseData['Primary'][muscle]/100);
               }
             }
-            for (var muscle in exerciseData['Secondary']!.keys){
+            for (var muscle in (exerciseData['Secondary'] ?? {}).keys){
               if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(exerciseData['Secondary']![muscle]!/100);
+                muscleData[muscle] += selector*(exerciseData['Secondary'][muscle]/100);
               } else{
-                muscleData[muscle] = selector*(exerciseData['Secondary']![muscle]!/100);
+                muscleData[muscle] = selector*(exerciseData['Secondary'][muscle]/100);
               }
             }
           }

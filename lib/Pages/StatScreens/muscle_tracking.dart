@@ -443,18 +443,18 @@ Future<Map> getWeekData(String mainMuscle, WidgetRef ref) async{
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
         } else {
-          exercise = exerciseMuscles[exercise] ?? {};
+          exerciseData = exerciseMuscles[exercise] ?? {};
         }
 
         if (exerciseData.isEmpty) continue;
 
         for (int i = 0; i < data[day]['sets'][exercise].length; i++){
-          for (var muscle in exerciseData['Primary']!.keys){
+          for (var muscle in (exerciseData['Primary'] ?? {}).keys){
             if (muscleGroups[mainMuscle]!.contains(muscle)){
               weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseData['Primary']![muscle]!/100);
             }
           }
-          for (var muscle in exerciseData['Secondary']!.keys){
+          for (var muscle in (exerciseData['Secondary'] ?? {}).keys){
             if (muscleGroups[mainMuscle]!.contains(muscle)){
               weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseData['Secondary']![muscle]!/100);
             }
@@ -490,20 +490,20 @@ Future<List> getSetAmounts(WidgetRef ref) async {
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
         } else {
-          exercise = exerciseMuscles[exercise] ?? {};
+          exerciseData = exerciseMuscles[exercise] ?? {};
         }
 
         if (exerciseData.isEmpty) continue;
 
         for (int i = 0; i < sets[day]['sets'][exercise].length; i++){
-          for (var muscle in exerciseData['Primary']!.keys){
+          for (var muscle in (exerciseData['Primary'] ?? {}).keys){
             if (muscleData.containsKey(muscle)){
               muscleData[muscle] += 1*(exerciseData['Primary']![muscle]!/100);
             } else{
               muscleData[muscle] = 1*(exerciseData['Primary']![muscle]!/100);
             }
           }
-          for (var muscle in exerciseData['Secondary']!.keys){
+          for (var muscle in (exerciseData['Secondary'] ?? {}).keys){
             if (muscleData.containsKey(muscle)){
               muscleData[muscle] += 1*(exerciseData['Secondary']![muscle]!/100);
             } else{

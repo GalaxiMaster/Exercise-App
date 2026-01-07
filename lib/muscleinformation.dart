@@ -12,29 +12,30 @@ Map<String, List<String>> muscleGroups = {
 Color getColor(String key) {
   var colors = {
     'Chest': Colors.red,
-    'Upper Chest': Colors.redAccent,
-    'Lower Chest': Colors.deepOrangeAccent,
+    'Upper Chest': Colors.pinkAccent,
+    'Lower Chest': Colors.deepOrange,
     'Triceps': Colors.orange,
-    'Biceps': Colors.pink,
-    'Front Delts': Colors.lightBlue,
+    'Biceps': Colors.purpleAccent.shade700,
+    'Front Delts': Colors.blue,
     'Side Delts': Colors.cyan,
     'Rear Delts': Colors.teal,
-    'Traps': Colors.deepPurpleAccent,
-    'Forearms': Colors.purple,
-    'Lats': Colors.indigo,
-    'Erectors': Colors.lightGreen,
-    'Rhomboids': Colors.green,
-    'Glutes': Colors.deepOrange,
+    'Traps': Colors.deepPurple,
+    'Forearms': Colors.brown,
+    'Lats': Colors.indigo, // unchanged
+    'Erectors': Colors.green,
+    'Rhomboids': Colors.greenAccent,
+    'Glutes': Colors.deepOrangeAccent,
     'Quads': Colors.yellow,
     'Hamstrings': Colors.amber,
-    'Calves': Colors.lightGreen,
+    'Calves': Colors.lime,
     'Abdominals': Colors.lightBlueAccent,
     'Obliques': Colors.blueGrey,
-    'Hip Flexors': Colors.lightBlue
+    'Hip Flexors': Colors.lightGreen
   };
 
   return colors[key] ?? Colors.grey;
 }
+
 
 Map exerciseMuscles = {
     "Cable Pushdown": {
@@ -568,10 +569,7 @@ Map exerciseMuscles = {
     },
     "Dumbbell Single Leg Calf Raise": {
         "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
+            "Calves": 100
         },
         "type": "Weighted"
     },
@@ -582,17 +580,6 @@ Map exerciseMuscles = {
         "Secondary": {
             "Biceps": 30,
             "Forearms": 10
-        },
-        "type": "Weighted"
-    },
-    "Dumbbell Single Leg Deadlift": {
-        "Primary": {
-            "Hamstrings": 50,
-            "Glutes": 30
-        },
-        "Secondary": {
-            "Erectors": 10,
-            "Balance & Stability": 10
         },
         "type": "Weighted"
     },
@@ -953,17 +940,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Kettlebell One Legged Deadlift": {
-        "Primary": {
-            "Hamstrings": 50,
-            "Glutes": 30
-        },
-        "Secondary": {
-            "Erectors": 10,
-            "Balance": 10
-        },
-        "type": "Weighted"
-    },
     "Barbell Incline Row": {
         "Primary": {
             "Rhomboids": 30,
@@ -1039,29 +1015,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbell Step Up Single Leg Balance with Bicep Curl": {
-        "Primary": {
-            "Quads": 40,
-            "Glutes": 30,
-            "Biceps": 20
-        },
-        "Secondary": {
-            "Hamstrings": 5,
-            "Balance": 5
-        },
-        "type": "Weighted"
-    },
-    "Kettlebell Kickstand One Leg Deadlift": {
-        "Primary": {
-            "Hamstrings": 50,
-            "Glutes": 30
-        },
-        "Secondary": {
-            "Erectors": 10,
-            "Balance": 10
-        },
-        "type": "Weighted"
-    },
     "Hanging Toes to Bar": {
         "Primary": {
             "Abdominals": 50,
@@ -1087,15 +1040,6 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Side Delts": 30
-        },
-        "type": "Weighted"
-    },
-    "Barbell Standing Rocking Leg Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance": 10
         },
         "type": "Weighted"
     },
@@ -1633,10 +1577,7 @@ Map exerciseMuscles = {
     },
     "Barbell Standing Calf Raise": {
         "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance": 10
+            "Calves": 100
         },
         "type": "Weighted"
     },
@@ -2045,15 +1986,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbell Fly (knees at 90 degrees)": {
-        "Primary": {
-            "Chest": 80
-        },
-        "Secondary": {
-            "Front Delts": 20
-        },
-        "type": "Weighted"
-    },
     "Lever Deadlift (plate loaded)": {
         "Primary": {
             "Hamstrings": 40,
@@ -2128,9 +2060,8 @@ Map exerciseMuscles = {
             "Quads": 60
         },
         "Secondary": {
-            "Glutes": 20,
-            "Hamstrings": 10,
-            "Balance": 10
+            "Glutes": 25,
+            "Hamstrings": 15,
         },
         "type": "Weighted"
     },
@@ -2551,17 +2482,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Single Leg Deadlift with Knee Lift": {
-        "Primary": {
-            "Hamstrings": 50,
-            "Glutes": 30
-        },
-        "Secondary": {
-            "Erectors": 10,
-            "Balance": 10
-        },
-        "type": "Weighted"
-    },
     "Cable Squatting Curl": {
         "Primary": {
             "Biceps": 80
@@ -2610,10 +2530,7 @@ Map exerciseMuscles = {
     },
     "Lever Standing Calf Raise": {
         "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance": 10
+            "Calves": 100
         },
         "type": "Weighted"
     },
@@ -2704,15 +2621,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Sled One Leg Calf Press on Leg Press": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance": 10
-        },
-        "type": "Weighted"
-    },
     "Dumbbell One Arm Low Fly": {
         "Primary": {
             "Lower Chest": 80
@@ -2729,16 +2637,6 @@ Map exerciseMuscles = {
         "Secondary": {
             "Triceps": 15,
             "Front Delts": 5
-        },
-        "type": "Weighted"
-    },
-    "One Leg Quarter Squat": {
-        "Primary": {
-            "Quads": 70
-        },
-        "Secondary": {
-            "Glutes": 20,
-            "Balance": 10
         },
         "type": "Weighted"
     },
@@ -2941,15 +2839,6 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Forearms": 20
-        },
-        "type": "Weighted"
-    },
-    "Dumbbell Seated One Leg Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
         },
         "type": "Weighted"
     },
@@ -3190,10 +3079,7 @@ Map exerciseMuscles = {
     },
     "Weighted Seated Calf Raise": {
         "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
+            "Calves": 100
         },
         "type": "Weighted"
     },
@@ -3378,15 +3264,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Smith Toe Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
     "Dumbbell One Arm Bench Fly": {
         "Primary": {
             "Chest": 80
@@ -3408,19 +3285,7 @@ Map exerciseMuscles = {
     },
     "Dumbbell Standing Calf Raise": {
         "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
-    "Barbell Standing Leg Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance": 10
+            "Calves": 100
         },
         "type": "Weighted"
     },
@@ -3537,35 +3402,6 @@ Map exerciseMuscles = {
             "Hamstrings": 10
         },
         "type": "Weighted"
-    },
-    "Barbell Floor Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
-    "Dumbbell one leg squat w": {
-        "Primary": {
-            "Quads": 60
-        },
-        "Secondary": {
-            "Glutes": 20,
-            "Hamstrings": 10,
-            "Balance": 10
-        },
-        "type": "Weighted"
-    },
-    "Bodyweight Standing Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Bodyweight"
     },
     "Lever Alternate Biceps Curl": {
         "Primary": {
@@ -3817,15 +3653,7 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Smith Seated Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
+
     "Dumbbell Rotation Reverse Fly": {
         "Primary": {
             "Rear Delts": 70
@@ -3932,15 +3760,6 @@ Map exerciseMuscles = {
         },
         "type": "Bodyweight"
     },
-    "Bodyweight Standing Pulse Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Bodyweight"
-    },
     "Lever Hip Thrust": {
         "Primary": {
             "Glutes": 80
@@ -4044,15 +3863,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Smith Calf Raise (with block)": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
     "Cable Reverse Curl": {
         "Primary": {
             "Brachialis": 60
@@ -4149,15 +3959,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Hack One Leg Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
     "Side Lying Clam": {
         "Primary": {
             "Hip Abductors": 70
@@ -4212,15 +4013,6 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Forearms": 10
-        },
-        "type": "Weighted"
-    },
-    "Dumbbell Standing Single Leg Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
         },
         "type": "Weighted"
     },
@@ -4359,15 +4151,6 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Smith One Leg Floor Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance & Stability": 10
-        },
-        "type": "Weighted"
-    },
     "Bodyweight Step up on Stepbox": {
         "Primary": {
             "Quads": 60,
@@ -4449,15 +4232,6 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Chest": 20
-        },
-        "type": "Weighted"
-    },
-    "Smith Standing Leg Calf Raise": {
-        "Primary": {
-            "Calves": 90
-        },
-        "Secondary": {
-            "Balance": 10
         },
         "type": "Weighted"
     },
@@ -4621,17 +4395,6 @@ Map exerciseMuscles = {
         },
         "Secondary": {
             "Grip Strength": 10
-        },
-        "type": "Weighted"
-    },
-    "Barbell One Leg Squat": {
-        "Primary": {
-            "Quads": 60
-        },
-        "Secondary": {
-            "Glutes": 20,
-            "Hamstrings": 10,
-            "Balance": 10
         },
         "type": "Weighted"
     },
@@ -4835,16 +4598,6 @@ Map exerciseMuscles = {
         "Secondary": {},
         "type": "Weighted"
     },
-    "Weighted Counterbalanced Squat": {
-        "Primary": {
-            "Quads": 70
-        },
-        "Secondary": {
-            "Glutes": 15,
-            "Hamstrings": 15
-        },
-        "type": "Weighted"
-    },
     "Cable pull through": {
         "Primary": {
             "Glutes": 35,
@@ -4981,12 +4734,11 @@ Map exerciseMuscles = {
     },
     "Split Squats": {
         "Primary": {
-            "Quads": 35,
-            "Glutes": 35
+            "Quads": 40,
+            "Glutes": 40
         },
         "Secondary": {
-            "Hamstrings": 15,
-            "Balance": 15
+            "Hamstrings": 20,
         },
         "type": "Weighted"
     },
@@ -5184,13 +4936,12 @@ Map exerciseMuscles = {
     },
     "Dumbbell Step up": {
         "Primary": {
-            "Quads": 35,
-            "Glutes": 35
+            "Quads": 40,
+            "Glutes": 40
         },
         "Secondary": {
             "Hamstrings": 10,
             "Calves": 10,
-            "Balance": 10
         },
         "type": "Weighted"
     },
@@ -5702,17 +5453,6 @@ Map exerciseMuscles = {
             "Obliques": 30
         },
         "type": "Bodyweight"
-    },
-    "Dumbbell Single Leg Step Up": {
-        "Primary": {
-            "Quads": 50,
-            "Glutes": 40
-        },
-        "Secondary": {
-            "Hamstrings": 5,
-            "Balance": 5
-        },
-        "type": "Weighted"
     },
     "Hip Thrusts": {
         "Primary": {
@@ -6663,10 +6403,7 @@ Map exerciseMuscles = {
     },
     "Lever Leg Extension": {
         "Primary": {
-            "Quads": 80
-        },
-        "Secondary": {
-            "Knees": 20
+            "Quads": 100
         },
         "type": "Weighted"
     },
@@ -6697,15 +6434,7 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Lever Seated Leg Extension": {
-        "Primary": {
-            "Quads": 80
-        },
-        "Secondary": {
-            "Knees": 20
-        },
-        "type": "Weighted"
-    },
+
     "Lever Seated One Leg Leg Curl": {
         "Primary": {
             "Hamstrings": 70
@@ -6762,12 +6491,9 @@ Map exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "One Leg Leg Extension": {
+    "Single Leg Leg Extension": {
         "Primary": {
-            "Quads": 80
-        },
-        "Secondary": {
-            "Knees": 20
+            "Quads": 100
         },
         "type": "Weighted"
     },

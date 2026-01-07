@@ -347,7 +347,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
       if (isCustom && customExercisesData.containsKey(exercise)){
         exerciseData = customExercisesData[exercise];
       } else {
-        exercise = exerciseMuscles[exercise] ?? {};
+        exerciseData = exerciseMuscles[exercise] ?? {};
       }
 
       if (exerciseData.isEmpty) continue;

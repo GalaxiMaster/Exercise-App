@@ -20,7 +20,7 @@ class MuscleData extends ConsumerWidget {
     return Scaffold(
       appBar: myAppBar(context, 'Muscle data'),
       body: FutureBuilder<List>(
-        future: getPercentageData('Sets', -1, ref),
+        future: getPercentageData('Sets', 30, ref),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
