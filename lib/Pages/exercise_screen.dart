@@ -88,12 +88,12 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     });
   }
   
-  Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues) {
+  Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues, List<List> groupedDates) {
     switch (_currentTab) {
       case TabItem.info:
         return infoBody(widget.exercises);
       case TabItem.graph:
-        return graphBody(spots, dates, xValues, context, isBodyWeight);
+        return graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates);
     }
   }
   Map scaleMapTo(Map map, num targetSum) {
@@ -108,6 +108,15 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     final List xValues = exerciseData.map((data) => data['x-value']).toList();
     final List values = exerciseData.map((data) => data[selector]).toList();
     final Set things = exerciseData.map((data) => data['x-value']).toSet(); // todo rename
+    final Map<String, List<String>> datesByExercise = {};
+
+    for (final data in exerciseData) {
+      final exercise = data['exercise'];
+      final date = data['date']; // or .split(' ')[0]
+
+      datesByExercise.putIfAbsent(exercise, () => []);
+      datesByExercise[exercise]!.add(date);
+    }
 
     if (dates.isNotEmpty){
       if (week == ''){
@@ -160,7 +169,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           ),
         ],
       ),
-      body: _buildPageContent(spotsByExercise, dates, xValues),
+      body: _buildPageContent(spotsByExercise, dates, xValues, datesByExercise.values.toList()),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTab.index, // Convert enum to index
         onTap: (index) {
@@ -276,13 +285,14 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     );
   }
     
-  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context, bool isBodyWight) {
+  Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context, bool isBodyWight, List<List> groupedDates) {
     String unit = 'kg';
     if (isBodyWeight || selector == 'reps'){unit = '';}
 
     final List<LineChartBarData> allLineBarsData = [];
     List exercisesOrder = [];
     // Add a line for each exercise
+    int i = 0;
     for (var entry in spots.entries) {
       // Add the main line for this exercise
       allLineBarsData.add(
@@ -297,7 +307,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           ),
         ),
       );
-
+      i++;
       // Add best fit line if there are enough points
       if (entry.value.length > 1) {
         allLineBarsData.add(
@@ -311,6 +321,8 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
             belowBarData: BarAreaData(show: false),
           ),
         );
+        groupedDates.insert(i, <String>[]); // Adding filler list so that the barIndex lines up properly when theres multiple lines
+        i++;
       }
       exercisesOrder.add(entry.key);
     }
@@ -436,12 +448,12 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                           if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
                             // Find the nearest point (spot) the user interacted with
                             final touchedSpot = touchResponse.lineBarSpots!.first;
-              
+                            final barIndex = touchedSpot.barIndex;
                             // Get the index and value of the touched spot
                             // final int index = touchedSpot.spotIndex;
                             final String weekLabel; 
                             if (scaleSetting ==  ScaleSetting.equalIntervals){
-                              weekLabel =  dates[touchedSpot.x.toInt()].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point ! DOESNT WORK WITH MULTIPLE GRAPHS
+                              weekLabel =  groupedDates[barIndex][touchedSpot.spotIndex].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point ! DOESNT WORK WITH MULTIPLE GRAPHS
                             }
                             else{
                               weekLabel =  DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt())); // Assuming 'dates' is a list of labels for each X point

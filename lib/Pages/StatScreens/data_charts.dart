@@ -7,211 +7,249 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'radar_chart.dart';
 
-class DataCharts extends ConsumerStatefulWidget{
+class DataCharts extends ConsumerStatefulWidget {
   const DataCharts({super.key});
+
   @override
-  // ignore: library_private_types_in_public_api
-  _DataChartsState createState() => _DataChartsState();
+  ConsumerState<DataCharts> createState() => _DataChartsState();
 }
 
 class _DataChartsState extends ConsumerState<DataCharts> {
-  String chartTarget = 'Sets';    
+  String chartTarget = 'Sets';
   double radius = 125;
   String muscleSelected = 'All Muscles';
-  String timeSelected= 'All Time';
+  String timeSelected = 'All Time';
   int range = -1;
   String selectedGraph = 'Pie Chart';
+
+  late Future<List<Map>> _dataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() {
+    _dataFuture = getPercentageData(
+      chartTarget,
+      range,
+      ref,
+      targetMuscleGroup: muscleSelected,
+    );
+  }
+
+  void _updateAndReload(VoidCallback fn) {
+    setState(() {
+      fn();
+      _loadData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Charts'),
+        title: const Text('Charts'),
         actions: [
           TextButton.icon(
             onPressed: () async {
-              final String? result = await showModalBottomSheet(
+              final result = await showModalBottomSheet<String>(
                 context: context,
-                builder: (BuildContext context) {
-                  return SelectorPopupList(options: ['Pie Chart', '100p Area Chart', 'Spline Area', 'Spline Line', 'Stacked Column', 'Stacked Line', 'Step Area']);
-                },
+                builder: (_) => const SelectorPopupList(
+                  options: [
+                    'Pie Chart',
+                    '100p Area Chart',
+                    'Spline Area',
+                    'Spline Line',
+                    'Stacked Column',
+                    'Stacked Line',
+                    'Step Area',
+                  ],
+                ),
               );
-              if (result != null){
-                setState(() {
-                  selectedGraph = result;
-                });
+              if (result != null) {
+                setState(() => selectedGraph = result);
               }
-            }, 
+            },
             label: Text(
               selectedGraph,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
-            icon: const Icon(Icons.arrow_drop_down, size: 30, color: Colors.white,),
-            iconAlignment: IconAlignment.end, 
+            icon: const Icon(Icons.arrow_drop_down, size: 30, color: Colors.white),
+            iconAlignment: IconAlignment.end,
           )
         ],
       ),
-      body: FutureBuilder(
-      future: getPercentageData(chartTarget, range, ref, targetMuscleGroup: muscleSelected),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error loading data'));
-        } else if (snapshot.hasData) {
-          Map scaledData = snapshot.data?[0];
-          Map unscaledData = snapshot.data?[1];
-          List<PieChartSectionData> sections = scaledData.entries.map((entry) {
+      body: FutureBuilder<List<Map>>(
+        future: _dataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.hasError) {
+            return const Center(child: Text('Error loading data'));
+          }
+
+          final scaledData = snapshot.data![0];
+          final unscaledData = snapshot.data![1];
+
+          final keys = scaledData.keys.toList().reversed.toList();
+          final scaledValues = scaledData.values.toList().reversed.toList();
+          final unscaledValues = unscaledData.values.toList().reversed.toList();
+
+          final sections = List.generate(keys.length, (i) {
             return PieChartSectionData(
-              color: getColor(entry.key),
-              value: entry.value,
-              title: entry.value > 5 ? '${entry.key}\n${entry.value}%' : '',
+              color: getColor(keys[i]),
+              value: scaledValues[i],
+              title: scaledValues[i] > 5 ? '${keys[i]}\n${scaledValues[i]}%' : '',
               radius: radius,
-              titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              titleStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             );
-          }).toList();
+          });
+
           return Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   selectorBox(
-                    muscleSelected, 
-                    'muscles', 
-                    (entry) {
-                      setState(() {
-                        muscleSelected = entry.key;
-                      });
-                    }, 
-                    context
+                    muscleSelected,
+                    'muscles',
+                    (entry) => _updateAndReload(() {
+                      muscleSelected = entry.key;
+                    }),
+                    context,
                   ),
                   selectorBox(
-                    timeSelected, 
-                    'time', 
-                    (entry) {
-                      setState(() {
-                        timeSelected = entry.key;
-                        range = entry.value;
-                      });
-                    }, 
-                  context
+                    timeSelected,
+                    'time',
+                    (entry) => _updateAndReload(() {
+                      timeSelected = entry.key;
+                      range = entry.value;
+                    }),
+                    context,
                   ),
                 ],
               ),
               SizedBox(
                 width: double.infinity,
                 height: 270,
-                child: switch (selectedGraph) {
-                  'Pie Chart' => PieChart(
-                    PieChartData(
-                      sections: sections,
-                      centerSpaceRadius: 10,
-                      sectionsSpace: 2,
-                      startDegreeOffset: -87,
-                    ),
-                  ),
-                  _ => TimeCharts(
-                    range: range,
-                    musclesSelected: muscleSelected,
-                    target: chartTarget,
-                    selectedGraph: selectedGraph,
-                  ),
-                },
+                child: selectedGraph == 'Pie Chart'
+                    ? PieChart(
+                        PieChartData(
+                          sections: sections,
+                          centerSpaceRadius: 10,
+                          sectionsSpace: 2,
+                          startDegreeOffset: -87,
+                        ),
+                      )
+                    : TimeCharts(
+                        range: range,
+                        musclesSelected: muscleSelected,
+                        target: chartTarget,
+                        selectedGraph: selectedGraph,
+                      ),
               ),
               Row(
                 children: [
-                  SelectorBox('Sets', chartTarget == 'Sets'),
-                  SelectorBox('Volume', chartTarget == 'Volume'),
+                  _SelectorBox(
+                    text: 'Sets',
+                    selected: chartTarget == 'Sets',
+                    onTap: () => _updateAndReload(() {
+                      chartTarget = 'Sets';
+                    }),
+                  ),
+                  _SelectorBox(
+                    text: 'Volume',
+                    selected: chartTarget == 'Volume',
+                    onTap: () => _updateAndReload(() {
+                      chartTarget = 'Volume';
+                    }),
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
-              const Divider(thickness: 1, color: Colors.grey, height: 1,),          
-              Flexible(
+              const Divider(thickness: 1, color: Colors.grey, height: 1),
+              Expanded(
                 child: ListView.builder(
-                  itemCount: scaledData.keys.length,
+                  itemCount: keys.length,
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Container(
-                                  width: 12.5,
-                                  height: 12.5,
-                                  decoration: BoxDecoration(
-                                    color: getColor(scaledData.keys.toList().reversed.toList()[index]),
-                                    border: Border.all(color: Colors.black)
-                                  ),
+                              Container(
+                                width: 12.5,
+                                height: 12.5,
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  color: getColor(keys[index]),
+                                  border: Border.all(color: Colors.black),
                                 ),
                               ),
                               Text(
-                                '${scaledData.keys.toList().reversed.toList()[index]} : ',
-                                style: const TextStyle(
-                                  fontSize: 20
-                                ),
+                                '${keys[index]} : ',
+                                style: const TextStyle(fontSize: 20),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Text(
-                                '${unscaledData.values.toList().reversed.toList()[index].toStringAsFixed(1)} ${chartTarget == 'Volume' ? 'kg' : chartTarget} : ${scaledData.values.toList().reversed.toList()[index]}%',
-                                style: const TextStyle(
-                                  fontSize: 20
-                                ),
-                              )
-                            ]
+                                '${unscaledValues[index].toStringAsFixed(1)} '
+                                '${chartTarget == 'Volume' ? 'kg' : chartTarget} '
+                                ': ${scaledValues[index]}%',
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ],
                           ),
                         ),
                         Divider(
                           thickness: .25,
-                          height: 0.2,
+                          height: .2,
                           color: Colors.grey.withValues(alpha: .5),
-                        )
+                        ),
                       ],
                     );
-                  }
+                  },
                 ),
-              )
-            ]
+              ),
+            ],
           );
-        } else {
-          return const Center(child: Text('No data available'));
-        }
-      },
+        },
       ),
     );
   }
-  
-  // ignore: non_constant_identifier_names
-  Widget SelectorBox(String text, bool selected){
+}
+
+class _SelectorBox extends StatelessWidget {
+  final String text;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _SelectorBox({
+    required this.text,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async{
-        setState(() {
-          switch(text){
-            case 'Sets':chartTarget = 'Sets';
-            case 'Volume': chartTarget = 'Volume';
-          }
-        });
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Container(
-          alignment: Alignment.center,
           decoration: BoxDecoration(
             color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-            child: Text(
-              text
-            ),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          child: Text(text),
         ),
       ),
     );

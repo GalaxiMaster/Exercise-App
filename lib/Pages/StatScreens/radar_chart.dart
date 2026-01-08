@@ -276,7 +276,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   }
 }
 
-  Future<List> getPercentageData(String target, int range, WidgetRef ref, {String? targetMuscleGroup}) async {
+  Future<List<Map>> getPercentageData(String target, int range, WidgetRef ref, {String? targetMuscleGroup}) async {
     Map muscleData = {};
     Map data = await readData();
     final Map customExercisesData = await ref.read(customExercisesProvider.future);

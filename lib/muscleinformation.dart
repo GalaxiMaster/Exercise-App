@@ -6344,10 +6344,7 @@ Map exerciseMuscles = {
     },
     "Finger Curls": {
         "Primary": {
-            "Forearms": 80
-        },
-        "Secondary": {
-            "Grip": 20
+            "Forearms": 100
         },
         "type": "Weighted"
     },
@@ -6427,7 +6424,7 @@ Map exerciseMuscles = {
     },
     "Lever Seated Hip Adduction": {
         "Primary": {
-            "Inner Thighs": 80
+            "Adductors": 80
         },
         "Secondary": {
             "Glutes": 20

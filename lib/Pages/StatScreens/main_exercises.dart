@@ -91,7 +91,6 @@ void setExerciseData() async {
               Flexible(
                 child: ListView.builder(
                   itemCount: exerciseData.keys.length,
-                  reverse: true,
                   itemBuilder:  (context, index) {
                     String exercise = exerciseData.keys.toList()[index];
                     return InkWell(
