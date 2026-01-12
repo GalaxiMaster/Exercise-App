@@ -37,6 +37,8 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   Map exerciseTypeAccess = {};
   bool loading = false;
 
+  Map boxErrors = {};
+
   @override
   void initState() {        
     super.initState();
@@ -51,14 +53,15 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
             startTime = data['stats']['startTime'];
           }
         });
+        repopulateExerciseTypeAccess();
       });
     }else {
       sets = widget.sets['sets'];
       exerciseNotes = widget.sets['stats']?['notes'] ?? {};
+      repopulateExerciseTypeAccess();
     }
     preLoad();
     _initializeFocusNodesAndControllers();
-    repopulateExerciseTypeAccess();
     loading = false;
   }
   @override
@@ -420,23 +423,103 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                             ),
                             
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
-                              child: Center(
-                                child: (exerciseMuscles[exercise]?['type'] ?? '') != 'Bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
-                                  TextFormField(
+                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: (boxErrors[exercise]?[i]?['weight'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(7.5)
+                                ),
+                                child: Center(
+                                  child: (exerciseMuscles[exercise]?['type'] ?? '') != 'Bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
+                                    TextFormField(
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
+                                      ],
+                                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                                      focusNode: _focusNodes[exercise]![i]['weight'],
+                                      controller: _controllers[exercise]![i]['weight'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
+                                      ),
+                                      decoration: InputDecoration(
+                                        hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type']),
+                                        border: InputBorder.none,
+                                        hintStyle: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 16, // Adjust hint text size
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        if (boxErrors[exercise]?[i]['weight'] ?? false){
+                                          boxErrors[exercise] ??= {};
+                                          boxErrors[exercise][i] ??= {};
+                                          boxErrors[exercise][i]['weight'] = false;
+                                        }
+                                        value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                                        sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                                        isRecord(exercise, i);
+                                        updateExercises();
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        if (i == sets[exercise]!.length - 1) {
+                                          addNewSet(exercise, exerciseTypeAccess[exercise]);
+                                        } else {
+                                          FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+                                        }
+                                      },
+                                      onTap: () {
+                                        _controllers[exercise]![i]['reps']!.selection = TextSelection(
+                                          baseOffset: 0,
+                                          extentOffset: _controllers[exercise]![i]['reps']!.text.length,
+                                        );
+                                      },
+                                    ) : exerciseTypeAccess[exercise] == 'Timed' ? 
+                                      SizedBox(
+                                        height: 50, 
+                                        child: TimerScreen(
+                                          updateVariable: (int seconds){
+                                            String value = seconds.toString();
+                                            sets[exercise]![i]['weight'] = value;
+                                            isRecord(exercise, i);
+                                            updateExercises();
+                                          },
+                                        )
+                                      ) :
+                                    const Text(
+                                      '-',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 33.5,
+                                      ),
+                                    )
+                                ),
+                              ),
+                            ),
+                            if (exerciseTypeAccess[exercise] != 'Timed')
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: (boxErrors[exercise]?[i]?['reps'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(7.5)
+                                ), 
+                                child: Center(
+                                  child: TextFormField(
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
+                                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
                                     ],
                                     keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                    focusNode: _focusNodes[exercise]![i]['weight'],
-                                    controller: _controllers[exercise]![i]['weight'],
+                                    focusNode: _focusNodes[exercise]![i]['reps'],
+                                    controller: _controllers[exercise]![i]['reps'],
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                     ),
                                     decoration: InputDecoration(
-                                      hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type']),
+                                      hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type']),
                                       border: InputBorder.none,
                                       hintStyle: const TextStyle(
                                         color: Colors.grey,
@@ -444,17 +527,22 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                       ),
                                     ),
                                     onChanged: (value) {
+                                      if (boxErrors[exercise]?[i]?['reps'] ?? false){
+                                        boxErrors[exercise] ??= {};
+                                        boxErrors[exercise][i] ??= {};
+                                        boxErrors[exercise][i]['reps'] = false;
+                                      }
                                       value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                      sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                                      sets[exercise]![i]['reps'] = value != 'null' ? value : '';
                                       isRecord(exercise, i);
                                       updateExercises();
                                     },
-                                    onFieldSubmitted: (value) {
-                                      if (i == sets[exercise]!.length - 1) {
-                                        addNewSet(exercise, exerciseTypeAccess[exercise]);
-                                      } else {
-                                        FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
-                                      }
+                                      onFieldSubmitted: (value) {
+                                        if (i == sets[exercise]!.length - 1) {
+                                          addNewSet(exercise, exerciseTypeAccess[exercise]);
+                                        } else {
+                                          FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
+                                        }
                                     },
                                     onTap: () {
                                       _controllers[exercise]![i]['reps']!.selection = TextSelection(
@@ -462,70 +550,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                         extentOffset: _controllers[exercise]![i]['reps']!.text.length,
                                       );
                                     },
-                                  ) : exerciseTypeAccess[exercise] == 'Timed' ? 
-                                    SizedBox(
-                                      height: 50, 
-                                      child: TimerScreen(
-                                        updateVariable: (int seconds){
-                                          String value = seconds.toString();
-                                          sets[exercise]![i]['weight'] = value;
-                                          isRecord(exercise, i);
-                                          updateExercises();
-                                        },
-                                      )
-                                    ) :
-                                  const Text(
-                                    '-',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                    ),
-                                  )
-                              ),
-                            ),
-                            if (exerciseTypeAccess[exercise] != 'Timed')
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Reduce vertical padding
-                              child: Center(
-                                child: TextFormField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
-                                  ],
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                  focusNode: _focusNodes[exercise]![i]['reps'],
-                                  controller: _controllers[exercise]![i]['reps'],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                   ),
-                                  decoration: InputDecoration(
-                                    hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type']),
-                                    border: InputBorder.none,
-                                    hintStyle: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16, // Adjust hint text size
-                                    ),
-                                  ),
-                                  onChanged: (value) {
-                                    value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                    sets[exercise]![i]['reps'] = value != 'null' ? value : '';
-                                    isRecord(exercise, i);
-                                    updateExercises();
-                                  },
-                                    onFieldSubmitted: (value) {
-                                      if (i == sets[exercise]!.length - 1) {
-                                        addNewSet(exercise, exerciseTypeAccess[exercise]);
-                                      } else {
-                                        FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
-                                      }
-                                  },
-                                  onTap: () {
-                                    _controllers[exercise]![i]['reps']!.selection = TextSelection(
-                                      baseOffset: 0,
-                                      extentOffset: _controllers[exercise]![i]['reps']!.text.length,
-                                    );
-                                  },
                                 ),
                               ),
                             ),
@@ -776,11 +801,22 @@ void addNewSet(String exercise, String type) {
 
   bool checkValidWorkout(Map sets){ // could even put this in the save function maybe
     for (String exercise in sets.keys){
-      for (var set in sets[exercise]!) {
+      for (int i = 0; i < sets[exercise].length; i++) {
+        Map set = sets[exercise][i];
         debugPrint(set.toString());
         if (set['reps'] == ''){
+          setState(() {
+            boxErrors[exercise] ??= {};
+            boxErrors[exercise][i] ??= {};
+            boxErrors[exercise][i]['reps'] = true;
+          });
           return false;
         } else if(set['weight'] == ''){
+          setState(() {
+            boxErrors[exercise] ??= {};
+            boxErrors[exercise][i] ??= {};
+            boxErrors[exercise][i]['weight'] = true;
+          });
           return false;
         }
       }
