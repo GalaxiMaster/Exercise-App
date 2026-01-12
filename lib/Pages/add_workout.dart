@@ -800,6 +800,7 @@ void addNewSet(String exercise, String type) {
   }
 
   bool checkValidWorkout(Map sets){ // could even put this in the save function maybe
+    bool isStillValid = true;
     for (String exercise in sets.keys){
       for (int i = 0; i < sets[exercise].length; i++) {
         Map set = sets[exercise][i];
@@ -810,18 +811,18 @@ void addNewSet(String exercise, String type) {
             boxErrors[exercise][i] ??= {};
             boxErrors[exercise][i]['reps'] = true;
           });
-          return false;
+          isStillValid = false;
         } else if(set['weight'] == ''){
           setState(() {
             boxErrors[exercise] ??= {};
             boxErrors[exercise][i] ??= {};
             boxErrors[exercise][i]['weight'] = true;
           });
-          return false;
+          isStillValid = false;
         }
       }
     }
-    return true;
+    return isStillValid;
   }
 
   bool isRecord(String exercise, int index, {String mode = 'notTick'}) {
