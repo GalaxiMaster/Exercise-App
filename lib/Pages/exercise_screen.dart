@@ -47,11 +47,14 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   ScaleSetting scaleSetting = ScaleSetting.equalIntervals;
   Color activeColor = Colors.blue;
   bool isBodyWeight = false; // default false
+  PageController pageController = PageController();
+  late Future<Map> musclePercentages;
 
   @override
   void initState() {
     super.initState();
     _loadHighlightedDays();
+    musclePercentages = getMusclePercentages(); // for now keep here
   }
  
   void alterHeadingBar(num value, String weekt, Color color){
@@ -82,21 +85,33 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     });
   }
   
-  void _selectTab(TabItem tabItem) {
+  void _selectTab(int tabIndex, {bool movePage = true}) {
+    if (pageController.hasClients && movePage) {
+      pageController.animateToPage(
+        tabIndex, 
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeInOut,
+      );
+    }
     setState(() {
-      _currentTab = tabItem;
+      _currentTab = TabItem.values[tabIndex];
     });
   }
   
   Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues, List<List> groupedDates) {
-    List<Widget> pages  = [graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates), infoBody(widget.exercises)];
+    List<Widget> pages  = [
+      graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates), 
+      infoBody(widget.exercises)
+    ];
+
     return PageView.builder(
+      controller: pageController,
       itemCount: pages.length,
       itemBuilder: (context, index){
         return pages[index];
       },
       onPageChanged: (index) {
-        _selectTab(TabItem.values[index]);
+        _selectTab(index);
       },
     );
   }
@@ -104,6 +119,45 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     num currentSum = map.values.reduce((a, b) => a + b);
     num scaleFactor = targetSum / currentSum;
     return map.map((k, v) => MapEntry(k, double.parse((v * scaleFactor).toStringAsFixed(2))));
+  }
+
+  Future<Map> getMusclePercentages() async {
+    Map primaryMuscles = {};
+    Map secondaryMuscles = {};
+    final Map customExercisesData = await ref.read(customExercisesProvider.future);
+
+    for (String exercise in widget.exercises){
+      bool isCustom = customExercisesData.containsKey(exercise);
+      Map exerciseData = {};
+
+      if (isCustom && customExercisesData.containsKey(exercise)){
+        exerciseData = customExercisesData[exercise];
+      } else {
+        exerciseData = exerciseMuscles[exercise] ?? {};
+      }
+
+      if (exerciseData.isEmpty) continue;
+
+      for (String muscle in exerciseData['Primary'].keys){
+        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseData['Primary'][muscle];
+      }     
+      for (String muscle in exerciseData['Secondary'].keys){
+        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseData['Secondary'][muscle];
+      }
+    }
+    num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
+    if (primaryMuscles.isNotEmpty){
+      num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+      primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
+    }
+    if (secondaryMuscles.isNotEmpty){
+      num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+      secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
+    }
+    return {
+      'primaryMuscles': primaryMuscles,
+      'secondaryMuscles': secondaryMuscles
+    };
   }
 
   @override
@@ -178,7 +232,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         currentIndex: _currentTab.index, // Convert enum to index
         onTap: (index) {
           // Convert index back to enum
-          _selectTab(TabItem.values[index]);
+          _selectTab(index);
         },
         items: const [
           BottomNavigationBarItem(
@@ -195,52 +249,17 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   }
   
   Widget infoBody(List exercise){
-    Map primaryMuscles = {};
-    Map secondaryMuscles = {};
-
-    Future<bool> getMusclePercentages() async {
-      final Map customExercisesData = await ref.read(customExercisesProvider.future);
-
-      for (String exercise in widget.exercises){
-        bool isCustom = customExercisesData.containsKey(exercise);
-        Map exerciseData = {};
-
-        if (isCustom && customExercisesData.containsKey(exercise)){
-          exerciseData = customExercisesData[exercise];
-        } else {
-          exerciseData = exerciseMuscles[exercise] ?? {};
-        }
-
-        if (exerciseData.isEmpty) continue;
-
-        for (String muscle in exerciseData['Primary'].keys){
-          primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseData['Primary'][muscle];
-        }     
-        for (String muscle in exerciseData['Secondary'].keys){
-          secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseData['Secondary'][muscle];
-        }
-      }
-      num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
-      if (primaryMuscles.isNotEmpty){
-        num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
-        primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
-      }
-      if (secondaryMuscles.isNotEmpty){
-        num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
-        secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
-      }
-      return true;
-    }
-
-
-    return FutureBuilder(
-    future: getMusclePercentages(),
+    return FutureBuilder( // Lower future builder later
+    future: musclePercentages,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error loading data'));
         } else if (snapshot.hasData) {
+          Map primaryMuscles = snapshot.data!['primaryMuscles'];
+          Map secondaryMuscles= snapshot.data!['secondaryMuscles'];
+
           return Column(
             children: [
               BodyHeatMap(assetPath: 'assets/Muscle_heatmap.svg', exercises: widget.exercises,),
