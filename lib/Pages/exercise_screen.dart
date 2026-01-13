@@ -6,6 +6,7 @@ import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +27,7 @@ enum ScaleSetting {
 }
 
 class ExerciseScreen extends ConsumerStatefulWidget {
-  final List exercises;
+  final List<String> exercises;
 
   const ExerciseScreen({super.key, required this.exercises});
 
@@ -48,13 +49,11 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   Color activeColor = Colors.blue;
   bool isBodyWeight = false; // default false
   PageController pageController = PageController();
-  late Future<Map> musclePercentages;
 
   @override
   void initState() {
     super.initState();
     _loadHighlightedDays();
-    musclePercentages = getMusclePercentages(); // for now keep here
   }
  
   void alterHeadingBar(num value, String weekt, Color color){
@@ -101,7 +100,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues, List<List> groupedDates) {
     List<Widget> pages  = [
       graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates), 
-      infoBody(widget.exercises)
+      InfoBody(exercises: widget.exercises)
     ];
 
     return PageView.builder(
@@ -114,50 +113,6 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         _selectTab(index);
       },
     );
-  }
-  Map scaleMapTo(Map map, num targetSum) {
-    num currentSum = map.values.reduce((a, b) => a + b);
-    num scaleFactor = targetSum / currentSum;
-    return map.map((k, v) => MapEntry(k, double.parse((v * scaleFactor).toStringAsFixed(2))));
-  }
-
-  Future<Map> getMusclePercentages() async {
-    Map primaryMuscles = {};
-    Map secondaryMuscles = {};
-    final Map customExercisesData = await ref.read(customExercisesProvider.future);
-
-    for (String exercise in widget.exercises){
-      bool isCustom = customExercisesData.containsKey(exercise);
-      Map exerciseData = {};
-
-      if (isCustom && customExercisesData.containsKey(exercise)){
-        exerciseData = customExercisesData[exercise];
-      } else {
-        exerciseData = exerciseMuscles[exercise] ?? {};
-      }
-
-      if (exerciseData.isEmpty) continue;
-
-      for (String muscle in exerciseData['Primary'].keys){
-        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseData['Primary'][muscle];
-      }     
-      for (String muscle in exerciseData['Secondary'].keys){
-        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseData['Secondary'][muscle];
-      }
-    }
-    num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
-    if (primaryMuscles.isNotEmpty){
-      num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
-      primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
-    }
-    if (secondaryMuscles.isNotEmpty){
-      num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
-      secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
-    }
-    return {
-      'primaryMuscles': primaryMuscles,
-      'secondaryMuscles': secondaryMuscles
-    };
   }
 
   @override
@@ -210,6 +165,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       appBar: AppBar(
         title: Text(widget.exercises.length == 1 ?  widget.exercises[0] : 'Exercises Data'),
         actions: [
+          if (_currentTab == TabItem.graph)
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () async{
@@ -248,67 +204,105 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     );
   }
   
-  Widget infoBody(List exercise){
-    return FutureBuilder( // Lower future builder later
-    future: musclePercentages,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error loading data'));
-        } else if (snapshot.hasData) {
-          Map primaryMuscles = snapshot.data!['primaryMuscles'];
-          Map secondaryMuscles= snapshot.data!['secondaryMuscles'];
-
-          return Column(
-            children: [
-              BodyHeatMap(assetPath: 'assets/Muscle_heatmap.svg', exercises: widget.exercises,),
-              const Text(
-                'Primary muscles:',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal, // Set the direction to horizontal
-                  itemCount: primaryMuscles.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
-                      child: Text('${primaryMuscles.values.toList()[index]}% ${primaryMuscles.keys.toList()[index]}'),
-                    );
-                  },
-                ),
-              ),
-              const Text(
-                'Secondary muscles:',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal, // Set the direction to horizontal
-                  itemCount: secondaryMuscles.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
-                      child: Text('${secondaryMuscles.values.toList()[index]}% ${secondaryMuscles.keys.toList()[index]}'),
-                    );
-                  },
-                ),
-              ),
-            ]
-          );
-        } else {
-          return const Center(child: Text('No data available'));
-        }
-      },
-    );
-  }
-    
   Widget graphBody(Map<String, List<FlSpot>> spots, List<dynamic> dates, List xValues, BuildContext context, bool isBodyWight, List<List> groupedDates) {
+    Widget exerciseTile(String exercise, index, increase, isBodyWeight) {
+      return Padding(
+        padding: const EdgeInsets.all(8),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: graphColors[index].withValues(alpha: .2),
+            borderRadius: BorderRadius.circular(20)
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  exercise,
+                  style: const TextStyle(
+                    fontSize: 20
+                  ),
+                ),
+                const Divider(
+                  thickness: .2,
+                ),
+                if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
+                Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
+                if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
+                Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
+                if ((exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight')
+                Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
+                Text('Increase: $increase%')
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    double calculateInterval(num itemTotal, num itemCount) {
+      // If there is 0 or 1 item, return the total (nothing to divide)
+      if (itemCount <= 1) {
+        return itemTotal.toDouble();
+      }
+
+      // Guard against zero total range
+      if (itemTotal == 0) {
+        itemTotal = 1;
+      }
+
+      // There are (N - 1) gaps between N points — divide by N-1
+      return (itemTotal.toDouble()) / (itemCount - 1);
+    }
+    
+    Widget selectorBox(String text, bool selected){
+      return GestureDetector(
+        onTap: () async{
+
+          setState(() {
+            switch(text){
+              case 'Weight': selector = 'weight';
+              case 'Volume': selector = 'volume';
+              case 'Reps': selector = 'reps';
+            }
+            final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+            final List values = exerciseData.map((data) => data[selector]).toList();
+            graphvalue = values.isNotEmpty ? numParsething(values[values.length - 1]) : 0;
+            week = dates.isNotEmpty ? dates.last.split(' ')[0] : '';
+            alterHeadingBar(graphvalue, week, Colors.blue);
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              child: Text(
+                text
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    
+    String getDateValue(List dates, num value) {
+      if (scaleSetting == ScaleSetting.scaled){
+        DateTime target = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+        return DateFormat('MMM dd').format(target);
+      }
+      else{
+        return DateFormat('MMM dd').format(DateTime.parse(dates[value.round()].split(' ')[0]));
+      }
+    }
+    
     String unit = 'kg';
     if (isBodyWeight || selector == 'reps'){unit = '';}
 
@@ -586,136 +580,35 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         ),
       );
   }
-  String getGradientData(List<FlSpot> points){
-    FlSpot a = points[0];
-    FlSpot b = points[points.length-1];
+    // String getGradientData(List<FlSpot> points){
+    //   FlSpot a = points[0];
+    //   FlSpot b = points[points.length-1];
 
-    double gradient = (a.y-b.y)/(0-points.length);
-    return gradient.toStringAsFixed(2);
-  }
-  Widget exerciseTile(String exercise, index, increase, isBodyWeight) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: graphColors[index].withValues(alpha: .2),
-          borderRadius: BorderRadius.circular(20)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                exercise,
-                style: const TextStyle(
-                  fontSize: 20
-                ),
-              ),
-              const Divider(
-                thickness: .2,
-              ),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
-              Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
-              Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
-              if ((exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight')
-              Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
-              Text('Increase: $increase%')
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    //   double gradient = (a.y-b.y)/(0-points.length);
+    //   return gradient.toStringAsFixed(2);
+    // }
 
-  double calculateInterval(num itemTotal, num itemCount) {
-    // If there is 0 or 1 item, return the total (nothing to divide)
-    if (itemCount <= 1) {
-      return itemTotal.toDouble();
-    }
-
-    // Guard against zero total range
-    if (itemTotal == 0) {
-      itemTotal = 1;
-    }
-
-    // There are (N - 1) gaps between N points — divide by N-1
-    return (itemTotal.toDouble()) / (itemCount - 1);
-  }
-  
-  Widget selectorBox(String text, bool selected){
-    return GestureDetector(
-      onTap: () async{
-
-        setState(() {
-          switch(text){
-            case 'Weight': selector = 'weight';
-            case 'Volume': selector = 'volume';
-            case 'Reps': selector = 'reps';
-          }
-          final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
-          final List values = exerciseData.map((data) => data[selector]).toList();
-          graphvalue = values.isNotEmpty ? numParsething(values[values.length - 1]) : 0;
-          week = dates.isNotEmpty ? dates.last.split(' ')[0] : '';
-          alterHeadingBar(graphvalue, week, Colors.blue);
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-            child: Text(
-              text
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  
-  String getDateValue(List dates, num value) {
-    if (scaleSetting == ScaleSetting.scaled){
-      DateTime target = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-      return DateFormat('MMM dd').format(target);
-    }
-    else{
-      return DateFormat('MMM dd').format(DateTime.parse(dates[value.round()].split(' ')[0]));
-    }
-  }
-}
-extension ColorExtension on Color {
-  int get redVal   => (r * 255).round().clamp(0, 255);
-  int get greenVal => (g * 255).round().clamp(0, 255);
-  int get blueVal  => (b * 255).round().clamp(0, 255);
-
-  String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
 }
 
-class BodyHeatMap extends ConsumerStatefulWidget {
+class BodyHeatMap extends StatefulWidget {
   final String assetPath;
   final double width;
   final List exercises;
+  final Map muscleMap;
 
   const BodyHeatMap({
     super.key,
     required this.assetPath,
     this.width = 500, 
-    required this.exercises,
+    required this.exercises, 
+    required this.muscleMap,
   });
 
   @override
   BodyHeatMapState createState() => BodyHeatMapState();
 }
 
-class BodyHeatMapState extends ConsumerState<BodyHeatMap> {
+class BodyHeatMapState extends State<BodyHeatMap> {
   String? modifiedSvgString;
 
   @override
@@ -727,26 +620,9 @@ class BodyHeatMapState extends ConsumerState<BodyHeatMap> {
   Future<void> _loadAndModifySvg() async {
     try {
       Map<String, List<dynamic>> musclesMap = {};
-      final Map customExercisesData = await ref.read(customExercisesProvider.future);
 
-      for (String exercise in widget.exercises) {
-        bool isCustom = customExercisesData.containsKey(exercise);
-        Map exerciseData = {};
-
-        if (isCustom && customExercisesData.containsKey(exercise)){
-          exerciseData = customExercisesData[exercise];
-        } else {
-          exerciseData = exerciseMuscles[exercise] ?? {};
-        }
-
-        if (exerciseData.isEmpty) continue;
-
-        for (MapEntry muscle in exerciseData['Primary'].entries){
-          musclesMap[muscle.key] = [muscle.value/100, Colors.red];
-        }
-        for (MapEntry muscle in exerciseData['Secondary'].entries){
-          musclesMap[muscle.key] = [muscle.value/100, Colors.red];
-        }
+      for (MapEntry muscle in widget.muscleMap.entries){
+        musclesMap[muscle.key] = [muscle.value/100, Colors.red];
       }
       musclesMap['Body'] = [1.0, Colors.grey];
       String modifiedSvg = await modifySvgPaths(widget.assetPath, musclesMap);
@@ -759,18 +635,18 @@ class BodyHeatMapState extends ConsumerState<BodyHeatMap> {
     }
   }
 
-Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatMap) async {
-  String svgString = await rootBundle.loadString(assetPath);
-  final document = xml.XmlDocument.parse(svgString);
+  Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatMap) async {
+    String svgString = await rootBundle.loadString(assetPath);
+    final document = xml.XmlDocument.parse(svgString);
   
-  heatMap.forEach((className, values) {
+    heatMap.forEach((className, values) {
     if (values.length != 2 || values[0] is! double || values[1] is! Color) {
       throw ArgumentError('Invalid heat map data for $className');
     }
     
     double opacity = values[0] as double;
     Color color = values[1] as Color;
-    debugPrint("${className == 'Upper Chest'}ballsac $className" );
+
     final paths = document.findAllElements('path')
         .where((element) => element.getAttribute('class')?.contains(className) ?? false);
     
@@ -788,6 +664,7 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
     // Convert the modified document back to a string
     return document.toXmlString(pretty: true);
   }
+
   Color interpolateColor(Color startColor, Color endColor, double t) {
     return Color.fromARGB(
       255,
@@ -806,6 +683,7 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
     intensity = intensity.clamp(0.0, 1.0);
     return interpolateColor(lightShade, darkShade, intensity);
   }
+
   @override
   Widget build(BuildContext context) {
     return modifiedSvgString != null
@@ -816,6 +694,137 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
       : const CircularProgressIndicator();
   }
 }
+
+class InfoBody extends ConsumerStatefulWidget {
+  final List<String> exercises;
+  const InfoBody({super.key, required this.exercises});
+  @override
+  // ignore: library_private_types_in_public_api
+  _InfoBodyState createState() => _InfoBodyState();
+}
+
+class _InfoBodyState extends ConsumerState<InfoBody> {
+  late Future<Map> musclePercentages;
+  @override
+  initState(){
+    super.initState();
+    musclePercentages = getMusclePercentages();
+  }
+  Future<Map> getMusclePercentages() async {
+    Map primaryMuscles = {};
+    Map secondaryMuscles = {};
+    final Map customExercisesData = await ref.read(customExercisesProvider.future);
+
+    for (String exercise in widget.exercises){
+      bool isCustom = customExercisesData.containsKey(exercise);
+      Map exerciseData = {};
+
+      if (isCustom && customExercisesData.containsKey(exercise)){
+        exerciseData = customExercisesData[exercise];
+      } else {
+        exerciseData = exerciseMuscles[exercise] ?? {};
+      }
+
+      if (exerciseData.isEmpty) continue;
+
+      for (String muscle in exerciseData['Primary'].keys){
+        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + exerciseData['Primary'][muscle];
+      }     
+      for (String muscle in exerciseData['Secondary'].keys){
+        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + exerciseData['Secondary'][muscle];
+      }
+    }
+    num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);
+    if (primaryMuscles.isNotEmpty){
+      num map1Portion = 100 * primaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+      primaryMuscles = scaleMapTo(primaryMuscles, map1Portion);
+    }
+    if (secondaryMuscles.isNotEmpty){
+      num map2Portion = 100 * secondaryMuscles.values.reduce((a, b) => a + b) / totalSum;
+      secondaryMuscles = scaleMapTo(secondaryMuscles, map2Portion);
+    }
+    return {
+      'primaryMuscles': primaryMuscles,
+      'secondaryMuscles': secondaryMuscles
+    };
+  }
+  Map scaleMapTo(Map map, num targetSum) {
+    num currentSum = map.values.reduce((a, b) => a + b);
+    num scaleFactor = targetSum / currentSum;
+    return map.map((k, v) => MapEntry(k, double.parse((v * scaleFactor).toStringAsFixed(2))));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+    future: musclePercentages,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return const Center(child: Text('Error loading data'));
+      } else if (snapshot.hasData) {
+        Map secondaryMuscles = snapshot.data!['secondaryMuscles'];
+        Map primaryMuscles = snapshot.data!['primaryMuscles'];
+        return Column(
+      children: [
+        BodyHeatMap(
+          assetPath: 'assets/Muscle_heatmap.svg', 
+          exercises: widget.exercises, 
+          muscleMap: {
+            ...primaryMuscles,
+            ...secondaryMuscles
+          },
+        ),
+        const Text(
+          'Primary muscles:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 20,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal, // Set the direction to horizontal
+            itemCount: primaryMuscles.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
+                child: Text('${primaryMuscles.values.toList()[index]}% ${primaryMuscles.keys.toList()[index]}'),
+              );
+            },
+          ),
+        ),
+        const Text(
+          'Secondary muscles:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 20,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal, // Set the direction to horizontal
+            itemCount: secondaryMuscles.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0), // Optional padding for spacing
+                child: Text('${secondaryMuscles.values.toList()[index]}% ${secondaryMuscles.keys.toList()[index]}'),
+              );
+            },
+          ),
+        ),
+      ]
+    );
+      } else {
+        return const Center(child: Text('No data available'));
+      }
+    },
+    );
+  }
+
+}
+
+
+
 
 Future<List> getStats(List targets, range) async {
   Map data = await readData();

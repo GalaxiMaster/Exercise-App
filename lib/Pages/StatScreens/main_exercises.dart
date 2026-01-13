@@ -16,7 +16,7 @@ class MainExercisesPage extends StatefulWidget {
 
 class _MainExercisesPageState extends State<MainExercisesPage> {
   bool multiSelect = false;
-  List selectedItems = [];
+  List<String> selectedItems = [];
   late Map exerciseData;
   bool isLoading = true;
   Map<String, bool> assetExists = {}; // cache for asset existence

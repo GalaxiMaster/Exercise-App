@@ -29,7 +29,7 @@ class WorkoutList extends ConsumerStatefulWidget {
 class _WorkoutListState extends ConsumerState<WorkoutList> {
   String query = '';
   late final List exerciseList;
-  final List selectedItems = [];
+  final List<String> selectedItems = [];
   bool multiSelect = false;
   Map<String, bool> assetExists = {}; // cache for asset existence
 
