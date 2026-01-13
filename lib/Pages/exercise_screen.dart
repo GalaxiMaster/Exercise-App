@@ -692,6 +692,10 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   }
 }
 extension ColorExtension on Color {
+  int get redVal   => (r * 255).round().clamp(0, 255);
+  int get greenVal => (g * 255).round().clamp(0, 255);
+  int get blueVal  => (b * 255).round().clamp(0, 255);
+
   String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
 }
 
@@ -787,9 +791,9 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
   Color interpolateColor(Color startColor, Color endColor, double t) {
     return Color.fromARGB(
       255,
-      _interpolate(startColor.red, endColor.red, t),
-      _interpolate(startColor.green, endColor.green, t),
-      _interpolate(startColor.blue, endColor.blue, t),
+      _interpolate(startColor.redVal, endColor.redVal, t),
+      _interpolate(startColor.greenVal, endColor.greenVal, t),
+      _interpolate(startColor.blueVal, endColor.blueVal, t),
     );
   }
 
@@ -805,11 +809,11 @@ Future<String> modifySvgPaths(String assetPath, Map<String, List<dynamic>> heatM
   @override
   Widget build(BuildContext context) {
     return modifiedSvgString != null
-        ? SvgPicture.string(
-            modifiedSvgString!,
-            width: widget.width,
-          )
-        : const CircularProgressIndicator();
+      ? SvgPicture.string(
+          modifiedSvgString!,
+          width: widget.width,
+        )
+      : const CircularProgressIndicator();
   }
 }
 
@@ -833,11 +837,11 @@ Future<List> getStats(List targets, range) async {
       Map dayHeaviestWeight = {};
       Map dayHeaviestVolume = {};
 
-      for (var exercise in data[day]['sets'].keys) { // TODO add validation rq
+      for (String exercise in data[day]['sets'].keys) { // TODO add validation rq
         if (targets.contains(exercise)) {
 
           startDate ??= dayDate;
-          for (var set in data[day]['sets'][exercise]) {
+          for (Map set in data[day]['sets'][exercise]) {
             set = {
               'weight': double.parse(set['weight'].toString()),
               'reps': double.parse(set['reps'].toString()),
@@ -845,7 +849,7 @@ Future<List> getStats(List targets, range) async {
               'date': day,
               'volume': double.parse(set['reps'].toString()).abs() * double.parse(set['weight'].toString()).abs(),
               'exercise': exercise,
-              'x-value': dayDate.millisecondsSinceEpoch, //  'x-value': dayDate.difference(startDate).inDays,
+              'x-value': dayDate.millisecondsSinceEpoch,
             };
             dayHeaviestWeight[exercise] ??= set;
             if (set['weight'] > dayHeaviestWeight[exercise]?['weight'] 
@@ -999,3 +1003,4 @@ Future<ScaleSetting?> showSettingToggleDialog(
     },
   );
 }
+
