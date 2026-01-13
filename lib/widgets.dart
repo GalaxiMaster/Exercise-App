@@ -1,8 +1,10 @@
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
+import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:intl/intl.dart';
 
 double autoRoundUp(double value) {
   // Get the order of magnitude of the value
@@ -355,4 +357,59 @@ AppBar myAppBar(BuildContext context, String title, {Widget? button}) {
       if (button != null) button,
     ],
   );
+}
+
+class Header extends StatelessWidget {
+  final int weeksAgo;
+  final Function({required int delta}) onArrow;
+  final bool findMondayDate;
+
+  const Header({
+    super.key, 
+    required this.weeksAgo,
+    required this.onArrow, 
+    this.findMondayDate = true, 
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    DateTime date = now.subtract(Duration(days: weeksAgo * 7));
+    String weekStr = DateFormat('MMM dd').format(findMondayDate ? findMonday(date) : date);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Row( // header
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              onArrow(delta: -1);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 30,
+            ),
+          ),
+          Text(
+            weeksAgo == 0 ? 'This week' : weekStr,
+            style: const TextStyle(
+              fontSize: 22,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              if (weeksAgo > 0) {
+               onArrow(delta: 1);            
+              }
+            },
+            child: Icon(
+              Icons.arrow_forward_ios,
+              size: 30,
+              color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

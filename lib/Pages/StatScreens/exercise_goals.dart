@@ -156,7 +156,15 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                   builder: (context, value, _) {
                     return Header(
                       weeksAgo: value,
-                      pageController: pageController,
+                      onArrow: ({required int delta}){
+                        if (pageController.hasClients) {
+                            pageController.animateToPage(
+                              pageController.page!.round() + delta, 
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                      },
                     );
                   },
                 ),
@@ -681,7 +689,7 @@ class TickPainter extends CustomPainter {
 }
 
 class ListThing extends StatelessWidget {
-  final Map settings;
+  final Map<String, dynamic> settings;
   final Map data;
   final Function upDateSettings;
   const ListThing({required this.settings, required this.data, super.key, required this.upDateSettings});
@@ -709,7 +717,7 @@ class ListThing extends StatelessWidget {
           )
         : const Center(child: Text('No goals set'));
   }
-  void deleteGoal(settings, exercise){
+  void deleteGoal(Map<String, dynamic> settings, String exercise){
     settings['Exercise Goals'].remove(exercise);
     upDateSettings(settings);
     writeData(settings, path: 'settings',append: false);
@@ -720,70 +728,5 @@ class ListThing extends StatelessWidget {
     settings['Exercise Goals'][exercise] = [currentValue, value[1]];
     upDateSettings(settings);
     writeData(settings, path: 'settings',append: false);
-  }
-}
-
-class Header extends StatelessWidget {
-  final int weeksAgo;
-  final PageController pageController;
-
-  const Header({
-    super.key, 
-    required this.weeksAgo,
-    required this.pageController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    DateTime date = now.subtract(Duration(days: weeksAgo * 7));
-    String weekStr = DateFormat('MMM dd').format(findMonday(date));
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Row( // header
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () {
-                if (pageController.hasClients) {
-                  pageController.animateToPage(
-                    pageController.page!.round() - 1, 
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 30,
-            ),
-          ),
-          Text(
-            weeksAgo == 0 ? 'This week' : weekStr,
-            style: const TextStyle(
-              fontSize: 22,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              if (weeksAgo > 0) {
-               if (pageController.hasClients) {
-                  pageController.animateToPage(
-                    pageController.page!.round() + 1, 
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }                    
-              }
-            },
-            child: Icon(
-              Icons.arrow_forward_ios,
-              size: 30,
-              color: weeksAgo == 0 ? Colors.grey.shade900 : Colors.white,
-            ),
-          )
-        ],
-      ),
-    );
   }
 }
