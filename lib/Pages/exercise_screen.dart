@@ -89,12 +89,16 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   }
   
   Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues, List<List> groupedDates) {
-    switch (_currentTab) {
-      case TabItem.info:
-        return infoBody(widget.exercises);
-      case TabItem.graph:
-        return graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates);
-    }
+    List<Widget> pages  = [graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates), infoBody(widget.exercises)];
+    return PageView.builder(
+      itemCount: pages.length,
+      itemBuilder: (context, index){
+        return pages[index];
+      },
+      onPageChanged: (index) {
+        _selectTab(TabItem.values[index]);
+      },
+    );
   }
   Map scaleMapTo(Map map, num targetSum) {
     num currentSum = map.values.reduce((a, b) => a + b);
