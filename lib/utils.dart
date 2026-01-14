@@ -7,3 +7,15 @@ extension ColorExtension on Color {
 
   String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
 }
+
+int getNormalSetNumber(String exercise, int currentIndex, List sets) {
+  int normalSetCount = 0;
+  
+  for (int j = 0; j <= currentIndex; j++) {
+    if (sets[j]['type'] != 'Warmup') {
+      normalSetCount++;
+    }
+  }     
+
+  return normalSetCount;
+}

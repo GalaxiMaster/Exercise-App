@@ -6,6 +6,7 @@ import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -415,7 +416,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                             ? 'F'
                                             : sets[exercise]![i]['type'] == 'Dropset'
                                               ? 'D'
-                                              : '${_getNormalSetNumber(exercise, i)}',
+                                              : '${getNormalSetNumber(exercise, i, sets[exercise]!)}',
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
@@ -658,18 +659,6 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
       }
     }
     return '0';
-  }
-
-  int _getNormalSetNumber(String exercise, int currentIndex) {
-    int normalSetCount = 0;
-    
-    for (int j = 0; j <= currentIndex; j++) {
-      if (sets[exercise]![j]['type'] != 'Warmup') {
-        normalSetCount++;
-      }
-    }     
-
-    return normalSetCount;
   }
 
   void _showSetTypeMenu(String exercise, int setIndex) {

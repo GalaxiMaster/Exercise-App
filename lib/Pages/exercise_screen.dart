@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:exercise_app/Pages/add_workout.dart';
+import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
@@ -18,6 +20,7 @@ import 'StatScreens/radar_chart.dart';
 
 enum TabItem {
   graph,
+  history,
   info,
 }
 
@@ -100,6 +103,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   Widget _buildPageContent(Map<String, List<FlSpot>> spots, List dates, List xValues, List<List> groupedDates) {
     List<Widget> pages  = [
       graphBody(spots, dates, xValues, context, isBodyWeight, groupedDates), 
+      ExerciseHistory(targetExercises: widget.exercises),
       InfoBody(exercises: widget.exercises)
     ];
 
@@ -194,6 +198,10 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.auto_graph),
             label: 'Graph',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.info),
@@ -1013,3 +1021,264 @@ Future<ScaleSetting?> showSettingToggleDialog(
   );
 }
 
+class ExerciseHistory extends ConsumerStatefulWidget {
+  final List<String> targetExercises;
+  const ExerciseHistory({super.key, required this.targetExercises});
+  @override
+  // ignore: library_private_types_in_public_api
+  _ExerciseHistoryState createState() => _ExerciseHistoryState();
+}
+
+class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
+  late Future<Map<String, Map>> exerciseHistory;
+  Map<String, bool> assetExists = {}; // cache for asset existence
+  late Future<Map> futureData;
+
+  @override
+  initState(){
+    super.initState();
+    exerciseHistory = populateExerciseHistory();
+    checkAssets();
+    futureData = readData();
+  }
+  void checkAssets() async {  // combine with the other one in choose exercises to make one single more dynamic function
+    for (String exercise in widget.targetExercises) {
+      String filePath = "assets/Exercises/$exercise.png";
+      bool exists = await fileExists(filePath);
+      assetExists[exercise] = exists;
+      if (mounted){
+        precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
+        setState(() {}); // Trigger rebuild after checking asset TODO optomise?
+      }
+    }
+  }
+  Future<Map<String, Map>> populateExerciseHistory() async {
+    Map<String, Map> history = {};
+    final Map customExercisesData = await ref.read(customExercisesProvider.future);
+    Map data = await futureData;
+    for (String day in data.keys.toList().reversed) {
+      for (String exercise in data[day]['sets'].keys){
+        if (widget.targetExercises.contains(exercise)){
+          history[day] ??= {};
+          history[day]!['stats'] ??= data[day]['stats'];
+          history[day]!['data'] ??= [];
+
+          bool isCustom = customExercisesData.containsKey(exercise);
+        
+          ExerciseHistoryNode model = ExerciseHistoryNode(
+            name: exercise, 
+            sets: data[day]['sets'][exercise], 
+            workoutRef: day, 
+            type: isCustom ? customExercisesData[exercise]['type'] : exerciseMuscles[exercise]['type']
+          );
+          history[day]!['data']!.add(model);
+        }
+      }
+    }
+
+    return history;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: exerciseHistory,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error loading data ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index){
+              String day = snapshot.data!.keys.toList()[index];
+              DateTime startTime = DateTime.parse(snapshot.data![day]!['stats']['startTime']);
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    child: GestureDetector(
+                      onTap: (){
+                        futureData.then((data){
+                          if (!context.mounted) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[day], dayKey: day))
+                          );
+                        });
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        spacing: 8,
+                        children: [
+                          Text(
+                            DateFormat('dd MMM, yyyy').format(startTime),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('h:mma').format(startTime).toLowerCase(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white.withValues(alpha: 0.7),
+                            ),
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.arrow_forward_ios),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                    itemCount: snapshot.data![day]!['data']!.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, j) {
+                      ExerciseHistoryNode model = snapshot.data![day]!['data'][j];
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            child: Row(
+                              children: [
+                                assetExists[model.name] == true
+                                  ? Image.asset(
+                                      "assets/Exercises/${model.name}.png",
+                                      height: 50,
+                                      width: 50,
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: SvgPicture.asset(
+                                        "assets/profile.svg",
+                                        height: 35,
+                                        width: 35,
+                                        colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+                                      ),
+                                    ),
+                                Text(
+                                  model.name
+                                )
+                              ],
+                            ),
+                          ),
+                          Table(
+                            border: const TableBorder.symmetric(inside: BorderSide.none),
+                            columnWidths: const {
+                              0: FlexColumnWidth(1),
+                              1: FlexColumnWidth(2),
+                              2: FlexColumnWidth(2),
+                            },
+                            children: [
+                              TableRow(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 3),
+                                    child: Center(
+                                      child: Text('Set'),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 3),
+                                    child: Center(
+                                      child: Text('Weight (kg)')
+                                    ),
+                                  ), 
+                                  if (model.type != 'Timed')
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 3),
+                                    child: Center(
+                                      child: Text('Reps')
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              for (int i = 0; i < (model.sets.length); i++)
+                              TableRow(
+                                decoration: BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        model.sets[i]['type'] == 'Warmup'
+                                            ? 'W'
+                                            : model.sets[i]['type'] == 'Failure'
+                                                ? 'F'
+                                                : model.sets[i]['type'] == 'Dropset'
+                                                  ? 'D'
+                                                  : '${getNormalSetNumber(model.name, i, model.sets)}',
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  
+                                  SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: model.type == 'Timed' ? 
+                                        SizedBox(
+                                          height: 50, 
+                                          child: TimerScreen() // TODO
+                                        ) : model.type == 'weighted' ? 
+                                        const Text(
+                                          '-',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 33.5,
+                                          ),
+                                        ) 
+                                        : Text(
+                                          model.sets[i]['weight'],
+                                            style: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                        ) 
+                                    ),
+                                  ),
+                                  if (model.type != 'Timed')
+                                  SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        model.sets[i]['reps'],
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      )
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      );
+                    }
+                  )
+                ],
+              );
+            },
+          );
+
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
+    );
+  }
+
+}
+class ExerciseHistoryNode {
+  final String name;
+  final List sets;
+  final String workoutRef;
+  final String type;
+  ExerciseHistoryNode({required this.name, required this.sets, required this.workoutRef, required this.type});
+}
