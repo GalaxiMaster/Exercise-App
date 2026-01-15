@@ -41,7 +41,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
     super.initState();
     loading = true;
     if(widget.sets.isEmpty){
-      getPreviousWorkout().then((data) {
+      ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
           sets = data['sets'] ?? {};
           exerciseNotes = data['stats']?['notes'] ?? {};
@@ -56,7 +56,6 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
       exerciseNotes = widget.sets['stats']?['notes'] ?? {};
       repopulateExerciseTypeAccess();
     }
-    preLoad();
     _initializeFocusNodesAndControllers();
     loading = false;
   }
@@ -177,24 +176,6 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
     _checkBoxStates[exercise]!.add(false);
   }
 }
-  
-  void preLoad() async{ // TODO abolish
-    Map data = await readData();
-    var sortedKeys = data.keys.toList()..sort();
-    // Create a sorted map by iterating over sorted keys
-    Map<String, dynamic> sortedMap = {
-      for (var key in sortedKeys) key: data[key]!,
-    };
-    data = sortedMap;
-    setState(() {}); // Update UI after loading data
-  }
-
-  Future<Map> getPreviousWorkout() async {
-    Map data = {};
-    data = await readData(path: 'current');
-    debugPrint("${data}data");
-    return data;
-  }
 
   void updateExercises() async{
     if (!widget.editing){

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
@@ -155,8 +154,9 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                       );
                       if (result != null){
                         dayData['sets'] = result;
-                        editDay(dayData);
-                        setState(() {});
+
+                        ref.read(workoutDataProvider.notifier).updateValue(widget.dayKey, dayData);
+                        // setState(() {});
                       }
                     },
                     child: const Text(
@@ -250,12 +250,6 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
         ),
       )
     );
-  }
-  Future<bool> editDay(Map day) async{
-    Map<String, dynamic> data = await readData();
-    data[widget.dayKey]['sets'] = day['sets'];
-    writeData(data, append: false);
-    return true;
   }
   // ignore: non_constant_identifier_names
   Padding muscleSplit_stackedBars(List dayData, BuildContext context) {

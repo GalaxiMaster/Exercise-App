@@ -172,10 +172,10 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(startTime);
     String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(endTime);
 
-    Map daata = await readData();
+    Map allData = await ref.read(workoutDataProvider.future);
     int num = 1; // find workouts done that day
-    for (int i = 0; i < daata.keys.length; i++){
-      if (daata.keys.toList()[i]?.split(' ')[0] == day){
+    for (int i = 0; i < allData.keys.length; i++){
+      if (allData.keys.toList()[i]?.split(' ')[0] == day){
         num++;
       }
     }

@@ -390,20 +390,20 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                           GestureDetector(
                             onTap: () async{
                               Map data = await readData();
-                              Map keys = {};
+                              Map<String, dynamic> keys = {};
                               for (String key in data.keys) {
                                 if (key.contains(week)){
                                   keys[key] = data[key];
                                 }
                               }
-                              if (keys.isEmpty || !context.mounted) return;
+                              if (keys.isEmpty || week.isEmpty || !context.mounted) return;
 
-                              Navigator.push(
+                              Navigator.push( // TODO mark
                                 context,
                                 MaterialPageRoute(builder: (context) => 
                                   keys.keys.length > 1 
-                                    ? DayScreen(date: DateTime.parse(week), dayData: keys)
-                                    : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys[0]} 1'))
+                                    ? DayScreen(date: DateTime.parse(week), dayKeys: keys.keys.toList())
+                                    : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys.keys.toList()[0]} 1'))
 
                               ).then((_) {
                                 _loadHighlightedDays(reload: true);  // Call the method after returning from Addworkout

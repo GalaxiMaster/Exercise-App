@@ -18,29 +18,32 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   Map<String, dynamic> routines = {};
-
+  bool workoutInProgress = false;
   @override
   void initState() {
     super.initState();
     _loadRoutines();
-    getIsCurrent();
-    preCacheProviders();
+    cacheData();
   }
   Future<bool> getIsCurrent() async{
-    Map data = await readData(path: 'current');
+    Map<String, dynamic> data = await ref.read(currentWorkoutProvider.future);
     return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
   Future<void> _loadRoutines() async {
     Map<String, dynamic> loadedRoutines = await readData(path: 'routines');
-    debugPrint("$loadedRoutines routines loaded");
+    debugPrint("routines loaded");
     setState(() {
       routines = loadedRoutines;
     });
   }
 
-  void preCacheProviders(){
+  void cacheData() {
     ref.read(customExercisesProvider);
+    getIsCurrent().then((res){
+      workoutInProgress = res;
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {

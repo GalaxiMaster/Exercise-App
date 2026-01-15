@@ -1,63 +1,78 @@
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class DayScreen extends StatefulWidget {
+class DayScreen extends ConsumerStatefulWidget {
   final DateTime date;
-  final Map dayData;
+  final List<String> dayKeys;
   final Function? reload;
-  const DayScreen({super.key, required this.date, required this.dayData, this.reload});
+  const DayScreen({super.key, required this.date, required this.dayKeys, this.reload});
   @override
   // ignore: library_private_types_in_public_api
   _DayScreenState createState() => _DayScreenState();
 }
 
-class _DayScreenState extends State<DayScreen> {
-  Map dayData = {};
-  void reload(String date) async{
-    Map data = await readData();
-    setState(() { // who knows if this works // ! WHAT DO YOU MEAN WHO KNOWS IF IT WORKS??
-      dayData = data[date];
-    }); 
+class _DayScreenState extends ConsumerState<DayScreen> {
+  late DateTime date;
+  @override
+  void initState() {
+    super.initState();
+    date = widget.date;
   }
+  Map<dynamic, dynamic> parseDayKeys(Map workoutData, List dayKeys) {
+    Map data = {};
+    for (String key in dayKeys){
+      if (!workoutData.containsKey(key)) continue;
+
+      data[key] = workoutData[key];
+    }
+
+    return data;
+  }
+
   @override
   build(BuildContext context) {
-    dayData = widget.dayData;
-    DateTime date = widget.date;
+    final workoutProvider = ref.watch(workoutDataProvider);
     
     return Scaffold(
       appBar: AppBar(
         title: Text('Workouts for ${date.day}/${date.month}/${date.year}'),
       ),
-      body: Column(
-        children: [
-          Flexible(
-            child: ListView.builder(
-              itemCount: dayData.keys.length,
-              itemBuilder: (context, index){
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], dayKey: dayData.keys.toList()[index]))
-                    ).then((_) {
-                      reload(dayData.keys.toList()[index]);
-                    });
-                  },
-                  child: dayBox(dayData[dayData.keys.toList()[index]])
-                );
-              }
-            ),
-          )
-        ],
+      body: workoutProvider.when(
+        data: (data){
+          Map dayData = parseDayKeys(data, widget.dayKeys);
+          return Column(
+            children: [
+              Flexible(
+                child: ListView.builder(
+                  itemCount: dayData.keys.length,
+                  itemBuilder: (context, index){
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], dayKey: dayData.keys.toList()[index]))
+                        );
+                      },
+                      child: dayBox(dayData.entries.toList()[index])
+                    );
+                  }
+                ),
+              )
+            ],
+          );
+        }, 
+        error: (error, stack) => Text('An error occured fetching the data: $error'), 
+        loading: () => CircularProgressIndicator()
       )
     );
   }
-  Widget dayBox(Map day){
+  Widget dayBox(MapEntry day){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
       child: Container(
@@ -73,7 +88,7 @@ class _DayScreenState extends State<DayScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10, top: 10),
                   child: Text(
-                    DateFormat('EEEE, MMM d, yyyy').format(DateTime.parse(day['stats']['startTime'])),
+                    DateFormat('EEEE, MMM d, yyyy').format(DateTime.parse(day.value['stats']['startTime'])),
                     style: const TextStyle(
                       fontSize: 18
                     ),
@@ -94,31 +109,13 @@ class _DayScreenState extends State<DayScreen> {
                               builder: (context) => Addworkout(sets: day, editing: true),
                             ),
                           );
-                          if (result != null){
-                            day['sets'] = result;
-                            editDay(day);
-                            setState(() {});
-                            if (widget.reload != null){
-                              widget.reload!();
-                            }
-                          }
+                          ref.read(workoutDataProvider.notifier).updateValue(day.key, result);
                         case 'Share':
                           debugPrint('share');
                           // share day
                         case 'Delete':
                           debugPrint('delete');
-                          String keyToRemove = '';
-                          widget.dayData.forEach((key, value) {
-                            if (value == day) {
-                              keyToRemove = key;
-                            }
-                          });
-                          await deleteDay(day);
-                          widget.dayData.remove(keyToRemove);
-                          if (widget.reload != null){
-                            widget.reload!();
-                          }
-                          setState(() {});// TODO maybe include the index somewhere later                       
+                          ref.read(workoutDataProvider.notifier).deleteDay(day.key);
                       }
                     },
                     itemBuilder: (BuildContext context) {
@@ -137,17 +134,17 @@ class _DayScreenState extends State<DayScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                '${day['stats']['startTime'].split(' ')[1]}-${day['stats']['endTime'].split(' ')[1]}',
+                '${day.value['stats']['startTime'].split(' ')[1]}-${day.value['stats']['endTime'].split(' ')[1]}',
                 style: const TextStyle(
                   fontSize: 15
                 ),
               ),
             ),
-            WorkoutStats(workout: day),
-            if (day['stats']?['notes']?['Workout'] != null)
+            WorkoutStats(workout: day.value),
+            if (day.value['stats']?['notes']?['Workout'] != null)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text('Notes :${day['stats']?['notes']?['Workout']}'),
+                child: Text('Notes :${day.value['stats']?['notes']?['Workout']}'),
               ),
             const Row(
               children: [
@@ -162,19 +159,19 @@ class _DayScreenState extends State<DayScreen> {
                 ),
               ],
             ),
-            for (int i = 0; i < (day['sets']?.length ?? 0); i++)
+            for (int i = 0; i < (day.value['sets']?.length ?? 0); i++)
             Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
                   child: Text(
-                    day['sets'].keys.toList()[i]
+                    day.value['sets'].keys.toList()[i]
                   ),
                 ),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                  child: Text(getBestSet(day['sets'][day['sets'].keys.toList()[i]], exerciseMuscles[day['sets'].keys.toList()[i]]?['type'] ?? 'Weighted')),
+                  child: Text(getBestSet(day.value['sets'][day.value['sets'].keys.toList()[i]], exerciseMuscles[day.value['sets'].keys.toList()[i]]?['type'] ?? 'Weighted')),
                 )
               ],
             ),
@@ -184,32 +181,7 @@ class _DayScreenState extends State<DayScreen> {
       ),
     );
   }
-  Future<bool> deleteDay(Map day) async{
-    String dayKey = '';
-    widget.dayData.forEach((key, value) {
-      if (value == day) {
-        dayKey = key;
-      }
-    });
-    if (dayKey == ''){return false;}
-    Map<String, dynamic> data = await readData();
-    data.remove(dayKey);
-    writeData(data, append: false);
-    return true;
-  }
-    Future<bool> editDay(Map day) async{
-    String dayKey = '';
-    widget.dayData.forEach((key, value) {
-      if (value == day) {
-        dayKey = key;
-      }
-    });
-    if (dayKey == ''){return false;}
-    Map<String, dynamic> data = await readData();
-    data[dayKey]['sets'] = day['sets'];
-    writeData(data, append: false);
-    return true;
-  }
+
   String getBestSet(List exercise, String type){
     List bestSet = [];
     for (var set in exercise){

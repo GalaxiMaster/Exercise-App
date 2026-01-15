@@ -166,3 +166,32 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
 }
 
 final recordsProvider = AsyncNotifierProvider<RecordsNotifier, Map<String, dynamic>>(RecordsNotifier.new);
+
+class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
+  @override
+  Future<Map<String, dynamic>> build() async {
+    ref.keepAlive();
+    return await readData(path: 'current');
+  }
+
+  void updateValue(String key, dynamic value) {
+    state = AsyncData({
+      ...state.value ?? {},
+      key: value,
+    });
+    state.whenData((data){
+      writeData(data, path: 'current');
+    });
+  }
+  
+  Future<void> deleteExercise(String key) async {
+    Map stateVal = state.value ?? {};
+    stateVal.remove(key);
+    state = AsyncData({
+      ...stateVal
+    });
+    deleteKey(key, path: 'current');
+  }
+}
+
+final currentWorkoutProvider = AsyncNotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(CurrentWorkoutNotifier.new);

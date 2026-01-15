@@ -145,7 +145,7 @@ class CalendarWidgetState extends State<CalendarWidget> {
                       date.month == highlightedDay.month &&
                       date.day == highlightedDay.day)) 
                     {
-                    Map daysData = {};
+                    Map<String, dynamic> daysData = {};
                     for (var day in widget.exerciseData.keys){
                       if (day.split(' ')[0] == DateFormat('yyy-MM-dd').format(date)){
                         daysData.addAll({day : widget.exerciseData[day]});
@@ -156,7 +156,7 @@ class CalendarWidgetState extends State<CalendarWidget> {
                       MaterialPageRoute(
                         builder: (context) => DayScreen(
                           date: date,
-                          dayData: daysData,
+                          dayKeys: daysData.keys.toList(),
                         ),
                       )
                     );
