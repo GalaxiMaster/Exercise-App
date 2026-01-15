@@ -19,3 +19,32 @@ int getNormalSetNumber(String exercise, int currentIndex, List sets) {
 
   return normalSetCount;
 }
+
+enum PRType { none, weight, reps, first }
+
+class PRResult {
+  final bool isPR;
+  final PRType type;
+
+  PRResult(this.isPR, this.type);
+}
+
+class Lift {
+  final double weight;
+  final double reps;
+
+  Lift(this.weight, this.reps);
+}
+
+Lift? liftFromSet(Map set) {
+  if (set['weight'] == '' || set['reps'] == '') return null;
+  return Lift(
+    double.tryParse(set['weight'].toString()) ?? 0,
+    double.tryParse(set['reps'].toString()) ?? 0,
+  );
+}
+
+bool isBetter(Lift a, Lift b) {
+  if (a.weight != b.weight) return a.weight > b.weight;
+  return a.reps > b.reps;
+}

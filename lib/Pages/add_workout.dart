@@ -26,11 +26,8 @@ class Addworkout extends ConsumerStatefulWidget {
 }
 
 class _AddworkoutState extends ConsumerState<Addworkout> {
-  var preCsvData = {};
-  Map<String, dynamic> records = {};
   Map sets = {};
   Map exerciseNotes = {};
-  Map settings = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   Map<String, List<Map<String, TextEditingController>>> _controllers = {};
@@ -39,12 +36,10 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   bool loading = false;
 
   Map boxErrors = {};
-
   @override
   void initState() {        
     super.initState();
     loading = true;
-    reloadRecords();    
     if(widget.sets.isEmpty){
       getPreviousWorkout().then((data) {
         setState(() {
@@ -183,7 +178,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   }
 }
   
-  void preLoad() async{
+  void preLoad() async{ // TODO abolish
     Map data = await readData();
     var sortedKeys = data.keys.toList()..sort();
     // Create a sorted map by iterating over sorted keys
@@ -191,8 +186,6 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
       for (var key in sortedKeys) key: data[key]!,
     };
     data = sortedMap;
-    preCsvData = data;
-    settings = await getAllSettings();
     setState(() {}); // Update UI after loading data
   }
 
@@ -215,6 +208,9 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   @override
   Widget build(BuildContext context) {
     final customExerciseAsync = ref.read(customExercisesProvider);
+    final Map settings = ref.watch(settingsProvider).value ?? {};
+    final Map workoutData = ref.watch(workoutDataProvider).value ?? {};
+    final Map records = ref.watch(recordsProvider).value ?? {};
 
     if (loading){
       return CircularProgressIndicator();
@@ -276,7 +272,6 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                         return MeasurementPopup(initialMeasurement: settings['Bodyweight'] ?? '0',);
                                       },
                                     );
-                                    settings = await getAllSettings();
                                   },
                                   child: const Icon(
                                     Icons.person_2_outlined, 
@@ -445,7 +440,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                         color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                       ),
                                       decoration: InputDecoration(
-                                        hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type']),
+                                        hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type'], workoutData),
                                         border: InputBorder.none,
                                         hintStyle: const TextStyle(
                                           color: Colors.grey,
@@ -460,7 +455,14 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                         }
                                         value = (int.tryParse(value) ?? double.tryParse(value)).toString();
                                         sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                                        isRecord(exercise, i);
+                                        final result = checkSetPR(exercise, i, records);
+
+                                        applyPRResult(
+                                          exercise,
+                                          i,
+                                          result,
+                                          settings,
+                                        );  
                                         updateExercises();
                                       },
                                       onFieldSubmitted: (value) {
@@ -483,7 +485,14 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                           updateVariable: (int seconds){
                                             String value = seconds.toString();
                                             sets[exercise]![i]['weight'] = value;
-                                            isRecord(exercise, i);
+                                            final result = checkSetPR(exercise, i, records);
+
+                                            applyPRResult(
+                                              exercise,
+                                              i,
+                                              result,
+                                              settings,
+                                            );  
                                             updateExercises();
                                           },
                                         )
@@ -520,7 +529,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                       color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
                                     ),
                                     decoration: InputDecoration(
-                                      hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type']),
+                                      hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type'], workoutData),
                                       border: InputBorder.none,
                                       hintStyle: const TextStyle(
                                         color: Colors.grey,
@@ -535,7 +544,14 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                       }
                                       value = (int.tryParse(value) ?? double.tryParse(value)).toString();
                                       sets[exercise]![i]['reps'] = value != 'null' ? value : '';
-                                      isRecord(exercise, i);
+                                      final result = checkSetPR(exercise, i, records);
+
+                                      applyPRResult(
+                                        exercise,
+                                        i,
+                                        result,
+                                        settings,
+                                      );  
                                       updateExercises();
                                     },
                                       onFieldSubmitted: (value) {
@@ -567,7 +583,14 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                                     _checkBoxStates[exercise]![i] = value!;
                                   });
                                   if (value ?? false){
-                                    isRecord(exercise, i, mode: 'Ticked');
+                                    final result = checkSetPR(exercise, i, records);
+
+                                    applyPRResult(
+                                      exercise,
+                                      i,
+                                      result,
+                                      settings,
+                                    );                                  
                                   }
                                 },
                               ),
@@ -595,7 +618,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WorkoutList(setting: 'choose', preData: preCsvData),
+                    builder: (context) => WorkoutList(setting: 'choose', preData: workoutData),
                   ),
                 );
 
@@ -639,13 +662,14 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
     );
   }
   
-  String getPrevious(String tExercise, int setNum, String target, String type){ // TODO with the matching set types, it could be preferential instead of only. like if theres no sets with that index and set type, it just picks the last of that type
-    if (preCsvData.isNotEmpty){
-    for (var day in preCsvData.keys.toList().reversed.toList()){
-        for (var exercise in preCsvData[day]['sets'].keys){
+  String getPrevious(String tExercise, int setNum, String target, String type, Map workoutData){ // TODO this is very expensive, probably cache results
+    // TODO with the matching set types, it could be preferential instead of only. like if theres no sets with that index and set type, it just picks the last of that type
+    if (workoutData.isNotEmpty){
+      for (var day in workoutData.keys.toList().reversed.toList()){
+        for (var exercise in workoutData[day]['sets'].keys){
           if (exercise == tExercise){
-            for (var i = 0; i < preCsvData[day]['sets'][exercise].length; i++) {
-              var set = preCsvData[day]['sets'][exercise][i];
+            for (var i = 0; i < workoutData[day]['sets'][exercise].length; i++) {
+              var set = workoutData[day]['sets'][exercise][i];
               if (i == setNum-1 && set['type'] == type) {
                 if (target == 'Weight') {
                   return set['weight'].toString();
@@ -814,144 +838,97 @@ void addNewSet(String exercise, String type) {
     return isStillValid;
   }
 
-  bool isRecord(String exercise, int index, {String mode = 'notTick'}) {
-    if (sets[exercise][index]['reps'] == '' || sets[exercise][index]['weight'] == ''){ // TODO check if the heaviest set is pr on change
-      if (sets[exercise][index]['PR'] == 'yes'){
-        setState(() {
-          sets[exercise][index]['PR'] = 'no';
-        });
-      }
-      return false;
+  // ! START RECORDS
+  void applyPRResult(
+    String exercise,
+    int index,
+    PRResult result,
+    Map settings,
+  ) {
+    setState(() {
+      sets[exercise][index]['PR'] = result.isPR ? 'yes' : 'no';
+    });
+
+    if (!result.isPR) return;
+    if (settings['Tick Boxes'] ?? false) return;
+
+    String subtitle;
+    switch (result.type) {
+      case PRType.weight:
+        subtitle = "Heaviest Weight - ${sets[exercise][index]['weight']} kg";
+        break;
+      case PRType.reps:
+        subtitle = "Highest Reps - ${sets[exercise][index]['reps']}";
+        break;
+      case PRType.first:
+        subtitle = "First Record!";
+        break;
+      default:
+        return;
     }
-    List best = [];
-    int topindex = -1;
-    for (int i = 0; i < sets[exercise].length; i++) {
-      var record = sets[exercise][i];
-      if (record['reps'] == '' || record['weight'] == '') {
-      }
-      else if (best.isEmpty){
-        best = [double.parse(record['weight'].toString()), double.parse(record['reps'])];
-        topindex = i;
-      }
-      else if (double.parse(record['weight'].toString()) > best[0] || double.parse(record['weight'].toString()) == best[0] && double.parse(record['reps']) > best[1]){
-        best = [double.parse(record['weight'].toString()), double.parse(record['reps'])];
-        topindex = i;
-      }
-      else {
-        if (sets[exercise][index]['PR'] == 'yes'){
-          setState(() {
-            sets[exercise][index]['PR'] = 'no';
-          });
-        }
-      }
-    }
-    if (index == topindex){
-      printRecords();
-      List candidate = [sets[exercise]![index]['weight'], sets[exercise]![index]['reps']]; // TODO move the pr to the most recent set, or highlight both
-      if (records.containsKey(exercise)){
-        if (double.parse(candidate[0]) > double.parse(records[exercise]['weight'])){
-          setState(() {
-            sets[exercise][index]['PR'] = 'yes';
-          });
-          if (!(settings['Tick Boxes'] ?? false) || mode == 'Ticked'){
-            AchievementPopup.show(
-              context,
-              title: exercise,
-              subtitle: "Heaviest Weight - ${sets[exercise][index]['weight']} kg",
-              icon: Icons.emoji_events,  // Trophy or medal icon
-            );
-            if (settings['Vibrations'] ?? true){
-              // Vibration.vibrate(duration: 200, amplitude: 150);
-            }
-          }
-          return true;
-        }else if(double.parse(candidate[0]) == double.parse(records[exercise]['weight']) && double.parse(candidate[1]) > double.parse(records[exercise]['reps'])){
-          setState(() {
-            sets[exercise][index]['PR'] = 'yes';
-          });
-          if (!(settings['Tick Boxes'] ?? false) || mode == 'Ticked'){
-            AchievementPopup.show(
-              context,
-              title: exercise,
-              subtitle: "Highest Reps - ${sets[exercise][index]['reps']}",
-              icon: Icons.emoji_events,  // Trophy or medal icon
-            );
-            if (settings['Vibrations'] ?? true){
-              // Vibration.vibrate(duration: 200, amplitude: 150);
-            }
-          }
-          return true;
-        }else {
-          if (sets[exercise][index]['PR'] == 'yes'){
-            setState(() {
-              sets[exercise][index]['PR'] = 'no';
-            });
-          }
-        }
-      } else{
-          setState(() {
-            sets[exercise][index]['PR'] = 'yes';
-          });
-          return true;
-      }
-      return false;
-    }else{
-      setState(() {
-        if (sets[exercise][index]['PR'] == 'yes'){
-          setState(() {
-            sets[exercise][index]['PR'] = 'no';
-          });
-        }
-      });
-      return false;
-    }
+
+    AchievementPopup.show(
+      context,
+      title: exercise,
+      subtitle: subtitle,
+      icon: Icons.emoji_events,
+    );
   }
-  void printRecords() async{
-    var data = await readData(path: 'records');
-    debugPrint(data.toString());
+
+  PRResult checkSetPR(String exercise, int index, Map records) {
+    final lift = liftFromSet(sets[exercise][index]);
+    if (lift == null) return PRResult(false, PRType.none);
+
+    final bestIndex = bestSetIndex(sets[exercise]);
+    if (bestIndex != index) return PRResult(false, PRType.none);
+
+    final recordLift = records.containsKey(exercise)
+        ? liftFromSet(records[exercise])
+        : null;
+
+    return evaluatePR(
+      candidate: lift,
+      record: recordLift,
+    );
   }
-  void reloadRecords() async {
-    Map data = await readData();
-    var sortedKeys = data.keys.toList()..sort();
-    Map<String, dynamic> recordsTemp = await readData(path: 'records');
-    // Create a sorted map by iterating over sorted keys
-    Map<String, dynamic> sortedMap = {
-      for (var key in sortedKeys) key: data[key]!,
-    };
-    Map dataCopy = sortedMap;
-    data = sortedMap;
-    for (String day in data.keys){
-      for (String exercise in data[day]['sets'].keys){
 
-        Map topSet = recordsTemp[exercise] ?? {'weight': 0, 'reps': 0};
+  int? bestSetIndex(List sets) {
+    int? bestIndex;
+    Lift? bestLift;
 
-        for (int i = 0; i < data[day]['sets'][exercise].length; i++){
-          Map set = data[day]['sets'][exercise][i];
-          if (double.parse(set['weight'].toString()) > double.parse(topSet['weight'].toString())){
-            topSet = set;
-            dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
-          }
-          else if (double.parse(set['weight'].toString()) == double.parse(topSet['weight'].toString()) && 
-                    double.parse(set['reps'].toString()) > double.parse(topSet['reps'].toString()) 
-                  ){
-            topSet = set; 
-            dataCopy[day]['sets'][exercise][i]['PR'] = 'yes';
+    for (int i = 0; i < sets.length; i++) {
+      final lift = liftFromSet(sets[i]);
+      if (lift == null) continue;
 
-          }
-        }
-        recordsTemp[exercise] = topSet;
+      if (bestLift == null || isBetter(lift, bestLift)) {
+        bestLift = lift;
+        bestIndex = i;
       }
-
     }
-    writeData(records, path: 'records', append: false);
-          // List sets = data[day]['sets'][exercise];
-        // sets.sort((a, b) => a["weight"].compareTo(b["weight"])); wild way to get top set, but i need progressive
-        // debugPrint('yeah');
-    records = recordsTemp;
+    return bestIndex;
   }
+
+  PRResult evaluatePR({
+    required Lift candidate,
+    Lift? record,
+  }) {
+    if (record == null) return PRResult(true, PRType.first);
+
+    if (candidate.weight > record.weight) {
+      return PRResult(true, PRType.weight);
+    }
+
+    if (candidate.weight == record.weight &&
+        candidate.reps > record.reps) {
+      return PRResult(true, PRType.reps);
+    }
+
+    return PRResult(false, PRType.none);
+  }
+  // !End records
 }
 
-class TimerScreen extends StatefulWidget {
+class TimerScreen extends StatefulWidget { // TODO cleanup
   final Function(int seconds)? updateVariable;
 
   const TimerScreen({super.key, this.updateVariable});

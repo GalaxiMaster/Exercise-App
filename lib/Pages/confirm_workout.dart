@@ -1,8 +1,10 @@
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-class ConfirmWorkout extends StatefulWidget {
+class ConfirmWorkout extends ConsumerStatefulWidget {
   final Map sets;
   final String startTime; 
   final Map exerciseNotes;
@@ -16,7 +18,7 @@ class ConfirmWorkout extends StatefulWidget {
   ConfirmWorkoutState createState() => ConfirmWorkoutState();
 }
 
-class ConfirmWorkoutState extends State<ConfirmWorkout> {
+class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
   Map getStats(){
     Map stats = {"Volume" : 0, "Sets" : 0, "Exercises" : 0, "WorkoutTime": ''};
     
@@ -178,36 +180,17 @@ class ConfirmWorkoutState extends State<ConfirmWorkout> {
       }
     }
     Map<String, dynamic> data = {
-      '$day $num' : {
       'stats' : {
         'startTime' : startTimeStr,
         'endTime' : endTimeStr,
         'notes' : workoutNotes,
       },
       'sets' : exerciseList
-      }
     };
-    writeData(await getRecords(exerciseList), path: 'records', append: false);
-    writeData(data, append: true);
-    syncData();
-    resetData(['current']); // TODO
-  }
-  
-  Future<Map<String, dynamic>> getRecords(Map exercises) async{
-    Map<String, dynamic> records = await readData(path: 'records');
-    for (var exercise in exercises.keys){
-      for (var set in exercises[exercise]){
-        if (set['PR'] == 'yes'){       
-          if (records[exercise] == null){
-            records[exercise] = set;
-          }
-          else if (double.parse(set['weight'].toString()) > double.parse(records[exercise]['weight']) || (double.parse(set['weight'].toString()) == double.parse(records[exercise]['weight']) && double.parse(set['reps'].toString()) > double.parse(records[exercise]['reps']))){
-            records[exercise] = set;
-          }
-        }
-      }
-    }
-    return records;
+    ref.read(recordsProvider.notifier).writeNewRecords(exerciseList);
+    ref.read(workoutDataProvider.notifier).updateValue('$day $num', data);
+    syncData(); // TODO make simpler
+    resetData(['current']);
   }
 }
 

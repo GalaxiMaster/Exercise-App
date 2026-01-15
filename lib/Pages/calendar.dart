@@ -2,7 +2,6 @@ import 'package:exercise_app/Pages/SettingsPages/calendar_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
@@ -25,20 +24,12 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
   @override
   void initState() {
     super.initState();
-    _loadHighlightedDays();
   }
 
-  Future<void> _loadHighlightedDays() async {
-    var data = await readData();
-    setState(() {
-      exerciseData = data;
-      highlightedDays = data.keys.map((x) => DateTime.parse(x.split(' ')[0])).toList();
-      isLoading = false;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     final settingsAsync = ref.watch(settingsProvider);
+    final workoutAsync = ref.watch(workoutDataProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -79,24 +70,34 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
           )
         ],
       ),
-      body: isLoading 
-      ? const Center(child: CircularProgressIndicator()) 
-      : settingsAsync.when(
-        data: (map) {
-          return switch (selection.value) {
-            'month' => CalendarWidget(
-                highlightedDays: highlightedDays, 
-                exerciseData: exerciseData, 
-                reload: _loadHighlightedDays
-              ),
-            'year' => buildMonthCalendar(highlightedDays),
-            'multiYear' => MultiYearCalendar(activeDates: highlightedDays, settings: map['CalendarSettings']['MultiYear'],),
-            _ => const SizedBox.shrink(),
-          };
-        },        
-        loading: () => CircularProgressIndicator(),
-        error: (err, stack) => Text('Error: $err'),
-      ),
+      body: settingsAsync.when(
+        loading: () => const CircularProgressIndicator(),
+        error: (e, _) => Text('Error: $e'),
+        data: (settings) {
+          return workoutAsync.when(
+            loading: () => const CircularProgressIndicator(),
+            error: (e, _) => Text('Error: $e'),
+            data: (workoutData) {
+              final highlightedDays = workoutData.keys
+                  .map((x) => DateTime.parse(x.split(' ')[0]))
+                  .toList();
+
+              return switch (selection.value) {
+                'month' => CalendarWidget(
+                    highlightedDays: highlightedDays,
+                    exerciseData: workoutData,
+                  ),
+                'year' => buildMonthCalendar(highlightedDays),
+                'multiYear' => MultiYearCalendar(
+                    activeDates: highlightedDays,
+                    settings: settings['CalendarSettings']['MultiYear'],
+                  ),
+                _ => const SizedBox.shrink(),
+              };
+            },
+          );
+        },
+      )
     );
   }
 }
@@ -104,9 +105,8 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
 class CalendarWidget extends StatefulWidget {
   final List<DateTime> highlightedDays;
   final Map exerciseData;
-  final Function reload;
 
-  const CalendarWidget({super.key, required this.highlightedDays, required this.exerciseData, required this.reload});
+  const CalendarWidget({super.key, required this.highlightedDays, required this.exerciseData});
 
   @override
   CalendarWidgetState createState() => CalendarWidgetState();
@@ -157,7 +157,6 @@ class CalendarWidgetState extends State<CalendarWidget> {
                         builder: (context) => DayScreen(
                           date: date,
                           dayData: daysData,
-                          reload: widget.reload,
                         ),
                       )
                     );

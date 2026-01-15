@@ -75,15 +75,6 @@ Future<void> resetData(List<String>? boxes) async {
   }
 }
 
-Future<Set> gatherTags() async{
-  final box = await readData();
-
-  Set allTags = box.values
-    .expand((w) => w['tags'] ?? [])
-    .toSet(); // Collect all unique tags from all words
-  return allTags;
-}
-
 Future<void> exportJson(BuildContext context) async {
   LoadingOverlay loadingOverlay = LoadingOverlay();
   try {
