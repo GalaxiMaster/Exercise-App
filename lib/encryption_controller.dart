@@ -102,7 +102,7 @@ void restoreDataFromCloud() async{
         .collection('User Data')
         .doc(uuid).get()).data();
     if (data != null){
-      writeData(data['Data']);
+      writeData(data['Output']);
       writeData(data['Settings'], path: 'settings');
       writeData(data['Records'], path: 'records');
     }

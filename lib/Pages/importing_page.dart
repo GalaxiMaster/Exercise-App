@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class ImportingPage extends StatefulWidget {
+class ImportingPage extends ConsumerStatefulWidget {
   const ImportingPage({super.key});
 
   @override
@@ -17,7 +19,7 @@ class ImportingPage extends StatefulWidget {
   _ImportingPageState createState() => _ImportingPageState();
 }
 
-class _ImportingPageState extends State<ImportingPage> {
+class _ImportingPageState extends ConsumerState<ImportingPage> {
   List<DateTime> highlightedDays = [];
   Map exerciseData = {};
   @override
@@ -31,8 +33,7 @@ class _ImportingPageState extends State<ImportingPage> {
       appBar: myAppBar(context, 'Importing'),
       body: Column(
         children: [
-          
-          _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from This', function: (){importDataThis(context);}),
+          _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from This', function: (){importDataThis(context, ref);}),
           _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from Hevy', function: (){importDataHevy(context);}),
           _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from Strong', function: (){importDataStrong(context);})
 
@@ -83,7 +84,7 @@ Widget _buildSettingsBox({
     );
   }
 
-void importDataThis(BuildContext context) async{
+void importDataThis(BuildContext context, WidgetRef ref) async{
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -107,6 +108,8 @@ void importDataThis(BuildContext context) async{
       for (String key in jsonData.keys){
         writeData(jsonData[key], append: true, path: key);
       }
+      ref.invalidate(workoutDataProvider);
+
       // Map data = await readData();
       showDialog(
         // ignore: use_build_context_synchronously

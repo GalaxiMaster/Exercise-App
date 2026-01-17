@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/Account/sign_up.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class SignInPage extends StatefulWidget {
+class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
 
   @override
   SignInPageState createState() => SignInPageState();
 }
 
-class SignInPageState extends State<SignInPage> {
+class SignInPageState extends ConsumerState<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -48,6 +50,8 @@ class SignInPageState extends State<SignInPage> {
               if (isNew) {
                 // TODO createDefaultPermissions(userCredential);
               }
+              restoreDataFromCloud();
+              ref.invalidate(workoutDataProvider);
               if (mounted) {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }
@@ -160,6 +164,8 @@ class SignInPageState extends State<SignInPage> {
                               email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
+                            restoreDataFromCloud();
+                            ref.invalidate(workoutDataProvider);
                             // toDO getUserPermissions();
                             if (!context.mounted) return;
                             Navigator.popUntil(context, (route) => route.isFirst);
