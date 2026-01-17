@@ -5,21 +5,21 @@ import 'package:exercise_app/Pages/StatScreens/muscle_data.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Pages/StatScreens/stats.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class Profile extends StatefulWidget {
+class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  ConsumerState<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
-  late Future<List<dynamic>> _futureData;
+class _ProfileState extends ConsumerState<Profile> {
   String graphSelector = 'sessions';
   String prevSelector = 'sessions';
   num? selectedBarValue; // TODO set to what it actually is
@@ -28,12 +28,8 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    _loadData();
   }
 
-  void _loadData() {
-    _futureData = Future.wait([getData(), getAllSettings()]);
-  }
   void alterHeadingBar(double value, String week){
     DateTime te = DateFormat('yyyy MMM dd').parse(week);
     var test = DateTime.now().difference(te).inDays;
@@ -43,7 +39,37 @@ class _ProfileState extends State<Profile> {
       selectedBarWeekDistance = distanceInWeeks == 0 ? 'This week' : '$distanceInWeeks weeks ago';
     });
   }
+  final allDataProvider = Provider<AsyncValue<Map<String, Map>>>((ref) {
+    // 1. Listen to the dependencies. 
+    // Using 'watch' ensures this provider recalculates when data changes.
+    final workoutAsyncValue = ref.watch(workoutDataProvider);
 
+    // 2. Handle the AsyncValue of the workout provider
+    return workoutAsyncValue.whenData((data) {
+        Map weeks = {};
+
+        // Preload the last 8 Mondays
+        DateTime today = DateTime.now();
+        DateTime currentMonday = findMonday(today);
+
+        for (int i = 0; i < 7; i++) {
+          DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
+          String day = DateFormat('yyyy MMM dd').format(monday);
+          weeks[day] = 0;
+        }
+
+        Map<String, Map> information = {
+          'sessions': getWeekData(data, Map.from(weeks)),
+          'duration': getDurationData(data, Map.from(weeks)),
+          'volume': getWeightAndStufftData(data, Map.from(weeks), 'volume'),
+          'weight':getWeightAndStufftData(data, Map.from(weeks), 'weight'),
+          'reps': getWeightAndStufftData(data, Map.from(weeks), 'reps'),
+          'sets': getWeightAndStufftData(data, Map.from(weeks), 'sets'),
+        };
+        return information;
+      },
+    );
+  });
   @override
   Widget build(BuildContext context) {
     List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
@@ -56,6 +82,9 @@ class _ProfileState extends State<Profile> {
       case 'sets': unit = 'sets';
 
     }
+    
+    final allDataAsync = ref.watch(allDataProvider);
+
     return Scaffold(
       appBar: myAppBar(context, 'Profile', 
         button: MyIconButton(
@@ -69,28 +98,19 @@ class _ProfileState extends State<Profile> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Settings()),
-            ).then((value) {
-              setState(() { //TODO could possibly make it only reload if the settings is different
-                _loadData();
-              });
-            });
+            );
           },
         ),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: _futureData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading data ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final data = snapshot.data![0][graphSelector]; // Extract data
-            final goal = double.tryParse(snapshot.data![1]['Day Goal'].toString()) ?? 1.0; // Extract goal
-            selectedBarValue ??= numParsething(data.values.toList()[data.values.toList().length-1]);
+      body: allDataAsync.when(
+        data: (rData){
+          final Map settings = ref.watch(settingsProvider).value ?? {};
+          final Map? data = rData[graphSelector]; // Extract data
+            final goal = double.tryParse(settings['Day Goal'].toString()) ?? 1.0; // Extract goal
+            selectedBarValue ??= numParsething(data?.values.toList().last ?? 0);
             if (prevSelector != graphSelector){
               prevSelector = graphSelector;
-              selectedBarValue = numParsething(data.values.toList()[data.values.toList().length-1]);
+              selectedBarValue = numParsething(data?.values.toList().last ?? 0);
               selectedBarWeekDistance = 'This week';
             }
             return Column(
@@ -136,7 +156,7 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
-                DataBarChart(data: data, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
+                DataBarChart(data: data ?? {}, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -178,12 +198,7 @@ class _ProfileState extends State<Profile> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => destination)
-                          ).then((value) {
-                            // Reload the data when coming back from another page
-                            setState(() {
-                              _loadData();
-                            });
-                          });
+                          );
                         },
                         child: Center(
                           child: Container(
@@ -218,11 +233,10 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             );
-          } else {
-            return const Center(child: Text('No data available'));
-          }
-        },
-      ),
+        }, 
+        error: (error, stack) => Text('Error fetching data $error'), 
+        loading: () => CircularProgressIndicator()
+      )
     );
   }
   Widget selectorBox(String text, bool selected){
@@ -448,33 +462,6 @@ class DataBarChart extends StatelessWidget {
     );
   }
 }
-
-  Future<Map> getData() async {
-    Map data = await readData();
-    Map weeks = {};
-
-    // Preload the last 8 Mondays
-    DateTime today = DateTime.now();
-    DateTime currentMonday = findMonday(today);
-
-    for (int i = 0; i < 7; i++) {
-      DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
-      String day = DateFormat('yyyy MMM dd').format(monday);
-      weeks[day] = 0;
-    }
-
-
-    Map information = {
-      'sessions': getWeekData(data, Map.from(weeks)),
-      'duration': getDurationData(data, Map.from(weeks)),
-      'volume': getWeightAndStufftData(data, Map.from(weeks), 'volume'),
-      'weight':getWeightAndStufftData(data, Map.from(weeks), 'weight'),
-      'reps': getWeightAndStufftData(data, Map.from(weeks), 'reps'),
-      'sets': getWeightAndStufftData(data, Map.from(weeks), 'sets'),
-    };
-    return information;
-  }
-
   Map getWeekData(Map data, Map weeks){
     // Process data
     for (var day in data.keys) {
