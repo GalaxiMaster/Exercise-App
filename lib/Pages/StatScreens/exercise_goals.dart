@@ -2,29 +2,31 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
-class ExerciseGoals extends StatefulWidget {
+class ExerciseGoals extends ConsumerStatefulWidget {
   const ExerciseGoals({super.key});   
     @override
   // ignore: library_private_types_in_public_api
   _ExerciseGoalsState createState() => _ExerciseGoalsState();
 }
 
-class _ExerciseGoalsState extends State<ExerciseGoals> {
+class _ExerciseGoalsState extends ConsumerState<ExerciseGoals> {
   int weeksAgo = 0;
   late PageController pageController;
   final ValueNotifier<int> headerState = ValueNotifier(0);
   final ValueNotifier<Map<String, dynamic>> listState = ValueNotifier({});
   final ValueNotifier<Map<String, dynamic>> chartState = ValueNotifier({});
-  late Map settings;
+  late Map<String, dynamic> settings;
 
   late List<PieChartSectionData> graphSections;
   late double percentageComplete;
@@ -37,8 +39,6 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
         pageController.jumpToPage(99999);
       }
     });
-
-    fetchInitialData();
   }
   @override
   void dispose() {
@@ -57,35 +57,8 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
   void updateChart(Map<String, dynamic> newState) {
     chartState.value = newState; // Update chart state
   }
-  Future<void> fetchInitialData() async {
-    try {
-      final results = await Future.wait([getExerciseStuff(weeksAgo), getAllSettings()]);
-      List result = calculatePieSections( results[1], results[0]);
-      graphSections = result[0];
-      percentageComplete = result[1];
-      settings = results[1];
 
-      listState.value = {
-        'settings': results[1], // Real settings
-        'data': results[0],     // Real data
-      };
-      updateChart({
-        'settings': settings,
-        'sections': graphSections,
-        'percent': percentageComplete,
-      });
-
-    } catch (e) {
-      debugPrint('Error fetching initial data: $e');
-      listState.value = {
-        'settings': {}, // Fallback empty values
-        'data': {},
-      };
-      graphSections = [];
-      percentageComplete = 0;
-    }
-  }
-  List calculatePieSections(settings, data){
+  List calculatePieSections(Map settings, Map data) {
     List<PieChartSectionData> graphSections = [];
     double notComplete = 0;
     double complete = 0;
@@ -113,98 +86,116 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
     double percentageComplete = complete / (notComplete + complete);
     return [graphSections, percentageComplete];
   }
-
-  void fetchNewData() async{
-    Map<String, dynamic> exerciseData = await getExerciseStuff(weeksAgo) as Map<String, dynamic>;
-    List pieData = calculatePieSections(settings, exerciseData);
-    updateList({
-      'settings': settings,
-      'data': exerciseData,
-    });
-    updateChart({
-      'settings': settings,
-      'sections': pieData[0],
-      'percent': pieData[1],
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Future.wait([getExerciseStuff(weeksAgo), getAllSettings()]),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error loading data ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          return Scaffold(
-            appBar: myAppBar(context, 'Exercise goals',
-            button: GestureDetector(
-              onTap: () {
-                addExerciseGoal(settings);
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Center(child: Icon(Icons.add)),
-              ),
-            )),
-            body: Column(
-              children: [
-                ValueListenableBuilder<int>(
-                  valueListenable: headerState,
-                  builder: (context, value, _) {
-                    return Header(
-                      weeksAgo: value,
-                      onArrow: ({required int delta}){
-                        if (pageController.hasClients) {
-                            pageController.animateToPage(
-                              pageController.page!.round() + delta, 
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                      },
-                    );
-                  },
-                ),
-                ValueListenableBuilder<Map<String, dynamic>>(
-                  valueListenable: chartState,
-                  builder: (context, chartData, _) {
-                    return CenterChart(
-                      pageController: pageController, 
-                      settings: chartData['settings'], 
-                      graphSections: chartData['sections'], 
-                      percentageComplete: chartData['percent'], 
-                      addWeeksAgo: (direction){
-                        weeksAgo += direction;
-                        updateHeader(weeksAgo);
-                        fetchNewData();
-                      },
-                    );
-                  },
-                ),
-                const Divider(),
-                Expanded(
-                  child: ValueListenableBuilder<Map<String, dynamic>>(
-                    valueListenable: listState,
-                    builder: (context, listData, _) {
-                      return ListThing(
-                        settings: listData['settings'] ?? {},
-                        data: listData['data'] ?? {}, 
-                        upDateSettings: upDateSettings
-                      );
-                    },
-                  ),
-                ),
-                ],
-              )
-            );
-          } else {
-            return const Center(child: Text('No data available'));
+    final allDataProvider = Provider.family<AsyncValue<Map<String, Map>>, int>((ref, weeksAgo) {
+      final workoutAsyncValue = ref.watch(workoutDataProvider);
+      settings = ref.watch(settingsProvider).value ?? {};
+
+      return workoutAsyncValue.whenData((data) {
+        DateTime now = DateTime.now();
+        DateTime date = now.subtract(Duration(days: weeksAgo * 7));
+        String weekStr = DateFormat('MMM dd').format(findMonday(date));
+        Map<String, dynamic> exerciseData = {};
+        for (String day in data.keys) {
+          if (DateFormat('MMM dd').format(findMonday(DateTime.parse(day.split(' ')[0]))) == weekStr){
+            for (String exercise in data[day]['sets'].keys){
+              exerciseData[exercise] = (exerciseData[exercise] ?? 0) + 1;
+            }
           }
-        },
-      );
+        }
+
+        List result = calculatePieSections(settings, exerciseData);
+        graphSections = result[0];
+        percentageComplete = result[1];
+
+        listState.value = {
+          'settings': settings,
+          'data': exerciseData,
+        };
+        updateChart({
+          'settings': settings,
+          'sections': graphSections,
+          'percent': percentageComplete,
+        });
+
+        graphSections = [];
+        percentageComplete = 0;
+        return {};
+      });
+    });
+    final allDataAsync = ref.watch(allDataProvider(weeksAgo));
+    return allDataAsync.when(
+      data: (data){
+        return Scaffold(
+          appBar: myAppBar(context, 'Exercise goals',
+          button: GestureDetector(
+            onTap: () {
+              addExerciseGoal(settings);
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Center(child: Icon(Icons.add)),
+            ),
+          )),
+          body: Column(
+            children: [
+              ValueListenableBuilder<int>(
+                valueListenable: headerState,
+                builder: (context, value, _) {
+                  return Header(
+                    weeksAgo: value,
+                    onArrow: ({required int delta}){
+                      if (pageController.hasClients) {
+                          pageController.animateToPage(
+                            pageController.page!.round() + delta, 
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                    },
+                  );
+                },
+              ),
+              ValueListenableBuilder<Map<String, dynamic>>(
+                valueListenable: chartState,
+                builder: (context, chartData, _) {
+                  return CenterChart(
+                    pageController: pageController, 
+                    settings: chartData['settings'], 
+                    graphSections: chartData['sections'], 
+                    percentageComplete: chartData['percent'], 
+                    addWeeksAgo: (direction){
+                      setState(() {
+                        weeksAgo += direction;
+                      });
+                      updateHeader(weeksAgo);
+                      // fetchNewData();
+                    },
+                  );
+                },
+              ),
+              const Divider(),
+              Expanded(
+                child: ValueListenableBuilder<Map<String, dynamic>>(
+                  valueListenable: listState,
+                  builder: (context, listData, _) {
+                    return ListThing(
+                      settings: listData['settings'] ?? {},
+                      data: listData['data'] ?? {}, 
+                      upDateSettings: upDateSettings
+                    );
+                  },
+                ),
+              ),
+              ],
+            )
+          );
+      },
+      error: (Object error, StackTrace stackTrace) => Text('Error fetching settings $error'), 
+      loading: () => CircularProgressIndicator()
+    );
   }
   void upDateSettings(Map settings){
     updateList({
@@ -219,7 +210,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
     });
   }
 
-  void addExerciseGoal(settings) async{
+  void addExerciseGoal(Map<String, dynamic> settings) async{
     List? result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const WorkoutList(setting: 'choose'))
@@ -227,7 +218,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
     if (result == null) return;
 
     String exercise = result[0];
-    int currentValue = 0;
+    int? currentValue = 0;
     showDialog(
       // ignore: use_build_context_synchronously
       context: context,
@@ -286,7 +277,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
               ),
               textAlign: TextAlign.center,
               onChanged: (value) {
-                currentValue = int.tryParse(value) ?? currentValue;
+                currentValue = int.tryParse(value);
               },
             ),
           ),
@@ -295,6 +286,7 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
             TextButton(
               child: const Center(child: Text('OK', style: TextStyle(color: Colors.blue),)),
               onPressed: () {
+                if (currentValue == null) return;
                 Navigator.of(context).pop(); // Dismiss the dialog
                 debugPrint('$exercise: $currentValue');
                 var generatedColor = Random().nextInt(Colors.primaries.length);
@@ -312,30 +304,13 @@ class _ExerciseGoalsState extends State<ExerciseGoals> {
                       'percent': results[1],    
                   });
                 });
-                writeData(settings, path: 'settings',append: false);
+                ref.read(settingsProvider.notifier).updateValue('Exercise Goals', settings['Exercise Goals']);
               },
             ),
           ],
         );
       }
     );
-      }
-  
-  Future<Map> getExerciseStuff(int weeksAgo) async {
-    DateTime now = DateTime.now();
-    DateTime date = now.subtract(Duration(days: weeksAgo * 7));
-    String weekStr = DateFormat('MMM dd').format(findMonday(date));
-    Map data = await readData();
-    Map<String, dynamic> exerciseData = {};
-    for (String day in data.keys){
-      if (DateFormat('MMM dd').format(findMonday(DateTime.parse(day.split(' ')[0]))) == weekStr){
-        for (String exercise in data[day]['sets'].keys){
-          exerciseData[exercise] = (exerciseData[exercise] ?? 0) + 1;
-        }
-      }
-    }
-
-    return exerciseData;
   }
 }
 
@@ -607,7 +582,7 @@ class ExerciseBox extends StatelessWidget {
                     height: 15,
                     width: 250,
                     child: LinearProgressIndicator(
-                      value: exercise.value / goal,
+                      value: exercise.value / (goal > 0 ? goal : 1),
                       minHeight: 5,
                       backgroundColor: color.withValues(alpha: .2),
                       valueColor: AlwaysStoppedAnimation<Color>(color),

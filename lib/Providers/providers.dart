@@ -2,7 +2,7 @@ import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsNotifier extends AsyncNotifier<Map> {
+class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
   @override
   Future<Map<String, dynamic>> build() async {
     return await getAllSettings();
@@ -13,17 +13,18 @@ class SettingsNotifier extends AsyncNotifier<Map> {
       ...state.value ?? {},
       key: value,
     });
+    writeKey(key, value, path: 'settings');
   }
   
   Future<void> saveSettings() async {
-    final Map<String, dynamic>? currentSettings = state.value as Map<String, dynamic>?;
+    final Map<String, dynamic>? currentSettings = state.value;
     if (currentSettings != null) {
       await writeData(currentSettings, path: 'settings');
     }
   }
 }
 
-final settingsProvider = AsyncNotifierProvider<SettingsNotifier, Map>(SettingsNotifier.new);
+final settingsProvider = AsyncNotifierProvider<SettingsNotifier, Map<String, dynamic>>(SettingsNotifier.new);
 
 class CustomExercisesNotifier extends AsyncNotifier<Map> {
   @override
@@ -121,13 +122,7 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
       ...state.value ?? {},
       key: value,
     });
-    state.whenData((data) async {
-      await writeData(
-        data,
-        path: 'records',
-        append: false,
-      );
-    });
+    writeKey(key, value, path: 'records');
   }
 
   int? bestSetIndex(List sets) {
