@@ -82,10 +82,10 @@ class MuscleTrackingState extends ConsumerState<MuscleTracking> {
 class FlexibleMuscleLayout extends StatefulWidget {
   final Map data;
   final Map normalData;
-  Map goals;
+  final Map goals;
   final Function(String, double) onGoalUpdate;
 
-  FlexibleMuscleLayout({super.key, required this.data, required this.normalData, required this.goals, required this.onGoalUpdate});
+  const FlexibleMuscleLayout({super.key, required this.data, required this.normalData, required this.goals, required this.onGoalUpdate});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -96,9 +96,7 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
   String? expandedMuscle;
 
   void reloadState(){
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -156,11 +154,11 @@ Map getMuscleSpecifics(Map data, String muscle) {
 class SetProgressTile extends StatelessWidget {
   final String muscle;
   final double value;
-  double goal;
+  final double goal;
   final VoidCallback onTap;
   final Function(String, double) onGoalUpdate;
 
-  SetProgressTile({
+  const SetProgressTile({
     super.key,
     required this.muscle,
     required this.value,
@@ -264,8 +262,6 @@ class SetProgressTile extends StatelessWidget {
                                   child: const Center(child: Text('OK', style: TextStyle(color: Colors.blue),)),
                                   onPressed: () {
                                     Navigator.of(context).pop(); // Dismiss the dialog
-                                    writeMuscleGoal(muscle, currentValue);
-                                    goal = currentValue;
                                     onGoalUpdate(muscle, currentValue);
                                   },
                                 ),
