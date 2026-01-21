@@ -94,7 +94,7 @@ Future<void> syncData({String? user, data = false, records = false, settings = f
   }
 }
 
-void restoreDataFromCloud() async{
+Future<bool?> restoreDataFromCloud() async{
   User? user = FirebaseAuth.instance.currentUser;
   if (user != null){
     String uuid = user.uid;
@@ -107,4 +107,5 @@ void restoreDataFromCloud() async{
       writeData(data['Records'], path: 'records');
     }
   }
+  return true;
 }

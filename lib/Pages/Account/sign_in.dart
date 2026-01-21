@@ -164,8 +164,9 @@ class SignInPageState extends ConsumerState<SignInPage> {
                               email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
-                            restoreDataFromCloud();
-                            ref.invalidate(workoutDataProvider);
+                            restoreDataFromCloud().then((_){
+                              ref.invalidate(workoutDataProvider);
+                            });
                             // toDO getUserPermissions();
                             if (!context.mounted) return;
                             Navigator.popUntil(context, (route) => route.isFirst);
