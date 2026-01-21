@@ -53,24 +53,58 @@ class CustomExercisesNotifier extends AsyncNotifier<Map> {
 final customExercisesProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map>(CustomExercisesNotifier.new);
 
 class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
+  int sessions = 0;
+  int streak = 0;
   @override
   Future<Map<String, dynamic>> build() async {
     ref.keepAlive();
-    return await readData();
+    final data = await readData();
+    setStats(data);
+    return data;
   }
-
   void updateValue(String key, dynamic value) {
-    state = AsyncData({
-      ...state.value ?? {},
-      key: value,
-    });
+    Map<String, dynamic> oldState = state.value ?? {};
+    bool isNewKey = !oldState.containsKey(key);
+
+    Map<String, dynamic> newState = {
+      ...oldState,
+      key: value
+    };
+
+    if (isNewKey) {
+      setStats(newState);
+    }
+    state = AsyncData(newState);
+    writeData(newState);
   }
 
   Future<void> deleteDay(String key) async {
     final stateVal = Map<String, dynamic>.from(state.value ?? {});
     stateVal.remove(key);
     state = AsyncData(stateVal);
+    setStats(state.value ?? {});
     deleteKey(key);
+  }
+
+  void setStats(Map<String, dynamic> data) async{
+    int tempStreak = 0;
+    List counted = [];
+    int week = weekNumber(DateTime.now());
+
+    for (final day in data.keys.toList().reversed) {
+      final weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
+      if (counted.contains(weekNum)) continue;
+      counted.add(weekNum);
+
+      if (week - weekNum <= 1) {
+        tempStreak++;
+        week = weekNum;
+      } else {
+        break;
+      }
+    }
+    sessions = data.keys.length;
+    streak = tempStreak;
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:exercise_app/Pages/SettingsPages/calendar_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
@@ -227,26 +228,20 @@ class _StreakRestRowState extends State<StreakRestRow> {
     var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList().last.split(' ')[0])).inDays;
     int streaks = 0;
     int week = weekNumber(DateTime.now());
-    for (var day in widget.exerciseData.keys.toList().reversed) {
-      debugPrint(day);
-      int weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
-      debugPrint('${week - weekNum}  $week  $weekNum');
-      if (week - weekNum == 1) {
+    List<int> counted = [];
+    for (final day in widget.exerciseData.keys.toList().reversed) { // todo move streaks to the provider
+      final weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
+      if (counted.contains(weekNum)) continue;
+      counted.add(weekNum);
+
+      if (week - weekNum <= 1) {
         streaks++;
         week = weekNum;
-      } else if (week - weekNum == 0){
-        continue;
-      }else {
+      } else {
         break;
       }
     }
     return [streaks, rest];
-  }
-
-  int weekNumber(DateTime date) {
-    int dayOfYear = int.parse(DateFormat("D").format(date));
-    int weekNumber = ((dayOfYear - date.weekday + 10) / 7).floor();
-    return weekNumber;
   }
 
   @override

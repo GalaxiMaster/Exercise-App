@@ -7,6 +7,7 @@ import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Pages/StatScreens/stats.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,9 +26,12 @@ class _ProfileState extends ConsumerState<Profile> {
   num? selectedBarValue; // TODO set to what it actually is
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
+  late User? account;
+
   @override
   void initState() {
     super.initState();
+    account = FirebaseAuth.instance.currentUser;
   }
 
   void alterHeadingBar(double value, String week){
@@ -70,6 +74,10 @@ class _ProfileState extends ConsumerState<Profile> {
       },
     );
   });
+  
+  final TextStyle quickStatStyle = TextStyle(
+    fontSize: 16
+  );
   @override
   Widget build(BuildContext context) {
     List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
@@ -102,140 +110,229 @@ class _ProfileState extends ConsumerState<Profile> {
           },
         ),
       ),
-      body: allDataAsync.when(
-        data: (rData){
-          final Map settings = ref.watch(settingsProvider).value ?? {};
-          final Map? data = rData[graphSelector]; // Extract data
-            final goal = double.tryParse(settings['Day Goal'].toString()) ?? 1.0; // Extract goal
-            selectedBarValue ??= numParsething(data?.values.toList().last ?? 0);
-            if (prevSelector != graphSelector){
-              prevSelector = graphSelector;
-              selectedBarValue = numParsething(data?.values.toList().last ?? 0);
-              selectedBarWeekDistance = 'This week';
-            }
-            return Column(
+      body: Column(
+        children: [
+          if (account != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                 CircleAvatar(
+                  radius: 35,
+                  foregroundImage: account!.photoURL != null 
+                    ? NetworkImage(account!.photoURL!) 
+                    : null,
+                  backgroundColor: Colors.blue[700],
+                  child: Text(
+                    (account!.email?.substring(0, 1).toUpperCase() ?? 'U'),
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 5,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '$selectedBarValue $unit',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          account!.displayName ?? '',
+                          style: TextStyle(
+                            fontSize: 20
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Text(
-                              selectedBarWeekDistance,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ]
+                        ),
                       ),
-                      const Row(
+                      Row(
+                        spacing: 10,
                         children: [
-                          Text(
-                            'Last 8 weeks',
-                            style: TextStyle(
-                              color: Colors.blue,
+                          RichText(
+                            text: TextSpan(
+                              style: quickStatStyle,
+                              children: [
+                                TextSpan(
+                                  text: ref.watch(workoutDataProvider.notifier).sessions.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold
+                                  )
+                                ),
+                                TextSpan(
+                                  text: ' Sessions',
+                                  style: TextStyle(
+                                    fontSize: 14
+                                  )
+                                )
+                              ]
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                          RichText(
+                            text: TextSpan(
+                              style: quickStatStyle,
+                              children: [
+                                TextSpan(
+                                  text: ref.watch(workoutDataProvider.notifier).streak.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold
+                                  )
+                                ),
+                                TextSpan(
+                                  text: ' Week Streak',
+                                  style: TextStyle(
+                                    fontSize: 13
+                                  )
+                                )
+                              ]
+                            ),
+                          )
                         ],
                       )
                     ],
                   ),
-                ),
-                DataBarChart(data: data ?? {}, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      selectorBox('Sessions', graphSelector == 'sessions'),
-                      selectorBox('Duration', graphSelector == 'duration'),
-                      selectorBox('Sets', graphSelector == 'sets'),
-                      selectorBox('Volume', graphSelector == 'volume'),
-                      selectorBox('Weight', graphSelector == 'weight'),
-                      selectorBox('Reps', graphSelector == 'reps'),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 3.2, // Adjust to fit your needs
-                    ),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero, // Remove padding around the GridView
-                    physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Widget destination;
-                          if (index == 0) {
-                            destination = CalenderScreen();
-                          } else if (index == 1) {
-                            destination = const WorkoutList(setting: 'info',);
-                          } else if (index == 2) {
-                            destination = const MuscleData();
-                          } else {
-                            destination = const Stats();
-                          }
-                  
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => destination)
-                          );
-                        },
-                        child: Center(
-                          child: Container(
-                            width: 190,
-                            padding: const EdgeInsets.all(8.0),
-                            margin: EdgeInsets.zero,
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent.withValues(alpha: 0.9),
-                              border: Border.all(
-                                // color: Colors.blueAccent.withOpacity(0.6),
-                                width: 2.0,
+                )
+              ],
+            ),
+          ),
+          allDataAsync.when(
+            data: (rData){
+              final Map settings = ref.watch(settingsProvider).value ?? {};
+              final Map? data = rData[graphSelector]; // Extract data
+                final goal = double.tryParse(settings['Day Goal'].toString()) ?? 1.0; // Extract goal
+                selectedBarValue ??= numParsething(data?.values.toList().last ?? 0);
+                if (prevSelector != graphSelector){
+                  prevSelector = graphSelector;
+                  selectedBarValue = numParsething(data?.values.toList().last ?? 0);
+                  selectedBarWeekDistance = 'This week';
+                }
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '$selectedBarValue $unit',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  messages[index],
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  selectedBarWeekDistance,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ]
                           ),
+                          const Row(
+                            children: [
+                              Text(
+                                'Last 8 weeks',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    DataBarChart(data: data ?? {}, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          selectorBox('Sessions', graphSelector == 'sessions'),
+                          selectorBox('Duration', graphSelector == 'duration'),
+                          selectorBox('Sets', graphSelector == 'sets'),
+                          selectorBox('Volume', graphSelector == 'volume'),
+                          selectorBox('Weight', graphSelector == 'weight'),
+                          selectorBox('Reps', graphSelector == 'reps'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 3.2, // Adjust to fit your needs
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-        }, 
-        error: (error, stack) => Text('Error fetching data $error'), 
-        loading: () => CircularProgressIndicator()
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero, // Remove padding around the GridView
+                        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Widget destination;
+                              if (index == 0) {
+                                destination = CalenderScreen();
+                              } else if (index == 1) {
+                                destination = const WorkoutList(setting: 'info',);
+                              } else if (index == 2) {
+                                destination = const MuscleData();
+                              } else {
+                                destination = const Stats();
+                              }
+                      
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => destination)
+                              );
+                            },
+                            child: Center(
+                              child: Container(
+                                width: 190,
+                                padding: const EdgeInsets.all(8.0),
+                                margin: EdgeInsets.zero,
+                                decoration: BoxDecoration(
+                                  color: Colors.blueAccent.withValues(alpha: 0.9),
+                                  border: Border.all(
+                                    // color: Colors.blueAccent.withOpacity(0.6),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      messages[index],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+            }, 
+            error: (error, stack) => Text('Error fetching data $error'), 
+            loading: () => CircularProgressIndicator()
+          ),
+        ],
       )
     );
   }

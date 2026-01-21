@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:intl/intl.dart';
+
 extension ColorExtension on Color {
   int get redVal   => (r * 255).round().clamp(0, 255);
   int get greenVal => (g * 255).round().clamp(0, 255);
@@ -47,4 +49,10 @@ Lift? liftFromSet(Map set) {
 bool isBetter(Lift a, Lift b) {
   if (a.weight != b.weight) return a.weight > b.weight;
   return a.reps > b.reps;
+}
+
+int weekNumber(DateTime date) {
+  int dayOfYear = int.parse(DateFormat("D").format(date));
+  int weekNumber = (dayOfYear - date.weekday + 10) ~/ 7;
+  return weekNumber;
 }
