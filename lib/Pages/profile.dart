@@ -6,6 +6,7 @@ import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Pages/StatScreens/stats.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -80,7 +81,17 @@ class _ProfileState extends ConsumerState<Profile> {
   );
   @override
   Widget build(BuildContext context) {
-    List<String> messages = ['Calender', 'Exercises', 'Muscles', 'Stats'];
+    List<ButtonDetails> buttonDetails = [
+      ButtonDetails(
+        title: 'Calendar', icon: Icons.calendar_month, destination: const CalenderScreen()),
+      ButtonDetails(
+        title: 'Exercises', icon: Icons.sports_gymnastics, destination: const WorkoutList(setting: 'info',)),
+      ButtonDetails(
+        title: 'Muscles', icon: Icons.fitness_center, destination: const MuscleData()),
+      ButtonDetails(
+        title: 'Stats', icon: Icons.bar_chart, destination: const Stats()),
+    ];
+
     switch (graphSelector){
       case 'sessions': unit = 'days';
       case 'duration': unit = 'h';
@@ -267,63 +278,60 @@ class _ProfileState extends ConsumerState<Profile> {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 3.2, // Adjust to fit your needs
-                        ),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero, // Remove padding around the GridView
-                        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                        itemCount: 4,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Widget destination;
-                              if (index == 0) {
-                                destination = CalenderScreen();
-                              } else if (index == 1) {
-                                destination = const WorkoutList(setting: 'info',);
-                              } else if (index == 2) {
-                                destination = const MuscleData();
-                              } else {
-                                destination = const Stats();
-                              }
-                      
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => destination)
-                              );
-                            },
-                            child: Center(
-                              child: Container(
-                                width: 190,
-                                padding: const EdgeInsets.all(8.0),
-                                margin: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  color: Colors.blueAccent.withValues(alpha: 0.9),
-                                  border: Border.all(
-                                    // color: Colors.blueAccent.withOpacity(0.6),
-                                    width: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.5),
+                        child: GridView.builder(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 3.5, // Adjust to fit your needs
+                          ),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero, // Remove padding around the GridView
+                          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            ButtonDetails button = buttonDetails[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => button.destination)
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    // color: Colors.blueAccent.withValues(alpha: 0.8),
+                                    color: Color.fromARGB(255, 21, 21, 21),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      messages[index],
-                                      style: const TextStyle(
-                                        fontSize: 20,
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    spacing: 10,
+                                    children: [
+                                      SizedBox(width: 15),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Icon(button.icon),
                                       ),
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            button.title,
+                                            style: const TextStyle(fontSize: 20),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.5),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -559,64 +567,64 @@ class DataBarChart extends StatelessWidget {
     );
   }
 }
-  Map getWeekData(Map data, Map weeks){
-    // Process data
-    for (var day in data.keys) {
-      DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
-      String formattedDate = DateFormat('yyyy MMM dd').format(monday);
+Map getWeekData(Map data, Map weeks){
+  // Process data
+  for (var day in data.keys) {
+    DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
+    String formattedDate = DateFormat('yyyy MMM dd').format(monday);
 
-      // Only process if the Monday is within the last 8 weeks
-      if (weeks.keys.contains(formattedDate)) {
-        weeks[formattedDate] = (weeks[formattedDate] ?? 0) + 1;
-      }
+    // Only process if the Monday is within the last 8 weeks
+    if (weeks.keys.contains(formattedDate)) {
+      weeks[formattedDate] = (weeks[formattedDate] ?? 0) + 1;
     }
-
-    return Map.fromEntries(weeks.entries.toList().reversed);
   }
 
-  DateTime findMonday(DateTime date) {
-    int daysToSubtract = (date.weekday - DateTime.monday) % 7;
-    return date.subtract(Duration(days: daysToSubtract));
-  }
+  return Map.fromEntries(weeks.entries.toList().reversed);
+}
 
-  Map getWeightAndStufftData(Map data, Map weeks, String selector){
-    for (var day in data.keys) {
-      DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
-      String formattedDate = DateFormat('yyyy MMM dd').format(monday);
-      // Only process if the Monday is within the last 8 weeks
-      if (weeks.keys.contains(formattedDate)) {
-        double dayWeight = 0;
-        for (String exercise in data[day]['sets'].keys){
-          for (Map set in data[day]['sets'][exercise]){
-            if (selector == 'volume'){
-              dayWeight += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
-            }else if (selector == 'sets'){
-              dayWeight++;
-            } else{
-              dayWeight += double.parse(set[selector].toString());
-            }
+DateTime findMonday(DateTime date) {
+  int daysToSubtract = (date.weekday - DateTime.monday) % 7;
+  return date.subtract(Duration(days: daysToSubtract));
+}
+
+Map getWeightAndStufftData(Map data, Map weeks, String selector){
+  for (var day in data.keys) {
+    DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
+    String formattedDate = DateFormat('yyyy MMM dd').format(monday);
+    // Only process if the Monday is within the last 8 weeks
+    if (weeks.keys.contains(formattedDate)) {
+      double dayWeight = 0;
+      for (String exercise in data[day]['sets'].keys){
+        for (Map set in data[day]['sets'][exercise]){
+          if (selector == 'volume'){
+            dayWeight += (double.parse(set['weight'].toString()) * double.parse(set['reps'].toString()));
+          }else if (selector == 'sets'){
+            dayWeight++;
+          } else{
+            dayWeight += double.parse(set[selector].toString());
           }
         }
-        weeks[formattedDate] = (weeks[formattedDate] ?? 0) + double.parse(dayWeight.toStringAsFixed(2));
       }
-
-    }
-    return Map.fromEntries(weeks.entries.toList().reversed);
-  }
-
-    Map getDurationData(Map data, Map weeks){
-    // Process data
-    for (var day in data.keys) {
-      DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
-      String formattedDate = DateFormat('yyyy MMM dd').format(monday);
-
-      // Only process if the Monday is within the last 8 weeks
-      if (weeks.keys.contains(formattedDate)) {
-        Duration difference = DateTime.parse(data[day]['stats']['endTime']).difference(DateTime.parse(data[day]['stats']['startTime'])); // Calculate the difference
-        double hours = difference.inMinutes.toDouble() / 60;
-        weeks[formattedDate] = (weeks[formattedDate] ?? 0) + hours;
-      }
+      weeks[formattedDate] = (weeks[formattedDate] ?? 0) + double.parse(dayWeight.toStringAsFixed(2));
     }
 
-    return Map.fromEntries(weeks.entries.toList().reversed);
   }
+  return Map.fromEntries(weeks.entries.toList().reversed);
+}
+
+  Map getDurationData(Map data, Map weeks){
+  // Process data
+  for (var day in data.keys) {
+    DateTime monday = findMonday(DateTime.parse(day.split(' ')[0])); // Get the Monday of that week
+    String formattedDate = DateFormat('yyyy MMM dd').format(monday);
+
+    // Only process if the Monday is within the last 8 weeks
+    if (weeks.keys.contains(formattedDate)) {
+      Duration difference = DateTime.parse(data[day]['stats']['endTime']).difference(DateTime.parse(data[day]['stats']['startTime'])); // Calculate the difference
+      double hours = difference.inMinutes.toDouble() / 60;
+      weeks[formattedDate] = (weeks[formattedDate] ?? 0) + hours;
+    }
+  }
+
+  return Map.fromEntries(weeks.entries.toList().reversed);
+}

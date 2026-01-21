@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension ColorExtension on Color {
@@ -55,4 +56,16 @@ int weekNumber(DateTime date) {
   int dayOfYear = int.parse(DateFormat("D").format(date));
   int weekNumber = (dayOfYear - date.weekday + 10) ~/ 7;
   return weekNumber;
+}
+
+class ButtonDetails {
+  final String title;
+  final IconData icon;
+  final Widget destination;
+
+  ButtonDetails({
+    required this.title,
+    required this.icon,
+    required this.destination,
+  });
 }
