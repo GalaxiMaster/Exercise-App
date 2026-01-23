@@ -10,27 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
 
-
-class Options {
-  Map<String, int> timeOptions = {
-    'Past Week': 7,
-    'Past 4 weeks': 28,
-    'Past 8 weeks': 56,
-    'Past 3 months': 90,
-    'Past 6 months': 180,
-    'Past year': 365,
-    'All time': -1,
-  };
-  Map<String, String> muscleOptions = {
-    'Chest': 'Chest',
-    'Back': 'Back',
-    'Legs': 'Legs',
-    'Core': 'Core',
-    'Shoulders': 'Shoulders',
-    'All Muscles': 'All Muscles',
-  };
-}
-
 Future<Map<String, dynamic>> readData({String path = 'output'}) async {
   final box = await Hive.openBox(path);
   return Map<String, dynamic>.from(box.toMap());

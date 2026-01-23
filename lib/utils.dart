@@ -1,7 +1,26 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+class Options {
+  Map<String, int> timeOptions = {
+    'Past Week': 7,
+    'Past Month': 30,
+    'Past 8 weeks': 56,
+    'Past 3 months': 90,
+    'Past 6 months': 180,
+    'Past year': 365,
+    'All time': -1,
+  };
+  Map<String, String> muscleOptions = {
+    'Chest': 'Chest',
+    'Back': 'Back',
+    'Legs': 'Legs',
+    'Core': 'Core',
+    'Shoulders': 'Shoulders',
+    'All Muscles': 'All Muscles',
+  };
+}
+
 
 extension ColorExtension on Color {
   int get redVal   => (r * 255).round().clamp(0, 255);

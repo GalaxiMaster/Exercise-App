@@ -5,7 +5,6 @@ import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';

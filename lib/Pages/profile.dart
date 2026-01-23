@@ -87,7 +87,7 @@ class _ProfileState extends ConsumerState<Profile> {
       ButtonDetails(
         title: 'Exercises', icon: Icons.sports_gymnastics, destination: const WorkoutList(setting: 'info',)),
       ButtonDetails(
-        title: 'Muscles', icon: Icons.fitness_center, destination: const MuscleData()),
+        title: 'Muscles', icon: Icons.fitness_center, destination: MuscleData()),
       ButtonDetails(
         title: 'Stats', icon: Icons.bar_chart, destination: const Stats()),
     ];
@@ -279,7 +279,7 @@ class _ProfileState extends ConsumerState<Profile> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.5),
+                        padding: const EdgeInsets.symmetric(horizontal: 2.5),
                         child: GridView.builder(
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
