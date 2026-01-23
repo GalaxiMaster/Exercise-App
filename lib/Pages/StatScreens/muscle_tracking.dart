@@ -11,8 +11,7 @@ import 'dart:math' as math;
 import 'package:intl/intl.dart';
 
 class MuscleTracking extends ConsumerStatefulWidget {
-  final Map setData;
-  const MuscleTracking({super.key, required this.setData});
+  const MuscleTracking({super.key});
 
   @override
   MuscleTrackingState createState() => MuscleTrackingState();
