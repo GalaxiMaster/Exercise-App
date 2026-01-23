@@ -1,6 +1,6 @@
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,8 @@ class _RadarChartPageState extends ConsumerState<RadarChartPage> {
     String timeSelection = 'All time';
 
     Future<void> reloadData(int range) async {
-      sets = (await getPercentageData('Sets', range, ref))[0];
+      final workoutData = ref.watch(workoutDataProvider).value ?? {};
+      sets = (getPercentageData(workoutData, 'Sets', range, ref))[0];
       setState(() {
         data = [];
         for (String group in muscleGroups.keys){
@@ -276,10 +277,9 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   }
 }
 
-  Future<List<Map>> getPercentageData(String target, int range, WidgetRef ref, {String? targetMuscleGroup}) async {
-    Map muscleData = {};
-    Map data = await readData();
-    final Map customExercisesData = await ref.read(customExercisesProvider.future);
+  List<Map<String, double>> getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
+    Map<String, double> muscleData = {};
+    final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
     for (var day in data.keys){
       Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
@@ -315,11 +315,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
               case 'Sets' : selector = 1;
             }
             for (var muscle in musclesInExercise.keys){
-              if (muscleData.containsKey(muscle)){
-                muscleData[muscle] += selector*(musclesInExercise[muscle]/100);
-              } else{
-                muscleData[muscle] = selector*(musclesInExercise[muscle]/100);
-              }
+              muscleData[muscle] = (muscleData[muscle] ?? 0) + selector*(musclesInExercise[muscle]/100);
             }
           }
         }
@@ -331,11 +327,11 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
     // Scale results to 100
     double total = muscleData.values.fold(0.0, (p, c) => p + c);
     debugPrint(total.toString());
-    Map scaledMuscleData = {};
+    Map<String, double> scaledMuscleData = {};
     for (String muscle in muscleData.keys){
-      scaledMuscleData[muscle] = ((muscleData[muscle] / total * 100.0) * 100).roundToDouble() / 100;
+      scaledMuscleData[muscle] = ((muscleData[muscle]! / total * 100.0) * 100).roundToDouble() / 100;
     }
-    List<MapEntry> entries = muscleData.entries.toList();
+    List<MapEntry<String, double>> entries = muscleData.entries.toList();
     entries.sort((a, b) => a.value.compareTo(b.value));
     muscleData = Map.fromEntries(entries);
     debugPrint(muscleData.toString());

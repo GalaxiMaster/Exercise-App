@@ -52,7 +52,7 @@ class ChartData {
   final double value;
 }
 
-Future<Map<String, List<ChartData>>> setupData(
+Future<Map<String, List<ChartData>>> setupData( // Todo remove and merge with data fetching on the homepage
   WidgetRef ref, {
   String target = 'Sets',
   int range = -1,
