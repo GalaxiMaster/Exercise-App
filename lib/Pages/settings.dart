@@ -3,18 +3,20 @@ import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/Pages/SettingsPages/workout_settings.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends ConsumerWidget {
   const Settings({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: myAppBar(context, 'Settings'),
       body: FutureBuilder(
@@ -159,7 +161,7 @@ Future<String> getBodyweight() async {
       );
 }
 
-class GoalOptions extends StatefulWidget {
+class GoalOptions extends ConsumerStatefulWidget {
   const GoalOptions({super.key});
 
   @override
@@ -167,7 +169,7 @@ class GoalOptions extends StatefulWidget {
   _GoalOptionsState createState() => _GoalOptionsState();
 }
 
-class _GoalOptionsState extends State<GoalOptions> {
+class _GoalOptionsState extends ConsumerState<GoalOptions> {
   int _selectedIndex = 1; // Default selection
   final List<String> _options = List.generate(7, (index) => '${index + 1}');
   late FixedExtentScrollController _scrollController;
@@ -255,7 +257,7 @@ class _GoalOptionsState extends State<GoalOptions> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              updateSettings('Day Goal', _options[_selectedIndex]);
+              ref.read(settingsProvider.notifier).updateValue('Day Goal', _options[_selectedIndex]);
             },
             child: const Text('Done'),
           ),
@@ -290,13 +292,6 @@ void resetDataButton(BuildContext context){
       );
     }
   );
-}
-
-void updateSettings(String option, String value) async{
-  Map<String, dynamic> data = await readData(path: 'settings');
-  data[option] = value;
-  debugPrint(data.toString());
-  writeData(data, path: 'settings', append: false);
 }
 
 void moveExercises(BuildContext context) async{ // TODO Add move records too?
@@ -354,14 +349,12 @@ void moveExercises(BuildContext context) async{ // TODO Add move records too?
   writeData(newData);
 }
 
-class MeasurementPopup extends StatelessWidget{
+class MeasurementPopup extends ConsumerWidget{
   final String initialMeasurement;
   const MeasurementPopup({super.key, required this.initialMeasurement});
 
-
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -396,7 +389,7 @@ class MeasurementPopup extends StatelessWidget{
                       ),
                     ),
                     onChanged: (value){
-                      updateSettings('Bodyweight', value);
+                      ref.read(settingsProvider.notifier).updateValue('Bodyweight', value);
                     },
                   ),
                 ),
