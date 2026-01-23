@@ -22,6 +22,20 @@ class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
       await writeData(currentSettings, path: 'settings');
     }
   }
+
+  void updateMuscleGoal(String muscle, double newGoal) {
+    final currentSettings = state.value ?? {};
+    final muscleGoals = Map<String, dynamic>.from(currentSettings['Muscle Goals'] ?? {});
+    muscleGoals[muscle] = newGoal;
+
+    final updatedSettings = {
+      ...currentSettings,
+      'Muscle Goals': muscleGoals,
+    };
+
+    state = AsyncData(updatedSettings);
+    writeKey('Muscle Goals', muscleGoals, path: 'settings');
+  }
 }
 
 final settingsProvider = AsyncNotifierProvider<SettingsNotifier, Map<String, dynamic>>(SettingsNotifier.new);
