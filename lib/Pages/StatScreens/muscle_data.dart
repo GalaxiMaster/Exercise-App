@@ -4,98 +4,109 @@ import 'package:exercise_app/Pages/StatScreens/main_exercises.dart';
 import 'package:exercise_app/Pages/StatScreens/muscle_tracking.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/StatScreens/strength_gradient.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-class MuscleData extends ConsumerWidget {
+class MuscleData extends ConsumerStatefulWidget {
   const MuscleData({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  // ignore: library_private_types_in_public_api
+  _MuscleDataState createState() => _MuscleDataState();
+}
+
+class _MuscleDataState extends ConsumerState<MuscleData> {
+
+
+  final allDataProvider = Provider<AsyncValue<List<Map>>>((ref) {
+
+    final workoutAsyncValue = ref.watch(workoutDataProvider);
+
+    return workoutAsyncValue.whenData((data){
+        return getPercentageData(data, 'Sets', 30, ref);
+      },
+    );
+  });
+  @override
+  Widget build(BuildContext context) {
     double radius = 125;
 
+    final dataProvider = ref.watch(allDataProvider);
     return Scaffold(
       appBar: myAppBar(context, 'Muscle data'),
-      body: FutureBuilder<List>(
-        future: getPercentageData('Sets', 30, ref),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading data ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final Map<String, double> scaledMuscleData = Map<String, double>.from(snapshot.data![0]);
-            final Map<String, double> unscaledMuscleData = Map<String, double>.from(snapshot.data![1]);
+      body: dataProvider.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error loading data $err')),
+        data: (data) {
+          final Map<String, double> scaledMuscleData = Map<String, double>.from(data[0]);
+          final Map<String, double> unscaledMuscleData = Map<String, double>.from(data[1]);
 
-            List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
-              return PieChartSectionData(
-                color: getColor(entry.key),
-                value: entry.value,
-                title: entry.value > 7.5 ? '${entry.key}\n${entry.value}%' : '',
-                radius: radius,
-                titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-              );
-            }).toList();
-
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 270,
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DataCharts(),
-                          ),
-                        );
-                      },
-                      child: PieChart(
-                        PieChartData(
-                          sections: sections,
-                          centerSpaceRadius: 10,
-                          sectionsSpace: 2,
-                          startDegreeOffset: -87,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 40,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainer,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      child: Text(
-                        'Fancy stats',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
-                  box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, const MainExercisesPage()),
-                  box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking(setData: unscaledMuscleData,)),
-                  box('trophy', 'Exercise goals', "Set goals per exercise per week", context, const ExerciseGoals()),
-                  box('chart', 'Strength Gradient', "See your strength over a period", context, const StrengthGradiant()),
-                ],
-              ),
+          List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
+            return PieChartSectionData(
+              color: getColor(entry.key),
+              value: entry.value,
+              title: entry.value > 7.5 ? '${entry.key}\n${entry.value}%' : '',
+              radius: radius,
+              titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
             );
-          } else {
-            return const Center(child: Text('No data available'));
-          }
-        },
-      ),
+          }).toList();
+
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 270,
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DataCharts(),
+                        ),
+                      );
+                    },
+                    child: PieChart(
+                      PieChartData(
+                        sections: sections,
+                        centerSpaceRadius: 10,
+                        sectionsSpace: 2,
+                        startDegreeOffset: -87,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  height: 40,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Text(
+                      'Fancy stats',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
+                box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, const MainExercisesPage()),
+                box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking(setData: unscaledMuscleData,)),
+                box('trophy', 'Exercise goals', "Set goals per exercise per week", context, const ExerciseGoals()),
+                box('chart', 'Strength Gradient', "See your strength over a period", context, const StrengthGradiant()),
+              ],
+            ),
+          );
+        }
+      )
     );
   }
 
