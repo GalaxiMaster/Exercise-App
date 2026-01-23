@@ -129,7 +129,7 @@ class _DataChartsState extends ConsumerState<DataCharts> {
               const Divider(thickness: 1, color: Colors.grey, height: 1),
               Expanded(
                 child: ListView.builder(
-                  itemCount: data.keys.length,
+                  itemCount: data.keys!.length,
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
@@ -142,12 +142,12 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                                 height: 12.5,
                                 margin: const EdgeInsets.only(right: 8),
                                 decoration: BoxDecoration(
-                                  color: getColor(data.keys[index]),
+                                  color: getColor(data.keys![index]),
                                   border: Border.all(color: Colors.black),
                                 ),
                               ),
                               Text(
-                                '${data.keys[index]} : ',
+                                '${data.keys![index]} : ',
                                 style: const TextStyle(fontSize: 20),
                               ),
                               const Spacer(),
@@ -191,7 +191,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
     );
 
     final Map<String, double> scaledData = percentageData[0];
-    final Map<String, double> unscaledData = (percentageData[1]);
+    final Map<String, double> unscaledData = percentageData[1];
     
     final List<String> keys = scaledData.keys.toList().reversed.toList();
     final List<double> scaledValues = scaledData.values.toList().reversed.toList();
@@ -222,13 +222,13 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
 });
 class ChartDataViewModel {
   final List<PieChartSectionData> sections;
-  final List<String> keys;
+  final List<String>? keys;
   final List<double> scaledValues;
   final List<double> unscaledValues;
 
   ChartDataViewModel({
     required this.sections,
-    required this.keys,
+    this.keys,
     required this.scaledValues,
     required this.unscaledValues,
   });

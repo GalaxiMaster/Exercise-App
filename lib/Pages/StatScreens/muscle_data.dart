@@ -11,48 +11,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-class MuscleData extends ConsumerStatefulWidget {
+class MuscleData extends ConsumerWidget {
   const MuscleData({super.key});
+
   @override
-  // ignore: library_private_types_in_public_api
-  _MuscleDataState createState() => _MuscleDataState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _MuscleDataState extends ConsumerState<MuscleData> {
-
-
-  final allDataProvider = Provider<AsyncValue<List<Map>>>((ref) {
-
-    final workoutAsyncValue = ref.watch(workoutDataProvider);
-
-    return workoutAsyncValue.whenData((data){
-        return getPercentageData(data, 'Sets', 30, ref);
-      },
-    );
-  });
-  @override
-  Widget build(BuildContext context) {
-    double radius = 125;
-
-    final dataProvider = ref.watch(allDataProvider);
+    final dataProvider = ref.watch(chartDataProvider);
     return Scaffold(
       appBar: myAppBar(context, 'Muscle data'),
       body: dataProvider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (data) {
-          final Map<String, double> scaledMuscleData = Map<String, double>.from(data[0]);
-          final Map<String, double> unscaledMuscleData = Map<String, double>.from(data[1]);
-
-          List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
-            return PieChartSectionData(
-              color: getColor(entry.key),
-              value: entry.value,
-              title: entry.value > 7.5 ? '${entry.key}\n${entry.value}%' : '',
-              radius: radius,
-              titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-            );
-          }).toList();
 
           return SingleChildScrollView(
             child: Column(
@@ -72,7 +43,7 @@ class _MuscleDataState extends ConsumerState<MuscleData> {
                     },
                     child: PieChart(
                       PieChartData(
-                        sections: sections,
+                        sections: data.sections,
                         centerSpaceRadius: 10,
                         sectionsSpace: 2,
                         startDegreeOffset: -87,
@@ -97,9 +68,9 @@ class _MuscleDataState extends ConsumerState<MuscleData> {
                     ),
                   ),
                 ),
-                box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage(sets: unscaledMuscleData)),
+                box('radar-chart', 'Radar chart', 'Look at your data in a radar chart', context, RadarChartPage()),
                 box('dumbbell', 'Main exercises', 'See what exercises you do the most', context, const MainExercisesPage()),
-                box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking(setData: unscaledMuscleData,)),
+                box('flexing', 'Muscle tracking', "See how many sets you've done for each muscle group", context, MuscleTracking()),
                 box('trophy', 'Exercise goals', "Set goals per exercise per week", context, const ExerciseGoals()),
                 box('chart', 'Strength Gradient', "See your strength over a period", context, const StrengthGradiant()),
               ],
@@ -171,3 +142,28 @@ class _MuscleDataState extends ConsumerState<MuscleData> {
 }
 
 
+final chartDataProvider = Provider<AsyncValue<ChartDataViewModel>>((ref) {
+  final workoutAsyncValue = ref.watch(workoutDataProvider);
+
+  return workoutAsyncValue.whenData((data){
+      final List percentageData = getPercentageData(data, 'Sets', 30, ref);
+      final Map<String, double> scaledMuscleData = Map<String, double>.from(percentageData[0]);
+      final Map<String, double> unscaledMuscleData = Map<String, double>.from(percentageData[1]);
+
+      List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
+        return PieChartSectionData(
+          color: getColor(entry.key),
+          value: entry.value,
+          title: entry.value > 7.5 ? '${entry.key}\n${entry.value}%' : '',
+          radius: 125,
+          titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+        );
+      }).toList();
+      return ChartDataViewModel(
+        sections: sections,
+        scaledValues: scaledMuscleData.values.toList().reversed.toList(),
+        unscaledValues: unscaledMuscleData.values.toList().reversed.toList(),
+      );
+    },
+  );
+});
