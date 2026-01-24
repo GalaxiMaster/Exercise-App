@@ -50,8 +50,10 @@ class SignInPageState extends ConsumerState<SignInPage> {
               if (isNew) {
                 // TODO createDefaultPermissions(userCredential);
               }
-              restoreDataFromCloud();
-              ref.invalidate(workoutDataProvider);
+              restoreDataFromCloud().then((_){
+                ref.invalidate(workoutDataProvider);
+              });
+              
               if (mounted) {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }

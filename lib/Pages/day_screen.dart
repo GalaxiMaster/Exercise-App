@@ -106,10 +106,15 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                           final result = await Navigator.push(
                             context, 
                             MaterialPageRoute(
-                              builder: (context) => Addworkout(sets: day, editing: true),
+                              builder: (context) => Addworkout(sets: day.value, editing: true),
                             ),
                           );
-                          ref.read(workoutDataProvider.notifier).updateValue(day.key, result);
+                          if (result != null) {
+                            ref.read(workoutDataProvider.notifier).updateValue(day.key, {
+                              ...day.value,
+                              'sets': result
+                            });
+                          }
                         case 'Share':
                           debugPrint('share');
                           // share day
