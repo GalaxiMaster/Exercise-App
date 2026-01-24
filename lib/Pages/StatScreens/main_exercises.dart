@@ -1,242 +1,255 @@
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-// ignore: must_be_immutable
-class MainExercisesPage extends StatefulWidget {
+class MainExercisesPage extends ConsumerStatefulWidget {
   const MainExercisesPage({super.key});
+  
   @override
-  // ignore: library_private_types_in_public_api
-  _MainExercisesPageState createState() => _MainExercisesPageState();
+  ConsumerState<MainExercisesPage> createState() => _MainExercisesPageState();
 }
 
-class _MainExercisesPageState extends State<MainExercisesPage> {
+class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
   bool multiSelect = false;
   List<String> selectedItems = [];
-  late Map exerciseData;
-  bool isLoading = true;
-  Map<String, bool> assetExists = {}; // cache for asset existence
 
-
-  String timeSelected = 'All Time';
-  int range = -1;
-  String muscleSelected = 'All Muscles';
-
-  @override
-  void initState() {
-    super.initState();
-    setExerciseData(); // Load data once
-  }
-
-void setExerciseData() async {
-  final data = await getExercises(range, muscleSelected);
-  // Build a cache of which exercises have local png assets to avoid per-row async checks
-  final exercises = data.keys.toList();
-  final futures = exercises.map((e) => fileExists("assets/Exercises/$e.png")).toList();
-  final results = await Future.wait(futures);
-  for (int i = 0; i < exercises.length; i++) {
-    assetExists[exercises[i]] = results[i];
-    if (results[i] && mounted) {
-      precacheImage(AssetImage("assets/Exercises/${exercises[i]}.png"), context);
-    }
-  }
-
-  setState(() {
-    exerciseData = data; // Store the fetched data
-    isLoading = false;   // Mark loading as complete
-  });
-}
   @override
   Widget build(BuildContext context) {
+    final exerciseListProvider = ref.watch(mainExercisesProvider);
+    final assetExistsAsync = ref.watch(exercisesWithAssetsProvider);
+
+    ref.listen(exercisesWithAssetsProvider, (previous, next) {
+      next.whenData((assetMap) {
+        for (final entry in assetMap.entries) {
+          if (entry.value && context.mounted) {
+            precacheImage(
+              AssetImage("assets/Exercises/${entry.key}.png"),
+              context,
+            );
+          }
+        }
+      });
+    });
+
     return Scaffold(
-      appBar: myAppBar(context, 'Exercisess'),
-      body: isLoading
-      ? const Center(child: CircularProgressIndicator()) // Show loading spinner
-      : Stack(
-        children: [
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      appBar: myAppBar(context, 'Exercises'),
+      body: exerciseListProvider.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error loading data $err')),
+        data: (exerciseData) {
+          return assetExistsAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => _buildExerciseList(exerciseData, {}),
+            data: (assetExists) => _buildExerciseList(exerciseData, assetExists),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildExerciseList(Map exerciseData, Map<String, bool> assetExists) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                selectorBox(
+                  ref.watch(chartFilterProvider).muscleSelected,
+                  'muscles',
+                  (entry) => ref.read(chartFilterProvider.notifier).setMuscle(entry.key),
+                  context,
+                ),
+                selectorBox(
+                  ref.watch(chartFilterProvider).timeLabel,
+                  'time',
+                  (entry) => ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key),
+                  context,
+                ),
+              ],
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: exerciseData.keys.length,
+                itemBuilder: (context, index) {
+                  String exercise = exerciseData.keys.toList()[index];
+                  return _buildExerciseItem(exercise, exerciseData, assetExists);
+                },
+              ),
+            )
+          ],
+        ),
+        if (multiSelect) _buildMultiSelectButton(),
+      ],
+    );
+  }
+
+  Widget _buildExerciseItem(String exercise, Map exerciseData, Map<String, bool> assetExists) {
+    final isSelected = selectedItems.contains(exercise);
+    
+    return InkWell(
+      onTap: () {
+        if (multiSelect) {
+          setState(() {
+            if (selectedItems.contains(exercise)) {
+              selectedItems.remove(exercise);
+              if (selectedItems.isEmpty) {
+                multiSelect = false;
+              }
+            } else {
+              selectedItems.add(exercise);
+            }
+          });
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExerciseScreen(exercises: [exercise]),
+            ),
+          );
+        }
+      },
+      onLongPress: () {
+        setState(() {
+          if (selectedItems.contains(exercise)) {
+            selectedItems.remove(exercise);
+            if (selectedItems.isEmpty) {
+              multiSelect = false; // Fixed: was == instead of =
+            }
+          } else {
+            if (!multiSelect) {
+              multiSelect = true;
+            }
+            selectedItems.add(exercise);
+          }
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Row(
+          children: [
+            if (isSelected)
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Container(
+                  width: 2,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            assetExists[exercise] == true
+                ? Image.asset(
+                    "assets/Exercises/$exercise.png",
+                    height: 50,
+                    width: 50,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: SvgPicture.asset(
+                      "assets/profile.svg",
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  selectorBox(
-                    muscleSelected, 
-                    'muscles', 
-                    (entry) {
-                      setState(() {
-                        muscleSelected = entry.key;
-                      });
-                      setExerciseData();
-                    }, 
-                    context
-                  ),
-                  selectorBox(
-                    timeSelected, 
-                    'time', 
-                    (entry) {
-                      setState(() {
-                        timeSelected = entry.key;
-                        range = entry.value;
-                        setExerciseData();
-                      });
-                    }, 
-                  context
-                  ),
+                  Text(exercise),
+                  Text('${exerciseData[exercise]} times'),
                 ],
               ),
-              Flexible(
-                child: ListView.builder(
-                  itemCount: exerciseData.keys.length,
-                  itemBuilder:  (context, index) {
-                    String exercise = exerciseData.keys.toList()[index];
-                    return InkWell(
-                      onTap: () {
-                        if (multiSelect){
-                          setState(() {
-                            if (selectedItems.contains(exercise)){
-                              selectedItems.remove(exercise);
-                              if (selectedItems.isEmpty){
-                                multiSelect = false;
-                              }
-                            }else{
-                              if (!multiSelect){
-                                multiSelect = true;
-                              }
-                              selectedItems.add(exercise);
-                            }  
-                          });
-                        }else{
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseScreen(exercises: [exercise])
-                            )
-                          );
-                        }
-                      },
-                      onLongPress: (){
-                        setState(() {
-                          if (selectedItems.contains(exercise)){
-                            selectedItems.remove(exercise);
-                            if (selectedItems.isEmpty){
-                              multiSelect == false;
-                            }
-                          }else{
-                            if (!multiSelect){
-                              multiSelect = true;
-                            }
-                            selectedItems.add(exercise);
-                          }  
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        child: Row(
-                          children: [
-                            if (selectedItems.contains(exercise))
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Container(
-                                width: 2,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ),
-                            // Use cached existence map (populated in setExerciseData) to avoid per-row async work
-                            assetExists[exercise] == true
-                                ? Image.asset(
-                                    "assets/Exercises/$exercise.png",
-                                    height: 50,
-                                    width: 50,
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: SvgPicture.asset(
-                                      "assets/profile.svg",
-                                      height: 35,
-                                      width: 35,
-                                    ),
-                                  ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                Text(exercise),
-                                Text('${exerciseData[exerciseData.keys.toList()[index]]} times')
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.arrow_forward_ios)
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ]
-          ),
-          if (multiSelect)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: GestureDetector(
-                onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExerciseScreen(exercises: selectedItems)
-                        )
-                    );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(50)
-                  ),
-                  height: 50,
-                  width: double.infinity,
-                  child: Center(
-                    child: Text(
-                      'Choose ${selectedItems.length} exercise(s)',
-                      style: const TextStyle(
-                        fontSize: 20
-                      ),
-                    )
-                  ),
-                ),
+            ),
+            const Spacer(),
+            const Icon(Icons.arrow_forward_ios),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMultiSelectButton() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExerciseScreen(exercises: selectedItems),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            height: 50,
+            width: double.infinity,
+            child: Center(
+              child: Text(
+                'Choose ${selectedItems.length} exercise(s)',
+                style: const TextStyle(fontSize: 20),
               ),
             ),
           ),
-        ]
-      )
+        ),
+      ),
     );
   }
-  Future<Map> getExercises(int range, String muscleGroup) async {
+}
+
+final exercisesWithAssetsProvider = FutureProvider<Map<String, bool>>((ref) async {
+  final exerciseDataAsync = ref.watch(mainExercisesProvider);
+  
+  return exerciseDataAsync.when(
+    loading: () => <String, bool>{},
+    error: (_, __) => <String, bool>{},
+    data: (exerciseData) async {
+      final exercises = exerciseData.keys.toList();
+      final futures = exercises.map((e) => fileExists("assets/Exercises/$e.png")).toList();
+      final results = await Future.wait(futures);
+      
+      final assetMap = <String, bool>{};
+      for (int i = 0; i < exercises.length; i++) {
+        assetMap[exercises[i]] = results[i];
+      }
+      return assetMap;
+    },
+  );
+});
+
+final mainExercisesProvider = Provider<AsyncValue<Map>>((ref) {
+  final rawDataAsync = ref.watch(workoutDataProvider);
+  final filters = ref.watch(chartFilterProvider);
+
+  return rawDataAsync.whenData((data) {
     Map exerciseMap = {};
-    Map data = await readData();
-    for (var day in data.keys){
-      Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+    for (var day in data.keys) {
+      Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
       int diff = difference.inDays;
-      if (diff <= range || range == -1){
-        for (var exercise in data[day]['sets'].keys){
-          for (String muscle in (muscleGroups[muscleGroup] ?? ['muscle'])){
-            if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || muscleGroup == 'All Muscles'){ //  || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false)
-              // for (Map set in data[day]['sets'][exercise]){
+      if (diff <= filters.range || filters.range == -1) {
+        for (var exercise in data[day]['sets'].keys) {
+          for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])) {
+            if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) ||
+                filters.muscleSelected == 'All Muscles') {
               List sets = data[day]['sets'][exercise];
               String target = 'weight';
               (exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
               sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
-            // }
               exerciseMap[exercise] = (exerciseMap[exercise] ?? 0) + 1;
               break;
             }
@@ -248,5 +261,9 @@ void setExerciseData() async {
     entries.sort((a, b) => b.value.compareTo(a.value));
     exerciseMap = Map.fromEntries(entries);
     return exerciseMap;
-  }
-}
+  });
+});
+
+final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
+  return ChartFiltersNotifier();
+});
