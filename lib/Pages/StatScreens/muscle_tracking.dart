@@ -1,6 +1,5 @@
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:flutter/services.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -51,6 +50,7 @@ class MuscleTrackingState extends ConsumerState<MuscleTracking> {
                   data: data[0]?[weeksAgo],
                   normalData: data[1]?[weeksAgo] ?? {},
                   goals: muscleGoals!,
+                  weeksAgo: weeksAgo,
                 ),
               ],
             ),
@@ -65,8 +65,9 @@ class FlexibleMuscleLayout extends StatefulWidget {
   final Map data;
   final Map normalData;
   final Map goals;
+  final int weeksAgo;
 
-  const FlexibleMuscleLayout({super.key, required this.data, required this.normalData, required this.goals});
+  const FlexibleMuscleLayout({super.key, required this.data, required this.normalData, required this.goals, required this.weeksAgo});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -75,7 +76,7 @@ class FlexibleMuscleLayout extends StatefulWidget {
 
 class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
   String? expandedMuscle;
-
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -96,6 +97,7 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
                 goal: widget.goals[muscle],
                 onTap: () => setState(() => expandedMuscle = null),
                 data: getMuscleSpecifics(widget.normalData, muscle),
+                weeksAgo: widget.weeksAgo,
               );
             } else {
               return SetProgressTile(
@@ -110,21 +112,21 @@ class _FlexibleMuscleLayoutState extends State<FlexibleMuscleLayout> {
       ),
     );
   }
-Map getMuscleSpecifics(Map data, String muscle) {
-  Map<String, double> sortedData = {};
+  Map getMuscleSpecifics(Map data, String muscle) {
+    Map<String, double> sortedData = {};
 
-  if (muscleGroups.containsKey(muscle)) {
-    List<String> muscleList = muscleGroups[muscle]!;
+    if (muscleGroups.containsKey(muscle)) {
+      List<String> muscleList = muscleGroups[muscle]!;
 
-    for (String muscleName in muscleList) {
-      if (data.containsKey(muscleName)) {
-        sortedData[muscleName] = data[muscleName];
+      for (String muscleName in muscleList) {
+        if (data.containsKey(muscleName)) {
+          sortedData[muscleName] = data[muscleName];
+        }
       }
     }
-  }
 
-  return sortedData;
-}
+    return sortedData;
+  }
 }
 
 class SetProgressTile extends ConsumerWidget {
@@ -268,14 +270,16 @@ class ExpandedSetProgressTile extends StatelessWidget {
   final double goal;
   final Map data;
   final VoidCallback onTap;
-
+  final int weeksAgo;
+  
   const ExpandedSetProgressTile({
     super.key,
     required this.muscle,
     required this.value,
     required this.goal,
     required this.onTap, 
-    required this.data,
+    required this.data, 
+    required this.weeksAgo,
   });
 
   @override
@@ -343,7 +347,7 @@ class ExpandedSetProgressTile extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 1,
-                      child: WeeklyProgressChart(muscle: muscle,),
+                      child: WeeklyProgressChart(muscle: muscle, weeksAgo: weeksAgo,),
                     ),
                   ],
                 ),
@@ -358,23 +362,19 @@ class ExpandedSetProgressTile extends StatelessWidget {
 
 class WeeklyProgressChart extends ConsumerWidget {
   final String muscle;
-  const WeeklyProgressChart({super.key, required this.muscle});
+  final int weeksAgo;
+  const WeeklyProgressChart({super.key, required this.muscle, required this.weeksAgo});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<Map>(
-        future: getWeekData(muscle, ref),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading data ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            return SizedBox(
+    final Map<String, double> data = ref.watch(weeklyMuscleDataProvider.select((data){
+      return data[weeksAgo]?[muscle] ?? {};
+    }));
+    return SizedBox(
       height: 150,
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: snapshot.data?.values.reduce((a, b) => a + b) ?? 10, // get the max value out of the array with snapshot.data!.values.cast<num>().toList().reduce(max).toDouble()
+          maxY: data.isNotEmpty ? data.values.reduce((a, b) => a + b) : 0, // get the max value out of the array with data!.values.cast<num>().toList().reduce(max).toDouble()
           barTouchData: BarTouchData(enabled: false),
           titlesData: FlTitlesData(
             show: true,
@@ -393,8 +393,7 @@ class WeeklyProgressChart extends ConsumerWidget {
           ),
           gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
-          barGroups: 
-          snapshot.data!.entries.toList().asMap().entries.map((entry) {
+          barGroups: data.entries.toList().asMap().entries.map((entry) {
             int index = entry.key;
             var data = entry.value.value;
             return BarChartGroupData(
@@ -412,56 +411,53 @@ class WeeklyProgressChart extends ConsumerWidget {
         ),
       ),
     );
-  } else {
-    return const Text('No data available');
   }
-  });
 }
 
-Future<Map> getWeekData(String mainMuscle, WidgetRef ref) async{ // TODO Remove and merge with data fetching on the homepage
-  Map weekData = {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0}; // double format
-  Map data = await readData();
-  final Map customExercisesData = await ref.read(customExercisesProvider.future);
+final weeklyMuscleDataProvider = Provider<Map>((ref) {
+  final dataAsync = ref.watch(workoutDataProvider);
+  final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
-  for (var day in data.keys){
-    if (DateTime.now().difference(DateTime.parse(day.split(' ')[0])).inDays < 7){
-      String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
-      for (var exercise in data[day]['sets'].keys){
-        bool isCustom = customExercisesData.containsKey(exercise);
-        Map exerciseData = {};
+  return dataAsync.maybeWhen(
+    data: (data) {
+      Map<int, Map<String, Map<String, double>>> groupedWeeklyData = {};
 
-        if (isCustom && customExercisesData.containsKey(exercise)){
-          exerciseData = customExercisesData[exercise];
-        } else {
-          exerciseData = exerciseMuscles[exercise] ?? {};
-        }
+      for (var day in data.keys){
+        Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+        int weekRef = difference.inDays ~/ 7;
 
-        if (exerciseData.isEmpty) continue;
+        groupedWeeklyData[weekRef] ??= {};
+        for (var exercise in data[day]['sets'].keys){
+          bool isCustom = customExercisesData.containsKey(exercise);
+          Map exerciseData = {};
 
-        for (int i = 0; i < data[day]['sets'][exercise].length; i++){
-          for (var muscle in (exerciseData['Primary'] ?? {}).keys){
-            if (muscleGroups[mainMuscle]!.contains(muscle)){
-              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseData['Primary']![muscle]!/100);
-            }
+          if (isCustom){
+            exerciseData = customExercisesData[exercise];
+          } else {
+            exerciseData = exerciseMuscles[exercise] ?? {};
           }
-          for (var muscle in (exerciseData['Secondary'] ?? {}).keys){
-            if (muscleGroups[mainMuscle]!.contains(muscle)){
-              weekData[dayName] = (weekData[dayName] ?? 0) + 1 * (exerciseData['Secondary']![muscle]!/100);
+          String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
+
+          if (exerciseData.isEmpty) continue;
+
+          Map<String, int> allMuscles = {...(exerciseData['Primary'] ?? {}), ...(exerciseData['Secondary'] ?? {})};
+
+          for (int i = 0; i < data[day]['sets'][exercise].length; i++){
+            for (MapEntry muscle in allMuscles.entries){
+              String? category = muscleGroups.entries
+                .firstWhere((entry) => entry.value.contains(muscle.key), orElse: () => MapEntry('', []))
+                .key;
+              groupedWeeklyData[weekRef]![category] ??= {'Mon': 0.0, 'Tue': 0.0, 'Wed': 0.0, 'Thu': 0.0, 'Fri': 0.0, 'Sat': 0.0, 'Sun': 0.0};
+              groupedWeeklyData[weekRef]![category]![dayName] = (groupedWeeklyData[weekRef]?[category]?[dayName] ?? 0) + 1 * (muscle.value!/100);
             }
           }
         }
       }
-    }
-  }
-  return weekData;
-}
-}
-
-void writeMuscleGoal(String muscle, double value) async{ // ! MARK decimate
-  Map<String, dynamic> settings = await getAllSettings();
-  settings['Muscle Goals'][muscle] = value;
-  writeData(settings, path: 'settings',append: false);
-}
+      return groupedWeeklyData;
+    },
+    orElse: () => {},
+  );
+});
 
 class CaloriesSpeedometer extends StatelessWidget {
   final double value;
@@ -563,7 +559,7 @@ class SpeedometerPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-final chartViewModelProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
+final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);
   final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
