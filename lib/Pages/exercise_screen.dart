@@ -1131,7 +1131,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
 
         // 3. Process the data (Reversed keys to keep chronology)
         for (String day in data.keys.toList().reversed) {
-          final daySets = data[day]['sets'] as Map<String, dynamic>;
+          final daySets = Map<String, dynamic>.from(data[day]['sets'] as Map<dynamic, dynamic>);
 
           for (String exercise in daySets.keys) {
             if (targetSet.contains(exercise)) {
