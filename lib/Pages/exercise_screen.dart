@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
@@ -210,16 +211,12 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   Widget selectorBox(String text, bool selected){
     return GestureDetector(
       onTap: () async{
-        setState(() {
-          ref.read(graphSelectorProvider.notifier).set(
-            text.toLowerCase(),
-          );
-          // final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
-          // final List values = exerciseData.map((data) => data[selector]).toList();
-          // graphvalue = values.isNotEmpty ? numParsething(values[values.length - 1]) : 0;
-          // week = dates.isNotEmpty ? dates.last.split(' ')[0] : '';
-          // alterHeadingBar(graphvalue, week, Colors.blue);
-        });
+        ref.read(chartFilterProvider.notifier).setTarget(text.toLowerCase());
+        // final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+        // final List values = exerciseData.map((data) => data[selector]).toList();
+        // graphvalue = values.isNotEmpty ? numParsething(values[values.length - 1]) : 0;
+        // week = dates.isNotEmpty ? dates.last.split(' ')[0] : '';
+        // alterHeadingBar(graphvalue, week, Colors.blue);
       },
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -279,7 +276,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   @override
   Widget build(BuildContext context) {
       final dataProvider = ref.watch(workoutDataProvider);
-      ref.listen(graphSelectorProvider, (previous, next) {
+      ref.listen(chartFilterProvider.select((data) => data.chartTarget), (previous, next) { // TODO check back if this works
         if (previous != next && res != null) {
           res!.then((data) {
             final exerciseData = data[0];
@@ -310,11 +307,11 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                 return const Center(child: Text('Error loading data'));
               } else if (snapshot.hasData) {
                 
-                final selector = ref.watch(graphSelectorProvider);
+                final filters = ref.watch(chartFilterProvider);
 
                 final exerciseData = snapshot.data![0];
                 final List dates = exerciseData.map((datas) => datas['date']).toList(); // .split(' ')[0]
-                final List values = exerciseData.map((datas) => datas[selector]).toList();
+                final List values = exerciseData.map((datas) => datas[filters.chartTarget]).toList();
                 final Set things = exerciseData.map((datas) => datas['x-value']).toSet(); // todo rename
                 final Map<String, List<String>> datesByExercise = {};
 
@@ -353,12 +350,12 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                   spots[exerciseName]!.add(
                     FlSpot(
                       widget.scaleSetting == ScaleSetting.equalIntervals ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
-                      (!isBodyWeight ? double.parse(entry.value[selector].toString()) : double.parse(entry.value['reps'].toString())),
+                      (!isBodyWeight ? double.parse(entry.value[filters.chartTarget].toString()) : double.parse(entry.value['reps'].toString())),
                     ),
                   );
                 });
               String unit = 'kg';
-              if (isBodyWeight || selector == 'reps'){unit = '';}
+              if (isBodyWeight || filters.chartTarget == 'reps'){unit = '';}
 
               final List<LineChartBarData> allLineBarsData = [];
               List exercisesOrder = [];
@@ -605,9 +602,9 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                         if (!isBodyWeight)
                         Row(
                           children: [
-                            selectorBox('Weight', selector == 'weight'),
-                            selectorBox('Volume', selector == 'volume'),
-                            selectorBox('Reps', selector == 'reps'),
+                            selectorBox('Weight', filters.chartTarget == 'weight'),
+                            selectorBox('Volume', filters.chartTarget == 'volume'),
+                            selectorBox('Reps', filters.chartTarget == 'reps'),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -887,18 +884,9 @@ class _InfoBodyState extends ConsumerState<InfoBody> {
 
 }
 
-// Tracks the current selector ("weight", "volume", or "reps").
-class GraphSelector extends Notifier<String> {
-  @override
-  String build() => 'weight';
-
-  void set(String newSelector) {
-    state = newSelector;
-  }
-}
-
-final graphSelectorProvider = NotifierProvider<GraphSelector, String>(GraphSelector.new);
-
+final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
+  return ChartFiltersNotifier(initialFilters: ChartFilters.weight());
+});
 
 Future<List> getStats(Map data, List targets, int range) async {
   List targetData = [];
@@ -1111,7 +1099,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
       assetExists[exercise] = exists;
       if (mounted){
         precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
-        setState(() {}); // Trigger rebuild after checking asset TODO optomise?
+        setState(() {}); // ! Trigger rebuild after checking asset TODO optomise? 
       }
     }
   }
@@ -1164,188 +1152,188 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
     );
   });
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // ! futureData has not been initialised
     final historyAsync = ref.watch(exerciseHistoryProvider(widget.targetExercises));
 
     return historyAsync.when(
       data: (history) => ListView.builder(
-            itemCount: history.length,
-            itemBuilder: (context, index){
-              String day = history.keys.toList()[index];
-              DateTime startTime = DateTime.parse(history[day]!['stats']['startTime']);
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    child: GestureDetector(
-                      onTap: (){
-                        futureData.then((data){
-                          if (!context.mounted) return;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[day], dayKey: day))
-                          );
-                        });
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        spacing: 8,
+        itemCount: history.length,
+        itemBuilder: (context, index){
+          String day = history.keys.toList()[index];
+          DateTime startTime = DateTime.parse(history[day]!['stats']['startTime']);
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: GestureDetector(
+                  onTap: (){
+                    futureData.then((data){
+                      if (!context.mounted) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[day], dayKey: day))
+                      );
+                    });
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    spacing: 8,
+                    children: [
+                      Text(
+                        DateFormat('dd MMM, yyyy').format(startTime),
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        DateFormat('h:mma').format(startTime).toLowerCase(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white.withValues(alpha: 0.7),
+                        ),
+                      ),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.arrow_forward_ios),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              ListView.builder(
+                itemCount: history[day]!['data']!.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, j) {
+                  ExerciseHistoryNode model = history[day]!['data'][j];
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: Row(
+                          children: [
+                            assetExists[model.name] == true
+                              ? Image.asset(
+                                  "assets/Exercises/${model.name}.png",
+                                  height: 50,
+                                  width: 50,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: SvgPicture.asset(
+                                    "assets/profile.svg",
+                                    height: 35,
+                                    width: 35,
+                                    colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+                                  ),
+                                ),
+                            Text(
+                              model.name
+                            )
+                          ],
+                        ),
+                      ),
+                      Table(
+                        border: const TableBorder.symmetric(inside: BorderSide.none),
+                        columnWidths: const {
+                          0: FlexColumnWidth(1),
+                          1: FlexColumnWidth(2),
+                          2: FlexColumnWidth(2),
+                        },
                         children: [
-                          Text(
-                            DateFormat('dd MMM, yyyy').format(startTime),
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          TableRow(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 3),
+                                child: Center(
+                                  child: Text('Set'),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 3),
+                                child: Center(
+                                  child: Text('Weight (kg)')
+                                ),
+                              ), 
+                              if (model.type != 'Timed')
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 3),
+                                child: Center(
+                                  child: Text('Reps')
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            DateFormat('h:mma').format(startTime).toLowerCase(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white.withValues(alpha: 0.7),
-                            ),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_forward_ios),
+                          for (int i = 0; i < (model.sets.length); i++)
+                          TableRow(
+                            decoration: BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
+                            children: [
+                              SizedBox(
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    model.sets[i]['type'] == 'Warmup'
+                                        ? 'W'
+                                        : model.sets[i]['type'] == 'Failure'
+                                            ? 'F'
+                                            : model.sets[i]['type'] == 'Dropset'
+                                              ? 'D'
+                                              : '${getNormalSetNumber(model.name, i, model.sets)}',
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                              
+                              SizedBox(
+                                height: 50,
+                                child: Center(
+                                  child: model.type == 'Timed' ? 
+                                    SizedBox(
+                                      height: 50, 
+                                      child: TimerScreen() // TODO
+                                    ) : model.type == 'weighted' ? 
+                                    const Text(
+                                      '-',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 33.5,
+                                      ),
+                                    ) 
+                                    : Text(
+                                      model.sets[i]['weight'],
+                                        style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ) 
+                                ),
+                              ),
+                              if (model.type != 'Timed')
+                              SizedBox(
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    model.sets[i]['reps'],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  )
+                                ),
+                              ),
+                            ],
                           )
                         ],
                       ),
-                    ),
-                  ),
-                  ListView.builder(
-                    itemCount: history[day]!['data']!.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, j) {
-                      ExerciseHistoryNode model = history[day]!['data'][j];
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            child: Row(
-                              children: [
-                                assetExists[model.name] == true
-                                  ? Image.asset(
-                                      "assets/Exercises/${model.name}.png",
-                                      height: 50,
-                                      width: 50,
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: SvgPicture.asset(
-                                        "assets/profile.svg",
-                                        height: 35,
-                                        width: 35,
-                                        colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
-                                      ),
-                                    ),
-                                Text(
-                                  model.name
-                                )
-                              ],
-                            ),
-                          ),
-                          Table(
-                            border: const TableBorder.symmetric(inside: BorderSide.none),
-                            columnWidths: const {
-                              0: FlexColumnWidth(1),
-                              1: FlexColumnWidth(2),
-                              2: FlexColumnWidth(2),
-                            },
-                            children: [
-                              TableRow(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 3),
-                                    child: Center(
-                                      child: Text('Set'),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 3),
-                                    child: Center(
-                                      child: Text('Weight (kg)')
-                                    ),
-                                  ), 
-                                  if (model.type != 'Timed')
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 3),
-                                    child: Center(
-                                      child: Text('Reps')
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              for (int i = 0; i < (model.sets.length); i++)
-                              TableRow(
-                                decoration: BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(
-                                        model.sets[i]['type'] == 'Warmup'
-                                            ? 'W'
-                                            : model.sets[i]['type'] == 'Failure'
-                                                ? 'F'
-                                                : model.sets[i]['type'] == 'Dropset'
-                                                  ? 'D'
-                                                  : '${getNormalSetNumber(model.name, i, model.sets)}',
-                                        style: const TextStyle(fontSize: 20),
-                                      ),
-                                    ),
-                                  ),
-                                  
-                                  SizedBox(
-                                    height: 50,
-                                    child: Center(
-                                      child: model.type == 'Timed' ? 
-                                        SizedBox(
-                                          height: 50, 
-                                          child: TimerScreen() // TODO
-                                        ) : model.type == 'weighted' ? 
-                                        const Text(
-                                          '-',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 33.5,
-                                          ),
-                                        ) 
-                                        : Text(
-                                          model.sets[i]['weight'],
-                                            style: TextStyle(
-                                            fontSize: 18,
-                                          ),
-                                        ) 
-                                    ),
-                                  ),
-                                  if (model.type != 'Timed')
-                                  SizedBox(
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(
-                                        model.sets[i]['reps'],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      )
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      );
-                    }
-                  )
-                ],
-              );
-            },
-          ),
+                    ],
+                  );
+                }
+              )
+            ],
+          );
+        },
+      ),
       loading: () => const CircularProgressIndicator(),
       error: (err, stack) => Text('Error: $err'),
     );

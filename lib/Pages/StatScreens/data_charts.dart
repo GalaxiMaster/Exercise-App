@@ -246,6 +246,11 @@ class ChartFilters {
     this.muscleSelected = 'All Muscles', 
     this.timeLabel = 'All Time',
   });
+  ChartFilters.weight({
+    this.range = -1,
+    this.timeLabel = 'All Time',
+  }) : chartTarget = 'weight',
+       muscleSelected = '';
 
   ChartFilters copyWith({
     String? chartTarget,
@@ -263,9 +268,13 @@ class ChartFilters {
 }
 
 class ChartFiltersNotifier extends Notifier<ChartFilters> {
+  final ChartFilters? initialFilters;
+  
+  ChartFiltersNotifier({this.initialFilters});
+  
   @override
   ChartFilters build() {
-    return ChartFilters(); 
+    return initialFilters ?? ChartFilters();
   }
 
   void setTarget(String target) {
@@ -280,6 +289,7 @@ class ChartFiltersNotifier extends Notifier<ChartFilters> {
     state = state.copyWith(muscleSelected: muscle);
   }
 }
+
 
 final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
   return ChartFiltersNotifier();
