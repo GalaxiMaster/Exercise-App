@@ -1,62 +1,48 @@
 import 'dart:math';
-
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/widgets.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-class StrengthGradiant extends StatefulWidget {
+class StrengthGradiant extends ConsumerWidget {
   const StrengthGradiant({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _StrengthGradiantState createState() => _StrengthGradiantState();
-}
-
-class _StrengthGradiantState extends State<StrengthGradiant> {
-  String timeSelected = 'All Time';
-  int range = -1;
-  String muscleSelected = 'All Muscles';
-  @override
-  initState(){
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dataProvider = ref.read(strengthGradientProvider);
     
     return Scaffold(
       appBar: myAppBar(context, 'Strength Gradient'),
-      body: FutureBuilder(
-      future: getGradient(range, muscleSelected),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error loading data ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          double msAverage = snapshot.data![0];
-          List msData = snapshot.data![1].reversed.toList();
+      body: dataProvider.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error loading data $err')),
+        data: (data) {
+          double msAverage = data[0];
+          List msData = data[1].reversed.toList();
           double gradient = double.parse(msAverage.toStringAsFixed(2));
           return Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  selectorBox(muscleSelected, 'muscles', (entry) {
-                    setState(() {
-                      muscleSelected = entry.key;
-                    });
-                  }, context),
-                  selectorBox(timeSelected, 'time', (entry) {
-                    setState(() {
-                      timeSelected = entry.key;
-                      range = entry.value;
-                    });
-                  }, context),
+                  selectorBox(
+                    ref.watch(chartFilterProvider).muscleSelected, 
+                    'muscles', 
+                    (entry) => ref.read(chartFilterProvider.notifier).setMuscle(entry.key), 
+                    context
+                  ),
+                  selectorBox(
+                    ref.watch(chartFilterProvider).timeLabel, 
+                    'time', 
+                    (entry) => ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key), 
+                    context
+                  ),
                 ],
               ),
               Container(
@@ -124,109 +110,109 @@ class _StrengthGradiantState extends State<StrengthGradiant> {
               )
             ],
           );
-        } else {
-          return const Center(child: Text('No data available'));
-        }
-      },
+        },
       ),
     );
   }
 }
-Future<List> getGradient(int range, String muscleGroup) async{
-  Map data = await readData();
-  Map exercisesMap = {};
-  for (String day in data.keys){
-    Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
-    int diff = difference.inDays;
-    if (diff <= range || range == -1){
-      for (String exercise in data[day]['sets'].keys){
-        for (String muscle in (muscleGroups[muscleGroup] ?? ['muscle'])){
-          if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || muscleGroup == 'All Muscles'){ //  || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false)
-            // for (Map set in data[day]['sets'][exercise]){
-            List sets = data[day]['sets'][exercise];
-            String target = 'weight';
-            (exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
-            sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
-            Map set = sets[sets.length-1];
-            if (!exercisesMap.containsKey(exercise)){
-              exercisesMap[exercise] = [];
+final strengthGradientProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
+  final rawDataAsync = ref.watch(workoutDataProvider);
+  final filters = ref.watch(chartFilterProvider);
+
+  return rawDataAsync.whenData((data) {
+    Map exercisesMap = {};
+    for (String day in data.keys){
+      Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+      int diff = difference.inDays;
+      if (diff <= filters.range || filters.range == -1){
+        for (String exercise in data[day]['sets'].keys){
+          for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])){
+            if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || filters.muscleSelected == 'All Muscles'){ //  || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false)
+              // for (Map set in data[day]['sets'][exercise]){
+              List sets = data[day]['sets'][exercise];
+              String target = 'weight';
+              (exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
+              sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
+              Map set = sets[sets.length-1];
+              if (!exercisesMap.containsKey(exercise)){
+                exercisesMap[exercise] = [];
+              }
+              // Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
+              exercisesMap[exercise].add(set);
+            // }
             }
-            // Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
-            exercisesMap[exercise].add(set);
-          // }
           }
         }
       }
     }
-  }
-  Map ms = {};
-  for (String exercise in exercisesMap.keys){
-    if (exercisesMap[exercise].length > 1){
-      List<num> x = [];
-      List<num> y = [];
-      exercisesMap[exercise] = exercisesMap[exercise].reversed.toList();
-      for (var pair in exercisesMap[exercise]!) {
-        y.add((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'Weighted' ?  double.parse(pair['weight'].toString()) : double.parse(pair['reps'].toString())); // x value is the first element
-      }
-      x = List.generate(y.length, (index) => index);
-
-      int n = y.length;
-      if (n != 0){
-        // num minValue = x.reduce(min);
-        // num maxValue = x.reduce(max);
-
-        // double m = minValue/maxValue;
-
-        FlSpot a = FlSpot(x[0].toDouble(), y[0].toDouble());
-        FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
-        double m = 0;
-        if (a.y < 0 && b.y < 0){
-          m = ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
-        }else{
-          m = ((b.y-a.y)/a.y.abs())*100;
+    Map ms = {};
+    for (String exercise in exercisesMap.keys){
+      if (exercisesMap[exercise].length > 1){
+        List<num> x = [];
+        List<num> y = [];
+        exercisesMap[exercise] = exercisesMap[exercise].reversed.toList();
+        for (var pair in exercisesMap[exercise]!) {
+          y.add((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'Weighted' ?  double.parse(pair['weight'].toString()) : double.parse(pair['reps'].toString())); // x value is the first element
         }
-        ms[exercise] = m;
+        x = List.generate(y.length, (index) => index);
 
+        int n = y.length;
+        if (n != 0){
+          // num minValue = x.reduce(min);
+          // num maxValue = x.reduce(max);
+
+          // double m = minValue/maxValue;
+
+          FlSpot a = FlSpot(x[0].toDouble(), y[0].toDouble());
+          FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
+          double m = 0;
+          if (a.y < 0 && b.y < 0){
+            m = ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
+          }else{
+            m = ((b.y-a.y)/a.y.abs())*100;
+          }
+          ms[exercise] = m;
+
+        }
       }
     }
-    
-  }
-double mAverage = 0;
-List filteredData = [];
+    double mAverage = 0;
+    List filteredData = [];
 
-if (ms.isNotEmpty) {
-  // Sort ms by values
-  var sortedEntries = ms.entries.toList()
-    ..sort((a, b) => a.value.compareTo(b.value));
-  var sortedValues = sortedEntries.map((entry) => entry.value).toList();
+    if (ms.isNotEmpty) {
+      // Sort ms by values
+      var sortedEntries = ms.entries.toList()
+        ..sort((a, b) => a.value.compareTo(b.value));
+      var sortedValues = sortedEntries.map((entry) => entry.value).toList();
 
-  // Calculate Q1, Q3, and IQR
-  num q1 = sortedValues[(sortedValues.length * 0.25).floor()];
-  num q3 = sortedValues[(sortedValues.length * 0.75).floor()];
-  num iqr = q3 - q1;
+      // Calculate Q1, Q3, and IQR
+      num q1 = sortedValues[(sortedValues.length * 0.25).floor()];
+      num q3 = sortedValues[(sortedValues.length * 0.75).floor()];
+      num iqr = q3 - q1;
 
-  // Adjust bounds for outliers
-  num lowerBound = q1 - 2.5 * iqr;
-  num upperBound = q3 + 2.5 * iqr;
+      // Adjust bounds for outliers
+      num lowerBound = q1 - 2.5 * iqr;
+      num upperBound = q3 + 2.5 * iqr;
 
-  // Filter entries within bounds
-  filteredData = sortedEntries
-      .where((entry) => entry.value >= lowerBound && entry.value <= upperBound)
-      .toList();
+      // Filter entries within bounds
+      filteredData = sortedEntries
+          .where((entry) => entry.value >= lowerBound && entry.value <= upperBound)
+          .toList();
 
-  // Calculate the average
-  if (filteredData.isNotEmpty) {
-    mAverage = filteredData
-            .map((entry) => entry.value)
-            .reduce((a, b) => a + b) /
-        ms.length;
-  }
-}
+      // Calculate the average
+      if (filteredData.isNotEmpty) {
+        mAverage = filteredData
+                .map((entry) => entry.value)
+                .reduce((a, b) => a + b) /
+            ms.length;
+      }
+    }
 
 
-  return [mAverage, filteredData];
-}
+    return [mAverage, filteredData];
+  });
+});
 
-num toNum(weight) {
-  return int.tryParse(weight.toString()) ?? double.parse(weight.toString());
-}
+final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
+  return ChartFiltersNotifier();
+});

@@ -232,7 +232,7 @@ final exercisesWithAssetsProvider = FutureProvider<Map<String, bool>>((ref) asyn
   );
 });
 
-final mainExercisesProvider = Provider<AsyncValue<Map>>((ref) {
+final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);
   final filters = ref.watch(chartFilterProvider);
 
