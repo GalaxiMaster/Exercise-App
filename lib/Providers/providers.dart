@@ -143,20 +143,23 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
   @override
   Future<Map<String, dynamic>> build() async {
     ref.keepAlive();
-    return await reloadRecords();
+    
+    final workoutData = await ref.watch(workoutDataProvider.future);
+    
+    return _calculateRecords(workoutData);
   }
-  Future<Map<String, dynamic>> reloadRecords() async {
-    final data = await readData();
+
+  Map<String, dynamic> _calculateRecords(Map<String, dynamic> data) {
     final recordsTemp = <String, Lift>{};
 
     for (final day in data.keys) {
-      final exercises = data[day]['sets'];
+      final exercises = data[day]['sets'] as Map<String, dynamic>? ?? {};
 
       for (final exercise in exercises.keys) {
-        final setsList = exercises[exercise];
+        final setsList = exercises[exercise] as List<dynamic>? ?? [];
 
-        for (int i = 0; i < setsList.length; i++) {
-          final lift = liftFromSet(setsList[i]);
+        for (var setData in setsList) {
+          final lift = liftFromSet(setData);
           if (lift == null) continue;
 
           final current = recordsTemp[exercise];
@@ -166,20 +169,20 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
         }
       }
     }
-    Map<String, dynamic> records = {
+
+    final records = {
       for (final e in recordsTemp.entries)
         e.key: {
           'weight': e.value.weight,
           'reps': e.value.reps,
         }
     };
-    await writeData(
-      records,
-      path: 'records',
-      append: false,
-    );
+
+    writeData(records, path: 'records', append: false);
+
     return records;
   }
+
   void updateValue(String key, dynamic value) {
     state = AsyncData({
       ...state.value ?? {},
