@@ -142,11 +142,7 @@ class GraphBody extends ConsumerStatefulWidget {
 class _GraphBodyState extends ConsumerState<GraphBody> {
   String week = '';
   num graphvalue = 0;
-  String weekrangeStr = 'All Time';
-  int range = -1;
   Color activeColor = Colors.blue;
-  Map heaviestWeight = {};
-  Map heaviestVolume = {};
 
   void alterHeadingBar(num value, String weekt, Color color){
     setState(() {
@@ -156,7 +152,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
     });
   }
 
-  Widget exerciseTile(String exercise, index, increase, isBodyWeight) {
+  Widget exerciseTile(String exercise, int index, num increase, bool isBodyWeight, Map heaviestWeight, Map heaviestVolume) {
       return Padding(
         padding: const EdgeInsets.all(8),
         child: Container(
@@ -246,394 +242,355 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
       return DateFormat('MMM dd').format(DateTime.parse(dates[value.round()].split(' ')[0]));
     }
   }
-  
-  Future<List> loadHighlightedDays(Map<String, dynamic> data, {bool reload = false}) async {
-      var stats = await getStats(data, widget.exercises, range);
-      // final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
-      // final List values = exerciseData.map((data) => data[selector]).toList();
 
-      setState(() { /// TODO alter
-        // exerciseData = stats[0];
-        if (stats[0].isNotEmpty){
-          heaviestWeight = stats[1];
-          heaviestVolume = stats[2];
-        }
-        if (reload){
-          // graphvalue = numParsething(values[values.length - 1]);
-          // week = dates.last.split(' ')[0];
-          // alterHeadingBar(graphvalue, week, Colors.blue);
-        }
-      });
-      return stats;
-    }
-  
-  Future<List>? res;
-
-  @override
-  initState(){
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
-      final dataProvider = ref.watch(workoutDataProvider);
-      ref.listen(chartFilterProvider.select((data) => data.chartTarget), (previous, next) { // TODO check back if this works
-        if (previous != next && res != null) {
-          res!.then((data) {
-            final exerciseData = data[0];
-            if (exerciseData.isNotEmpty) {
-              final List dates = exerciseData.map((datas) => datas['date']).toList();
-              final List values = exerciseData.map((datas) => datas[next]).toList();
-              
-              if (values.isNotEmpty && dates.isNotEmpty) {
-                alterHeadingBar(
-                  numParsething(values[values.length - 1]),
-                  dates.last.split(' ')[0],
-                  Colors.blue
-                );
+      final dataProvider = ref.watch(graphDataProvider(widget.exercises));
+
+      return dataProvider.when(
+        data: (data){
+          ref.listen(chartFilterProvider.select((data) => data.chartTarget), (previous, next) {
+            if (previous != next) {
+              final exerciseData = data.stats;
+              if (exerciseData.isNotEmpty) {
+                final List dates = exerciseData.map((datas) => datas['date']).toList();
+                final List values = exerciseData.map((datas) => datas[next]).toList();
+                
+                if (values.isNotEmpty && dates.isNotEmpty) {
+                  alterHeadingBar(
+                    numParsething(values[values.length - 1]),
+                    dates.last.split(' ')[0],
+                    Colors.blue
+                  );
+                }
               }
             }
           });
-        }
-      });
-      return dataProvider.when(
-        data: (data){
-          res ??= loadHighlightedDays(data);
-          return FutureBuilder(
-            future: res,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(child: Text('Error loading data'));
-              } else if (snapshot.hasData) {
-                
-                final filters = ref.watch(chartFilterProvider);
+          final filters = ref.watch(chartFilterProvider);
+          final exerciseData = data.stats;
+          final List dates = exerciseData.map((datas) => datas['date']).toList(); // .split(' ')[0]
+          final List values = exerciseData.map((datas) => datas[filters.chartTarget]).toList();
+          final Set things = exerciseData.map((datas) => datas['x-value']).toSet(); // todo rename
+          final Map<String, List<String>> datesByExercise = {};
 
-                final exerciseData = snapshot.data![0];
-                final List dates = exerciseData.map((datas) => datas['date']).toList(); // .split(' ')[0]
-                final List values = exerciseData.map((datas) => datas[filters.chartTarget]).toList();
-                final Set things = exerciseData.map((datas) => datas['x-value']).toSet(); // todo rename
-                final Map<String, List<String>> datesByExercise = {};
+          for (final data in exerciseData) {
+            final exercise = data['exercise'];
+            final date = data['date']; // or .split(' ')[0]
 
-                for (final data in exerciseData) {
-                  final exercise = data['exercise'];
-                  final date = data['date']; // or .split(' ')[0]
+            datesByExercise.putIfAbsent(exercise, () => []);
+            datesByExercise[exercise]!.add(date);
+          }
+          final List groupedDates = datesByExercise.values.toList();
+          // graphvalue = numParsething(value);
+          // week = weekt;
+          activeColor = Colors.blue;
+          if (dates.isNotEmpty){
+            if (week == ''){
+              week = dates.last.split(' ')[0];
+            }
+            if (graphvalue == 0){
+              graphvalue = numParsething(values[values.length - 1]);
+            }
+          }
+          final Map<String, List<FlSpot>> spots = {};
+          final bool isBodyWeight = widget.exercises.every((exercise) {
+            return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
+          });
+          
+          // Iterate through the exercise data
+          exerciseData.asMap().entries.forEach((entry) {
+            final exerciseName = entry.value['exercise'] as String;
 
-                  datesByExercise.putIfAbsent(exercise, () => []);
-                  datesByExercise[exercise]!.add(date);
-                }
-                final List groupedDates = datesByExercise.values.toList();
-                // graphvalue = numParsething(value);
-                // week = weekt;
-                activeColor = Colors.blue;
-                if (dates.isNotEmpty){
-                  if (week == ''){
-                    week = dates.last.split(' ')[0];
-                  }
-                  if (graphvalue == 0){
-                    graphvalue = numParsething(values[values.length - 1]);
-                  }
-                }
-                final Map<String, List<FlSpot>> spots = {};
-                final bool isBodyWeight = widget.exercises.every((exercise) {
-                  return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
-                });
-                
-                // Iterate through the exercise data
-                exerciseData.asMap().entries.forEach((entry) {
-                  final exerciseName = entry.value['exercise'] as String;
+            // Initialize the list for this exercise if it doesn't exist
+            spots[exerciseName] ??= [];
+            
+            // Create and add the FlSpot for this entry
+            spots[exerciseName]!.add(
+              FlSpot(
+                widget.scaleSetting == ScaleSetting.equalIntervals ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
+                (!isBodyWeight ? double.parse(entry.value[filters.chartTarget].toString()) : double.parse(entry.value['reps'].toString())),
+              ),
+            );
+          });
+          String unit = 'kg';
+          if (isBodyWeight || filters.chartTarget == 'reps'){unit = '';}
 
-                  // Initialize the list for this exercise if it doesn't exist
-                  spots[exerciseName] ??= [];
-                  
-                  // Create and add the FlSpot for this entry
-                  spots[exerciseName]!.add(
-                    FlSpot(
-                      widget.scaleSetting == ScaleSetting.equalIntervals ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
-                      (!isBodyWeight ? double.parse(entry.value[filters.chartTarget].toString()) : double.parse(entry.value['reps'].toString())),
-                    ),
-                  );
-                });
-              String unit = 'kg';
-              if (isBodyWeight || filters.chartTarget == 'reps'){unit = '';}
-
-              final List<LineChartBarData> allLineBarsData = [];
-              List exercisesOrder = [];
-              // Add a line for each exercise
-              int i = 0;
-              for (var entry in spots.entries) {
-                // Add the main line for this exercise
-                allLineBarsData.add(
-                  LineChartBarData(
-                    spots: entry.value,
-                    color: graphColors[exercisesOrder.length],
-                    barWidth: 3,
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: graphColors[exercisesOrder.length]
-                          .withValues(alpha: 0.2),
-                    ),
-                  ),
-                );
-                i++;
-                // Add best fit line if there are enough points
-                if (entry.value.length > 1) {
-                  allLineBarsData.add(
-                    LineChartBarData(
-                      isStrokeCapRound: false,
-                      dotData: const FlDotData(show: false),
-                      spots: calculateBestFitLine(entry.value),
-                      color: Colors.primaries[allLineBarsData.length % Colors.primaries.length].withRed(255), // Makes it a reddish version of the main line color
-                      barWidth: 2,
-                      dashArray: [5, 5],
-                      belowBarData: BarAreaData(show: false),
-                    ),
-                  );
-                  groupedDates.insert(i, <String>[]); // Adding filler list so that the barIndex lines up properly when theres multiple lines
-                  i++;
-                }
-                exercisesOrder.add(entry.key);
-              }
-              final PageController pageController = PageController(
-                initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
+          final List<LineChartBarData> allLineBarsData = [];
+          List exercisesOrder = [];
+          // Add a line for each exercise
+          int i = 0;
+          for (var entry in spots.entries) {
+            // Add the main line for this exercise
+            allLineBarsData.add(
+              LineChartBarData(
+                spots: entry.value,
+                color: graphColors[exercisesOrder.length],
+                barWidth: 3,
+                belowBarData: BarAreaData(
+                  show: true,
+                  color: graphColors[exercisesOrder.length]
+                      .withValues(alpha: 0.2),
+                ),
+              ),
+            );
+            i++;
+            // Add best fit line if there are enough points
+            if (entry.value.length > 1) {
+              allLineBarsData.add(
+                LineChartBarData(
+                  isStrokeCapRound: false,
+                  dotData: const FlDotData(show: false),
+                  spots: calculateBestFitLine(entry.value),
+                  color: Colors.primaries[allLineBarsData.length % Colors.primaries.length].withRed(255), // Makes it a reddish version of the main line color
+                  barWidth: 2,
+                  dashArray: [5, 5],
+                  belowBarData: BarAreaData(show: false),
+                ),
               );
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                          Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              groupedDates.insert(i, <String>[]); // Adding filler list so that the barIndex lines up properly when theres multiple lines
+              i++;
+            }
+            exercisesOrder.add(entry.key);
+          }
+          final PageController pageController = PageController(
+            initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
+          );
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                      Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 12.5,
-                                      height: 12.5,
-                                      decoration: BoxDecoration(
-                                        color: activeColor,
-                                        border: Border.all(color: Colors.black)
-                                      ),
-                                    ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 12.5,
+                                  height: 12.5,
+                                  decoration: BoxDecoration(
+                                    color: activeColor,
+                                    border: Border.all(color: Colors.black)
                                   ),
-                                  Text(
-                                    '${graphvalue.toStringAsFixed(2)} $unit',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async{
-                                      Map<String, dynamic> keys = {}; // TODO could cache this functions result to avoid calling it every click
-                                      for (String key in data.keys) {
-                                        if (key.contains(week)){
-                                          keys[key] = data[key];
-                                        }
-                                      }
-                                      if (keys.isEmpty || week.isEmpty || !context.mounted) return;
-
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => 
-                                          keys.keys.length > 1 
-                                            ? DayScreen(date: DateTime.parse(week), dayKeys: keys.keys.toList())
-                                            : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys.keys.toList()[0]} 1'))
-
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                                      child: Text(
-                                        spots.isNotEmpty ? DateFormat('MMM dd yyyy').format(DateTime.parse(week)) : '0',
-                                        style: const TextStyle(
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ]
+                                ),
+                              ),
+                              Text(
+                                '${graphvalue.toStringAsFixed(2)} $unit',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () async{
-                                  var entry = await showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return SelectorPopupMap(options: Options().timeOptions);
-                                    },
-                                  );
-                                  if(entry != null) {
-                                    setState(() {
-                                      range = entry.value;
-                                      weekrangeStr = entry.key;  
-                                    });
-                                    // loadHighlightedDays();
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      weekrangeStr,
-                                      style: const TextStyle(
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                    const Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onHorizontalDragUpdate: (details) {},
-                          child: SizedBox(
-                            height: 300,
-                            child: LineChart(
-                              LineChartData(
-                                lineBarsData: allLineBarsData,
-                                lineTouchData: LineTouchData(  
-                                  handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
-                                  touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                                    // debugPrint(touchResponse?.lineBarSpots.toString());
-                                    // if (event is FlTapUpEvent) {
-                                      // final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
-                                      // const double minX = 0;
-                                      // final double maxX = xValues[xValues.length-1].toDouble();
-                                      // const chartWidth = 420.0;
-                                      // final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
-                                      
-                                      // debugPrint('Touched X-axis value: $touchedXValue');
-                                    // }
-                                    if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
-                                      // Find the nearest point (spot) the user interacted with
-                                      final touchedSpot = touchResponse.lineBarSpots!.first;
-                                      final barIndex = touchedSpot.barIndex;
-                                      // Get the index and value of the touched spot
-                                      // final int index = touchedSpot.spotIndex;
-                                      final String weekLabel; 
-                                      if (widget.scaleSetting ==  ScaleSetting.equalIntervals){
-                                        weekLabel =  groupedDates[barIndex][touchedSpot.spotIndex].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point ! DOESNT WORK WITH MULTIPLE GRAPHS
-                                      }
-                                      else{
-                                        weekLabel =  DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt())); // Assuming 'dates' is a list of labels for each X point
-                                      }
-                                      final double value = touchedSpot.y; // Y value at the touched point
-                                      final double xVal = touchedSpot.x;
-                                      final Color? color = touchedSpot.bar.color;
-                                      debugPrint('xVal: $xVal, value: $value, weekLabel: $weekLabel');
-                                      // Use post-frame callback to ensure state/UI updates occur after the touch event
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        alterHeadingBar(value, weekLabel, color ?? Colors.blue); // Trigger your heading update function
-                                      });
+                                  Map<String, dynamic> keys = {}; // TODO could cache this functions result to avoid calling it every click
+                                  for (String key in data.rawData.keys) {
+                                    if (key.contains(week)){
+                                      keys[key] = data.rawData[key];
                                     }
-                                  },
-                                  getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
-                                    return spotIndexes.map((index) {
-                                      // Draw a vertical line from the top to the bottom of the chart at the X-axis of the touched spot
-                                      return const TouchedSpotIndicatorData(
-                                        FlLine(
-                                          color: Colors.blue,      // Vertical line color
-                                          strokeWidth: 2,          // Vertical line thickness
-                                        ),
-                                        FlDotData(show: true),     // Optionally show a dot at the touched point
-                                      );
-                                    }).toList();
-                                  },
+                                  }
+                                  if (keys.isEmpty || week.isEmpty || !context.mounted) return;
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => 
+                                      keys.keys.length > 1 
+                                        ? DayScreen(date: DateTime.parse(week), dayKeys: keys.keys.toList())
+                                        : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys.keys.toList()[0]} 1'))
+
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text(
+                                    spots.isNotEmpty ? DateFormat('MMM dd yyyy').format(DateTime.parse(week)) : '0',
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                    ),
+                                  ),
                                 ),
-                                titlesData: FlTitlesData(
-                                  topTitles: const AxisTitles(
-                                    sideTitles: SideTitles(showTitles: false),
+                              ),
+                            ]
+                          ),
+                          GestureDetector(
+                            onTap: () async{
+                              var entry = await showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return SelectorPopupMap(options: Options().timeOptions);
+                                },
+                              );
+                              if(entry != null) {
+                                ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key);
+                                // loadHighlightedDays();
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  filters.timeLabel,
+                                  style: const TextStyle(
+                                    color: Colors.blue,
                                   ),
-                                  rightTitles: const AxisTitles(
-                                    sideTitles: SideTitles(showTitles: false),
-                                  ),
-                                  bottomTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      interval: spots.isNotEmpty ? calculateInterval(
-                                        spots.values.expand((spots) => spots).map(
-                                          (spot) {
-                                              double spotVal = spot.x;
-                                              if (widget.scaleSetting ==  ScaleSetting.scaled) {
-                                                spotVal -= DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch.toDouble();
-                                              }
-                                              return spotVal;
+                                ),
+                                const Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onHorizontalDragUpdate: (details) {},
+                      child: SizedBox(
+                        height: 300,
+                        child: LineChart(
+                          LineChartData(
+                            lineBarsData: allLineBarsData,
+                            lineTouchData: LineTouchData(  
+                              handleBuiltInTouches: true, // Use built-in touch to ensure touch events are handled correctly
+                              touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                                // debugPrint(touchResponse?.lineBarSpots.toString());
+                                // if (event is FlTapUpEvent) {
+                                  // final touchX = event.localPosition.dx; // The raw X-position of the touch in pixels
+                                  // const double minX = 0;
+                                  // final double maxX = xValues[xValues.length-1].toDouble();
+                                  // const chartWidth = 420.0;
+                                  // final touchedXValue = int.parse((minX + (touchX / chartWidth) * (maxX - minX)+1).toStringAsFixed(0));
+                                  
+                                  // debugPrint('Touched X-axis value: $touchedXValue');
+                                // }
+                                if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
+                                  // Find the nearest point (spot) the user interacted with
+                                  final touchedSpot = touchResponse.lineBarSpots!.first;
+                                  final barIndex = touchedSpot.barIndex;
+                                  // Get the index and value of the touched spot
+                                  // final int index = touchedSpot.spotIndex;
+                                  final String weekLabel; 
+                                  if (widget.scaleSetting ==  ScaleSetting.equalIntervals){
+                                    weekLabel =  groupedDates[barIndex][touchedSpot.spotIndex].split(' ')[0]; // Assuming 'dates' is a list of labels for each X point ! DOESNT WORK WITH MULTIPLE GRAPHS
+                                  }
+                                  else{
+                                    weekLabel =  DateFormat('yyyy-MM-dd').format(DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt())); // Assuming 'dates' is a list of labels for each X point
+                                  }
+                                  final double value = touchedSpot.y; // Y value at the touched point
+                                  final double xVal = touchedSpot.x;
+                                  final Color? color = touchedSpot.bar.color;
+                                  debugPrint('xVal: $xVal, value: $value, weekLabel: $weekLabel');
+                                  // Use post-frame callback to ensure state/UI updates occur after the touch event
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    alterHeadingBar(value, weekLabel, color ?? Colors.blue); // Trigger your heading update function
+                                  });
+                                }
+                              },
+                              getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+                                return spotIndexes.map((index) {
+                                  // Draw a vertical line from the top to the bottom of the chart at the X-axis of the touched spot
+                                  return const TouchedSpotIndicatorData(
+                                    FlLine(
+                                      color: Colors.blue,      // Vertical line color
+                                      strokeWidth: 2,          // Vertical line thickness
+                                    ),
+                                    FlDotData(show: true),     // Optionally show a dot at the touched point
+                                  );
+                                }).toList();
+                              },
+                            ),
+                            titlesData: FlTitlesData(
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  interval: spots.isNotEmpty ? calculateInterval(
+                                    spots.values.expand((spots) => spots).map(
+                                      (spot) {
+                                          double spotVal = spot.x;
+                                          if (widget.scaleSetting ==  ScaleSetting.scaled) {
+                                            spotVal -= DateTime.parse(dates.first.split(' ')[0]).millisecondsSinceEpoch.toDouble();
                                           }
-                                        ).reduce(max),
-                                        5
-                                      ) : 9999,
-                                      showTitles: true,
-                                      getTitlesWidget: (value, _) {
-                                        return SideTitleWidget(
-                                          axisSide: AxisSide.bottom,
-                                          child: Text(
-                                            spots.isNotEmpty ? getDateValue(dates, value) : '',
-                                            style: const TextStyle(fontSize: 12),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  leftTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      getTitlesWidget: (value, _) {
-                                        return Text(value.toInt().toString()); // Display as integer
-                                      },
-                                    ),
-                                  ),
+                                          return spotVal;
+                                      }
+                                    ).reduce(max),
+                                    5
+                                  ) : 9999,
+                                  showTitles: true,
+                                  getTitlesWidget: (value, _) {
+                                    return SideTitleWidget(
+                                      axisSide: AxisSide.bottom,
+                                      child: Text(
+                                        spots.isNotEmpty ? getDateValue(dates, value) : '',
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                borderData: FlBorderData(
-                                  show: true,
-                                  border: Border.all(color: Theme.of(context).colorScheme.onSurface),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, _) {
+                                    return Text(value.toInt().toString()); // Display as integer
+                                  },
                                 ),
-                                gridData: const FlGridData(show: true),
                               ),
                             ),
+                            borderData: FlBorderData(
+                              show: true,
+                              border: Border.all(color: Theme.of(context).colorScheme.onSurface),
+                            ),
+                            gridData: const FlGridData(show: true),
                           ),
                         ),
-                        if (!isBodyWeight)
-                        Row(
-                          children: [
-                            selectorBox('Weight', filters.chartTarget == 'weight'),
-                            selectorBox('Volume', filters.chartTarget == 'volume'),
-                            selectorBox('Reps', filters.chartTarget == 'reps'),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        // if (widget.exercises.length > 1)
-                        SizedBox(
-                          height: 160,
-                          child: PageView.builder(
-                            physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
-                            scrollDirection: Axis.horizontal,
-                            controller: pageController,
-                            itemBuilder: (context, index){
-                              final itemIndex = index % widget.exercises.length;
-                              String exercise = widget.exercises[itemIndex];
-                              int orderPos = exercisesOrder.indexOf(exercise);
-                              return exerciseTile(exercise, orderPos != -1 ? orderPos : 0, spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0, isBodyWeight);
-                            }
-                          ),
-                        ),
-                        // if (widget.exercises.length == 1)
-                        // exerciseTile(widget.exercises[0], 0)
-
+                      ),
+                    ),
+                    if (!isBodyWeight)
+                    Row(
+                      children: [
+                        selectorBox('Weight', filters.chartTarget == 'weight'),
+                        selectorBox('Volume', filters.chartTarget == 'volume'),
+                        selectorBox('Reps', filters.chartTarget == 'reps'),
                       ],
                     ),
+                    const SizedBox(height: 5),
+                    // if (widget.exercises.length > 1)
+                    SizedBox(
+                      height: 160,
+                      child: PageView.builder(
+                        physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
+                        scrollDirection: Axis.horizontal,
+                        controller: pageController,
+                        itemBuilder: (context, index){
+                          final itemIndex = index % widget.exercises.length;
+                          String exercise = widget.exercises[itemIndex];
+                          int orderPos = exercisesOrder.indexOf(exercise);
+                          return exerciseTile(
+                            exercise, 
+                            orderPos != -1 ? orderPos : 0, 
+                            spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0, 
+                            isBodyWeight,
+                            data.heaviestWeight, 
+                            data.heaviestVolume
+                          );
+                        }
+                      ),
+                    ),
+                    // if (widget.exercises.length == 1)
+                    // exerciseTile(widget.exercises[0], 0)
+
+                  ],
                 ),
-              );
-              } else {
-                return const Center(child: Text('No data available'));
-              }
-            },
+            ),
           );
       }, 
       error: (error, stack) => Text('Error fetching data: $error'), 
@@ -888,7 +845,7 @@ final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, C
   return ChartFiltersNotifier(initialFilters: ChartFilters.weight());
 });
 
-Future<List> getStats(Map data, List targets, int range) async {
+List getStats(Map data, List targets, int range) {
   List targetData = [];
   Map heaviestWeight = {};
   Map heaviestVolume = {};
@@ -1347,4 +1304,37 @@ class ExerciseHistoryNode {
   final String workoutRef;
   final String type;
   ExerciseHistoryNode({required this.name, required this.sets, required this.workoutRef, required this.type});
+}
+
+
+final graphDataProvider = Provider.autoDispose.family<AsyncValue<GraphModel>, List>((ref, exericses) {
+  final filters = ref.watch(chartFilterProvider);
+  final rawDataAsync = ref.watch(workoutDataProvider);
+
+  return rawDataAsync.whenData((data) {
+    var stats = getStats(data, exericses, filters.range);
+    // final List dates = exerciseData.map((data) => data['date']).toList(); // .split(' ')[0]
+    // final List values = exerciseData.map((data) => data[selector]).toList();
+
+      // exerciseData = stats[0];
+    if (stats[0].isNotEmpty){
+      // heaviestWeight = stats[1];
+      // heaviestVolume = stats[2];
+    }
+    return GraphModel(
+      stats: stats[0], 
+      rawData: data, 
+      heaviestWeight: stats[1], 
+      heaviestVolume: stats[2]
+    );
+  });
+});
+
+class GraphModel {
+  final List stats;
+  final Map rawData;
+  final Map heaviestWeight;
+  final Map heaviestVolume;
+  GraphModel({required this.stats, required this.rawData, required this.heaviestWeight, required this.heaviestVolume});
+
 }
