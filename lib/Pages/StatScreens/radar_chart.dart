@@ -370,7 +370,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
         }
       }
     }else{
-      debugPrint("${data[day]}Out of range");
+      debugPrint("$day Out of range");
     }
   }
   for (int rangeKey in muscleData.keys){

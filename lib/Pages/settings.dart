@@ -31,8 +31,9 @@ class Settings extends ConsumerWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              settingsheader('Preferences'),
-              _buildSettingsBox(
+              settingsHeader('Preferences', context),
+              _buildSettingsTile(
+                context,
                 icon: Icons.person,
                 label: 'Account',
                 function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
@@ -56,7 +57,8 @@ class Settings extends ConsumerWidget {
                   }
                 },
               ),
-              _buildSettingsBox(
+              _buildSettingsTile(
+                context,
                 icon: Icons.flag,
                 label: 'Days per week goal',
                 function: () {
@@ -68,7 +70,8 @@ class Settings extends ConsumerWidget {
                   );
                 },
               ),
-              _buildSettingsBox(
+              _buildSettingsTile(
+                context,
                 icon: Icons.accessibility,
                 label: 'Measurements',
                 function: () async{
@@ -81,7 +84,8 @@ class Settings extends ConsumerWidget {
                   settings = await getAllSettings();
                 },
               ),
-              _buildSettingsBox(
+              _buildSettingsTile(
+                context,
                 icon: Icons.local_activity,
                 label: 'Workout',
                 function: () {
@@ -94,14 +98,16 @@ class Settings extends ConsumerWidget {
                 },
               ),
               // setttingDividor(),
-              settingsheader('Functions'),
-              _buildSettingsBox(
+              settingsHeader('Functions', context),
+              _buildSettingsTile(
+                context,
                 icon: Icons.upload,
                 label: 'Export data',
                 function: () => exportJson(context),
               ),
               setttingDividor(),
-              _buildSettingsBox(
+              _buildSettingsTile(
+                context,
                 icon: Icons.download,
                 label: 'Import data',
                 function: (){
@@ -114,13 +120,14 @@ class Settings extends ConsumerWidget {
                   // importData(context);
                 },
               ),
-              _buildSettingsBox(
+              _buildSettingsTile(
+                context, 
                 icon: Icons.refresh,
                 label: 'Reset data',
                 function: (){resetDataButton(context);},
               ),
-              setttingDividor(),
-              _buildSettingsBox(
+              _buildSettingsTile(
+                context, 
                 icon: Icons.move_down,
                 label: 'Move exercises',
                 function: (){moveExercises(context);},
@@ -135,18 +142,39 @@ class Settings extends ConsumerWidget {
     );
   }
 
-  Padding settingsheader(String header) {
+
+  Widget settingsHeader(String header, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.only(left: 4, top: 16, bottom: 8),
       child: Text(
-        header,
-        textAlign: TextAlign.left,
-        style: const TextStyle(
-          fontSize: 16,
+        header.toUpperCase(),
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
           color: Colors.grey,
           fontWeight: FontWeight.bold,
-          letterSpacing: .8
+          letterSpacing: 1.0,
         ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile(BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback? function,
+    Widget? rightside,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 1,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: ListTile(
+        onTap: function,
+        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
+        title: Text(
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        trailing: rightside ?? const Icon(Icons.arrow_forward_ios_rounded, size: 16),
       ),
     );
   }
@@ -400,46 +428,4 @@ class MeasurementPopup extends ConsumerWidget{
       ),
     );
   }
-
 }
-Widget _buildSettingsBox({
-    required IconData icon,
-    required String label,
-    required VoidCallback? function,
-    Widget? rightside
-  }) {
-    return GestureDetector(
-      onTap: function,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withValues(alpha: 0.1), // Background color for the whole box
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Row(
-            children: [
-              Icon(icon),
-              const SizedBox(width: 8.0),
-              Text(
-                label,
-                style: const TextStyle(
-                   fontSize: 23,
-                ),
-              ),
-              const Spacer(),
-              rightside ??
-                Container(
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.arrow_forward_ios),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
