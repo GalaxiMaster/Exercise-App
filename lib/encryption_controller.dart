@@ -102,9 +102,9 @@ Future<bool?> restoreDataFromCloud() async{
         .collection('User Data')
         .doc(uuid).get()).data();
     if (data != null){
-      writeData(data['Output']);
-      writeData(data['Settings'], path: 'settings');
-      writeData(data['Records'], path: 'records');
+      await writeData(data['Output']);
+      await writeData(data['Settings'], path: 'settings');
+      await writeData(data['Records'], path: 'records');
     }
   }
   return true;
