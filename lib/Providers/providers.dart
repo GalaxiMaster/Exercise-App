@@ -228,6 +228,13 @@ class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
     });
   }
   
+  void updateState(Map<String, dynamic> data) {
+    state = AsyncData(data);
+    state.whenData((data){
+      writeData(data, path: 'current');
+    });
+  }
+
   Future<void> deleteExercise(String key) async {
     Map stateVal = state.value ?? {};
     stateVal.remove(key);

@@ -1,6 +1,5 @@
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/encryption_controller.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -346,7 +345,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
       ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);
       ref.read(workoutDataProvider.notifier).updateValue('$day $num', data);
       syncData(); // TODO make simpler
-      resetData(['current']);
+      ref.read(currentWorkoutProvider.notifier).updateState({});
     }
     return data;
   }

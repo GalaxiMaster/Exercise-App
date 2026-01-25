@@ -26,7 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     cacheData();
   }
   Future<bool> getIsCurrent() async{
-    Map<String, dynamic> data = await ref.read(currentWorkoutProvider.future);
+    Map<String, dynamic> data = await ref.read(currentWorkoutProvider.future); // TODO clean up
     return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
   Future<void> _loadRoutines() async {
@@ -104,7 +104,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             TextButton(
                               child: const Text('Discard', style: TextStyle(color: Colors.red),),
                               onPressed: () {
-                                resetData(['current']); // TODO
+                                ref.read(currentWorkoutProvider.notifier).updateState({});
                                 Navigator.of(context).pop(); // Dismiss the dialog
                                 Navigator.push(
                                   context,

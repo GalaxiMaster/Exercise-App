@@ -284,7 +284,7 @@ void resetDataButton(BuildContext context){
           TextButton(
             child: const Text('Delete', style: TextStyle(color: Colors.red),),
             onPressed: () {
-              resetData(['current','output', 'records']);
+              resetData(['current','output', 'records']); // TODO impliment providers
               Navigator.of(context).pop(); // Dismiss the dialog
             },
           ),

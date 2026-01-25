@@ -3,7 +3,6 @@ import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
@@ -178,9 +177,9 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   void updateExercises() async{
     if (!widget.editing){
       if (sets.isEmpty){
-        resetData(['current']);
+        ref.read(currentWorkoutProvider.notifier).updateState({});
       }
-      writeData({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets}, path: 'current', append: false);
+      ref.read(currentWorkoutProvider.notifier).updateState({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets});
     }
   }
 
@@ -627,10 +626,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                       exerciseTypeAccess[exercise] = type;
                     }
                   }
-                  setState(() {
-
-                    updateExercises();
-                  });
+                  updateExercises();
                 }
               },
               child: const Text('Select Exercise'),
