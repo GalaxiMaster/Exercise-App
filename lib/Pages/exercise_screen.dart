@@ -42,23 +42,29 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   TabItem _currentTab = TabItem.graph;
   PageController pageController = PageController();
   ScaleSetting scaleSetting = ScaleSetting.equalIntervals;
+  bool _isAnimating = false;
 
   @override
   void initState() {
     super.initState();
   }
   
-  void _selectTab(int tabIndex, {bool movePage = true}) {
-    if (pageController.hasClients && movePage) {
-      pageController.animateToPage(
-        tabIndex, 
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeInOut,
-      );
-    }
+
+  void _selectTab(int tabIndex, {bool fromTap = false}) {
+    if (_currentTab.index == tabIndex) return;
+
     setState(() {
       _currentTab = TabItem.values[tabIndex];
     });
+
+    if (fromTap) {
+      _isAnimating = true;
+      pageController.animateToPage(
+        tabIndex,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      ).then((_) => _isAnimating = false);
+    }
   }
   
   Widget _buildPageContent() {
@@ -75,7 +81,8 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         return pages[index];
       },
       onPageChanged: (index) {
-        _selectTab(index);
+        if (_isAnimating) return;
+        _selectTab(index, fromTap: false);
       },
     );
   }
@@ -108,8 +115,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTab.index, // Convert enum to index
         onTap: (index) {
-          // Convert index back to enum
-          _selectTab(index);
+          _selectTab(index, fromTap: true);
         },
         items: const [
           BottomNavigationBarItem(
