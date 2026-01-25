@@ -237,12 +237,12 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   }
 }
 class PercentageDataRecords {
-  final Map<String, dynamic> currentData;
-  final Map<String, dynamic> previousData;
-  PercentageDataRecords({required this.currentData, required this.previousData});
+  final Map<String, double> currentData;
+  final Map<String, double>? previousData;
+  PercentageDataRecords({required this.currentData, this.previousData});
 }
 
-Map<String, double> getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
+PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
   Map<String, double> muscleData = {};
   final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
@@ -288,13 +288,12 @@ Map<String, double> getPercentageData(Map<String, dynamic> data, String target, 
       debugPrint("${data[day]}Out of range");
     }
   }
-  debugPrint(muscleData.toString());
 
   List<MapEntry<String, double>> entries = muscleData.entries.toList();
   entries.sort((a, b) => a.value.compareTo(b.value));
   muscleData = Map.fromEntries(entries);
 
-  return muscleData;
+  return PercentageDataRecords(currentData: muscleData);
 }
 
 
@@ -307,18 +306,19 @@ final radarModelProvider = Provider.autoDispose<AsyncValue<List<RadarEntry>>>((r
   final rawDataAsync = ref.watch(workoutDataProvider);
 
   return rawDataAsync.whenData((data) {
-    final percentageData = getPercentageData(
+    final PercentageDataRecords percentageData = getPercentageData(
       data, 
       filters.chartTarget, 
       filters.range, 
       ref, // Try to remove this dependency if possible
       targetMuscleGroup: filters.muscleSelected
     );
+
     final List<RadarEntry> radarSections = <RadarEntry>[];
     for (String group in muscleGroups.keys){
       double total = 0;
       for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-        double muscleNum = (percentageData[muscleGroups[group]?[i]] ?? 0);
+        double muscleNum = (percentageData.currentData[muscleGroups[group]?[i]] ?? 0);
           total += muscleNum;
       }
       radarSections.add(RadarEntry(value: total));

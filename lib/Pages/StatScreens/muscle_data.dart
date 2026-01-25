@@ -146,13 +146,14 @@ final chartDataProvider = Provider<AsyncValue<ChartDataViewModel>>((ref) {
   final workoutAsyncValue = ref.watch(workoutDataProvider);
 
   return workoutAsyncValue.whenData((data){
-      final Map<String, double> percentageData = getPercentageData(data, 'Sets', 30, ref);
-      // final Map<String, double> scaledMuscleData = Map<String, double>.from(percentageData[0]);
-      double total = percentageData.values.fold(0.0, (p, c) => p + c);
+      final PercentageDataRecords percentageData = getPercentageData(data, 'Sets', 30, ref);
+      Map<String, double> unscaledData = percentageData.currentData;
 
+      // final Map<String, double> scaledMuscleData = Map<String, double>.from(percentageData[0]);
+      double total = unscaledData.values.fold(0.0, (p, c) => p + c);
       Map<String, double> scaledMuscleData = {};
-      for (String key in percentageData.keys){
-        scaledMuscleData[key] = ((percentageData[key]! / total * 100.0) * 100).roundToDouble() / 100;
+      for (String key in unscaledData.keys){
+        scaledMuscleData[key] = ((unscaledData[key]! / total * 100.0) * 100).roundToDouble() / 100;
       }
 
       List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
@@ -166,7 +167,7 @@ final chartDataProvider = Provider<AsyncValue<ChartDataViewModel>>((ref) {
       }).toList();
       return ChartDataViewModel(
         sections: sections,
-        unscaledValues: percentageData.values.toList().reversed.toList(),
+        unscaledValues: unscaledData.values.toList().reversed.toList(),
       );
     },
   );

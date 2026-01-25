@@ -191,7 +191,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
     );
 
     // final Map<String, double> scaledData = percentageData[0];
-    final Map<String, double> unscaledData = percentageData;
+    final Map<String, double> unscaledData = percentageData.currentData;
     
     final List<String> keys = unscaledData.keys.toList().reversed.toList();
     // final List<double> scaledValues = scaledData.values.toList().reversed.toList();
