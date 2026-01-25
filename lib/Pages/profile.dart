@@ -207,138 +207,143 @@ class _ProfileState extends ConsumerState<Profile> {
               ],
             ),
           ),
-          allDataAsync.when(
-            data: (rData){
-              final Map settings = ref.watch(settingsProvider).value ?? {};
-              final Map? data = rData[graphSelector]; // Extract data
-                final goal = double.tryParse(settings['Day Goal'].toString()) ?? 1.0; // Extract goal
-                selectedBarValue ??= numParsething(data?.values.toList().last ?? 0);
-                if (prevSelector != graphSelector){
-                  prevSelector = graphSelector;
-                  selectedBarValue = numParsething(data?.values.toList().last ?? 0);
-                  selectedBarWeekDistance = 'This week';
-                }
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '$selectedBarValue $unit',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  selectedBarWeekDistance,
+          
+          Column(
+            children: [
+              allDataAsync.when(
+                data: (rData){
+                  final Map settings = ref.watch(settingsProvider).value ?? {};
+                  final Map? data = rData[graphSelector]; // Extract data
+                  final goal = double.tryParse(settings['Day Goal'].toString()) ?? 1.0; // Extract goal
+                  selectedBarValue ??= numParsething(data?.values.toList().last ?? 0);
+                  if (prevSelector != graphSelector){
+                    prevSelector = graphSelector;
+                    selectedBarValue = numParsething(data?.values.toList().last ?? 0);
+                    selectedBarWeekDistance = 'This week';
+                  }
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '$selectedBarValue $unit',
                                   style: const TextStyle(
-                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
                                   ),
                                 ),
-                              ),
-                            ]
-                          ),
-                          const Row(
-                            children: [
-                              Text(
-                                'Last 8 weeks',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    DataBarChart(data: data ?? {}, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          selectorBox('Sessions', graphSelector == 'sessions'),
-                          selectorBox('Duration', graphSelector == 'duration'),
-                          selectorBox('Sets', graphSelector == 'sets'),
-                          selectorBox('Volume', graphSelector == 'volume'),
-                          selectorBox('Weight', graphSelector == 'weight'),
-                          selectorBox('Reps', graphSelector == 'reps'),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.5),
-                        child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 3.5, // Adjust to fit your needs
-                          ),
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero, // Remove padding around the GridView
-                          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
-                            ButtonDetails button = buttonDetails[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => button.destination)
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    // color: Colors.blueAccent.withValues(alpha: 0.8),
-                                    color: Color.fromARGB(255, 21, 21, 21),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    spacing: 10,
-                                    children: [
-                                      SizedBox(width: 15),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Icon(button.icon),
-                                      ),
-                                      Expanded(
-                                        child: Center(
-                                          child: Text(
-                                            button.title,
-                                            style: const TextStyle(fontSize: 20),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 12.5),
-                                    ],
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text(
+                                    selectedBarWeekDistance,
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              ]
+                            ),
+                            const Row(
+                              children: [
+                                Text(
+                                  'Last 8 weeks',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                Icon(Icons.keyboard_arrow_down, color: Colors.blue,)
+                              ],
+                            ),
+                          ],
                         ),
                       ),
+                      DataBarChart(data: data ?? {}, goal: goal, selector: graphSelector, alterHeadingBar: alterHeadingBar,), // Pass the goal to DataBarChart
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            selectorBox('Sessions', graphSelector == 'sessions'),
+                            selectorBox('Duration', graphSelector == 'duration'),
+                            selectorBox('Sets', graphSelector == 'sets'),
+                            selectorBox('Volume', graphSelector == 'volume'),
+                            selectorBox('Weight', graphSelector == 'weight'),
+                            selectorBox('Reps', graphSelector == 'reps'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }, 
+                error: (error, stack) => Text('Error fetching data $error'), 
+                loading: () => CircularProgressIndicator()
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.5),
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3.5, // Adjust to fit your needs
                     ),
-                  ],
-                );
-            }, 
-            error: (error, stack) => Text('Error fetching data $error'), 
-            loading: () => CircularProgressIndicator()
-          ),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero, // Remove padding around the GridView
+                    physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      ButtonDetails button = buttonDetails[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => button.destination)
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              // color: Colors.blueAccent.withValues(alpha: 0.8),
+                              color: Color.fromARGB(255, 21, 21, 21),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              spacing: 10,
+                              children: [
+                                SizedBox(width: 15),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Icon(button.icon),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      button.title,
+                                      style: const TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 12.5),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          )
         ],
       )
     );

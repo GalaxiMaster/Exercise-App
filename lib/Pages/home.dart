@@ -93,9 +93,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 height: 50,
                 onTap: () async {
                   bool isCurrent = await getIsCurrent();
-                  if (isCurrent){
+                  if (isCurrent && context.mounted){
                     showDialog(
-                      // ignore: use_build_context_synchronously
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
