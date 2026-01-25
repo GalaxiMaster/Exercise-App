@@ -19,16 +19,11 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   Map<String, dynamic> routines = {};
-  bool workoutInProgress = false;
   @override
   void initState() {
     super.initState();
     _loadRoutines();
     cacheData();
-  }
-  Future<bool> getIsCurrent() async{
-    Map<String, dynamic> data = await ref.read(currentWorkoutProvider.future); // TODO clean up
-    return data['sets'] == null ? false : data['sets'].toString() != {}.toString();
   }
   Future<void> _loadRoutines() async {
     Map<String, dynamic> loadedRoutines = await readData(path: 'routines');
@@ -40,14 +35,13 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void cacheData() {
     ref.read(customExercisesProvider);
-    getIsCurrent().then((res){
-      workoutInProgress = res;
-    });
   }
 
 
   @override
   Widget build(BuildContext context) {
+    bool workoutInProgress = (ref.watch(currentWorkoutProvider).value ?? {}).isNotEmpty;
+
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
         button: MyIconButton(
@@ -93,8 +87,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: double.infinity, 
                 height: 50,
                 onTap: () async {
-                  bool isCurrent = await getIsCurrent();
-                  if (isCurrent && context.mounted){
+                  if (workoutInProgress && context.mounted){
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -110,9 +103,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => Addworkout()),
-                                ).then((_) {
-                                  getIsCurrent();  // Call the method after returning from Addworkout
-                                });
+                                );
                               },
                             ),
                             TextButton(
@@ -122,9 +113,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => Addworkout()),
-                                ).then((_) {
-                                  getIsCurrent();  // Call the method after returning from Addworkout
-                                });
+                                );
                               },
                             ),
                           ],
