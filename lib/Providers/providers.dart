@@ -104,8 +104,9 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
     int tempStreak = 0;
     List counted = [];
     int week = weekNumber(DateTime.now());
-
-    for (final day in data.keys.toList().reversed) {
+    List dayKeys = data.keys.toList();
+    dayKeys.sort((a, b) => a.compareTo(b));
+    for (final day in dayKeys.reversed) {
       final weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
       if (counted.contains(weekNum)) continue;
       counted.add(weekNum);
