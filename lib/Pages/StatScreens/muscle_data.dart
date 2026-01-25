@@ -130,11 +130,11 @@ class MuscleData extends ConsumerWidget {
               ),
             ],
           ),
-                            const Divider(
-          thickness: 1,
-          color: Colors.grey,
-          height: 1,
-        ),
+          const Divider(
+            thickness: 1,
+            color: Colors.grey,
+            height: 1,
+          ),
         ],
       ),
     );
@@ -146,9 +146,14 @@ final chartDataProvider = Provider<AsyncValue<ChartDataViewModel>>((ref) {
   final workoutAsyncValue = ref.watch(workoutDataProvider);
 
   return workoutAsyncValue.whenData((data){
-      final List percentageData = getPercentageData(data, 'Sets', 30, ref);
-      final Map<String, double> scaledMuscleData = Map<String, double>.from(percentageData[0]);
-      final Map<String, double> unscaledMuscleData = Map<String, double>.from(percentageData[1]);
+      final Map<String, double> percentageData = getPercentageData(data, 'Sets', 30, ref);
+      // final Map<String, double> scaledMuscleData = Map<String, double>.from(percentageData[0]);
+      double total = percentageData.values.fold(0.0, (p, c) => p + c);
+
+      Map<String, double> scaledMuscleData = {};
+      for (String key in percentageData.keys){
+        scaledMuscleData[key] = ((percentageData[key]! / total * 100.0) * 100).roundToDouble() / 100;
+      }
 
       List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
         return PieChartSectionData(
@@ -161,8 +166,7 @@ final chartDataProvider = Provider<AsyncValue<ChartDataViewModel>>((ref) {
       }).toList();
       return ChartDataViewModel(
         sections: sections,
-        scaledValues: scaledMuscleData.values.toList().reversed.toList(),
-        unscaledValues: unscaledMuscleData.values.toList().reversed.toList(),
+        unscaledValues: percentageData.values.toList().reversed.toList(),
       );
     },
   );

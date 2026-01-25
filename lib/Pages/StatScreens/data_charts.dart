@@ -154,7 +154,7 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                               Text(
                                 '${data.unscaledValues[index].toStringAsFixed(1)} '
                                 '${chartTarget == 'Volume' ? 'kg' : chartTarget} '
-                                ': ${data.scaledValues[index]}%',
+                                ': ${data.scaledValues?[index]}%',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],
@@ -190,32 +190,33 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
       targetMuscleGroup: filters.muscleSelected
     );
 
-    final Map<String, double> scaledData = percentageData[0];
-    final Map<String, double> unscaledData = percentageData[1];
+    // final Map<String, double> scaledData = percentageData[0];
+    final Map<String, double> unscaledData = percentageData;
     
-    final List<String> keys = scaledData.keys.toList().reversed.toList();
-    final List<double> scaledValues = scaledData.values.toList().reversed.toList();
+    final List<String> keys = unscaledData.keys.toList().reversed.toList();
+    // final List<double> scaledValues = scaledData.values.toList().reversed.toList();
 
+    double total = unscaledData.values.fold(0.0, (p, c) => p + c);
 
-    double radius = 125;
-    final sections = List.generate(keys.length, (i) {
+    Map<String, double> scaledMuscleData = {};
+    for (String key in unscaledData.keys){
+      scaledMuscleData[key] = ((unscaledData[key]! / total * 100.0) * 100).roundToDouble() / 100;
+    }
+
+    List<PieChartSectionData> sections = scaledMuscleData.entries.map((entry) {
       return PieChartSectionData(
-        color: getColor(keys[i]),
-        value: scaledValues[i],
-        title: scaledValues[i] > 5 ? '${keys[i]}\n${scaledValues[i]}%' : '',
-        radius: radius,
-        titleStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+        color: getColor(entry.key),
+        value: entry.value,
+        title: entry.value > 5 ? '${entry.key}\n${entry.value}%' : '',
+        radius: 125,
+        titleStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
       );
-    }).reversed.toList();
+    }).toList();
 
     return ChartDataViewModel(
       sections: sections,
       keys: keys,
-      scaledValues: scaledValues,
+      scaledValues: scaledMuscleData.values.toList().reversed.toList(),
       unscaledValues: unscaledData.values.toList().reversed.toList(),
     );
   });
@@ -223,13 +224,13 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
 class ChartDataViewModel {
   final List<PieChartSectionData> sections;
   final List<String>? keys;
-  final List<double> scaledValues;
+  final List<double>? scaledValues;
   final List<double> unscaledValues;
 
   ChartDataViewModel({
     required this.sections,
     this.keys,
-    required this.scaledValues,
+    this.scaledValues,
     required this.unscaledValues,
   });
 }

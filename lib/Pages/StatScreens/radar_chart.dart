@@ -236,71 +236,66 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
     );
   }
 }
+class PercentageDataRecords {
+  final Map<String, dynamic> currentData;
+  final Map<String, dynamic> previousData;
+  PercentageDataRecords({required this.currentData, required this.previousData});
+}
 
-  List<Map<String, double>> getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
-    Map<String, double> muscleData = {};
-    final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
+Map<String, double> getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
+  Map<String, double> muscleData = {};
+  final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
-    for (var day in data.keys){
-      Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
-      int diff = difference.inDays;
-      if (diff <= range || range == -1){
-        for (var exercise in data[day]['sets'].keys){
-          bool isCustom = customExercisesData.containsKey(exercise);
-          Map exerciseData = {};
+  for (var day in data.keys){
+    Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+    int diff = difference.inDays;
+    if (diff <= range || range == -1){
+      for (var exercise in data[day]['sets'].keys){
+        bool isCustom = customExercisesData.containsKey(exercise);
+        Map exerciseData = {};
 
-          if (isCustom && customExercisesData.containsKey(exercise)){
-            exerciseData = customExercisesData[exercise];
-          } else {
-            exerciseData = exerciseMuscles[exercise] ?? {};
+        if (isCustom && customExercisesData.containsKey(exercise)){
+          exerciseData = customExercisesData[exercise];
+        } else {
+          exerciseData = exerciseMuscles[exercise] ?? {};
+        }
+        
+        if (exerciseData.isEmpty) continue;
+        final Map<String, dynamic> musclesInExercise = {
+          ...?exerciseData['Primary'],
+          ...?exerciseData['Secondary'],
+        };
+        if (targetMuscleGroup != null && targetMuscleGroup != 'All Muscles'){ // DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
+          List muscleGroupMembers = muscleGroups[targetMuscleGroup] ?? [];
+          bool muscleExists = muscleGroupMembers.any((muscle){
+            return musclesInExercise.containsKey(muscle);
+          });
+          if (!muscleExists) continue;
+        }
+
+        for (var set in data[day]['sets'][exercise]){
+          double selector = 0;
+          switch(target){
+            case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
+            case 'Sets' : selector = 1;
           }
-          
-          if (exerciseData.isEmpty) continue;
-          final Map<String, dynamic> musclesInExercise = {
-            ...?exerciseData['Primary'],
-            ...?exerciseData['Secondary'],
-          };
-          if (targetMuscleGroup != null && targetMuscleGroup != 'All Muscles'){ // DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
-            List muscleGroupMembers = muscleGroups[targetMuscleGroup] ?? [];
-            bool muscleExists = muscleGroupMembers.any((muscle){
-              return musclesInExercise.containsKey(muscle);
-            });
-            if (!muscleExists) continue;
-          }
-
-          for (var set in data[day]['sets'][exercise]){
-            double selector = 0;
-            switch(target){
-              case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
-              case 'Sets' : selector = 1;
-            }
-            for (var muscle in musclesInExercise.keys){
-              muscleData[muscle] = (muscleData[muscle] ?? 0) + selector*(musclesInExercise[muscle]/100);
-            }
+          for (var muscle in musclesInExercise.keys){
+            muscleData[muscle] = (muscleData[muscle] ?? 0) + selector*(musclesInExercise[muscle]/100);
           }
         }
-      }else{
-        debugPrint("${data[day]}Out of range");
       }
+    }else{
+      debugPrint("${data[day]}Out of range");
     }
-    debugPrint(muscleData.toString());
-    // Scale results to 100
-    double total = muscleData.values.fold(0.0, (p, c) => p + c);
-    debugPrint(total.toString());
-    Map<String, double> scaledMuscleData = {};
-    for (String muscle in muscleData.keys){
-      scaledMuscleData[muscle] = ((muscleData[muscle]! / total * 100.0) * 100).roundToDouble() / 100;
-    }
-    List<MapEntry<String, double>> entries = muscleData.entries.toList();
-    entries.sort((a, b) => a.value.compareTo(b.value));
-    muscleData = Map.fromEntries(entries);
-    debugPrint(muscleData.toString());
-    entries = scaledMuscleData.entries.toList();
-    entries.sort((a, b) => a.value.compareTo(b.value));
-    scaledMuscleData = Map.fromEntries(entries);
-    debugPrint(scaledMuscleData.toString());
-    return [scaledMuscleData, muscleData].toList();
   }
+  debugPrint(muscleData.toString());
+
+  List<MapEntry<String, double>> entries = muscleData.entries.toList();
+  entries.sort((a, b) => a.value.compareTo(b.value));
+  muscleData = Map.fromEntries(entries);
+
+  return muscleData;
+}
 
 
 final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
@@ -323,7 +318,7 @@ final radarModelProvider = Provider.autoDispose<AsyncValue<List<RadarEntry>>>((r
     for (String group in muscleGroups.keys){
       double total = 0;
       for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-        double muscleNum = (percentageData[0][muscleGroups[group]?[i]] ?? 0);
+        double muscleNum = (percentageData[muscleGroups[group]?[i]] ?? 0);
           total += muscleNum;
       }
       radarSections.add(RadarEntry(value: total));
