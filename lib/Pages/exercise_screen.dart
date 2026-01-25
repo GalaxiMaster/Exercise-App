@@ -403,7 +403,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                                     MaterialPageRoute(builder: (context) => 
                                       keys.keys.length > 1 
                                         ? DayScreen(date: DateTime.parse(week), dayKeys: keys.keys.toList())
-                                        : IndividualDayScreen(dayKey: '${keys.keys.toList()[0]} 1'))
+                                        : IndividualDayScreen(dayKey: keys.keys.first))
 
                                   );
                                 },

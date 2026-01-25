@@ -44,6 +44,12 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
         (asyncState) => asyncState.value?[dayKey],
       ),
     );
+    if (dayData == null) {
+      return Scaffold(
+        appBar: myAppBar(context, 'Workout Details'),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     String dateStr = dayData['stats']['startTime'];
     String endTimeStr = dayData['stats']['endTime'];
     Duration length = DateTime.parse(endTimeStr).difference(DateTime.parse(dateStr));
