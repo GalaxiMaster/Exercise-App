@@ -409,3 +409,39 @@ class Header extends StatelessWidget {
     );
   }
 }
+
+Widget settingsHeader(String header, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 4, top: 16, bottom: 8),
+    child: Text(
+      header.toUpperCase(),
+      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+        color: Colors.grey,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.0,
+      ),
+    ),
+  );
+}
+
+Widget buildSettingsTile(BuildContext context, {
+  required IconData icon,
+  required String label,
+  required VoidCallback? function,
+  Widget? rightside,
+}) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    elevation: 1,
+    margin: const EdgeInsets.symmetric(vertical: 6),
+    child: ListTile(
+      onTap: function,
+      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
+      title: Text(
+        label,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+      trailing: rightside ?? const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+    ),
+  );
+}

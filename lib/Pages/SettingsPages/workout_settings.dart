@@ -26,7 +26,7 @@ class _WorkoutsettingsState extends State<Workoutsettings> {
           Map<String, dynamic> settings = snapshot.data!;
           return Column(
             children: [
-              _buildSettingsBox(icon: Icons.check, label: 'Tick Boxes', function: () {}, rightside:  ToggleSwitch(
+              buildSettingsTile(context, icon: Icons.check, label: 'Tick Boxes', function: () {}, rightside:  ToggleSwitch(
                 initialValue: settings['Tick Boxes'] ?? false,
                 onChanged: (value) {
                   settings['Tick Boxes'] = value;
@@ -35,7 +35,7 @@ class _WorkoutsettingsState extends State<Workoutsettings> {
                 },
                 ),
               ),
-              _buildSettingsBox(icon: Icons.check, label: 'Vibrations', function: () {}, rightside:  ToggleSwitch(
+              buildSettingsTile(context, icon: Icons.check, label: 'Vibrations', function: () {}, rightside:  ToggleSwitch(
                 initialValue: settings['Vibrations'] ?? true,
                 onChanged: (value) {
                   settings['Vibrations'] = value;
@@ -55,48 +55,6 @@ class _WorkoutsettingsState extends State<Workoutsettings> {
   }
   
 }
-Widget _buildSettingsBox({
-    required IconData icon,
-    required String label,
-    required VoidCallback? function,
-    Widget? rightside
-  }) {
-    return GestureDetector(
-      onTap: function,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withValues(alpha: 0.1), // Background color for the whole box
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Row(
-            children: [
-              Icon(icon),
-              const SizedBox(width: 8.0),
-              Text(
-                label,
-                style: const TextStyle(
-                   fontSize: 23,
-                ),
-              ),
-              const Spacer(),
-              rightside ??
-                Container(
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.arrow_forward_ios),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
 
 class ToggleSwitch extends StatefulWidget {
   final bool initialValue;

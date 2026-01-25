@@ -32,7 +32,7 @@ class Settings extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               settingsHeader('Preferences', context),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context,
                 icon: Icons.person,
                 label: 'Account',
@@ -57,7 +57,7 @@ class Settings extends ConsumerWidget {
                   }
                 },
               ),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context,
                 icon: Icons.flag,
                 label: 'Days per week goal',
@@ -70,7 +70,7 @@ class Settings extends ConsumerWidget {
                   );
                 },
               ),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context,
                 icon: Icons.accessibility,
                 label: 'Measurements',
@@ -84,7 +84,7 @@ class Settings extends ConsumerWidget {
                   settings = await getAllSettings();
                 },
               ),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context,
                 icon: Icons.local_activity,
                 label: 'Workout',
@@ -99,14 +99,14 @@ class Settings extends ConsumerWidget {
               ),
               // setttingDividor(),
               settingsHeader('Functions', context),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context,
                 icon: Icons.upload,
                 label: 'Export data',
                 function: () => exportJson(context),
               ),
               setttingDividor(),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context,
                 icon: Icons.download,
                 label: 'Import data',
@@ -120,13 +120,13 @@ class Settings extends ConsumerWidget {
                   // importData(context);
                 },
               ),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context, 
                 icon: Icons.refresh,
                 label: 'Reset data',
                 function: (){resetDataButton(context);},
               ),
-              _buildSettingsTile(
+              buildSettingsTile(
                 context, 
                 icon: Icons.move_down,
                 label: 'Move exercises',
@@ -138,43 +138,6 @@ class Settings extends ConsumerWidget {
           return const Center(child: Text('No data available'));
         }
       },
-      ),
-    );
-  }
-
-
-  Widget settingsHeader(String header, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, top: 16, bottom: 8),
-      child: Text(
-        header.toUpperCase(),
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: Colors.grey,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.0,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSettingsTile(BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback? function,
-    Widget? rightside,
-  }) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 1,
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: ListTile(
-        onTap: function,
-        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-        title: Text(
-          label,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        trailing: rightside ?? const Icon(Icons.arrow_forward_ios_rounded, size: 16),
       ),
     );
   }
