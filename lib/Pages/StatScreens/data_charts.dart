@@ -151,6 +151,38 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                                 style: const TextStyle(fontSize: 20),
                               ),
                               const Spacer(),
+                              if (data.previousValues != null)
+                              Builder(
+                                builder: (context) {
+                                  final previousValue = data.previousValues?.elementAtOrNull(index);
+                                  final difference = calculateDifference(data.unscaledValues[index], previousValue);
+                                  Color color =  difference > 0
+                                    ? Colors.green
+                                    : difference < 0
+                                      ? Colors.red
+                                      : Colors.grey;
+                                  return Row(
+                                    children: [
+                                      Icon(
+                                        difference > 0
+                                          ? Icons.arrow_upward
+                                          : difference < 0
+                                            ? Icons.arrow_downward
+                                            : Icons.remove,
+                                        color: color
+                                      ),
+                                      if (difference != 0)
+                                      Text(
+                                        '${difference.toStringAsFixed(1)}  ',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: color,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              ),
                               Text(
                                 '${data.unscaledValues[index].toStringAsFixed(1)} '
                                 '${chartTarget == 'Volume' ? 'kg' : chartTarget} '
@@ -175,6 +207,12 @@ class _DataChartsState extends ConsumerState<DataCharts> {
         }
       )
     );
+  }
+  num calculateDifference(num current, num? previous) {
+    if (previous == null) {
+      return 0;
+    }
+    return current - previous;
   }
 }
 final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewModel>>((ref) {
@@ -218,6 +256,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
       keys: keys,
       scaledValues: scaledMuscleData.values.toList().reversed.toList(),
       unscaledValues: unscaledData.values.toList().reversed.toList(),
+      previousValues: (percentageData.previous?.length ?? 0) > 0 ? percentageData.previous?.values.toList().reversed.toList() : null
     );
   });
 });
@@ -226,12 +265,14 @@ class ChartDataViewModel {
   final List<String>? keys;
   final List<double>? scaledValues;
   final List<double> unscaledValues;
+  final List<double>? previousValues;
 
   ChartDataViewModel({
     required this.sections,
+    required this.unscaledValues, 
     this.keys,
     this.scaledValues,
-    required this.unscaledValues,
+    this.previousValues,
   });
 }
 
