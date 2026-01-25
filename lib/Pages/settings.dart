@@ -124,13 +124,17 @@ class Settings extends ConsumerWidget {
                 context, 
                 icon: Icons.refresh,
                 label: 'Reset data',
-                function: (){resetDataButton(context);},
+                function: (){resetDataButton(context, ref);},
               ),
               buildSettingsTile(
                 context, 
                 icon: Icons.move_down,
                 label: 'Move exercises',
-                function: (){moveExercises(context);},
+                function: (){
+                  Map data = ref.watch(workoutDataProvider).value ?? {};
+                  // TODO error bar on empty
+                  moveExercises(context, data);
+                },
               ),
             ],
           );
@@ -258,7 +262,7 @@ class _GoalOptionsState extends ConsumerState<GoalOptions> {
   }
 }
 
-void resetDataButton(BuildContext context){
+void resetDataButton(BuildContext context, WidgetRef ref){
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -275,7 +279,18 @@ void resetDataButton(BuildContext context){
           TextButton(
             child: const Text('Delete', style: TextStyle(color: Colors.red),),
             onPressed: () {
-              resetData(['current','output', 'records']); // TODO impliment providers
+              Map providerKeys = {
+                'output': workoutDataProvider,
+                'settings': settingsProvider,
+                'current': currentWorkoutProvider
+              };
+              for (MapEntry provider in providerKeys.entries){
+                try {
+                  ref.read(provider.value.notifier).updateState(<String, dynamic>{});
+                } catch (e){
+                  debugPrint('${provider.key} could not be reset: $e');
+                }
+              }
               Navigator.of(context).pop(); // Dismiss the dialog
             },
           ),
@@ -285,9 +300,8 @@ void resetDataButton(BuildContext context){
   );
 }
 
-void moveExercises(BuildContext context) async{ // TODO Add move records too?
+void moveExercises(BuildContext context, Map data) async{ // TODO Add move records too?
   List? problemExercises = [];
-  Map data = await readData();
   for (String day in data.keys){
     for (String exercise in data[day]['sets'].keys){
       if (exerciseMuscles[exercise] == null && !problemExercises.contains(exercise)){

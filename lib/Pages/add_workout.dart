@@ -177,7 +177,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   void updateExercises() async{
     if (!widget.editing){
       if (sets.isEmpty){
-        ref.read(currentWorkoutProvider.notifier).updateState({});
+        ref.read(currentWorkoutProvider.notifier).updateState(<String, dynamic>{});
       } else{
         ref.read(currentWorkoutProvider.notifier).updateState({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets});
       }

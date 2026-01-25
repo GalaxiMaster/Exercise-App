@@ -19,8 +19,15 @@ class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
   Future<void> saveSettings() async {
     final Map<String, dynamic>? currentSettings = state.value;
     if (currentSettings != null) {
-      await writeData(currentSettings, path: 'settings');
+      writeData(currentSettings, path: 'settings');
     }
+  }
+
+  void updateState(Map<String, dynamic> data) {
+    state = AsyncData(data);
+    state.whenData((data){
+      writeData(data, path: 'settings');
+    });
   }
 
   void updateMuscleGoal(String muscle, double newGoal) {
@@ -90,6 +97,13 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
     }
     state = AsyncData(newState);
     writeData(newState);
+  }
+
+  void updateState(Map<String, dynamic> data) {
+    state = AsyncData(data);
+    state.whenData((data){
+      writeData(data);
+    });
   }
 
   Future<void> deleteDay(String key) async {
@@ -172,6 +186,13 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
       key: value,
     });
     writeKey(key, value, path: 'records');
+  }
+  
+  void updateState(Map<String, dynamic> data) {
+    state = AsyncData(data);
+    state.whenData((data){
+      writeData(data, path: 'records');
+    });
   }
 
   int? bestSetIndex(List sets) {
