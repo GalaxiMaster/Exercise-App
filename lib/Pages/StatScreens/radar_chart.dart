@@ -237,19 +237,27 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   }
 }
 class PercentageDataRecords {
-  final Map<String, double> currentData;
-  final Map<String, double>? previousData;
-  PercentageDataRecords({required this.currentData, this.previousData});
+  final Map<String, double> current;
+  final Map<String, double>? previous;
+  PercentageDataRecords({required this.current, this.previous});
 }
 
 PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
-  Map<String, double> muscleData = {};
+  Map<int, Map<String, double>> muscleData = {0: {}, 1: {}};
   final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
   for (var day in data.keys){
     Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
     int diff = difference.inDays;
+
+    int? inRange;
     if (diff <= range || range == -1){
+      inRange = 0;
+    } else if (diff <= range*2) {
+      inRange = 1;
+    }
+
+    if (inRange != null){
       for (var exercise in data[day]['sets'].keys){
         bool isCustom = customExercisesData.containsKey(exercise);
         Map exerciseData = {};
@@ -280,7 +288,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
             case 'Sets' : selector = 1;
           }
           for (var muscle in musclesInExercise.keys){
-            muscleData[muscle] = (muscleData[muscle] ?? 0) + selector*(musclesInExercise[muscle]/100);
+            muscleData[inRange]?[muscle] = (muscleData[inRange]?[muscle] ?? 0) + selector*(musclesInExercise[muscle]/100);
           }
         }
       }
@@ -288,12 +296,14 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
       debugPrint("${data[day]}Out of range");
     }
   }
+  for (int rangeKey in muscleData.keys){
+    List<MapEntry<String, double>> entries = muscleData[rangeKey]!.entries.toList();
+    entries.sort((a, b) => a.value.compareTo(b.value));
+    muscleData[rangeKey] = Map.fromEntries(entries);
+  }
 
-  List<MapEntry<String, double>> entries = muscleData.entries.toList();
-  entries.sort((a, b) => a.value.compareTo(b.value));
-  muscleData = Map.fromEntries(entries);
 
-  return PercentageDataRecords(currentData: muscleData);
+  return PercentageDataRecords(current: muscleData[0]!, previous: muscleData[1]);
 }
 
 
@@ -318,7 +328,7 @@ final radarModelProvider = Provider.autoDispose<AsyncValue<List<RadarEntry>>>((r
     for (String group in muscleGroups.keys){
       double total = 0;
       for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-        double muscleNum = (percentageData.currentData[muscleGroups[group]?[i]] ?? 0);
+        double muscleNum = (percentageData.current[muscleGroups[group]?[i]] ?? 0);
           total += muscleNum;
       }
       radarSections.add(RadarEntry(value: total));
