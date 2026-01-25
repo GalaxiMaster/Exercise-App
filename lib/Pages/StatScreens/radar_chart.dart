@@ -76,6 +76,7 @@ class RadarChartPage extends ConsumerWidget {
                         entryRadius: 3,
                         dataEntries: data[1]
                       ),
+                      if (data.isNotEmpty)
                       RadarDataSet(
                         fillColor: Colors.blue.withValues(alpha: 0.2),
                         borderColor: Colors.blue,
@@ -123,72 +124,70 @@ class RadarChartPage extends ConsumerWidget {
                   children: statTiles.map<Widget>((element){
                     return SizedBox(
                       width: 200,
-                      child: Expanded(
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  element.title,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                element.title,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: element.value.toStringAsFixed(0),
                                     ),
-                                    children: [
-                                      TextSpan(
-                                        text: element.value.toStringAsFixed(0),
+                                    TextSpan(
+                                      text: element.unit,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal,
                                       ),
-                                      TextSpan(
-                                        text: element.unit,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                    ]
-                                  )
-                                ),
-                              
-                                if (timeLabel != 'All Time')
-                                Builder(
-                                  builder: (context) {
-                                    Color color = element.change > 0
-                                      ? Colors.green
-                                      : element.change < 0
-                                        ? Colors.red
-                                        : Colors.grey;
-                                    return Row(
-                                      children: [
-                                        Icon(
-                                          element.change > 0
-                                            ? Icons.arrow_upward
-                                            : element.change < 0
-                                              ? Icons.arrow_downward
-                                              : Icons.remove,
+                                    )
+                                  ]
+                                )
+                              ),
+                            
+                              if (timeLabel != 'All Time')
+                              Builder(
+                                builder: (context) {
+                                  Color color = element.change > 0
+                                    ? Colors.green
+                                    : element.change < 0
+                                      ? Colors.red
+                                      : Colors.grey;
+                                  return Row(
+                                    children: [
+                                      Icon(
+                                        element.change > 0
+                                          ? Icons.arrow_upward
+                                          : element.change < 0
+                                            ? Icons.arrow_downward
+                                            : Icons.remove,
+                                        color: color,
+                                        size: 18,
+                                      ),
+                                      if (element.change != 0)
+                                      Text(
+                                        '${element.change.toStringAsFixed(0)} ${element.unit}',
+                                        style: TextStyle(
+                                          fontSize: 14,
                                           color: color,
-                                          size: 18,
                                         ),
-                                        if (element.change != 0)
-                                        Text(
-                                          '${element.change.toStringAsFixed(0)} ${element.unit}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: color,
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                ),
-                              ],
-                            ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              ),
+                            ],
                           ),
                         ),
                       ),
