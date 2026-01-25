@@ -143,7 +143,20 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   String week = '';
   num graphvalue = 0;
   Color activeColor = Colors.blue;
+  late final bool isBodyWeight;
+  @override
+  void initState() {
+    super.initState();
+    isBodyWeight = widget.exercises.every((exercise) {
+      return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
+    });
 
+    if (isBodyWeight) {
+      Future.microtask(() {
+        ref.read(chartFilterProvider.notifier).setTarget('reps');
+      });
+    }
+  }
   void alterHeadingBar(num value, String weekt, Color color){
     setState(() {
       graphvalue = numParsething(value);
@@ -293,9 +306,6 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
             }
           }
           final Map<String, List<FlSpot>> spots = {};
-          final bool isBodyWeight = widget.exercises.every((exercise) {
-            return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
-          });
           
           // Iterate through the exercise data
           exerciseData.asMap().entries.forEach((entry) {
