@@ -6,26 +6,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class ConfirmWorkout extends ConsumerStatefulWidget {
-  final Map sets;
-  final String startTime;
-  final Map exerciseNotes;
+  final Map data;
+  final bool editing;
   const ConfirmWorkout({
     super.key,
-    required this.sets,
-    required this.startTime,
-    required this.exerciseNotes,
+    required this.data,
+    required this.editing,
   });
   @override
   ConfirmWorkoutState createState() => ConfirmWorkoutState();
 }
 
 class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
+  Map quickStats = {};
+  Map stats = {};
+  DateTime startTime = DateTime.now();
+  DateTime endTime = DateTime.now();
+  final TextEditingController _workoutNotesController = TextEditingController();
+
+
   Map getStats() {
     Map stats = {"Volume": 0, "Sets": 0, "Exercises": 0, "WorkoutTime": ''};
 
-    for (var exercise in widget.sets.keys) {
+    for (var exercise in widget.data['sets'].keys) {
       stats['Exercises'] += 1;
-      for (var set in widget.sets[exercise]) {
+      for (var set in widget.data['sets'][exercise]) {
         stats['Sets'] += 1;
         stats['Volume'] += (double.parse(set['weight'].toString()).abs() *
                 double.parse(set['reps'].toString()))
@@ -56,9 +61,12 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
   @override
   void initState() {
     super.initState();
-    notes = widget.exerciseNotes;
-    startTime = DateTime.parse(widget.startTime);
-    _workoutNotesController.text = notes['Workout'] ?? '';
+    setState(() {
+      stats = widget.data['stats'] ?? {};
+      startTime = DateTime.parse(stats['startTime']);
+      endTime = DateTime.tryParse(stats['endTime'] ?? '') ?? endTime;
+      _workoutNotesController.text = stats['notes']?['Workout'] ?? '';
+    });
   }
 
   @override
@@ -67,15 +75,9 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     super.dispose();
   }
 
-  Map notes = {};
-  Map stats = {};
-  DateTime startTime = DateTime.now();
-  DateTime endTime = DateTime.now();
-  final TextEditingController _workoutNotesController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    stats = getStats();
+    quickStats = getStats();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -116,10 +118,10 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
               spacing: 10,
               runSpacing: 10,
               children: [
-                {'label': 'Volume', 'value': '${stats['Volume'].toStringAsFixed(1)}kg', 'icon': Icons.fitness_center, 'color': Colors.blue},
-                {'label': 'Sets', 'value': '${stats['Sets']}', 'icon': Icons.repeat, 'color': Colors.green},
-                {'label': 'Exercises', 'value': '${stats['Exercises']}', 'icon': Icons.format_list_numbered, 'color': Colors.orange},
-                {'label': 'Duration', 'value': stats['WorkoutTime'], 'icon': Icons.timer, 'color': Colors.purple},
+                {'label': 'Volume', 'value': '${quickStats['Volume'].toStringAsFixed(1)}kg', 'icon': Icons.fitness_center, 'color': Colors.blue},
+                {'label': 'Sets', 'value': '${quickStats['Sets']}', 'icon': Icons.repeat, 'color': Colors.green},
+                {'label': 'Exercises', 'value': '${quickStats['Exercises']}', 'icon': Icons.format_list_numbered, 'color': Colors.orange},
+                {'label': 'Duration', 'value': quickStats['WorkoutTime'], 'icon': Icons.timer, 'color': Colors.purple},
               ].map((item) {
                 return SizedBox(
                   width: (MediaQuery.of(context).size.width - 42) / 2, // Account for padding and spacing
@@ -224,8 +226,8 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    ...widget.sets.keys.map((exercise) {
-                      final exerciseSets = widget.sets[exercise] as List;
+                    ...widget.data['sets'].keys.map((exercise) {
+                      final exerciseSets = widget.data['sets'][exercise] as List;
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2.0),
                         child: Row(
@@ -272,7 +274,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
               minLines: 1,
               maxLines: 2,
               onChanged: (value) {
-                notes['Workout'] = value;
+                stats['notes']['Workout'] = value;
               },
             ),
             const SizedBox(height: 20),
@@ -286,9 +288,12 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
               height: 48,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  saveExercises(widget.sets, startTime, notes, endTime);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  saveExercises(widget.data, startTime, endTime).then((res){
+                    if (res != null && context.mounted) {
+                      Navigator.pop(context, res);
+                      Navigator.pop(context, res);
+                    }
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -316,7 +321,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     );
   }
 
-  void saveExercises(Map exerciseList, DateTime startTime, Map workoutNotes, DateTime endTime) async {
+  Future<Map<dynamic, dynamic>?> saveExercises(Map exerciseList, DateTime startTime, DateTime endTime) async {
     String day = DateFormat('yyyy-MM-dd').format(startTime);
     String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(startTime);
     String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(endTime);
@@ -328,18 +333,22 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
         num++;
       }
     }
-    Map<String, dynamic> data = {
-      'stats': {
-        'startTime': startTimeStr,
-        'endTime': endTimeStr,
-        'notes': workoutNotes,
-      },
-      'sets': exerciseList
+    Map<String, dynamic> combinedStats = {
+      ...stats, // Spread existing values into a NEW map
+      'startTime': startTimeStr,
+      'endTime': endTimeStr,
     };
-    ref.read(recordsProvider.notifier).writeNewRecords(exerciseList);
-    ref.read(workoutDataProvider.notifier).updateValue('$day $num', data);
-    syncData(); // TODO make simpler
-    resetData(['current']);
+    Map<String, dynamic> data = {
+      'stats': combinedStats,
+      'sets': exerciseList['sets']
+    };
+    if (!widget.editing) {
+      ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);
+      ref.read(workoutDataProvider.notifier).updateValue('$day $num', data);
+      syncData(); // TODO make simpler
+      resetData(['current']);
+    }
+    return data;
   }
 }
 

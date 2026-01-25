@@ -12,9 +12,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class IndividualDayScreen extends ConsumerStatefulWidget {
-  final Map dayData;
   final String dayKey;
-  const IndividualDayScreen({super.key, required this.dayData, required this.dayKey});
+  const IndividualDayScreen({super.key, required this.dayKey});
   @override
   // ignore: library_private_types_in_public_api
   _IndividualDayScreenState createState() => _IndividualDayScreenState();
@@ -22,8 +21,7 @@ class IndividualDayScreen extends ConsumerStatefulWidget {
 
 class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
   final Map<String, bool> _imageExistsCache = {};
-  Map dayData = {};
-
+  late String dayKey;
     // Cache the file existence check
   Future<bool> _checkFileExists(String filePath) async {
     if (_imageExistsCache.containsKey(filePath)) {
@@ -35,8 +33,17 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
     return exists;
   }
   @override
+  void initState() {
+    super.initState();
+    dayKey = widget.dayKey;
+  }
+  @override
   build(BuildContext context) {
-    dayData = widget.dayData;
+    final dayData = ref.watch(
+      workoutDataProvider.select(
+        (asyncState) => asyncState.value?[dayKey],
+      ),
+    );
     String dateStr = dayData['stats']['startTime'];
     String endTimeStr = dayData['stats']['endTime'];
     Duration length = DateTime.parse(endTimeStr).difference(DateTime.parse(dateStr));
@@ -120,7 +127,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                 ],
               ),
             ),
-            FutureBuilder(
+            FutureBuilder( // TODO fix
               future: getPercentages(dayData),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -152,11 +159,15 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                           builder: (context) => Addworkout(sets: jsonDecode(jsonEncode(dayData)), editing: true),
                         ),
                       );
-                      if (result != null){
-                        dayData['sets'] = result;
-
-                        ref.read(workoutDataProvider.notifier).updateValue(widget.dayKey, dayData);
-                        // setState(() {});
+                      if (result != null && dayData != result) { // Could add validation here
+                        String newDayKey = result['stats']['startTime'].split(' ')[0];
+                        if (newDayKey != dayKey.split(' ')[0]){
+                          ref.read(workoutDataProvider.notifier).deleteDay(dayKey);
+                          setState(() {
+                            dayKey = newDayKey;
+                          });
+                        }
+                        ref.read(workoutDataProvider.notifier).updateValue(newDayKey, result);
                       }
                     },
                     child: const Text(

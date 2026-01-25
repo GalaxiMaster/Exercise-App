@@ -403,7 +403,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                                     MaterialPageRoute(builder: (context) => 
                                       keys.keys.length > 1 
                                         ? DayScreen(date: DateTime.parse(week), dayKeys: keys.keys.toList())
-                                        : IndividualDayScreen(dayData: keys.values.first, dayKey: '${keys.keys.toList()[0]} 1'))
+                                        : IndividualDayScreen(dayKey: '${keys.keys.toList()[0]} 1'))
 
                                   );
                                 },
@@ -1042,7 +1042,6 @@ class ExerciseHistory extends ConsumerStatefulWidget {
 class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
   late Future<Map<String, Map>> exerciseHistory;
   Map<String, bool> assetExists = {}; // cache for asset existence
-  late Future<Map> futureData;
 
   @override
   initState(){
@@ -1109,7 +1108,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
     );
   });
   @override
-  Widget build(BuildContext context) { // ! futureData has not been initialised
+  Widget build(BuildContext context) {
     final historyAsync = ref.watch(exerciseHistoryProvider(widget.targetExercises));
 
     return historyAsync.when(
@@ -1124,13 +1123,11 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: GestureDetector(
                   onTap: (){
-                    futureData.then((data){
-                      if (!context.mounted) return;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: data[day], dayKey: day))
-                      );
-                    });
+                    if (!context.mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => IndividualDayScreen(dayKey: day))
+                    );
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,

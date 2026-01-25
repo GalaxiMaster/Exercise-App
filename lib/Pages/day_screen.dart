@@ -1,5 +1,4 @@
 import 'package:exercise_app/Pages/add_workout.dart';
-import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -56,7 +55,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => IndividualDayScreen(dayData: dayData[dayData.keys.toList()[index]], dayKey: dayData.keys.toList()[index]))
+                          MaterialPageRoute(builder: (context) => IndividualDayScreen(dayKey: dayData.keys.toList()[index]))
                         );
                       },
                       child: dayBox(dayData.entries.toList()[index])
@@ -109,11 +108,12 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                               builder: (context) => Addworkout(sets: day.value, editing: true),
                             ),
                           );
-                          if (result != null) {
-                            ref.read(workoutDataProvider.notifier).updateValue(day.key, {
-                              ...day.value,
-                              'sets': result
-                            });
+                          if (result != null && day.value != result) { // Could add validation here
+                            String newDayKey = result['stats']['startTime'].split(' ')[0];
+                            if (newDayKey != day.key.split(' ')[0]){
+                              ref.read(workoutDataProvider.notifier).deleteDay(day.key);
+                            }
+                            ref.read(workoutDataProvider.notifier).updateValue(newDayKey, result);
                           }
                         case 'Share':
                           debugPrint('share');
@@ -139,8 +139,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                '${day.value['stats']['startTime'].split(' ')[1]}-${day.value['stats']['endTime'].split(' ')[1]}',
-                style: const TextStyle(
+                  '${(day.value['stats']?['startTime']?.split(' ') as List?)?.elementAtOrNull(1) ?? '--'} - ${(day.value['stats']?['endTime']?.split(' ') as List?)?.elementAtOrNull(1) ?? '--'}',              style: const TextStyle(
                   fontSize: 15
                 ),
               ),
@@ -199,5 +198,72 @@ class _DayScreenState extends ConsumerState<DayScreen> {
       }
     }    
     return type == 'Bodyweight' ? (int.tryParse(bestSet[1].toString()) ?? bestSet[1]).toStringAsFixed(0) : '${bestSet[0]}kg x ${bestSet[1]}';
+  }
+}
+
+class WorkoutStats extends StatelessWidget {
+  final Map workout;
+  const WorkoutStats({
+    super.key,
+    required this.workout,
+  });
+
+  List workoutData(){
+    double volume = 0;
+    final stats = workout['stats'];
+
+    DateTime? start = DateTime.tryParse(stats?['startTime'] ?? '');
+    DateTime? end = DateTime.tryParse(stats?['endTime'] ?? '');
+
+    Duration difference = (start != null && end != null) 
+        ? end.difference(start) 
+        : Duration.zero;
+    
+    String time = '${difference.inHours != 0 ? '${difference.inHours}h' : ''} ${difference.inMinutes.remainder(60)}m';
+    int prs = 0;
+    for (var exercise in workout['sets'].keys){
+      for (var set in workout['sets'][exercise]){
+        if (set['PR'] == 'yes'){
+          prs++;
+        }
+        volume += double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs();
+      }
+    }
+    String sVolume = '';
+    debugPrint(volume.toString());
+    if (volume % 1 == 0) {
+      sVolume = volume.toStringAsFixed(0);
+    } else {
+      sVolume = volume.toStringAsFixed(2);
+    }
+    return [sVolume, time, prs];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List data = workoutData();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(data[1].toString()),
+          ),
+          const Icon(Icons.access_time),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('${data[0]}kg'),
+          ),
+          const Icon(Icons.fitness_center),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: data[2] == 1 ? const Text('1 PR') : Text('${data[2]} PRs') ,
+          ),
+          const Icon(Icons.emoji_events),
+        ]
+      ),
+    );
   }
 }

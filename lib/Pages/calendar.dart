@@ -305,65 +305,6 @@ class _StreakRestRowState extends State<StreakRestRow> {
   }
 }
 
-class WorkoutStats extends StatelessWidget {
-  final Map workout;
-  const WorkoutStats({
-    super.key,
-    required this.workout,
-  });
-
-  List workoutData(){
-    double volume = 0;
-    Duration difference = DateTime.parse(workout['stats']['endTime']).difference(DateTime.parse(workout['stats']['startTime']));
-    String time = '${difference.inHours != 0 ? '${difference.inHours}h' : ''} ${difference.inMinutes.remainder(60)}m';
-    int prs = 0;
-    for (var exercise in workout['sets'].keys){
-      for (var set in workout['sets'][exercise]){
-        if (set['PR'] == 'yes'){
-          prs++;
-        }
-        volume += double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs();
-      }
-    }
-    String sVolume = '';
-    debugPrint(volume.toString());
-    if (volume % 1 == 0) {
-      sVolume = volume.toStringAsFixed(0);
-    } else {
-      sVolume = volume.toStringAsFixed(2);
-    }
-    return [sVolume, time, prs];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List data = workoutData();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(data[1].toString()),
-          ),
-          const Icon(Icons.access_time),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text('${data[0]}kg'),
-          ),
-          const Icon(Icons.fitness_center),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: data[2] == 1 ? const Text('1 PR') : Text('${data[2]} PRs') ,
-          ),
-          const Icon(Icons.emoji_events),
-        ]
-      ),
-    );
-  }
-}
-
 Widget buildDaySquare(bool isActive, double size, {double margin = 0.75, double borderRadius = 1, Color activeColor = Colors.blue}) {
   return Container(
     width: size,

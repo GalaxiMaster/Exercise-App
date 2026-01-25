@@ -16,10 +16,10 @@ import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
 
 class Addworkout extends ConsumerStatefulWidget {
-  final Map sets;
+  final Map data;
   final bool editing;
   Addworkout({super.key, sets, this.editing = false}) 
-    : sets = sets ?? {};
+    : data = sets ?? {};
     @override
   // ignore: library_private_types_in_public_api
   _AddworkoutState createState() => _AddworkoutState();
@@ -37,10 +37,10 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
 
   Map boxErrors = {};
   @override
-  void initState() {        
+  void initState() { // TODO clean up this page, specifically this initstate section and to do with currentWorkout
     super.initState();
     loading = true;
-    if(widget.sets.isEmpty){
+    if(widget.data.isEmpty){
       ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
           sets = data['sets'] ?? {};
@@ -52,8 +52,8 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
         repopulateExerciseTypeAccess();
       });
     }else {
-      sets = widget.sets['sets'];
-      exerciseNotes = widget.sets['stats']?['notes'] ?? {};
+      sets = widget.data['sets'];
+      exerciseNotes = widget.data['stats']?['notes'] ?? {};
       repopulateExerciseTypeAccess();
     }
     _initializeFocusNodesAndControllers();
@@ -94,9 +94,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   }
 
   void _initializeFocusNodesAndControllers() {
-    debugPrint('${sets}idsk');
     for (String exercise in sets.keys) {
-      debugPrint('exercise: $exercise idsk');
       _ensureExerciseFocusNodesAndControllers(exercise);
     }
   }
@@ -683,7 +681,6 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
                 leading: const Icon(Icons.delete, color: Colors.red),
                 title: const Text('Remove Set', style: TextStyle(color: Colors.red)),
                 onTap: () {
-                  debugPrint(sets[exercise].toString());
                   setState(() {
                     if(setIndex == 0 && sets[exercise].length == 1){
                       sets.remove(exercise);
@@ -759,19 +756,24 @@ void addNewSet(String exercise, String type) {
   });
 }
   
-  void confirmExercises(Map sets, Map exerciseNotes){
+  void confirmExercises(Map sets, Map exerciseNotes) {
     bool isValidWorkout = checkValidWorkout(sets);
     if (isValidWorkout){
-      if (!widget.editing){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConfirmWorkout(sets: sets, startTime: startTime, exerciseNotes: exerciseNotes,),
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ConfirmWorkout(
+            data: {
+              'sets': sets,
+              'stats': widget.data['stats'] ?? {
+                'startTime': startTime,
+                'notes': exerciseNotes,
+              }
+            }, 
+            editing: widget.editing, 
           ),
-        );
-      } else{
-        Navigator.pop(context, sets);
-      }
+        ),
+      );
     } else {
       showDialog(
         context: context,
@@ -798,7 +800,6 @@ void addNewSet(String exercise, String type) {
     for (String exercise in sets.keys){
       for (int i = 0; i < sets[exercise].length; i++) {
         Map set = sets[exercise][i];
-        debugPrint(set.toString());
         if (set['reps'] == ''){
           setState(() {
             boxErrors[exercise] ??= {};
