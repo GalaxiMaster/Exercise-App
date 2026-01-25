@@ -9,7 +9,7 @@ class Options {
     'Past 3 months': 90,
     'Past 6 months': 180,
     'Past year': 365,
-    'All time': -1,
+    'All Time': -1,
   };
   Map<String, String> muscleOptions = {
     'Chest': 'Chest',
@@ -21,6 +21,19 @@ class Options {
   };
 }
 
+class ComparisonStatTile{
+  final String title;
+  num value;
+  num change;
+  String unit;
+
+  ComparisonStatTile({
+    required this.title,
+    required this.value,
+    required this.change,
+    required this.unit,
+  });
+}
 
 extension ColorExtension on Color {
   int get redVal   => (r * 255).round().clamp(0, 255);
@@ -28,6 +41,23 @@ extension ColorExtension on Color {
   int get blueVal  => (b * 255).round().clamp(0, 255);
 
   String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
+}
+extension HexColor on Color {
+  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
+  static Color fromHexColor(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+}
+
+// Used for calculating differences between current and previous values in chart pages
+num calculateDifference(num current, num? previous) {
+  if (previous == null) {
+    return 0;
+  }
+  return current - previous;
 }
 
 int getNormalSetNumber(String exercise, int currentIndex, List sets) {

@@ -13,12 +13,15 @@ class RadarChartPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final radarSectionsProvider = ref.watch(radarModelProvider);
+    final statBoxDataProvider = ref.watch(statBoxModelProvider);
+
     return Scaffold(
       appBar: myAppBar(context, 'Radar Chart'),
       body: radarSectionsProvider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (data) {
+          String timeLabel = ref.watch(chartFilterProvider).timeLabel;
           return Column(
             children: [
               Padding(
@@ -47,7 +50,7 @@ class RadarChartPage extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            ref.watch(chartFilterProvider).timeLabel,
+                            timeLabel,
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.white
@@ -111,29 +114,94 @@ class RadarChartPage extends ConsumerWidget {
                   ),
                 ),
               ),
-
+              statBoxDataProvider.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error loading data $err')),
+                data: (statTiles) => Wrap(
+                  spacing: 10,
+                  alignment: WrapAlignment.center,
+                  children: statTiles.map<Widget>((element){
+                    return SizedBox(
+                      width: 200,
+                      child: Expanded(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  element.title,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: element.value.toStringAsFixed(0),
+                                      ),
+                                      TextSpan(
+                                        text: element.unit,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    ]
+                                  )
+                                ),
+                              
+                                if (timeLabel != 'All Time')
+                                Builder(
+                                  builder: (context) {
+                                    Color color = element.change > 0
+                                      ? Colors.green
+                                      : element.change < 0
+                                        ? Colors.red
+                                        : Colors.grey;
+                                    return Row(
+                                      children: [
+                                        Icon(
+                                          element.change > 0
+                                            ? Icons.arrow_upward
+                                            : element.change < 0
+                                              ? Icons.arrow_downward
+                                              : Icons.remove,
+                                          color: color,
+                                          size: 18,
+                                        ),
+                                        if (element.change != 0)
+                                        Text(
+                                          '${element.change.toStringAsFixed(0)} ${element.unit}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: color,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              )
             ],
           );
         }
       )
     );
   }
-}
-extension HexColor on Color {
-  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
-  static Color fromHexColor(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
-  }
-
-  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
-  String toHexColor({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
-      '${alpha.toRadixString(16).padLeft(2, '0')}'
-      '${red.toRadixString(16).padLeft(2, '0')}'
-      '${green.toRadixString(16).padLeft(2, '0')}'
-      '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
 class SelectorPopupMap extends StatefulWidget {
@@ -315,6 +383,64 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
   return PercentageDataRecords(current: muscleData[0]!, previous: muscleData[1]);
 }
 
+
+List<ComparisonStatTile> getStatBoxData(Map data, int range) {
+  Map stats = {
+    'Workouts': {0: 0, 1: 0},
+    'Total Volume': {0: 0.0, 1: 0.0},
+    'Sets': {0: 0, 1: 0},
+    'Duration': {0: 0, 1: 0},
+  };
+  for (var day in data.keys){
+    Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
+    int diff = difference.inDays;
+
+    int? rangeKey;
+    if (diff <= range || range == -1){
+      rangeKey = 0;
+    } else if (diff <= range*2) {
+      rangeKey = 1;
+    }
+
+    if (rangeKey != null){
+      DateTime startTime = DateTime.parse(data[day]['stats']['startTime']);
+      DateTime endTime = DateTime.parse(data[day]['stats']['endTime']);
+      Duration length = endTime.difference(startTime);
+      stats['Duration'][rangeKey] = (stats['Duration'][rangeKey] ?? 0) + length.inMinutes;
+      stats['Workouts'][rangeKey] = (stats['Workouts'][rangeKey] ?? 0) + 1;
+      for (String exercise in data[day]['sets'].keys){
+        for (var set in data[day]['sets'][exercise]){
+          double volume = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
+          stats['Total Volume'][rangeKey] = (stats['Total Volume'][rangeKey] ?? 0) + volume;
+          stats['Sets'][rangeKey] = (stats['Sets'][rangeKey] ?? 0) + 1;
+        }
+      }
+    }
+  }
+  List<ComparisonStatTile> statTileList = [];
+  for (MapEntry entry in stats.entries){
+    statTileList.add(
+      ComparisonStatTile(
+        title: entry.key,
+        value: entry.value[0].toDouble(),
+        change: calculateDifference(entry.value[0].toDouble(), entry.value[1]?.toDouble() ?? 0),
+        unit: entry.key == 'Duration' ? 'min' : (entry.key == 'Total Volume' ? 'kg' : '')
+      )
+    );
+  }
+  return statTileList;
+}
+
+final statBoxModelProvider = Provider.autoDispose<AsyncValue<List<ComparisonStatTile>>>((ref) {
+  final filters = ref.watch(chartFilterProvider);
+  final rawDataAsync = ref.watch(workoutDataProvider);
+
+  return rawDataAsync.whenData((data) {
+    final List<ComparisonStatTile> boxData = getStatBoxData(data, filters.range);
+
+    return boxData;
+  });
+});
 
 final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
   return ChartFiltersNotifier();

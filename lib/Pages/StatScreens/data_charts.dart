@@ -1,6 +1,7 @@
 import 'package:exercise_app/Pages/StatScreens/stacked_area_chart.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -207,12 +208,6 @@ class _DataChartsState extends ConsumerState<DataCharts> {
         }
       )
     );
-  }
-  num calculateDifference(num current, num? previous) {
-    if (previous == null) {
-      return 0;
-    }
-    return current - previous;
   }
 }
 final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewModel>>((ref) {

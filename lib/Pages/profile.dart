@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:exercise_app/Pages/calendar.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/StatScreens/muscle_data.dart';
-import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Pages/StatScreens/stats.dart';
 import 'package:exercise_app/Providers/providers.dart';
