@@ -65,12 +65,20 @@ class RadarChartPage extends ConsumerWidget {
                 child: RadarChart(
                   RadarChartData(
                     dataSets: [
+                      if (data.length > 1)
+                      RadarDataSet(
+                        fillColor: Colors.grey.withValues(alpha: 0.2),
+                        borderColor: Colors.grey.withValues(alpha: 0.5),
+                        borderWidth: 2,
+                        entryRadius: 3,
+                        dataEntries: data[1]
+                      ),
                       RadarDataSet(
                         fillColor: Colors.blue.withValues(alpha: 0.2),
                         borderColor: Colors.blue,
                         borderWidth: 2,
                         entryRadius: 3,
-                        dataEntries: data
+                        dataEntries: data[0],
                       ),
                     ],
                     // radarBackgroundColor: Colors.transparent,
@@ -102,7 +110,8 @@ class RadarChartPage extends ConsumerWidget {
                     },
                   ),
                 ),
-              )
+              ),
+
             ],
           );
         }
@@ -311,7 +320,7 @@ final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, C
   return ChartFiltersNotifier();
 });
 
-final radarModelProvider = Provider.autoDispose<AsyncValue<List<RadarEntry>>>((ref) {
+final radarModelProvider = Provider.autoDispose<AsyncValue<List<List<RadarEntry>>>>((ref) {
   final filters = ref.watch(chartFilterProvider);
   final rawDataAsync = ref.watch(workoutDataProvider);
 
@@ -324,16 +333,20 @@ final radarModelProvider = Provider.autoDispose<AsyncValue<List<RadarEntry>>>((r
       targetMuscleGroup: filters.muscleSelected
     );
 
-    final List<RadarEntry> radarSections = <RadarEntry>[];
-    for (String group in muscleGroups.keys){
-      double total = 0;
-      for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-        double muscleNum = (percentageData.current[muscleGroups[group]?[i]] ?? 0);
-          total += muscleNum;
+    List<List<RadarEntry>> radarSections = [];
+    final List sectionSources = [percentageData.current, percentageData.previous ?? {}];
+    for (int i = 0; i < sectionSources.length; i++) {
+      if (sectionSources[i].isEmpty) continue;
+      radarSections.add([]);
+      for (String group in muscleGroups.keys){
+        double total = 0;
+        for (String muscle in muscleGroups[group]!) {
+          double muscleNum = (sectionSources[i]?[muscle] ?? 0);
+            total += muscleNum;
+        }
+        radarSections[i].add(RadarEntry(value: total));
       }
-      radarSections.add(RadarEntry(value: total));
     }
-
     return radarSections;
   });
 });
