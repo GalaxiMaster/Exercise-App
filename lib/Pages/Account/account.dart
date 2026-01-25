@@ -281,7 +281,7 @@ class AccountPageState extends State<AccountPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          errorSnackBar(e),
+          errorSnackBar(e.toString()),
         );
       }
     }
@@ -318,7 +318,7 @@ class AccountPageState extends State<AccountPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          errorSnackBar(e),
+          errorSnackBar(e.toString()),
         );
       }
     }
@@ -436,19 +436,19 @@ class AccountPageState extends State<AccountPage> {
     
     if (res) {
       LoadingOverlay loadingOverlay = LoadingOverlay();
-      if (context.mounted) loadingOverlay.showLoadingOverlay(context);
+      if (mounted) loadingOverlay.showLoadingOverlay(context);
       try {
         await reAuthUser(account);
         await FirebaseAuth.instance.currentUser?.delete();
         await FirebaseAuth.instance.signOut();
         _encryptionService.clearAllSecureStorage();
         loadingOverlay.removeLoadingOverlay();
-        if (context.mounted) Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       } catch (e) {
         loadingOverlay.removeLoadingOverlay();
-        if (context.mounted) {
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            errorSnackBar(e),
+            errorSnackBar(e.toString()),
           );
         }
       }

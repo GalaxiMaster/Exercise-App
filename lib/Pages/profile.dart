@@ -23,7 +23,7 @@ class Profile extends ConsumerStatefulWidget {
 class _ProfileState extends ConsumerState<Profile> {
   String graphSelector = 'sessions';
   String prevSelector = 'sessions';
-  num? selectedBarValue; // TODO set to what it actually is
+  num? selectedBarValue;
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
   late User? account;
@@ -43,38 +43,6 @@ class _ProfileState extends ConsumerState<Profile> {
       selectedBarWeekDistance = distanceInWeeks == 0 ? 'This week' : '$distanceInWeeks weeks ago';
     });
   }
-  final allDataProvider = Provider<AsyncValue<Map<String, Map>>>((ref) {
-    // 1. Listen to the dependencies. 
-    // Using 'watch' ensures this provider recalculates when data changes.
-    final workoutAsyncValue = ref.watch(workoutDataProvider);
-
-    // 2. Handle the AsyncValue of the workout provider
-    return workoutAsyncValue.whenData((data) {
-        Map weeks = {};
-
-        // Preload the last 8 Mondays
-        DateTime today = DateTime.now();
-        DateTime currentMonday = findMonday(today);
-
-        for (int i = 0; i < 7; i++) {
-          DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
-          String day = DateFormat('yyyy MMM dd').format(monday);
-          weeks[day] = 0;
-        }
-
-        Map<String, Map> information = {
-          'sessions': getWeekData(data, Map.from(weeks)),
-          'duration': getDurationData(data, Map.from(weeks)),
-          'volume': getWeightAndStufftData(data, Map.from(weeks), 'volume'),
-          'weight':getWeightAndStufftData(data, Map.from(weeks), 'weight'),
-          'reps': getWeightAndStufftData(data, Map.from(weeks), 'reps'),
-          'sets': getWeightAndStufftData(data, Map.from(weeks), 'sets'),
-        };
-        return information;
-      },
-    );
-  });
-  
   final TextStyle quickStatStyle = TextStyle(
     fontSize: 16
   );
@@ -571,6 +539,42 @@ class DataBarChart extends StatelessWidget {
     );
   }
 }
+
+final allDataProvider = Provider<AsyncValue<Map<String, Map>>>((ref) {
+  // 1. Listen to the dependencies. 
+  // Using 'watch' ensures this provider recalculates when data changes.
+  final workoutAsyncValue = ref.watch(workoutDataProvider);
+
+  // 2. Handle the AsyncValue of the workout provider
+  return workoutAsyncValue.whenData((data) {
+      Map weeks = {};
+
+      // Preload the last 8 Mondays
+      DateTime today = DateTime.now();
+      DateTime currentMonday = findMonday(today);
+
+      for (int i = 0; i < 7; i++) {
+        DateTime monday = currentMonday.subtract(Duration(days: 7 * i));
+        String day = DateFormat('yyyy MMM dd').format(monday);
+        weeks[day] = 0;
+      }
+
+      Map<String, Map> information = {
+        'sessions': getWeekData(data, Map.from(weeks)),
+        'duration': getDurationData(data, Map.from(weeks)),
+        'volume': getWeightAndStufftData(data, Map.from(weeks), 'volume'),
+        'weight':getWeightAndStufftData(data, Map.from(weeks), 'weight'),
+        'reps': getWeightAndStufftData(data, Map.from(weeks), 'reps'),
+        'sets': getWeightAndStufftData(data, Map.from(weeks), 'sets'),
+      };
+      return information;
+    },
+  );
+});
+
+
+
+
 Map getWeekData(Map data, Map weeks){
   // Process data
   for (var day in data.keys) {

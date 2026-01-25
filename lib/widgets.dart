@@ -236,20 +236,20 @@ class _MyTextButtonState extends State<MyTextButton> with SingleTickerProviderSt
     factor = factor.clamp(0.0, 1.0);
     
     // Extract ARGB values
-    int a = color.alpha;
-    int r = (color.red * factor).toInt();
-    int g = (color.green * factor).toInt();
-    int b = (color.blue * factor).toInt();
+    int a = color.alphaVal;
+    int r = (color.redVal * factor).toInt();
+    int g = (color.greenVal * factor).toInt();
+    int b = (color.blueVal * factor).toInt();
     
     // Return the new darker ARGB color
     return Color.fromARGB(a, r, g, b);
   }
   Color shiftColor(Color color, {int redShift = 0, int greenShift = 0, int blueShift = 0}) {
     // Extract ARGB values
-    int a = color.alpha;
-    int r = (color.red + redShift).clamp(0, 255).toInt();
-    int g = (color.green + greenShift).clamp(0, 255).toInt();
-    int b = (color.blue + blueShift).clamp(0, 255).toInt();
+    int a = color.alphaVal;
+    int r = (color.redVal + redShift).clamp(0, 255).toInt();
+    int g = (color.greenVal + greenShift).clamp(0, 255).toInt();
+    int b = (color.blueVal + blueShift).clamp(0, 255).toInt();
     
     // Return the new shifted ARGB color
     return Color.fromARGB(a, r, g, b);

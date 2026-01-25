@@ -3,6 +3,7 @@ import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -306,7 +307,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                           if (color != null) {
                             // Save selected color to data map
-                            data['data']['color'] = [color.alpha, color.red, color.green, color.blue];
+                            data['data']['color'] = [color.alphaVal, color.redVal, color.greenVal, color.blueVal];
 
                             // Save the color to storage
                             await writeData(data as Map<String, dynamic>, path: data['data']['name'], append: false);

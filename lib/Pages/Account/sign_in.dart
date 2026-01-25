@@ -305,13 +305,14 @@ class SignInPageState extends ConsumerState<SignInPage> {
   }
 }
 
-SnackBar errorSnackBar(text) => SnackBar(
-    backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
-    content: Text(
-      text,
-      style: const TextStyle(
-        color: Colors.red,
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-    ));
+SnackBar errorSnackBar(String text) => SnackBar(
+  backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
+  content: Text(
+    text,
+    style: const TextStyle(
+      color: Colors.red,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
+  )
+);

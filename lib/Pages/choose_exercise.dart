@@ -1,4 +1,4 @@
-import 'package:exercise_app/Pages/addCustomExercise.dart';
+import 'package:exercise_app/Pages/add_custom_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';

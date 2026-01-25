@@ -42,8 +42,6 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     int minutes = difference.inMinutes.remainder(60);
 
     stats['WorkoutTime'] = "${hours}h ${minutes}m";
-    // TODO: Add calories burned estimation
-    // TODO: Add average rest time between sets
     return stats;
   }
 

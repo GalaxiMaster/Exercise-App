@@ -39,8 +39,9 @@ extension ColorExtension on Color {
   int get redVal   => (r * 255).round().clamp(0, 255);
   int get greenVal => (g * 255).round().clamp(0, 255);
   int get blueVal  => (b * 255).round().clamp(0, 255);
+  int get alphaVal  => (a * 255).round().clamp(0, 255);
 
-  String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
+  String toHex() => '#${toARGB32().toRadixString(16).padLeft(8, '0').substring(2)}';
 }
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".

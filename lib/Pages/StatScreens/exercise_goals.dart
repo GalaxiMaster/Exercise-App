@@ -4,6 +4,7 @@ import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -292,7 +293,7 @@ class _ExerciseGoalsState extends ConsumerState<ExerciseGoals> {
                 var generatedColor = Random().nextInt(Colors.primaries.length);
                 var color = Colors.primaries[generatedColor];
                 setState(() {
-                  settings['Exercise Goals'][exercise] = [currentValue, [color.red, color.green, color.blue]];
+                  settings['Exercise Goals'][exercise] = [currentValue, [color.redVal, color.greenVal, color.blueVal]];
                   updateList({
                     'settings': settings, // Real settings
                     'data': listState.value['data'],     // Real data

@@ -65,6 +65,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
         if (set['PR'] == 'yes') prs++;
       }
     }
+    final percentageData = ref.watch(percentageModelProvider(dayData));
     return Scaffold(
       appBar: myAppBar(context, 'Workout Details'),
       body: SingleChildScrollView(
@@ -122,7 +123,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                   Row(
                     children: [
                       Text(
-                        'Pie chart',
+                        'Bar Chart', 
                         style: TextStyle(
                           fontSize: 16,
                         ),
@@ -133,20 +134,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                 ],
               ),
             ),
-            FutureBuilder( // TODO fix
-              future: getPercentages(dayData),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error loading data'));
-                } else if (snapshot.hasData) {
-                  return muscleSplit_stackedBars(snapshot.data!, context);
-                } else {
-                  return const Center(child: Text('No data available'));
-                }
-              },
-            ),
+            muscleSplit_stackedBars(percentageData, context), // TOdo add other chart options
             const Divider(height: .1, thickness: 0.5, color: Colors.grey,),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -346,48 +334,6 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
       ],
     );
   }
-  
-  Future<List<dynamic>> getPercentages(Map dayData) async{
-    Map percentages = {};
-    Map musclegroups = {};
-    final Map customExercisesData = await ref.read(customExercisesProvider.future);
-    for (String exercise in dayData['sets'].keys){
-      bool isCustom = customExercisesData.containsKey(exercise);
-      Map exerciseData = {};
-
-      if (isCustom && customExercisesData.containsKey(exercise)){
-        exerciseData = customExercisesData[exercise];
-      } else {
-        exerciseData = exerciseMuscles[exercise] ?? {};
-      }
-
-      if (exerciseData.isEmpty) continue;
-
-      for (var muscle in (exerciseData['Primary']?.keys ?? [])){
-        musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData['Primary']![muscle]!/100*dayData['sets'][exercise].length);
-      }
-      for (var muscle in (exerciseData['Secondary']?.keys ?? [])){
-        musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData['Secondary']![muscle]!/100*dayData['sets'][exercise].length);
-      }
-    }
-    for (String group in muscleGroups.keys){
-      for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
-        double muscleNum = (musclegroups[muscleGroups[group]?[i]] ?? 0).toDouble();
-          if (percentages[group] == null) {
-            percentages[group] = 0;
-          }
-          percentages[group] += muscleNum;
-      }
-    }
-    double currentSum = percentages.values.reduce((a, b) => a + b);
-    double scalingFactor = 100 / currentSum;
-    percentages.updateAll((key, value) => value * scalingFactor);
-    percentages = sortMapByValue(percentages, descending: true);
-    return percentages.entries
-      .map((entry) => {entry.key: double.parse(entry.value.toStringAsFixed(2))})
-      .toList();
-  }
-
 }
 Map sortMapByValue<K, V extends Comparable>(Map map, {bool descending = false}) {
   var entries = map.entries.toList()
@@ -397,3 +343,43 @@ Map sortMapByValue<K, V extends Comparable>(Map map, {bool descending = false}) 
   
   return Map.fromEntries(entries);
 }
+final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, data) {
+  final Map customExercisesData = ref.watch(customExercisesProvider).value ?? {};
+  Map percentages = {};
+  Map musclegroups = {};
+  for (String exercise in data['sets'].keys){
+    bool isCustom = customExercisesData.containsKey(exercise);
+    Map exerciseData = {};
+
+    if (isCustom && customExercisesData.containsKey(exercise)){
+      exerciseData = customExercisesData[exercise];
+    } else {
+      exerciseData = exerciseMuscles[exercise] ?? {};
+    }
+
+    if (exerciseData.isEmpty) continue;
+
+    for (var muscle in (exerciseData['Primary']?.keys ?? [])){
+      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData['Primary']![muscle]!/100*data['sets'][exercise].length);
+    }
+    for (var muscle in (exerciseData['Secondary']?.keys ?? [])){
+      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData['Secondary']![muscle]!/100*data['sets'][exercise].length);
+    }
+  }
+  for (String group in muscleGroups.keys){
+    for (int i = 0;i < (muscleGroups[group]?.length ?? 0); i++) {
+      double muscleNum = (musclegroups[muscleGroups[group]?[i]] ?? 0).toDouble();
+        if (percentages[group] == null) {
+          percentages[group] = 0;
+        }
+        percentages[group] += muscleNum;
+    }
+  }
+  double currentSum = percentages.values.reduce((a, b) => a + b);
+  double scalingFactor = 100 / currentSum;
+  percentages.updateAll((key, value) => value * scalingFactor);
+  percentages = sortMapByValue(percentages, descending: true);
+  return percentages.entries
+    .map((entry) => {entry.key: double.parse(entry.value.toStringAsFixed(2))})
+    .toList();
+});
