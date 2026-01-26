@@ -130,9 +130,7 @@ class Settings extends ConsumerWidget {
                 icon: Icons.move_down,
                 label: 'Move exercises',
                 function: (){
-                  Map data = ref.watch(workoutDataProvider).value ?? {};
-                  // TODO error bar on empty
-                  moveExercises(context, data);
+                  moveExercises(context, ref);
                 },
               ),
             ],
@@ -290,7 +288,8 @@ void resetDataButton(BuildContext context, WidgetRef ref){
   );
 }
 
-void moveExercises(BuildContext context, Map data) async{
+void moveExercises(BuildContext context, WidgetRef ref) async{
+  Map data = ref.read(workoutDataProvider).value ?? {};
   List? problemExercises = [];
   for (String day in data.keys){
     for (String exercise in data[day]['sets'].keys){
@@ -301,24 +300,23 @@ void moveExercises(BuildContext context, Map data) async{
   }
   problemExercises.isEmpty ? problemExercises = null : null;
   List? resultFromList = await Navigator.push(
-    // ignore: use_build_context_synchronously
     context,
     MaterialPageRoute(
       builder: (context) =>  WorkoutList(setting: 'choose', problemExercises: problemExercises, problemExercisesTitle: 'Invalid exercises',),
     ),
   );
-  if (resultFromList == null) return; // TODO clean slightly
+  if (resultFromList == null) return;
 
-  String resultFrom = resultFromList[0];
+  String resultFrom = resultFromList.first;
+  if (!context.mounted) return;
   List? resultToList = await Navigator.push(
-    // ignore: use_build_context_synchronously
     context,
     MaterialPageRoute(
       builder: (context) => const WorkoutList(setting: 'choose',),
     ),
   );
-  if (resultToList == null) return; // TODO clean slightly
-  String resultTo = resultToList[0];
+  if (resultToList == null) return;
+  String resultTo = resultToList.first;
 
   // Create a new map to preserve key order
   Map<String, dynamic> newData = {};
@@ -340,8 +338,8 @@ void moveExercises(BuildContext context, Map data) async{
         newData[day]['sets'][exercise] = data[day]['sets'][exercise];
       }
     }
+    ref.read(workoutDataProvider.notifier).updateValue(day, newData[day]);
   }
-  writeData(newData);
 }
 
 class MeasurementPopup extends ConsumerWidget{
