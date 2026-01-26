@@ -98,7 +98,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             TextButton(
                               child: const Text('Discard', style: TextStyle(color: Colors.red),),
                               onPressed: () {
-                                ref.read(currentWorkoutProvider.notifier).updateState({});
+                                ref.read(currentWorkoutProvider.notifier).updateState(<String, dynamic>{});
                                 Navigator.of(context).pop(); // Dismiss the dialog
                                 Navigator.push(
                                   context,

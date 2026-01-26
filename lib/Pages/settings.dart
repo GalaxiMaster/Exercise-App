@@ -17,17 +17,13 @@ class Settings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final settingsWatch = ref.watch(settingsProvider);
     return Scaffold(
       appBar: myAppBar(context, 'Settings'),
-      body: FutureBuilder(
-      future: getAllSettings(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error loading data'));
-        } else if (snapshot.hasData) {
-          Map? settings = snapshot.data;
+      body: settingsWatch.when(
+        loading: () => const CircularProgressIndicator(),
+        error: (e, _) => Text('Error: $e'),
+        data: (settings) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -65,9 +61,13 @@ class Settings extends ConsumerWidget {
                   showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return const GoalOptions();
+                      return GoalOptions(initialGoal: settings['Day Goal'],);
                     },
-                  );
+                  ).then((res){
+                    if (res == null) return;
+                    ref.read(settingsProvider.notifier).updateValue('Day Goal', res);
+
+                  });
                 },
               ),
               buildSettingsTile(
@@ -78,10 +78,9 @@ class Settings extends ConsumerWidget {
                   await showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return MeasurementPopup(initialMeasurement: (settings?['Bodyweight'] ?? '0'),);
+                      return MeasurementPopup(initialMeasurement: (settings['Bodyweight'] ?? '0'),);
                     },
                   );
-                  settings = await getAllSettings();
                 },
               ),
               buildSettingsTile(
@@ -138,17 +137,10 @@ class Settings extends ConsumerWidget {
               ),
             ],
           );
-        } else {
-          return const Center(child: Text('No data available'));
-        }
       },
       ),
     );
   }
-Future<String> getBodyweight() async {
-  Map data = await getAllSettings();
-  return data['Bodyweight'] ?? '';
-}
   Divider setttingDividor() => Divider(
         thickness: .3,
         color: Colors.grey.withValues(alpha: 0.5),
@@ -157,7 +149,8 @@ Future<String> getBodyweight() async {
 }
 
 class GoalOptions extends ConsumerStatefulWidget {
-  const GoalOptions({super.key});
+  final String initialGoal;
+  const GoalOptions({super.key, required this.initialGoal});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -184,22 +177,19 @@ class _GoalOptionsState extends ConsumerState<GoalOptions> {
 
   // Load the starting point asynchronously
   Future<void> _loadStartingPoint() async {
-    String startingPoint = await getStartingPoint();
+    String startingPoint = widget.initialGoal;
     setState(() {
       _selectedIndex = _options.contains(startingPoint) ? _options.indexOf(startingPoint) : _selectedIndex;
     });
-    _scrollController.jumpToItem(_selectedIndex); // Move to the starting point
-  }
-
-  Future<String> getStartingPoint() async {
-    Map data = await getAllSettings();
-    return data['Day Goal'] ?? '';
+    Future.microtask((){
+      _scrollController.jumpToItem(_selectedIndex); // Move to the starting point
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 300,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
@@ -220,8 +210,8 @@ class _GoalOptionsState extends ConsumerState<GoalOptions> {
                   });
                 },
                 physics: const FixedExtentScrollPhysics(),
-                perspective: 0.005,
-                diameterRatio: 1.5,
+                perspective: 0.009,
+                diameterRatio: 2,
                 childDelegate: ListWheelChildBuilderDelegate(
                   builder: (context, index) {
                     if (index < 0 || index >= _options.length) return null;
@@ -251,8 +241,7 @@ class _GoalOptionsState extends ConsumerState<GoalOptions> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              ref.read(settingsProvider.notifier).updateValue('Day Goal', _options[_selectedIndex]);
+              Navigator.pop(context, _options[_selectedIndex]);
             },
             child: const Text('Done'),
           ),
@@ -301,7 +290,7 @@ void resetDataButton(BuildContext context, WidgetRef ref){
   );
 }
 
-void moveExercises(BuildContext context, Map data) async{ // TODO Add move records too?
+void moveExercises(BuildContext context, Map data) async{
   List? problemExercises = [];
   for (String day in data.keys){
     for (String exercise in data[day]['sets'].keys){
