@@ -593,7 +593,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                           return exerciseTile(
                             exercise, 
                             orderPos != -1 ? orderPos : 0, 
-                            spots.isNotEmpty ? numParsething(findGradient(spots[exercise] ?? [])) : 0, 
+                            spots.isNotEmpty ? numParsething(percentageChange(spots[exercise] ?? [])) : 0, 
                             isBodyWeight,
                             data.heaviestWeight, 
                             data.heaviestVolume
@@ -955,14 +955,18 @@ List<FlSpot> calculateBestFitLine(List<FlSpot> dataPoints) {
   return [FlSpot(minX, m * minX + b), FlSpot(maxX, m * maxX + b)];
 }
 
-double findGradient(List<FlSpot> dataPoints){
-  FlSpot a = dataPoints[0];
-  FlSpot b = dataPoints[dataPoints.length-1];
-  if (a.y < 0 && b.y < 0){
-    return ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
-  }
-  return ((b.y-a.y)/a.y.abs())*100;
+double percentageChange(List<FlSpot> points) {
+  if (points.length < 2) return 0;
+
+  final start = points.first.y;
+  final end   = points.last.y;
+
+  if (start == 0) return 0; // or double.infinity, depending on your use case
+
+  return (end - start) / start.abs() * 100;
 }
+
+
 
 Future<ScaleSetting?> showSettingToggleDialog(
   BuildContext context,
@@ -977,57 +981,27 @@ Future<ScaleSetting?> showSettingToggleDialog(
         title: const Text('Select Scale Setting'),
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return IntrinsicHeight(
-              child: RadioGroup<ScaleSetting>(
-                groupValue: selectedValue,
-                onChanged: (value) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SegmentedButton<ScaleSetting>(
+                segments: const [
+                  ButtonSegment(
+                    value: ScaleSetting.equalIntervals,
+                    label: Text('Equal Intervals'),
+                    icon: Icon(Icons.equalizer),
+                  ),
+                  ButtonSegment(
+                    value: ScaleSetting.scaled,
+                    label: Text('Time scaled'),
+                    icon: Icon(Icons.scale),
+                  ),
+                ],
+                selected: {selectedValue},
+                onSelectionChanged: (Set<ScaleSetting> newSelection) {
                   setState(() {
-                    selectedValue = value!;
+                    selectedValue = newSelection.first;
                   });
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        const Text(
-                          'Time Scaled',
-                          textAlign: TextAlign.center,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedValue = ScaleSetting.scaled;
-                            });
-                          },
-                          child: Radio<ScaleSetting>(
-                            value: ScaleSetting.scaled,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Linear',
-                            textAlign: TextAlign.center,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                selectedValue = ScaleSetting.equalIntervals;
-                              });
-                            },
-                            child: Radio<ScaleSetting>(
-                              value: ScaleSetting.equalIntervals,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
             );
           },
@@ -1273,7 +1247,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
                                       ),
                                     ) 
                                     : Text(
-                                      model.sets[i]['weight'],
+                                      model.sets[i]['weight'].toString(),
                                         style: TextStyle(
                                         fontSize: 18,
                                       ),
@@ -1285,7 +1259,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
                                 height: 50,
                                 child: Center(
                                   child: Text(
-                                    model.sets[i]['reps'],
+                                    model.sets[i]['reps'].toString(),
                                     style: TextStyle(
                                       fontSize: 18,
                                     ),

@@ -69,7 +69,7 @@ class _ProfileState extends ConsumerState<Profile> {
 
     }
     
-    final allDataAsync = ref.watch(allDataProvider);
+    final allDataAsync = ref.watch(profileChartProvider);
 
     return Scaffold(
       appBar: myAppBar(context, 'Profile', 
@@ -548,7 +548,7 @@ class DataBarChart extends StatelessWidget {
   }
 }
 
-final allDataProvider = Provider<AsyncValue<Map<String, Map>>>((ref) {
+final profileChartProvider = Provider<AsyncValue<Map<String, Map>>>((ref) {
   // 1. Listen to the dependencies. 
   // Using 'watch' ensures this provider recalculates when data changes.
   final workoutAsyncValue = ref.watch(workoutDataProvider);

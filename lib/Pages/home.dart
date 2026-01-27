@@ -35,6 +35,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void cacheData() {
     ref.read(customExercisesProvider);
+    ref.read(profileChartProvider);
   }
 
 

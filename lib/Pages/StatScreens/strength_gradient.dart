@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/providers.dart';
@@ -10,15 +9,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-class StrengthGradiant extends ConsumerWidget {
-  const StrengthGradiant({super.key});
+enum GradientCalcType {
+  cumulative,
+  startToEnd
+}
 
+class StrengthGradiant extends ConsumerStatefulWidget {
+  const StrengthGradiant({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final dataProvider = ref.read(strengthGradientProvider);
-    
+  // ignore: library_private_types_in_public_api
+  _StrengthGradiantState createState() => _StrengthGradiantState();
+}
+
+class _StrengthGradiantState extends ConsumerState<StrengthGradiant> {
+  GradientCalcType gradientCalcType = GradientCalcType.startToEnd;
+  
+  @override
+  Widget build(BuildContext context) {
+    final dataProvider = ref.read(strengthGradientProvider(gradientCalcType));
     return Scaffold(
-      appBar: myAppBar(context, 'Strength Gradient'),
+      appBar: myAppBar(
+        context, 
+        'Strength Gradient',
+        button: IconButton(
+          onPressed: () async {
+            final res = await showGradientTypeToggleDialogue(context, gradientCalcType);
+
+            if (res != null){
+              setState(() {
+                gradientCalcType = res;
+              });
+            }
+          }, 
+          icon: Icon(Icons.settings)
+        )
+      ),
       body: dataProvider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
@@ -115,7 +140,8 @@ class StrengthGradiant extends ConsumerWidget {
     );
   }
 }
-final strengthGradientProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
+
+final strengthGradientProvider = Provider.autoDispose.family<AsyncValue<List>, GradientCalcType>((ref, gradientCalcType) {
   final rawDataAsync = ref.watch(workoutDataProvider);
   final filters = ref.watch(chartFilterProvider);
 
@@ -148,7 +174,7 @@ final strengthGradientProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
     Map ms = {};
     for (String exercise in exercisesMap.keys){
       if (exercisesMap[exercise].length > 1){
-        List<num> x = [];
+        List<int> x = [];
         List<num> y = [];
         exercisesMap[exercise] = exercisesMap[exercise].reversed.toList();
         for (var pair in exercisesMap[exercise]!) {
@@ -158,24 +184,43 @@ final strengthGradientProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
 
         int n = y.length;
         if (n != 0){
-          // num minValue = x.reduce(min);
-          // num maxValue = x.reduce(max);
+          List<FlSpot> dataPoints = List.generate(y.length, (index) => FlSpot(x[index].toDouble(), y[index].toDouble())).reversed.toList();
+          switch (gradientCalcType){
+            case GradientCalcType.cumulative:
+              double sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+              double minX = double.infinity, maxX = -double.infinity;
 
-          // double m = minValue/maxValue;
+              for (final p in dataPoints) {
+                final double x = p.x;
+                final double y = p.y;
 
-          FlSpot a = FlSpot(x[0].toDouble(), y[0].toDouble());
-          FlSpot b = FlSpot(x[x.length-1].toDouble(), y[y.length-1].toDouble());
-          double m = 0;
-          if (a.y < 0 && b.y < 0){
-            m = ((b.y-a.y).abs()/(min(a.y.abs(), b.y.abs())))*100;
-          }else{
-            m = ((b.y-a.y)/a.y.abs())*100;
+                sumX += x;
+                sumY += y;
+                sumXY += x * y;
+                sumX2 += x * x;
+
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+              }
+
+              final double m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+              final double b = (sumY - m * sumX) / n;
+
+              final double yMin = m * minX + b;
+              final double yMax = m * maxX + b;
+
+              final double percentageDiff = (yMin - yMax) / yMax * 100;
+
+
+              ms[exercise] = percentageDiff;
+            case GradientCalcType.startToEnd:
+              ms[exercise] = percentageChange(dataPoints);
           }
-          ms[exercise] = m;
-
         }
       }
     }
+
+
     double mAverage = 0;
     List filteredData = [];
 
@@ -208,7 +253,6 @@ final strengthGradientProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
       }
     }
 
-
     return [mAverage, filteredData];
   });
 });
@@ -216,3 +260,56 @@ final strengthGradientProvider = Provider.autoDispose<AsyncValue<List>>((ref) {
 final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
   return ChartFiltersNotifier();
 });
+
+Future<GradientCalcType?> showGradientTypeToggleDialogue(
+  BuildContext context,
+  GradientCalcType currentValue,
+) {
+  GradientCalcType selectedValue = currentValue;
+
+  return showDialog<GradientCalcType?>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Select Gradient Type'),
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: SegmentedButton<GradientCalcType>(
+                segments: const [
+                  ButtonSegment(
+                    value: GradientCalcType.cumulative,
+                    label: Text('Cumulative'),
+                    icon: Icon(Icons.equalizer),
+                  ),
+                  ButtonSegment(
+                    value: GradientCalcType.startToEnd,
+                    label: Text('Start to End'),
+                    icon: Icon(Icons.scale),
+                  ),
+                ],
+                selected: {selectedValue},
+                onSelectionChanged: (Set<GradientCalcType> newSelection) {
+                  setState(() {
+                    selectedValue = newSelection.first;
+                  });
+                },
+              ),
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(null),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(selectedValue),
+            child: const Text('Save'),
+          ),
+        ],
+      );
+    },
+  );
+}
