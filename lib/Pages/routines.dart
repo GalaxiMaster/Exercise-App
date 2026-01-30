@@ -1,19 +1,19 @@
 import 'package:exercise_app/Pages/choose_exercise.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ignore: must_be_immutable
-class AddRoutine extends StatefulWidget {
-  final Function() onRoutineSaved;
+class AddRoutine extends ConsumerStatefulWidget {
   // ignore: non_constant_identifier_names
   final String o_name;
   late Map sets;
 
   // ignore: non_constant_identifier_names
-  AddRoutine({super.key, required this.onRoutineSaved, sets, o_name}) 
+  AddRoutine({super.key, sets, o_name}) 
     : sets = sets ?? {}, 
       o_name = o_name ?? '';
   @override
@@ -21,7 +21,7 @@ class AddRoutine extends StatefulWidget {
   _AddRoutineState createState() => _AddRoutineState();
   }
 
-class _AddRoutineState extends State<AddRoutine> {
+class _AddRoutineState extends ConsumerState<AddRoutine> {
   late TextEditingController _routineNameController;
   Map sets = {};
   @override
@@ -281,16 +281,16 @@ class _AddRoutineState extends State<AddRoutine> {
       // if (widget.o_name != '' && name != widget.o_name){
       //   deleteFile('routines/${widget.o_name}');
       // }
-      Map<String, dynamic> newData = {
-        name: {
+      ref.read(routineDataProvider.notifier).updateValue(
+        name, 
+        {
           'data' : {
             'name' : name
           },
           'sets' : sets
         }
-      };
-      writeData(newData, path: 'routines');
-      widget.onRoutineSaved();          
+      );
+      Navigator.pop(context);
     }
   }
 }

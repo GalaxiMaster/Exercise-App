@@ -23,7 +23,7 @@ class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
     }
   }
 
-  void updateState(Map<String, dynamic> data) async {
+  void writeState(Map<String, dynamic> data) async {
     if (data.isEmpty) { // Guard
       data = await getAllSettings();
     }
@@ -103,7 +103,7 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
     writeData(newState);
   }
 
-  void updateState(Map<String, dynamic> data) {
+  void writeState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
       writeData(data, append: false);
@@ -195,7 +195,7 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
     writeKey(key, value, path: 'records');
   }
   
-  void updateState(Map<String, dynamic> data) {
+  void writeState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
       writeData(data, path: 'records', append: false);
@@ -256,7 +256,7 @@ class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
     });
   }
   
-  void updateState(Map<String, dynamic> data) {
+  void writeState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
       writeData(data, path: 'current', append: false);
@@ -274,3 +274,39 @@ class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
 }
 
 final currentWorkoutProvider = AsyncNotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(CurrentWorkoutNotifier.new);
+
+class RoutineDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
+  @override
+  Future<Map<String, dynamic>> build() async {
+    return await readData(path: 'routines');
+  }
+
+  void updateValue(String key, dynamic value) {
+    state = AsyncData({
+      ...state.value ?? {},
+      key: value,
+    });
+    state.whenData((data){
+      writeData(data, path: 'routines');
+    });
+  }
+  
+  void writeState(Map<String, dynamic> data) {
+    state = AsyncData(data);
+    state.whenData((data){
+      writeData(data, path: 'routines', append: false);
+    });
+  }
+
+  Future<void> deleteRoutine(String key) async {
+    Map stateVal = state.value ?? {};
+    stateVal.remove(key);
+    state = AsyncData({
+      ...stateVal
+    });
+    deleteKey(key, path: 'routines');
+  }
+}
+
+final routineDataProvider = AsyncNotifierProvider<RoutineDataNotifier, Map<String, dynamic>>(RoutineDataNotifier.new);
+

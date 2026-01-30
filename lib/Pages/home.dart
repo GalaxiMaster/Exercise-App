@@ -18,19 +18,10 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  Map<String, dynamic> routines = {};
   @override
   void initState() {
     super.initState();
-    _loadRoutines();
     cacheData();
-  }
-  Future<void> _loadRoutines() async {
-    Map<String, dynamic> loadedRoutines = await readData(path: 'routines');
-    debugPrint("routines loaded");
-    setState(() {
-      routines = loadedRoutines;
-    });
   }
 
   void cacheData() {
@@ -42,7 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     bool workoutInProgress = (ref.watch(currentWorkoutProvider).value ?? {}).isNotEmpty;
-
+    final routineDataAsync = ref.watch(routineDataProvider);
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
         button: MyIconButton(
@@ -99,7 +90,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             TextButton(
                               child: const Text('Discard', style: TextStyle(color: Colors.red),),
                               onPressed: () {
-                                ref.read(currentWorkoutProvider.notifier).updateState(<String, dynamic>{});
+                                ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
                                 Navigator.of(context).pop(); // Dismiss the dialog
                                 Navigator.push(
                                   context,
@@ -153,26 +144,29 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => 
-                      AddRoutine(onRoutineSaved: () {
-                        Navigator.pop(context); // Go back to the previous page
-                        _loadRoutines(); // Reload routines when we come back
-                      })
+                      AddRoutine()
                     ),
                   );
                 }
               ),
               const SizedBox(height: 20),
-              routines.isNotEmpty
-                ? ListView.builder(
-                  itemCount: routines.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic> routine = Map<String, dynamic>.from(routines.values.toList()[index]);
-                    return _buildStreakRestBox(data: routine);
-                  },
-                )
-                : const Text("No routines available"),
+              routineDataAsync.when(
+                loading: () => const Text("No routines available"),
+                error: (e, _) => const Text("Error: No routines available"),
+                data: (routines) {
+                  return routines.isNotEmpty
+                    ? ListView.builder(
+                      itemCount: routines.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> routine = Map<String, dynamic>.from(routines.values.toList()[index]);
+                        return _buildRoutineBox(data: routine);
+                      },
+                    )
+                    : const Text("No routines available");
+                },
+              )
             ],
           ),
         ),
@@ -182,10 +176,10 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void deleteRoutine(String name) async{
     await deleteKey(name, path: 'routines');
-    _loadRoutines();
+    // _loadRoutines();
   }
-  Widget _buildStreakRestBox({
-  required Map data,
+  Widget _buildRoutineBox({
+  required Map<String, dynamic> data,
 }) {
   Color color = data['data']?['color'] != null ? Color.fromARGB(data['data']?['color']?[0], data['data']?['color']?[1], data['data']?['color']?[2], data['data']?['color']?[3]) : const Color(0xff9DCEFF);
   String label =  data['data']?['name'] ?? 'Unknown Routine';
@@ -229,11 +223,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => 
-                              AddRoutine(
-                                onRoutineSaved: () {
-                                  Navigator.pop(context); // Go back to the previous page
-                                  _loadRoutines(); // Reload routines when we come back
-                                }, 
+                              AddRoutine( 
                                 sets: data, 
                                 o_name: label,
                               )
@@ -241,7 +231,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           );
                         case 'Share':
                           debugPrint('share');
-                          _loadRoutines();
                         case 'Color':
                           debugPrint('color');
                         
@@ -279,8 +268,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: const Text('Reset'),
                                     onPressed: () {
                                       data['data']['color'] = null;
-                                      writeData(data as Map<String, dynamic>, path: data['data']['name'], append: false);
-                                      _loadRoutines();
+                                      writeData(data, path: data['data']['name'], append: false);
+                                      // _loadRoutines();
                                       Navigator.of(context).pop();  // Close without saving
                                     },
                                   ),
@@ -299,15 +288,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                             // Save selected color to data map
                             data['data']['color'] = [color.alphaVal, color.redVal, color.greenVal, color.blueVal];
 
-                            // Save the color to storage
-                            await writeData(data as Map<String, dynamic>, path: data['data']['name'], append: false);
-
-                            // Reload routines after saving
-                            _loadRoutines();
+                            ref.read(routineDataProvider.notifier).updateValue(data['data']['name'], data);
                           }
 
                         case 'Delete':
-                          deleteRoutine(label);
+                          ref.read(routineDataProvider.notifier).deleteRoutine(label);
                       }
                     },
                     itemBuilder: (BuildContext context) {

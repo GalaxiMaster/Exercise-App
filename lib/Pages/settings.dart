@@ -274,7 +274,7 @@ void resetDataButton(BuildContext context, WidgetRef ref){
               };
               for (MapEntry provider in providerKeys.entries){
                 try {
-                  ref.read(provider.value.notifier).updateState(<String, dynamic>{});
+                  ref.read(provider.value.notifier).writeState(<String, dynamic>{});
                 } catch (e){
                   debugPrint('${provider.key} could not be reset: $e');
                 }

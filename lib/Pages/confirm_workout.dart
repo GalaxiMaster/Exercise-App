@@ -343,7 +343,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
       ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);
       ref.read(workoutDataProvider.notifier).updateValue('$day $num', data);
       syncData(); // TODO make simpler
-      ref.read(currentWorkoutProvider.notifier).updateState(<String, dynamic>{});
+      ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
     }
     return data;
   }
