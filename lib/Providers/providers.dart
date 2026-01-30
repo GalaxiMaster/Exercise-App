@@ -26,7 +26,7 @@ class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
   void updateState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
-      writeData(data, path: 'settings');
+      writeData(data, path: 'settings', append: false);
     });
   }
 
@@ -102,7 +102,7 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
   void updateState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
-      writeData(data);
+      writeData(data, append: false);
     });
   }
 
@@ -194,7 +194,7 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
   void updateState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
-      writeData(data, path: 'records');
+      writeData(data, path: 'records', append: false);
     });
   }
 
@@ -255,7 +255,7 @@ class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
   void updateState(Map<String, dynamic> data) {
     state = AsyncData(data);
     state.whenData((data){
-      writeData(data, path: 'current');
+      writeData(data, path: 'current', append: false);
     });
   }
 

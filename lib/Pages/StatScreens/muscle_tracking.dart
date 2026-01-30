@@ -33,7 +33,9 @@ class MuscleTrackingState extends ConsumerState<MuscleTracking> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (data) {
-          final muscleGoals = ref.watch(settingsProvider).value?['Muscle Goals'];
+          final muscleGoals = ref.watch(settingsProvider.select(
+            (asyncState) => asyncState.value?['Muscle Goals'],
+          ));
           return SingleChildScrollView(
             child: Column(
               children: [
