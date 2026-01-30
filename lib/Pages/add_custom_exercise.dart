@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:exercise_app/Pages/SettingsPages/custom_exercises_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -121,16 +120,14 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
     final String exerciseName = _exerciseNameController.text.trim();
     final Map<String, int> muscleGroups = _selectedMuscleGroups.map((k, v) => MapEntry(k, v!));
 
-    writeKey(
+    ref.read(customExercisesProvider.notifier).updateValue(
       exerciseName, 
       {
         ...toPrimarySecondary(muscleGroups), 
         'type': selectedExerciseType,
         'tags': ['custom']
-      },
-      path: 'customExercises'
+      }
     );
-    ref.invalidate(customExercisesProvider);
 
     Navigator.pop(context);
   }

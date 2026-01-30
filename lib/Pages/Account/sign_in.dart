@@ -50,10 +50,9 @@ class SignInPageState extends ConsumerState<SignInPage> {
               if (isNew) {
                 // TODO createDefaultPermissions(userCredential);
               }
-              restoreDataFromCloud().then((_){
-                ref.invalidate(workoutDataProvider);
-              });
-              
+              await restoreDataFromCloud();
+              ref.invalidate(workoutDataProvider);
+
               if (mounted) {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }
@@ -166,9 +165,10 @@ class SignInPageState extends ConsumerState<SignInPage> {
                               email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
-                            restoreDataFromCloud().then((_){
-                              ref.invalidate(workoutDataProvider);
-                            });
+                            await restoreDataFromCloud();
+                            
+                            ref.invalidate(workoutDataProvider);
+
                             // toDO getUserPermissions();
                             if (!context.mounted) return;
                             Navigator.popUntil(context, (route) => route.isFirst);

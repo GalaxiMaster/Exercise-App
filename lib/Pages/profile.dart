@@ -31,7 +31,7 @@ class _ProfileState extends ConsumerState<Profile> {
   @override
   void initState() {
     super.initState();
-    account = FirebaseAuth.instance.currentUser;
+    account = FirebaseAuth.instance.currentUser; // Doesnt refresh after the user signs out, could move to provider
   }
 
   void alterHeadingBar(double value, String week){

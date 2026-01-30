@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -185,7 +184,7 @@ class _ExerciseGoalsState extends ConsumerState<ExerciseGoals> {
                     return ListThing(
                       settings: listData['settings'] ?? {},
                       data: listData['data'] ?? {}, 
-                      upDateSettings: upDateSettings
+                      updateSettings: updatSettings
                     );
                   },
                 ),
@@ -198,17 +197,8 @@ class _ExerciseGoalsState extends ConsumerState<ExerciseGoals> {
       loading: () => CircularProgressIndicator()
     );
   }
-  void upDateSettings(Map settings){
-    updateList({
-      'settings': settings, // Real settings
-      'data': listState.value['data'],
-    });
-    List results = calculatePieSections(settings, listState.value['data']);
-    updateChart({
-        'settings': settings, // Real settings
-        'sections': results[0],
-        'percent': results[1],    
-    });
+  void updatSettings(Map newState){
+    ref.read(settingsProvider.notifier).updateValue('Exercise Goals', newState);
   }
 
   void addExerciseGoal(Map<String, dynamic> settings) async{
@@ -667,8 +657,8 @@ class TickPainter extends CustomPainter {
 class ListThing extends StatelessWidget {
   final Map<String, dynamic> settings;
   final Map data;
-  final Function upDateSettings;
-  const ListThing({required this.settings, required this.data, super.key, required this.upDateSettings});
+  final Function updateSettings;
+  const ListThing({required this.settings, required this.data, super.key, required this.updateSettings});
 
   @override
   Widget build(BuildContext context) {
@@ -695,14 +685,11 @@ class ListThing extends StatelessWidget {
   }
   void deleteGoal(Map<String, dynamic> settings, String exercise){
     settings['Exercise Goals'].remove(exercise);
-    upDateSettings(settings);
-    writeData(settings, path: 'settings',append: false);
+    updateSettings(settings);
   }
   void editGoal(Map<String, dynamic> settings, String exercise, int currentValue){
-    debugPrint('called');
-    List value = settings['Exercise Goals'][exercise];
+    List value = settings['Exercise Goals'][exercise]; // TODO wtf
     settings['Exercise Goals'][exercise] = [currentValue, value[1]];
-    upDateSettings(settings);
-    writeData(settings, path: 'settings',append: false);
+    updateSettings(settings['Exercise Goals']);
   }
 }

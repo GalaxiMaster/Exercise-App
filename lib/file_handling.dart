@@ -264,6 +264,7 @@ Future<void> getUserPermissions() async {
 
 Future<Map<String, dynamic>> getAllSettings() async{
   Map<String, dynamic> settings = await readData(path: 'settings');
+
   double defaultMuscleGoal = 30;
   Map<String, dynamic> defaultSettings = {
     'Day Goal' : '1',
@@ -291,7 +292,6 @@ Future<Map<String, dynamic>> getAllSettings() async{
       settings[key] = defaultSettings[key];
     }
   }
-  writeData(settings, path: 'settings',append: false);
   return settings;
 }
 

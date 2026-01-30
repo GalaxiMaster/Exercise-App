@@ -23,7 +23,10 @@ class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
     }
   }
 
-  void updateState(Map<String, dynamic> data) {
+  void updateState(Map<String, dynamic> data) async {
+    if (data.isEmpty) { // Guard
+      data = await getAllSettings();
+    }
     state = AsyncData(data);
     state.whenData((data){
       writeData(data, path: 'settings', append: false);
@@ -59,6 +62,7 @@ class CustomExercisesNotifier extends AsyncNotifier<Map> {
       ...state.value ?? {},
       key: value,
     });
+    writeKey(key, value, path: 'customExercises');
   }
   
   Future<void> deleteExercise(String key) async {

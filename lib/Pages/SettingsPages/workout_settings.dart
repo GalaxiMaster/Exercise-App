@@ -1,55 +1,42 @@
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Workoutsettings extends StatefulWidget{
+
+class Workoutsettings extends ConsumerWidget {
   const Workoutsettings({super.key});
-  
-  @override
-  // ignore: library_private_types_in_public_api
-  _WorkoutsettingsState createState() => _WorkoutsettingsState();
-}
 
-class _WorkoutsettingsState extends State<Workoutsettings> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsAsync = ref.watch(settingsProvider);
     return Scaffold(
       appBar: myAppBar(context, 'Workout Settings'),
-      body: FutureBuilder(
-        future: getAllSettings(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error loading data'));
-          } else if (snapshot.hasData) {
-          Map<String, dynamic> settings = snapshot.data!;
+      body: settingsAsync.when(
+        loading: () => const CircularProgressIndicator(),
+        error: (e, _) => Text('Error: $e'),
+        data: (settings) {
           return Column(
             children: [
               buildSettingsTile(context, icon: Icons.check, label: 'Tick Boxes', function: () {}, rightside:  ToggleSwitch(
                 initialValue: settings['Tick Boxes'] ?? false,
                 onChanged: (value) {
-                  settings['Tick Boxes'] = value;
-                  writeData(settings, path: 'settings', append: false);
+                  ref.read(settingsProvider.notifier).updateValue('Tick Boxes', value);
                   debugPrint('Check slider value changed: $value');
                 },
                 ),
               ),
               buildSettingsTile(context, icon: Icons.check, label: 'Vibrations', function: () {}, rightside:  ToggleSwitch(
-                initialValue: settings['Vibrations'] ?? true,
+                initialValue: settings['Vibrations'] ?? false,
                 onChanged: (value) {
-                  settings['Vibrations'] = value;
-                  writeData(settings, path: 'settings', append: false);
+                  ref.read(settingsProvider.notifier).updateValue('Vibrations', value);
                   debugPrint('Vibrations slider value changed: $value');
                 },
                 ),
               ),
             ],
           );
-        } else{
-          return const Text('Error');
         }
-      } 
       )
     );
   }

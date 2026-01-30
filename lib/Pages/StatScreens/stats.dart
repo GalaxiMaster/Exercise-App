@@ -3,6 +3,7 @@ import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:intl/intl.dart';
+// TODO update page one day
 
 class Stats extends StatefulWidget {
   const Stats({super.key});
