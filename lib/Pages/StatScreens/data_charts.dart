@@ -351,7 +351,7 @@ class _SelectorBox extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Container(
           decoration: BoxDecoration(
-            color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
+            color: selected ? Colors.blue : HexColor.fromHex('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),

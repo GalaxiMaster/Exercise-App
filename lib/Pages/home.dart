@@ -181,7 +181,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildRoutineBox({
   required Map<String, dynamic> data,
 }) {
-  Color color = data['data']?['color'] != null ? Color.fromARGB(data['data']?['color']?[0], data['data']?['color']?[1], data['data']?['color']?[2], data['data']?['color']?[3]) : const Color(0xff9DCEFF);
+Color color = HexColor.fromHex(
+      data['data']?['color'] ?? '#9DCEFF'
+    );
   String label =  data['data']?['name'] ?? 'Unknown Routine';
   String exercises =  data['sets'].keys?.join('\n') ?? 'No exercises';
   return Column(
@@ -237,20 +239,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Color? color = await showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                                Color tempColor = data['data']['color'] != null
-                              ? Color.fromARGB(
-                                  data['data']['color'][0],
-                                  data['data']['color'][1],
-                                  data['data']['color'][2],
-                                  data['data']['color'][3],
-                                )
-                              : const Color.fromARGB(255, 255, 255, 255);
+                              Color tempColor = HexColor.fromHex(
+                                data['data']?['color'] ?? '#ffffff'
+                              );
+
                               return AlertDialog(
                                 title: const Text('Pick a color'),
                                 content: SingleChildScrollView(
                                 child: ColorPicker(
                                   pickerColor: tempColor,
-                                  paletteType: PaletteType.hueWheel, // This is the key fix
+                                  paletteType: PaletteType.hueWheel,
                                   enableAlpha: false,
                                   onColorChanged: (color){
                                     setState(() => tempColor = color);
@@ -268,9 +266,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: const Text('Reset'),
                                     onPressed: () {
                                       data['data']['color'] = null;
-                                      writeData(data, path: data['data']['name'], append: false);
-                                      // _loadRoutines();
-                                      Navigator.of(context).pop();  // Close without saving
+                                      ref.read(routineDataProvider.notifier).updateValue(data['data']['name'], data);
+                                      Navigator.of(context).pop();
                                     },
                                   ),
                                   TextButton(
@@ -286,7 +283,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                           if (color != null) {
                             // Save selected color to data map
-                            data['data']['color'] = [color.alphaVal, color.redVal, color.greenVal, color.blueVal];
+                            data['data']['color'] = color.toHex();
 
                             ref.read(routineDataProvider.notifier).updateValue(data['data']['name'], data);
                           }

@@ -40,7 +40,7 @@ class RadarChartPage extends ConsumerWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: HexColor.fromHexColor('151515'),
+                      color: HexColor.fromHex('151515'),
                       borderRadius: BorderRadius.circular(50)
                     ),
                     height: 50,
@@ -242,7 +242,7 @@ class _SelectorPopupMapState extends State<SelectorPopupMap> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
         child: Container(
           decoration: BoxDecoration(
-            color: HexColor.fromHexColor('262626'),
+            color: HexColor.fromHex('262626'),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
@@ -298,7 +298,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
         child: Container(
           decoration: BoxDecoration(
-            color: HexColor.fromHexColor('262626'),
+            color: HexColor.fromHex('262626'),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(

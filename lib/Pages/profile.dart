@@ -344,7 +344,7 @@ class _ProfileState extends ConsumerState<Profile> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? Colors.blue : HexColor.fromHexColor('151515'),
+            color: selected ? Colors.blue : HexColor.fromHex('151515'),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(

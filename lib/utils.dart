@@ -44,14 +44,22 @@ extension ColorExtension on Color {
   String toHex() => '#${toARGB32().toRadixString(16).padLeft(8, '0').substring(2)}';
 }
 extension HexColor on Color {
-  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
-  static Color fromHexColor(String hexString) {
+  static Color fromHex(String hex) {
     final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
+
+    String cleanHex = hex.replaceFirst('#', '');
+
+    // If RGB, assume fully opaque
+    if (cleanHex.length == 6) {
+      buffer.write('FF');
+    }
+
+    buffer.write(cleanHex);
+
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
+
 
 // Used for calculating differences between current and previous values in chart pages
 num calculateDifference(num current, num? previous) {
