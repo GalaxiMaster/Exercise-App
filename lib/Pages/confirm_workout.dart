@@ -32,8 +32,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
       for (var set in widget.data['sets'][exercise]) {
         stats['Sets'] += 1;
         stats['Volume'] += (double.parse(set['weight'].toString()).abs() *
-                double.parse(set['reps'].toString()))
-            .abs();
+                double.parse(set['reps'].toString())).abs();
       }
     }
     Duration difference = endTime.difference(startTime);
@@ -60,7 +59,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     super.initState();
     setState(() {
       stats = widget.data['stats'] ?? {};
-      startTime = DateTime.parse(stats['startTime']);
+      startTime = DateTime.tryParse(stats['startTime'] ?? '') ?? startTime;
       endTime = DateTime.tryParse(stats['endTime'] ?? '') ?? endTime;
       _workoutNotesController.text = stats['notes']?['Workout'] ?? '';
     });

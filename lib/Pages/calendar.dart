@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:exercise_app/Pages/SettingsPages/calendar_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
@@ -103,7 +105,7 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
   }
 }
 
-class CalendarWidget extends StatefulWidget {
+class CalendarWidget extends ConsumerStatefulWidget {
   final List<DateTime> highlightedDays;
   final Map exerciseData;
 
@@ -113,7 +115,7 @@ class CalendarWidget extends StatefulWidget {
   CalendarWidgetState createState() => CalendarWidgetState();
 }
 
-class CalendarWidgetState extends State<CalendarWidget> {
+class CalendarWidgetState extends ConsumerState<CalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +123,6 @@ class CalendarWidgetState extends State<CalendarWidget> {
     if (widget.exerciseData.keys.isNotEmpty){
       firstTime = DateTime.parse(widget.exerciseData.keys.toList()[0].split(' ')[0]).subtract(const Duration(days: 31));
     }
-
     return Column(
       children: [
         if (widget.exerciseData.isNotEmpty) 
@@ -139,6 +140,24 @@ class CalendarWidgetState extends State<CalendarWidget> {
               bool isToday = date.year == DateTime.now().year &&
                   date.month == DateTime.now().month &&
                   date.day == DateTime.now().day;
+
+              List<Color> highlightedColors = [];
+
+              for (int i = 1; i < 10; i++) {
+                String dayKey = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} $i';
+
+                if (!widget.exerciseData.containsKey(dayKey)) break;
+
+                String? hex = widget.exerciseData[dayKey]?['stats']?['color'];
+
+                if (hex != null) {
+                  highlightedColors.add(HexColor.fromHex(hex));
+                } else {
+                  highlightedColors.add(Colors.blue);
+                }
+              }
+
+              final sweepData = generateHardSweep(highlightedColors);
               return GestureDetector(
                 onTap: () {
                   if (widget.highlightedDays.any((highlightedDay) =>
@@ -167,19 +186,27 @@ class CalendarWidgetState extends State<CalendarWidget> {
                   scale: 0.8,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: isToday ? Border.all(
+                      border: isToday && !isHighlighted? Border.all(
                         color: Colors.blue,
                         width: 2,
                       ) : null,
-                      color:
-                          isHighlighted ? Colors.blue : Colors.transparent,
+                      gradient: SweepGradient(
+                        center: Alignment.center,
+                        // Rotates the start point from 3 o'clock to 12 o'clock
+                        transform: const GradientRotation(-pi / 2),
+                        colors: sweepData['colors'],
+                        stops: sweepData['stops'],
+                      ),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: Text(
                         '${date.day}',
-                        style: const TextStyle(
-                            fontSize: 19
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: ((highlightedColors.isNotEmpty ? highlightedColors.first : null)?.computeLuminance() ?? 0) > 0.5
+                            ? Colors.black
+                            : Colors.white
                         ),
                       ),
                     ),
@@ -192,6 +219,30 @@ class CalendarWidgetState extends State<CalendarWidget> {
       ],
     );
   }
+  Map<String, dynamic> generateHardSweep(List<Color> inputColors) {
+    if (inputColors.isEmpty) return {'colors': [Colors.transparent, Colors.transparent], 'stops': [0.0, 1.0]};
+    if (inputColors.length == 1) return {'colors': [inputColors[0], inputColors[0]], 'stops': [0.0, 1.0]};
+
+    List<Color> colors = [];
+    List<double> stops = [];
+    int count = inputColors.length;
+
+    for (int i = 0; i < count; i++) {
+      // Add the color twice to create the start and end of a segment
+      colors.add(inputColors[i]);
+      colors.add(inputColors[i]);
+
+      // Calculate the stop points
+      // i / count is the start of this segment, (i + 1) / count is the end
+      stops.add(i / count);
+      stops.add((i + 1) / count);
+    }
+
+    return {
+      'colors': colors.reversed.toList(),
+      'stops': stops,
+    };
+  }
 }
 
 class StreakRestRow extends StatefulWidget {
@@ -200,11 +251,10 @@ class StreakRestRow extends StatefulWidget {
   const StreakRestRow({super.key, required this.exerciseData});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _StreakRestRowState createState() => _StreakRestRowState();
+  StreakRestRowState createState() => StreakRestRowState();
 }
 
-class _StreakRestRowState extends State<StreakRestRow> {
+class StreakRestRowState extends State<StreakRestRow> {
   late List stats;
 
   @override

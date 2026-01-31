@@ -31,7 +31,7 @@ class Addworkout extends ConsumerStatefulWidget {
 
 class AddworkoutState extends ConsumerState<Addworkout> {
   Map sets = {};
-  Map exerciseNotes = {};
+  Map stats = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
   Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   Map<String, List<Map<String, TextEditingController>>> _controllers = {};
@@ -48,17 +48,24 @@ class AddworkoutState extends ConsumerState<Addworkout> {
       ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
           sets = data['sets'] ?? {};
-          exerciseNotes = data['stats']?['notes'] ?? {};
+          stats['notes'] = data['stats']?['notes'] ?? {};
           if (sets.isNotEmpty){
             startTime = data['stats']['startTime'];
           }
+          stats['startTime'] = startTime;
         });
         repopulateExerciseTypeAccess();
       });
     }else {
       sets = widget.sets['sets'];
-      exerciseNotes = widget.sets['stats']?['notes'] ?? {};
+      stats['notes'] = widget.sets['stats']?['notes'] ?? {};
+      stats['startTime'] = startTime;
       repopulateExerciseTypeAccess();
+    }
+
+    if (widget.metaData != null){
+      Map metaDataMap = widget.metaData?.toMap() ?? {};
+      stats.addAll(metaDataMap);
     }
     _initializeFocusNodesAndControllers();
     loading = false;
@@ -184,7 +191,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
       if (sets.isEmpty){
         ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
       } else{
-        ref.read(currentWorkoutProvider.notifier).writeState({'stats': {'startTime': startTime, 'notes' : exerciseNotes,}, 'sets': sets});
+        ref.read(currentWorkoutProvider.notifier).writeState({'stats': stats, 'sets': sets});
       }
     }
   }
@@ -208,7 +215,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
           borderRadius: 10,
           iconHeight: 20,
           iconWidth: 20,
-          onTap: () => confirmExercises(sets, exerciseNotes),
+          onTap: () => confirmExercises(sets),
         ),
       ),
       body: SingleChildScrollView(
@@ -323,7 +330,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: TextFormField(
-                        initialValue: exerciseNotes[exercise] ?? '',
+                        initialValue: stats['notes'][exercise] ?? '',
                         decoration: const InputDecoration(
                           hintText: 'Enter your notes here...',
                           border: InputBorder.none,
@@ -333,7 +340,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                           )
                         ),
                         onChanged: (value) {
-                          exerciseNotes[exercise] = value;
+                          stats['notes'][exercise] = value;
                           updateExercises();
                         },
                       ),
@@ -758,7 +765,7 @@ void addNewSet(String exercise, String type) {
   });
 }
   
-  void confirmExercises(Map sets, Map exerciseNotes) {
+  void confirmExercises(Map sets) {
     bool isValidWorkout = checkValidWorkout(sets);
     if (isValidWorkout){
       Navigator.push(
@@ -767,10 +774,7 @@ void addNewSet(String exercise, String type) {
           builder: (context) => ConfirmWorkout(
             data: {
               'sets': sets,
-              'stats': widget.sets['stats'] ?? {
-                'startTime': startTime,
-                'notes': exerciseNotes,
-              }
+              'stats': widget.sets['stats'] ?? stats
             }, 
             editing: widget.editing, 
           ),
@@ -783,7 +787,7 @@ void addNewSet(String exercise, String type) {
           return AlertDialog(
             title: const Text('Invalid Input'),
             content: const Text('No empty inputs accepted. Please complete all fields.'),
-            actions: <Widget>[
+            actions: [
               TextButton(
                 child: const Text('OK'),
                 onPressed: () {

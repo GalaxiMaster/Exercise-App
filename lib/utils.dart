@@ -62,7 +62,16 @@ extension HexColor on Color {
 
 class WorkoutMetaData {
   final String? routineId;
-  WorkoutMetaData({this.routineId});
+  final Color? color;
+  WorkoutMetaData({this.routineId, this.color});
+  
+  Map toMap(){
+    Map res = {};
+    if (routineId != null) res['routineId'] = routineId;
+    if (color != null) res['color'] = color!.toHex();
+
+    return res;
+  }
 }
 
 // Used for calculating differences between current and previous values in chart pages

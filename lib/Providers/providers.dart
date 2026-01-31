@@ -221,7 +221,7 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
     for (var exercise in exerciseData.keys){
       for (var set in exerciseData[exercise]){
         if (set['PR'] == 'yes'){    
-          Map? currentPr = state.value![exercise];
+          Map? currentPr = state.value?[exercise];
           if (currentPr == null){
             updateValue(exercise, set);
           }
