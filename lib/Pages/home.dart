@@ -274,8 +274,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: double.infinity,
                 height: 40,
                 onTap: () => attemptStartWorkout(
-                  data: data,
-                  metaData: WorkoutMetaData(routineId: data['data']['id'])
+                  data: deepCopy(data),
+                  metaData: WorkoutMetaData(routineId: id, color: color)
                 ),
               ),
             ],
@@ -331,4 +331,3 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 }
-

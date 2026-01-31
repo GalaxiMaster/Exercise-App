@@ -140,3 +140,9 @@ class ButtonDetails {
     required this.destination,
   });
 }
+
+dynamic deepCopy(dynamic value) {
+  if (value is Map) return value.map((k, v) => MapEntry(k, deepCopy(v)));
+  if (value is List) return value.map(deepCopy).toList();
+  return value;
+}
