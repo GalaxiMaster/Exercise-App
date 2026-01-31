@@ -15,16 +15,21 @@ import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
 
 class Addworkout extends ConsumerStatefulWidget {
-  final Map data;
+  final Map sets;
   final bool editing;
-  Addworkout({super.key, sets, this.editing = false}) 
-    : data = sets ?? {};
-    @override
-  // ignore: library_private_types_in_public_api
-  _AddworkoutState createState() => _AddworkoutState();
+  final WorkoutMetaData? metaData;
+  const Addworkout({
+    super.key, 
+    Map? sets,
+    this.editing = false, 
+    this.metaData,
+  }) : sets = sets ?? const {}; // Assign default if null passed through
+
+  @override
+  AddworkoutState createState() => AddworkoutState();
 }
 
-class _AddworkoutState extends ConsumerState<Addworkout> {
+class AddworkoutState extends ConsumerState<Addworkout> {
   Map sets = {};
   Map exerciseNotes = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
@@ -39,7 +44,7 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
   void initState() { // TODO clean up this page, specifically this initstate section and to do with currentWorkout
     super.initState();
     loading = true;
-    if(widget.data.isEmpty){
+    if(widget.sets.isEmpty){
       ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
           sets = data['sets'] ?? {};
@@ -51,8 +56,8 @@ class _AddworkoutState extends ConsumerState<Addworkout> {
         repopulateExerciseTypeAccess();
       });
     }else {
-      sets = widget.data['sets'];
-      exerciseNotes = widget.data['stats']?['notes'] ?? {};
+      sets = widget.sets['sets'];
+      exerciseNotes = widget.sets['stats']?['notes'] ?? {};
       repopulateExerciseTypeAccess();
     }
     _initializeFocusNodesAndControllers();
@@ -762,7 +767,7 @@ void addNewSet(String exercise, String type) {
           builder: (context) => ConfirmWorkout(
             data: {
               'sets': sets,
-              'stats': widget.data['stats'] ?? {
+              'stats': widget.sets['stats'] ?? {
                 'startTime': startTime,
                 'notes': exerciseNotes,
               }

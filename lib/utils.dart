@@ -60,6 +60,10 @@ extension HexColor on Color {
   }
 }
 
+class WorkoutMetaData {
+  final String? routineId;
+  WorkoutMetaData({this.routineId});
+}
 
 // Used for calculating differences between current and previous values in chart pages
 num calculateDifference(num current, num? previous) {

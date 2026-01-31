@@ -5,17 +5,13 @@ import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nanoid/nanoid.dart';
 
-// ignore: must_be_immutable
 class AddRoutine extends ConsumerStatefulWidget {
-  // ignore: non_constant_identifier_names
-  final String o_name;
-  late Map sets;
+  final Map sets;
 
-  // ignore: non_constant_identifier_names
-  AddRoutine({super.key, sets, o_name}) 
-    : sets = sets ?? {}, 
-      o_name = o_name ?? '';
+  AddRoutine({super.key, Map? sets}) 
+    : sets = sets ?? {};
   @override
   // ignore: library_private_types_in_public_api
   _AddRoutineState createState() => _AddRoutineState();
@@ -27,9 +23,8 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
   @override
   void initState() {
     super.initState();
-    _routineNameController = TextEditingController(text: widget.o_name);
+    _routineNameController = TextEditingController(text: widget.sets['data']?['name'] ?? '');
     sets = widget.sets.isNotEmpty ? widget.sets['sets'] : {};
-
   }
 
   @override
@@ -276,16 +271,16 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
   }
   
   void createRoutine(String name) {
-    debugPrint(name + widget.o_name);
     if (name != ''){
       // if (widget.o_name != '' && name != widget.o_name){
       //   deleteFile('routines/${widget.o_name}');
       // }
+      final String id = widget.sets['data']?['id'] ?? nanoid();
       ref.read(routineDataProvider.notifier).updateValue(
-        name, 
+        id, 
         {
           'data' : {
-            'name' : name
+            'name' : name,
           },
           'sets' : sets
         }

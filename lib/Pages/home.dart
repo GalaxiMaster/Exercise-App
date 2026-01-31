@@ -32,7 +32,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool workoutInProgress = (ref.watch(currentWorkoutProvider).value ?? {}).isNotEmpty;
     final routineDataAsync = ref.watch(routineDataProvider);
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
@@ -79,46 +78,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: double.infinity, 
                 height: 50,
                 onTap: () async {
-                  if (workoutInProgress && context.mounted){
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Workout already in progress'),
-                          content: const Text('Continue or discard it?'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('Discard', style: TextStyle(color: Colors.red),),
-                              onPressed: () {
-                                ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
-                                Navigator.of(context).pop(); // Dismiss the dialog
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Addworkout()),
-                                );
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('Resume'),
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Dismiss the dialog
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Addworkout()),
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }else{
-                    if (!context.mounted) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Addworkout()),
-                    );
-                  }
+                  attemptStartWorkout();
                 }
               ),  
               const SizedBox(height: 20,),
@@ -160,8 +120,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(), // Disable scrolling
                       itemBuilder: (context, index) {
-                        Map<String, dynamic> routine = Map<String, dynamic>.from(routines.values.toList()[index]);
-                        return _buildRoutineBox(data: routine);
+                        MapEntry<String, dynamic> routine = routines.entries.toList()[index];
+                        return _buildRoutineBox(data: routine.value, id: routine.key);
                       },
                     )
                     : const Text("No routines available");
@@ -179,157 +139,196 @@ class _HomePageState extends ConsumerState<HomePage> {
     // _loadRoutines();
   }
   Widget _buildRoutineBox({
-  required Map<String, dynamic> data,
-}) {
-Color color = HexColor.fromHex(
-      data['data']?['color'] ?? '#9DCEFF'
-    );
-  String label =  data['data']?['name'] ?? 'Unknown Routine';
-  String exercises =  data['sets'].keys?.join('\n') ?? 'No exercises';
-  return Column(
-    children: [
-      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          children: [
-            Row(                
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,  // Align the text to the left within this column
-                  children: [
-                    Text(
-                      label,
-                      style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 17),
+    required Map data,
+    required String id
+  }) {
+    Color color = HexColor.fromHex(data['data']?['color'] ?? '#9DCEFF');
+    String label =  data['data']?['name'] ?? 'Unknown Routine';
+    String exercises =  data['sets'].keys?.join('\n') ?? 'No exercises';
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            children: [
+              Row(                
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 17),
+                      ),
+                      Text(
+                        exercises,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: PopupMenuButton<String>(
+                      onSelected: (value) async{
+                        switch(value){
+                          case 'Edit':
+                            debugPrint('edit');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => 
+                                AddRoutine( 
+                                  sets: data, 
+                                )
+                              ),
+                            );
+                          case 'Share':
+                            debugPrint('share');
+                          case 'Color':
+                            debugPrint('color');
+                          
+                            Color? color = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                Color tempColor = HexColor.fromHex(
+                                  data['data']?['color'] ?? '#ffffff'
+                                );
+
+                                return AlertDialog(
+                                  title: const Text('Pick a color'),
+                                  content: SingleChildScrollView(
+                                  child: ColorPicker(
+                                    pickerColor: tempColor,
+                                    paletteType: PaletteType.hueWheel,
+                                    enableAlpha: false,
+                                    onColorChanged: (color){
+                                      setState(() => tempColor = color);
+                                    },  
+                                  ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();  // Close without saving
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Reset'),
+                                      onPressed: () {
+                                        data['data']['color'] = null;
+                                        ref.read(routineDataProvider.notifier).updateValue(id, data);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Select'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(tempColor);  // Return selected color
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                            if (color != null) {
+                              // Save selected color to data map
+                              data['data']['color'] = color.toHex();
+
+                              ref.read(routineDataProvider.notifier).updateValue(id, data);
+                            }
+
+                          case 'Delete':
+                            ref.read(routineDataProvider.notifier).deleteRoutine(id);
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                          const PopupMenuItem(value: 'Share', child: Text('Share', style: TextStyle(decoration: TextDecoration.lineThrough))),    
+                          const PopupMenuItem(value: 'Color', child: Text('Color')),                    
+                          const PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                        ];
+                      },
+                      elevation: 2, // Adjust the shadow depth here (default is 8.0)
+                      icon: Icon(Icons.more_vert, color: color,),
                     ),
-                    Text(
-                      exercises,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 15),
+              MyTextButton(
+                text: 'Start routine',
+                color: color,
+                pressedColor: Colors.blue,
+                textColor: Colors.black,
+                borderRadius: 12.5,
+                width: double.infinity,
+                height: 40,
+                onTap: () => attemptStartWorkout(
+                  data: data,
+                  metaData: WorkoutMetaData(routineId: data['data']['id'])
                 ),
-                const Spacer(),
-                SizedBox(
-                  height: 40,
-                  width: 40,
-                  child: PopupMenuButton<String>(
-                    onSelected: (value) async{
-                      switch(value){
-                        case 'Edit':
-                          debugPrint('edit');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => 
-                              AddRoutine( 
-                                sets: data, 
-                                o_name: label,
-                              )
-                            ),
-                          );
-                        case 'Share':
-                          debugPrint('share');
-                        case 'Color':
-                          debugPrint('color');
-                        
-                          Color? color = await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              Color tempColor = HexColor.fromHex(
-                                data['data']?['color'] ?? '#ffffff'
-                              );
-
-                              return AlertDialog(
-                                title: const Text('Pick a color'),
-                                content: SingleChildScrollView(
-                                child: ColorPicker(
-                                  pickerColor: tempColor,
-                                  paletteType: PaletteType.hueWheel,
-                                  enableAlpha: false,
-                                  onColorChanged: (color){
-                                    setState(() => tempColor = color);
-                                  },  
-                                ),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Cancel'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();  // Close without saving
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Reset'),
-                                    onPressed: () {
-                                      data['data']['color'] = null;
-                                      ref.read(routineDataProvider.notifier).updateValue(data['data']['name'], data);
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Select'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop(tempColor);  // Return selected color
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-
-                          if (color != null) {
-                            // Save selected color to data map
-                            data['data']['color'] = color.toHex();
-
-                            ref.read(routineDataProvider.notifier).updateValue(data['data']['name'], data);
-                          }
-
-                        case 'Delete':
-                          ref.read(routineDataProvider.notifier).deleteRoutine(label);
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        const PopupMenuItem(value: 'Edit', child: Text('Edit')),
-                        const PopupMenuItem(value: 'Share', child: Text('Share')),    
-                        const PopupMenuItem(value: 'Color', child: Text('Color')),                    
-                        const PopupMenuItem(value: 'Delete', child: Text('Delete')),
-                      ];
-                    },
-                    elevation: 2, // Adjust the shadow depth here (default is 8.0)
-                    icon: Icon(Icons.more_vert, color: color,),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 15),
-            MyTextButton(
-              text: 'Start routine',
-              color: color,
-              pressedColor: Colors.blue,
-              textColor: Colors.black,
-              borderRadius: 12.5,
-              width: double.infinity,
-              height: 40,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => 
-                    Addworkout(sets: data)
-                  ),
-                );
-              },
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
-      ),
-      const SizedBox(height: 15)
-    ],
-  );
-}
+        const SizedBox(height: 15)
+      ],
+    );
+  }
+
+  void attemptStartWorkout({Map? data, WorkoutMetaData? metaData}) {
+    bool workoutInProgress = (ref.read(currentWorkoutProvider).value ?? {}).isNotEmpty;
+
+    if (workoutInProgress && context.mounted){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Workout already in progress'),
+            content: const Text('Continue or discard it?'),
+            actions: [
+              TextButton(
+                child: const Text('Discard', style: TextStyle(color: Colors.red),),
+                onPressed: () {
+                  ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Addworkout(sets: data, metaData: metaData,)),
+                  );
+                },
+              ),
+              TextButton(
+                child: const Text('Resume'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Addworkout(sets: data, metaData: metaData,)),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }else{
+      if (!context.mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Addworkout(sets: data, metaData: metaData,)),
+      );
+    }
+  }
 }
 
