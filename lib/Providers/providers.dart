@@ -298,7 +298,24 @@ class RoutineDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
     });
   }
 
-  Future<void> deleteRoutine(String key) async {
+  void updateColor(String id, String color) async {
+    final currentValue = Map<String, dynamic>.from(state.value ?? {})[id];
+    currentValue['data'] = {
+      ...Map<String, dynamic>.from(currentValue['data'] ?? {}),
+      'color': color,
+    };
+    updateValue(id, currentValue);
+
+    Map workoutData = await ref.read(workoutDataProvider.future);
+    for (MapEntry day in workoutData.entries){
+      if ((day.value['stats']?['routineId'] ?? '') == id) {
+        day.value['stats']['color'] = color;
+        ref.read(workoutDataProvider.notifier).updateValue(day.key, day.value);
+      }
+    }
+  }
+
+  void deleteRoutine(String key) {
     Map stateVal = state.value ?? {};
     stateVal.remove(key);
     state = AsyncData({

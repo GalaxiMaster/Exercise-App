@@ -29,7 +29,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.read(profileChartProvider);
   }
 
-
   @override
   Widget build(BuildContext context) {
     final routineDataAsync = ref.watch(routineDataProvider);
@@ -240,10 +239,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             );
 
                             if (color != null) {
-                              // Save selected color to data map
-                              data['data']['color'] = color.toHex();
-
-                              ref.read(routineDataProvider.notifier).updateValue(id, data);
+                              ref.read(routineDataProvider.notifier).updateColor(id, color.toHex());
                             }
 
                           case 'Delete':
@@ -253,7 +249,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       itemBuilder: (BuildContext context) {
                         return [
                           const PopupMenuItem(value: 'Edit', child: Text('Edit')),
-                          const PopupMenuItem(value: 'Share', child: Text('Share', style: TextStyle(decoration: TextDecoration.lineThrough))),    
+                          const PopupMenuItem(value: 'Share', child: Text('Share', style: TextStyle(decoration: TextDecoration.lineThrough, color: Colors.grey))),    
                           const PopupMenuItem(value: 'Color', child: Text('Color')),                    
                           const PopupMenuItem(value: 'Delete', child: Text('Delete')),
                         ];
