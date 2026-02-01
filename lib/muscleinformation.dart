@@ -558,7 +558,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Self Assisted Nordic Hamstring Curl": {
+    "Self Assisted Nordic Hamstrings Curl": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -1242,7 +1242,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable Assisted Nordic Curl": {
+    "Cable Assisted Nordic Hamstrings Curl": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -1252,7 +1252,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Banded"
     },
-    "Resistance Band Assisted Nordic Hamstring Curl": {
+    "Resistance Band Assisted Nordic Hamstrings Curl": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -3795,7 +3795,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Nordic Hamstring Curl": {
+    "Nordic Hamstrings Curl": {
         "Primary": {
             "Hamstrings": 80
         },
