@@ -21,6 +21,34 @@ class Options {
   };
 }
 
+Color getColor(String key) {
+  var colors = {
+    'Chest': Colors.red,
+    'Upper Chest': Colors.pinkAccent,
+    'Lower Chest': Colors.deepOrange,
+    'Triceps': Colors.orange,
+    'Biceps': Colors.purpleAccent.shade700,
+    'Front Delts': Colors.blue,
+    'Side Delts': Colors.cyan,
+    'Rear Delts': Colors.teal,
+    'Traps': Colors.deepPurple,
+    'Forearms': Colors.brown,
+    'Lats': Colors.indigo, // unchanged
+    'Erectors': Colors.green,
+    'Rhomboids': Colors.greenAccent,
+    'Glutes': Colors.deepOrangeAccent,
+    'Quads': Colors.yellow,
+    'Hamstrings': Colors.amber,
+    'Calves': Colors.lime,
+    'Abdominals': Colors.lightBlueAccent,
+    'Obliques': Colors.blueGrey,
+    'Hip Flexors': Colors.lightGreen
+  };
+
+  return colors[key] ?? Colors.grey;
+}
+
+
 class ComparisonStatTile{
   final String title;
   num value;

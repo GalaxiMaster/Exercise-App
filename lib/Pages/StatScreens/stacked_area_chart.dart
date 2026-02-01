@@ -1,6 +1,7 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

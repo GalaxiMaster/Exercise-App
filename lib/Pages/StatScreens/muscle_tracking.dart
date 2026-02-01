@@ -1,4 +1,5 @@
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';

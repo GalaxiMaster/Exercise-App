@@ -192,7 +192,7 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
                     for (String exercise in result){
                       if (!sets.containsKey(exercise)) {
                         sets[exercise] = [
-                          {'weight': exerciseMuscles[exercise]['type'] == 'Bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'}
+                          {'weight': exerciseMuscles[exercise]?['type'] == 'Bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]?['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'} // TODo fix up to account for cusotm exercises
                         ]; // Initialize sets list for the new exercise
                       }
                     }

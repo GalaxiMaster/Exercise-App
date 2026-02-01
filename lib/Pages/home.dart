@@ -2,7 +2,6 @@ import 'package:exercise_app/Pages/routines.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
@@ -133,10 +132,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void deleteRoutine(String name) async{
-    await deleteKey(name, path: 'routines');
-    // _loadRoutines();
-  }
   Widget _buildRoutineBox({
     required Map data,
     required String id

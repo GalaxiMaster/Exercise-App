@@ -5,7 +5,7 @@ import 'package:exercise_app/Pages/StatScreens/muscle_tracking.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/StatScreens/strength_gradient.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
