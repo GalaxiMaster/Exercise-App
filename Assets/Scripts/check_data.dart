@@ -8,15 +8,22 @@ void main() {
 
   final basePath = Directory('${scriptDir.parent.parent.path}/assets/exercises');
 
-  print('############# Images that don\'t have dictionary ###############');
+  print('########################################### Images that don\'t have dictionary #############################################');
   iterateThroughFolders(basePath, exerciseMuscles);
 
-  print('############# Dictionary that don\'t have images ###############');
+  print('########################################### Dictionary that don\'t have images #############################################');
   for (var exercise in exerciseMuscles.keys) {
     final filePath = '${basePath.path}/$exercise.png';
     final file = File(filePath);
     if (!file.existsSync()) {
       print(exercise);
+    }
+  }
+  // Verify Corrections
+  print('########################################### Inccorrect Corrections #############################################');
+  for (String correction in corrections.values) {
+    if (!exerciseMuscles.containsKey(correction)){
+      print(correction);
     }
   }
 }

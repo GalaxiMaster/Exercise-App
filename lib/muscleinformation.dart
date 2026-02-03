@@ -3,7 +3,7 @@ Map<String, List<String>> muscleGroups = {
   'Chest': ['Chest', 'Upper Chest', 'Lower Chest'],
   'Shoulders': ['Front Delts', 'Side Delts', 'Rear Delts'],
   'Arms': ['Biceps', 'Triceps', 'Forearms', 'Brachialis'],
-  'Legs': ['Quads', 'Hamstrings', 'Glutes', 'Calves'],
+  'Legs': ['Quads', 'Hamstrings', 'Glutes', 'Calves', 'Adductors'],
   'Core': ['Abdominals', 'Obliques', 'Hip Flexors']
 };
 
@@ -107,6 +107,16 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         "type": "Weighted"
     },
     "Cable Shoulder Press": {
+        "Primary": {
+            "Front Delts": 50,
+            "Side Delts": 30
+        },
+        "Secondary": {
+            "Triceps": 20
+        },
+        "type": "Weighted"
+    },
+    "Lever Seated Shoulder Press": {
         "Primary": {
             "Front Delts": 50,
             "Side Delts": 30
@@ -558,7 +568,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Self Assisted Nordic Hamstrings Curl": {
+    "Self Assisted Nordic Hamstrings Curls": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -1242,7 +1252,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable Assisted Nordic Hamstrings Curl": {
+    "Cable Assisted Nordic Hamstrings Curls": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -1252,7 +1262,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Banded"
     },
-    "Resistance Band Assisted Nordic Hamstrings Curl": {
+    "Resistance Band Assisted Nordic Hamstrings Curls": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -1869,7 +1879,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable Incline Cross Rear Fly": {
+    "Cable Incline Cross Rear Delt Fly": {
         "Primary": {
             "Rear Delts": 70
         },
@@ -2473,15 +2483,6 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbells Seated Triceps Extension": {
-        "Primary": {
-            "Triceps": 80
-        },
-        "Secondary": {
-            "Forearms": 20
-        },
-        "type": "Weighted"
-    },
     "Dumbbell Around Pullover": {
         "Primary": {
             "Lats": 50,
@@ -2519,7 +2520,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Dumbbell Rear Fly": {
+    "Dumbbell Rear Delt Fly": {
         "Primary": {
             "Rear Delts": 70
         },
@@ -2650,7 +2651,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Weighted Seated Calf Raise": {
+    "Lever Seated Calf Raise": {
         "Primary": {
             "Calves": 100
         },
@@ -2962,7 +2963,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Push up": {
+    "Push Up": {
         "Primary": {
             "Chest": 60,
             "Triceps": 30
@@ -3068,15 +3069,6 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Bodyweight"
     },
-    "Cable Rope High Pulley Overhead Triceps Extension": {
-        "Primary": {
-            "Triceps": 80
-        },
-        "Secondary": {
-            "Lats": 20
-        },
-        "type": "Weighted"
-    },
     "Barbell Sumo Romanian Deadlift": {
         "Primary": {
             "Hamstrings": 60,
@@ -3107,6 +3099,16 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         "type": "Weighted"
     },
     "Smith Hack Squat": {
+        "Primary": {
+            "Quads": 70
+        },
+        "Secondary": {
+            "Glutes": 20,
+            "Hamstrings": 10
+        },
+        "type": "Weighted"
+    },
+    "Barbell Hack Squat": {
         "Primary": {
             "Quads": 70
         },
@@ -3387,11 +3389,10 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
     },
     "Cable Rear Drive": {
         "Primary": {
-            "Glutes": 70
+            "Triceps": 60,
+            "Rear Delts": 40
         },
-        "Secondary": {
-            "Hamstrings": 30
-        },
+        "Secondary": {},
         "type": "Weighted"
     },
     "Dumbbell Standing Reverse Curl": {
@@ -3795,7 +3796,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Nordic Hamstrings Curl": {
+    "Nordic Hamstrings Curls": {
         "Primary": {
             "Hamstrings": 80
         },
@@ -3864,12 +3865,25 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
     },
     "Hanging Oblique Knee Raise": {
         "Primary": {
-            "Obliques": 80
-        },
-        "Secondary": {
+            "Obliques": 60,
             "Abdominals": 20
         },
-        "type": "Weighted"
+        "Secondary": {
+            "Hip Flexors": 15,
+            "Forearms": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Hanging Knee Raise": {
+        "Primary": {
+            "Abdominals": 70,
+            "Hip Flexors": 20
+        },
+        "Secondary": {
+            "Obliques": 10,
+            "Forearms": 5
+        },
+        "type": "Bodyweight"
     },
     "Weighted Standing Curl": {
         "Primary": {
@@ -3904,7 +3918,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         "Secondary": {},
         "type": "Weighted"
     },
-    "Cable Lateral Raise": {
+    "Cable Single Arm Lateral Raise": {
         "Primary": {
             "Side Delts": 85
         },
@@ -4651,7 +4665,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Hip Thrusts": {
+    "Dumbbell Hip Thrusts": {
         "Primary": {
             "Glutes": 70
         },
@@ -5184,16 +5198,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Weighted"
     },
-    "Cable Overhead Single Arm Triceps Extension (Rope)": {
-        "Primary": {
-            "Triceps": 70
-        },
-        "Secondary": {
-            "Front Delts": 30
-        },
-        "type": "Weighted"
-    },
-    "Cable Overhead Triceps Extension (Rope)": {
+    "Cable Overhead Single Arm Triceps Extension": {
         "Primary": {
             "Triceps": 70
         },
@@ -5780,7 +5785,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
     },
     "type": "Weighted"
   },
-  "Incline Chest Supported Row (Dumbbell)": {
+  "Dumbbell Incline Chest Supported Row": {
     "Primary": {
         "Rhomboids": 50
     },
@@ -5972,12 +5977,12 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Assisted"
     },
-    "Hip Abductor": {
+    "Machine Hip Abductor": {
         "Primary": {
-            "Glutes": 90
+            "Glutes": 80
         },
         "Secondary": {
-            "Hip Flexors": 10
+            "Hip Flexors": 20
         },
         "type": "Machine"
     },
@@ -6040,7 +6045,7 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         },
         "type": "Timed"
     },
-    "Jumping Jacks": {
+    "Jumping Jack": {
         "Primary": {
             "Glutes": 30,
             "Quads": 30
@@ -6093,95 +6098,426 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
           "Forearms": 15
       },
       "type": "Weighted"
-  },
+    },
+    "Handstand Push Up": {
+        "Primary": {
+            "Front Delts": 60,
+            "Triceps": 30
+        },
+        "Secondary": {
+            "Side Delts": 5,
+            "Traps": 5
+        },
+        "type": "Bodyweight"
+    },
+    "Lever Seated Single Leg Calf Raise": {
+        "Primary": {
+            "Gastrocnemius": 60,
+            "Soleus": 30
+        },
+        "Secondary": {
+            "Tibialis Anterior": 10
+        },
+        "type": "Weighted"
+    },
+    "Lever Seated Squat": {
+        "Primary": {
+            "Quads": 55,
+            "Glutes": 35
+        },
+        "Secondary": {
+            "Hamstrings": 10
+        },
+        "type": "Weighted"
+    },
+    "Single Arm Zottman Preacher Curl": {
+        "Primary": {
+            "Biceps": 45,
+            "Brachialis": 35,
+            "Brachioradialis": 10
+        },
+        "Secondary": {
+            "Forearms": 10
+        },
+        "type": "Weighted"
+    },
+    "Wall Handstand": {
+        "Primary": {
+            "Front Delts": 50,
+            "Triceps": 30
+        },
+        "Secondary": {
+            "Side Delts": 10,
+            "Traps": 10
+        },
+        "type": "Bodyweight"
+    },
+    "Weighted Wall Squat": {
+        "Primary": {
+            "Quads": 60,
+            "Glutes": 25
+        },
+        "Secondary": {
+            "Hamstrings": 10,
+            "Core": 5
+        },
+        "type": "Weighted"
+    },
+    "Cable Close Grip Curl": {
+        "Primary": {
+            "Biceps": 80
+        },
+        "Secondary": {
+            "Forearms": 20
+        },
+        "type": "Weighted"
+    },
+    "Bent Over Single Arm Rear Delt Fly": {
+        "Primary": {
+            "Rear Delts": 80
+        },
+        "Secondary": {
+            "Rhomboids": 20
+        },
+        "type": "Weighted"
+    },
 
-  "Handstand Push Up": {
-      "Primary": {
-          "Front Delts": 60,
-          "Triceps": 30
-      },
-      "Secondary": {
-          "Side Delts": 5,
-          "Traps": 5
-      },
-      "type": "Bodyweight"
-  },
-  "Lever Seated Single Leg Calf Raise": {
-      "Primary": {
-          "Gastrocnemius": 60,
-          "Soleus": 30
-      },
-      "Secondary": {
-          "Tibialis Anterior": 10
-      },
-      "type": "Weighted"
-  },
+    "Butterfly (Pec Deck)": {
+        "Primary": {
+            "Chest": 85
+        },
+        "Secondary": {
+            "Front Delts": 15
+        },
+        "type": "Weighted"
+    },
 
-  "Lever Seated Squat": {
-      "Primary": {
-          "Quads": 55,
-          "Glutes": 35
-      },
-      "Secondary": {
-          "Hamstrings": 10
-      },
-      "type": "Weighted"
-  },
+    "Chest Supported Two Arm Rear Delt Fly": {
+        "Primary": {
+            "Rear Delts": 75
+        },
+        "Secondary": {
+            "Rhomboids": 25
+        },
+        "type": "Weighted"
+    },
 
-  "Single Arm Zottman Preacher Curl": {
-      "Primary": {
-          "Biceps": 45,
-          "Brachialis": 35,
-          "Brachioradialis": 10
-      },
-      "Secondary": {
-          "Forearms": 10
-      },
-      "type": "Weighted"
-  },
+    "Decline Pike Pushup": {
+        "Primary": {
+            "Front Delts": 65
+        },
+        "Secondary": {
+            "Triceps": 20,
+            "Upper Chest": 15
+        },
+        "type": "Bodyweight"
+    },
 
-  "Wall Handstand": {
-      "Primary": {
-          "Front Delts": 50,
-          "Triceps": 30
-      },
-      "Secondary": {
-          "Side Delts": 10,
-          "Traps": 10
-      },
-      "type": "Bodyweight"
-  },
+    "Dumbbell Standing Single Leg Calf Raise": {
+        "Primary": {
+            "Calves": 90
+        },
+        "Secondary": {
+            "Glutes": 10
+        },
+        "type": "Weighted"
+    },
 
-  "Weighted Wall Squat": {
-      "Primary": {
-          "Quads": 60,
-          "Glutes": 25
-      },
-      "Secondary": {
-          "Hamstrings": 10,
-          "Core": 5
-      },
-      "type": "Weighted"
-  },
+    "Kneeling Single Arm Cable Rear Delt Row": {
+        "Primary": {
+            "Rear Delts": 60
+        },
+        "Secondary": {
+            "Rhomboids": 40
+        },
+        "type": "Weighted"
+    },
 
-  "Zottman Curl": {
-      "Primary": {
-          "Biceps": 45,
-          "Brachialis": 35,
-          "Brachioradialis": 10
-      },
-      "Secondary": {
-          "Forearms": 10
-      },
-      "type": "Weighted"
-  },
-  "Cable Close Grip Curl": {
-      "Primary": {
-          "Biceps": 80
-      },
-      "Secondary": {
-          "Forearms": 20
-      },
-      "type": "Weighted"
-  },
+    "Pike Pushup": {
+        "Primary": {
+            "Front Delts": 70
+        },
+        "Secondary": {
+            "Triceps": 20,
+            "Upper Chest": 10
+        },
+        "type": "Bodyweight"
+    },
+
+    "Standing Single Arm Cable Rear Delt Fly": {
+        "Primary": {
+            "Rear Delts": 80
+        },
+        "Secondary": {
+            "Rhomboids": 20
+        },
+        "type": "Weighted"
+    },
+
+    "Standing Single Arm Cable Rear Delt Row": {
+        "Primary": {
+            "Rear Delts": 55
+        },
+        "Secondary": {
+            "Rhomboids": 45
+        },
+        "type": "Weighted"
+    },
+
+    "Standing Two Arm Cable Rear Delt Fly": {
+        "Primary": {
+            "Rear Delts": 75
+        },
+        "Secondary": {
+            "Rhomboids": 25
+        },
+        "type": "Weighted"
+    },
+    "Cable Single Arm Wrist Curl": {
+        "Primary": {
+            "Forearms": 100
+        },
+        "Secondary": {},
+        "type": "Weighted"
+    },
+    "Weighted Decline Crunch": {
+        "Primary": {
+            "Abdominals": 85
+        },
+        "Secondary": {
+            "Hip Flexors": 15
+        },
+        "type": "Weighted"
+    },
+    "Machine Hip Adduction": {
+        "Primary": {
+            "Adductors": 80
+        },
+        "Secondary": {
+            "Hip Flexors": 15,
+            "Glutes": 5
+        },
+        "type": "Weighted"
+    },
+    "Bench Side Bend": {
+        "Primary": {
+            "Obliques": 85
+        },
+        "Secondary": {
+            "Hip Flexors": 15
+        },
+        "type": "Weighted"
+    },
+
+    "Cable Side Bend": {
+        "Primary": {
+            "Obliques": 90
+        },
+        "Secondary": {
+            "Hip Flexors": 10
+        },
+        "type": "Weighted"
+    },
+
+    "Side Bend": {
+        "Primary": {
+            "Obliques": 90
+        },
+        "Secondary": {
+            "Hip Flexors": 10
+        },
+        "type": "Bodyweight"
+    },
+    "Cable Overhead Triceps Extension (Rope)": {
+        "Primary": {
+            "Triceps": 70
+        },
+        "Secondary": {
+            "Front Delts": 30
+        },
+        "type": "Weighted"
+    },
+    "Lat Pullover (Rope)": {
+        "Primary": {
+            "Lats": 75
+        },
+        "Secondary": {
+            "Triceps": 15,
+            "Front Delts": 10
+        },
+        "type": "Weighted"
+    },
+    "Handstand Hold": {
+        "Primary": {
+            "Front Delts": 40,
+            "Side Delts": 25
+        },
+        "Secondary": {
+            "Triceps": 20,
+            "Abdominals": 15
+        },
+        "type": "Bodyweight"
+    },
+
+};
+
+Map<String, String> corrections = {
+  'Pull Up (Weighted)': 'Weighted Pull Up',
+  'Iso-Lateral Row (Machine)': 'Seated Lever Machine Row',
+  'Straight Arm Lat Pulldown (Cable)': 'Cable Pullover',
+  'Seated Cable Row - V Grip (Cable)': 'Cable seated row',
+  'Single Arm Curl (Cable)': 'Cable One Arm Biceps Curl',
+  'Bench Press (Barbell)': 'Barbell Bench Press',
+  'Triceps Dip (Weighted)': 'Weighted Triceps Dips',
+  'Lateral Raise (Cable)': 'Cable Single Arm Lateral Raise',
+  'Triceps Rope Pushdown': 'Cable Triceps Pushdown (Rope)',
+  'Incline Bench Press (Dumbbell)': 'Dumbbell Incline Bench Press',
+  'Cable Wrist Curl (Single)': 'Cable Single Arm Wrist Curl',
+  'Seated Palms Up Wrist Curl': 'Dumbbell Seated Palms Up Wrist Curl',
+  'Bent Over Row (Barbell)': 'Barbell Bent Over Row',
+  'Bench Press (Dumbbell)': 'Dumbbell Bench Press',
+  'Bicep Curl (Dumbbell)': 'Dumbbell Biceps Curl',
+  'Triceps Dip': 'Triceps Dips',
+  'Triceps Extension (Cable)': 'Cable Overhead Single Arm Triceps Extension',
+  'T Bar Row': 'Lying T-Bar Row',
+  'Lat Pulldown (Machine)': 'Machine Lat Pulldowns',
+  'Lateral Raise (Dumbbell)': 'Dumbbell Lateral Raise',
+  'Standing Calf Raise (Smith)': 'Smith Calf Raise',
+  'Hip Thrust (Barbell)': 'Barbell Hip Thrust',
+  'Leg Extension (Machine)': 'Lever Leg Extension',
+  'Deadlift (Barbell)': 'Barbell Deadlift',
+  'Back Extension (Weighted Hyperextension)': 'Back Extensions',
+  'Incline Bench Press (Barbell)': 'Barbell Incline Bench Press',
+  'Chin Up': 'Chin Up',
+  'Overhead Press (Barbell)': 'Standing Overhead Press (Barbell)',
+  'Bicep Curl (Cable)': 'Cable Curl',
+  'Bicep Curl (Barbell)': 'Barbell Curl',
+  'Chest Fly (Machine)': 'Machine Chest Fly',
+  'Pull Up': 'Pull Up',
+  'Rear Delt Reverse Fly (Machine)': 'Rear Delt Fly (Machine)',
+  'Hammer Curl (Dumbbell)': 'Dumbbell Hammer Curl',
+  'Leg Press (Machine)': 'Sled Leg Press',
+  'Shoulder Press (Dumbbell)': 'Dumbbell Seated Shoulder Press',
+  'Cable Pull Through': 'Cable Pull Through (Rope)',
+  'Cable Fly Crossovers': 'Cable Standing Up Straight Crossovers',
+  'Preacher Curl (Barbell)': 'Barbell Preacher Curl',
+  'Single Arm Lateral Raise (Cable)': 'Cable Single Arm Lateral Raise',
+  'Hammer Curl (Cable)': 'Cable Hammer Curl (Rope)',
+  'Dead Hang': 'Dead Hang',
+  'Seated Cable Row - Bar Grip': 'Cable Low Seated Row',
+  'Seated Cable Row - Bar Wide Grip': 'Wide Grip Overhand Row',
+  'Single Arm Cable Row': 'Cable One Arm Row',
+  'Lat Pulldown (Cable)': 'Lat Pulldown',
+  'Leg Raise Parallel Bars': 'Captain Seat Leg Raise',
+  'Hack Squat (Machine)': 'Hack Squat',
+  'Hack Squat': 'Barbell Hack Squat',
+  'Farmers Walk': 'Farmer Walk',
+  'Incline Bench Press (Smith Machine)': 'Smith Machine Incline Bench Press',
+  'Chin Up (Weighted)': 'Weighted Chin Up',
+  'Low Cable Fly Crossovers': 'Low Cable Fly',
+  'Behind the Back Bicep Wrist Curl (Barbell)': 'Barbell Behind the Back Wrist Curls',
+  'Push Up': 'Push Up',
+  'Flat Leg Raise': 'Seated Leg Raise',
+  'Sit Up': 'Sit Up',
+  'Concentration Curl (Dumbbell)': 'Dumbbell Concentration Curl',
+  'Front Raise (Dumbbell)': 'Dumbbell Front Raise',
+//   'Shoulder Press (Machine)': 'Lever Seated Shoulder Press',
+  'Chest Dip': 'Chest Dip',
+  'Seated Incline Curl (Dumbbell)': 'Dumbbell Incline Biceps Curl',
+  'Chest Fly': 'Machine Chest Fly',
+  'Seated Row (Cable)': 'Cable seated row',
+  'Triceps Extension (Dumbbell)': 'Dumbbell Seated Triceps Extension',
+  'Triceps Dip (Assisted)': 'Assisted Triceps Dips',
+  'Reverse Curl (Barbell)': 'Barbell Reverse Curl',
+  'Seated Calf Raise (Plate Loaded)': 'Lever Seated Calf Raise',
+  'Leg Press': 'Sled Leg Press',
+  'Reverse Fly (Machine)': 'Rear Delt Fly (Machine)',
+  'Bulgarian Split Squat': 'Bulgarian Split Squat',
+  'Seated Leg Press (Machine)': 'Lever Seated Leg Press',
+  'Seated Leg Curl (Machine)': 'Lever Seated Leg Curl',
+  'Preacher Curl (Machine)': 'Lever Preacher Curl',
+  'Seated Palms Up Wrist Curl (Dumbbell)': 'Dumbbell Seated Palms Up Wrist Curl',
+  'flutter kicks': 'Seated Flutter Kick',
+  'scissors': 'Scissors (advanced)',
+  'Flutter kicks': 'Seated Flutter Kick',
+  'Bent Over One Arm Row (Dumbbell)': 'Dumbbell Bent Over Bench Row',
+  'Bent Over Row (Dumbbell)': 'Dumbbell Bent Over Bench Row',
+  'Skullcrusher (Dumbbell)': 'Dumbbell Lying Floor Skullcrusher',
+  'Pullover (Dumbbell)': 'Dumbbell Pullover',
+  'Reverse Curl (Dumbbell)': 'Dumbbell Biceps Curl Reverse Grip',
+  'lever Row': 'Seated Lever Machine Row', // !
+  'Triceps Extension (Barbell)': 'Barbell Standing Overhead Triceps Extension',
+  'Skullcrusher (Barbell)': 'Barbell Lying Triceps Extension Skull Crusher',
+  'Plank': 'Plank',
+  'Jumping Jack': 'Jumping Jack',
+  'Crunch': 'Crunch',
+  'Running': 'Running',
+  'Reverse Grip Concentration Curl (Dumbbell)': 'Dumbbell Seated Reverse Concentration Curl',
+  'Arnold Press (Dumbbell)': 'Dumbbell Arnold Press',
+  'Walking': 'Walking',
+  'Pull Up (Assisted)': 'Assisted Pull Up',
+  'Iso-Lateral Chest Press (Machine)': 'Lever Chest Press (plate loaded)',
+  'Incline Chest Press (Machine)': 'Incline Lever Chest Press',
+  'Hip Abductor (Machine)': 'Machine Hip Abductor',
+  'Side Plank': 'Side Plank',
+  'Triceps Pushdown': 'Cable Triceps Pushdown (Straight Bar)',
+  'Single Arm Triceps Pushdown (Cable)': 'Cable One Arm Triceps Pushdown',
+  'Squat (Barbell)': 'Barbell Squat',
+  'Chest Press (Machine)': 'Lever Chest Press',
+  'Seated Calf Raise': 'Lever Seated Calf Raise',
+  'Hip Thrust (Machine)': 'Lever Hip Thrust',
+  'Zottman Curl (Dumbbell)': 'Dumbbell Zottman Curl',
+  'Sissy Squat (Weighted)': 'Weighted Sissy Squat',
+  'Seated Shoulder Press (Machine)': 'Lever Seated Shoulder Press',
+  'Shoulder Press (Machine Plates)': 'Machine Shoulder Press',
+  'Chest Supported Incline Row (Dumbbell)': 'Dumbbell Incline Chest Supported Row',
+  'Lying Leg Curl (Machine)': 'Lever Lying Leg Curl',
+  'Cross Body Hammer Curl': 'Dumbbell Cross Body Hammer Curl',
+  'Single Leg Standing Calf Raise (Dumbbell)': 'Dumbbell Standing Single Leg Calf Raise',
+  'Single Arm Triceps Extension (Dumbbell)': 'Dumbbell Seated One Arm Triceps Extension',
+  'Face Pull': 'Cable Standing Face Pull (Rope)',
+  'Lat Pulldown - Close Grip (Cable)': 'Cable Close Grip Lat Pulldown',
+  'Seated Row (Machine)': 'Seated Lever Machine Row',
+  'Rear Delt Reverse Fly (Dumbbell)': 'Dumbbell Rear Delt Fly',
+  'Stair Machine': 'Stair Master',
+  'Chest Fly (Dumbbell)': 'Dumbbell Fly',
+  'Cable Crunch': 'Cable Kneeling Crunch',
+  'Wrist Curl Cable': 'Cable Standing Wrist Curl',
+  'Bench Press (Smith Machine)': 'Smith Machine Bench Press',
+  'Decline Crunch (Weighted)': 'Weighted Decline Crunch',
+  'Seated Dip Machine': 'Lever Seated Dip',
+  'Shrug (Dumbbell)': 'Dumbbell Shrug',
+  'Cable Pushdown (Rope)': 'Cable Triceps Pushdown (Rope)',
+  'Preacher Curl (Dumbbell)': 'Dumbbell Preacher Curl',
+  'Rear Delt Reverse Fly (Cable)': 'Standing Two Arm Cable Rear Delt Fly',
+  'JM Press (Barbell)': 'Barbell JM Bench Press',
+  'Behind the Back Curl (Cable)': 'Cable Behind the Back Wrist Curls',
+  'Hip Adduction (Machine)': 'Machine Hip Adduction',
+  'Front Raise (Cable)': 'Cable Front Raise',
+  'Side Bend (Dumbbell)': 'Dumbbell Side Bend',
+  'Side Bend': 'Side Bend',
+  'Rope Straight Arm Pulldown': 'Lat Pullover (Rope)',
+  'Crunch (Machine)': 'Lever Seated Crunch',
+  'Standing Calf Raise (Machine)': 'Lever Standing Calf Raise',
+  'Single Arm Tricep Extension (Dumbbell)': 'Dumbbell Seated One Arm Triceps Extension',
+  'Leg Press Horizontal (Machine)': 'Lever Seated Leg Press',
+  'Overhead Triceps Extension (Cable)': 'Cable Overhead Triceps Extension (Rope)',
+  'Concentration Curl': 'Dumbbell Concentration Curl',
+
+
+  // ! Moving from renamed exercises section
+  'Cable One Arm Lateral Raise': 'Cable Single Arm Lateral Raise',
+  'Cable Half Kneeling External Rotation': 'Cable Kneeling External Rotation',
+  'Assisted Tricep Dips': 'Assisted Triceps Dips',
+  'Cable Pushdown': 'Cable Triceps Pushdown (Straight Bar)',
+  'Cable Unilateral Bicep Curl': 'Bayesian Curl',
+  'Sled Hack Squat': 'Hack Squat',
+  'Cable Triceps Pushdown (SZ bar)': 'Cable Triceps Pushdown (EZ bar)',
+  'Barbell Full Squat': 'Barbell Squat',
+  'Cable Standing One Arm Triceps Extension': 'Cable Overhead Single Arm Triceps Extension',
+  'Cable Overhead Tricep Extension Straight Bar': 'Cable Overhead Triceps Extension (Straight Bar)',
+  'Vertical Leg Raise (on parallel bars)': 'Captain Seat Leg Raise',
+  'Cable Overhead Tricep Single Arm Triceps Extension (Rope)': 'Cable Overhead Single Arm Triceps Extension',
+  'Cable Overhead Single Arm Triceps Extension (Rope)': 'Cable Overhead Single Arm Triceps Extension',
+  'Cable Bar Lateral Pulldown': 'Lateral Pulldown',
 };
