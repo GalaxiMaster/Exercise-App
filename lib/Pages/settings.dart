@@ -133,6 +133,14 @@ class Settings extends ConsumerWidget {
                   moveExercises(context, ref);
                 },
               ),
+              buildSettingsTile(
+                context, 
+                icon: Icons.check,
+                label: 'Validate Exercises',
+                function: (){
+                  validateExercises(ref);
+                },
+              ),
             ],
           );
       },
@@ -287,7 +295,28 @@ void resetDataButton(BuildContext context, WidgetRef ref){
     }
   );
 }
-
+void validateExercises(WidgetRef ref) {
+  Map data = ref.read(workoutDataProvider).value ?? {};
+  List correctionsNeeded = [];
+  for (String day in data.keys){
+    for (String exercise in data[day]['sets'].keys){
+      if (corrections.containsKey(exercise)) {
+        correctionsNeeded.add([day, exercise]);
+      }
+    }
+  }
+  for (List correction in correctionsNeeded) {
+    String day = correction[0];
+    String exercise = correction[1];
+    String? correctedExercise = corrections[exercise];
+    
+    if (correctedExercise == null) continue;
+    
+    data[day]['sets'][correctedExercise] = data[day]['sets'][exercise];
+    ref.read(workoutDataProvider.notifier).updateValue(day, data[day]);
+    (data[day]['sets'] as Map).remove(exercise);
+  }
+}
 void moveExercises(BuildContext context, WidgetRef ref) async{
   Map data = ref.read(workoutDataProvider).value ?? {};
   List? problemExercises = [];
