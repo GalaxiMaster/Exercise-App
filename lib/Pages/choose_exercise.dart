@@ -144,15 +144,17 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
                           ),
                         ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(exercise),
-                if (!isProblemExercise && customData == null)
-                Text(getMuscles(exercise))
-                else if (customData != null)
-                Text('${customData['Primary'].keys.toList().join(', ')}')
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(exercise),
+                  if (!isProblemExercise && customData == null)
+                  Text(getMuscles(exercise))
+                  else if (customData != null)
+                  Text('${customData['Primary'].keys.toList().join(', ')}')
+                ],
+              ),
             ),
           ],
         ),
