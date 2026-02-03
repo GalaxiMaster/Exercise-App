@@ -278,13 +278,13 @@ class ChartFilters {
 
   ChartFilters({
     this.chartTarget = 'Sets',
-    this.range = -1,
+    this.range = 365,
+    this.timeLabel = 'Past Year',
     this.muscleSelected = 'All Muscles', 
-    this.timeLabel = 'All Time',
   });
   ChartFilters.weight({
-    this.range = -1,
-    this.timeLabel = 'All Time',
+    this.range = 365,
+    this.timeLabel = 'Past Year',
   }) : chartTarget = 'weight',
        muscleSelected = '';
 
