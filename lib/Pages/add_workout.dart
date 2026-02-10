@@ -345,139 +345,197 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                         },
                       ),
                     ),
-                    Table(
-                      border: const TableBorder.symmetric(inside: BorderSide.none),
-                      columnWidths: const {
-                        0: FlexColumnWidth(1),
-                        1: FlexColumnWidth(2),
-                        2: FlexColumnWidth(2),
-                        3: FlexColumnWidth(1),
-                      },
+                    Column(
                       children: [
-                        TableRow(
+                        // header
+                        Row(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 3),
-                              child: Center(
-                                child: Text('Set'),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 3),
-                              child: Center(
-                                child: Text('Weight (kg)')
-                              ),
-                            ), 
-                            if (exerciseTypeAccess[exercise] != 'Timed')
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 3),
-                              child: Center(
-                                child: Text('Reps')
-                              ),
-                            ),
+                            Expanded(flex: 1, child: Center(child: Text('Set'))),
+                            Expanded(flex: 2, child: Center(child: Text('Weight (kg)'))),
+                            Expanded(flex: 2, child: Center(child: Text('Reps'))),
                             if (settings['Tick Boxes'] ?? false)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 3),
-                              child: Center(
-                                child: Icon(Icons.check)
-                              ),
-                            ),
+                            Expanded(flex: 1, child: Center(child: Icon(Icons.check))),
                           ],
                         ),
                         for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
-                        TableRow(
-                          decoration: _checkBoxStates[exercise]![i] ? BoxDecoration(color: const Color.fromARGB(255, 111, 223, 36).withAlpha(175)): BoxDecoration(color: i % 2 == 1 ? ThemeColors.bg : ThemeColors.accent),
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                _showSetTypeMenu(exercise, i);
-                              },
-                              child: SizedBox(
-                                height: 50,
-                                child: Center(
-                                  child: Text(
-                                    sets[exercise]![i]['type'] == 'Warmup'
-                                        ? 'W'
-                                        : sets[exercise]![i]['type'] == 'Failure'
-                                            ? 'F'
-                                            : sets[exercise]![i]['type'] == 'Dropset'
-                                              ? 'D'
-                                              : '${getNormalSetNumber(exercise, i, sets[exercise]!)}',
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                              ),
+                        SwipeDismissable(
+                          key: ValueKey('$exercise-$i'),
+                          direction: DismissDirection.startToEnd,
+                          confirmDismiss: (direction) async {
+                            addNewSet(exercise, 'Bodyweight', data: sets[exercise][i]);
+                            return false;
+                          },
+                          maxSwipeFraction: 0.2,
+                          background: Container(
+                            color: Colors.teal,
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Icon(Icons.repeat),
                             ),
-                            
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: (boxErrors[exercise]?[i]?['weight'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(7.5)
-                                ),
-                                child: Center(
-                                  child: (exerciseMuscles[exercise]?['type'] ?? '') != 'Bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
-                                    TextFormField(
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
-                                      ],
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                      focusNode: _focusNodes[exercise]![i]['weight'],
-                                      controller: _controllers[exercise]![i]['weight'],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
-                                      ),
-                                      decoration: InputDecoration(
-                                        hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type'], workoutData),
-                                        border: InputBorder.none,
-                                        hintStyle: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 16, // Adjust hint text size
+                          ),
+                          child: Container(
+                            color: _checkBoxStates[exercise]![i]
+                                ? const Color.fromARGB(255, 111, 223, 36).withAlpha(175)
+                                : (i.isOdd ? ThemeColors.bg : ThemeColors.accent),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                    onTap: () {
+                                      _showSetTypeMenu(exercise, i);
+                                    },
+                                    child: SizedBox(
+                                      height: 50,
+                                      child: Center(
+                                        child: Text(
+                                          sets[exercise]![i]['type'] == 'Warmup'
+                                              ? 'W'
+                                              : sets[exercise]![i]['type'] == 'Failure'
+                                                  ? 'F'
+                                                  : sets[exercise]![i]['type'] == 'Dropset'
+                                                    ? 'D'
+                                                    : '${getNormalSetNumber(exercise, i, sets[exercise]!)}',
+                                          style: const TextStyle(fontSize: 20),
                                         ),
                                       ),
-                                      onChanged: (value) {
-                                        if (boxErrors[exercise]?[i]['weight'] ?? false){
-                                          boxErrors[exercise] ??= {};
-                                          boxErrors[exercise][i] ??= {};
-                                          boxErrors[exercise][i]['weight'] = false;
-                                        }
-                                        value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                        sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                                        final result = checkSetPR(exercise, i, records);
-
-                                        applyPRResult(
-                                          exercise,
-                                          i,
-                                          result,
-                                          settings,
-                                        );  
-                                        updateExercises();
-                                      },
-                                      onFieldSubmitted: (value) {
-                                        if (i == sets[exercise]!.length - 1) {
-                                          addNewSet(exercise, exerciseTypeAccess[exercise]);
-                                        } else {
-                                          FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
-                                        }
-                                      },
-                                      onTap: () {
-                                        _controllers[exercise]![i]['reps']!.selection = TextSelection(
-                                          baseOffset: 0,
-                                          extentOffset: _controllers[exercise]![i]['reps']!.text.length,
-                                        );
-                                      },
-                                    ) : exerciseTypeAccess[exercise] == 'Timed' ? 
-                                      SizedBox(
-                                        height: 50, 
-                                        child: TimerScreen(
-                                          updateVariable: (int seconds){
-                                            String value = seconds.toString();
-                                            sets[exercise]![i]['weight'] = value;
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: (boxErrors[exercise]?[i]?['weight'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(7.5)
+                                      ),
+                                      child: Center(
+                                        child: (exerciseMuscles[exercise]?['type'] ?? '') != 'Bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
+                                          TextFormField(
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
+                                            ],
+                                            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                                            focusNode: _focusNodes[exercise]![i]['weight'],
+                                            controller: _controllers[exercise]![i]['weight'],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
+                                            ),
+                                            decoration: InputDecoration(
+                                              hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type'], workoutData),
+                                              border: InputBorder.none,
+                                              hintStyle: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 16, // Adjust hint text size
+                                              ),
+                                            ),
+                                            onChanged: (value) {
+                                              if (boxErrors[exercise]?[i]['weight'] ?? false){
+                                                boxErrors[exercise] ??= {};
+                                                boxErrors[exercise][i] ??= {};
+                                                boxErrors[exercise][i]['weight'] = false;
+                                              }
+                                              value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                                              sets[exercise]![i]['weight'] = value != 'null' ? value : '';
+                                              final result = checkSetPR(exercise, i, records);
+                                  
+                                              applyPRResult(
+                                                exercise,
+                                                i,
+                                                result,
+                                                settings,
+                                              );  
+                                              updateExercises();
+                                            },
+                                            onFieldSubmitted: (value) {
+                                              if (i == sets[exercise]!.length - 1) {
+                                                addNewSet(exercise, exerciseTypeAccess[exercise]);
+                                              } else {
+                                                FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+                                              }
+                                            },
+                                            onTap: () {
+                                              _controllers[exercise]![i]['reps']!.selection = TextSelection(
+                                                baseOffset: 0,
+                                                extentOffset: _controllers[exercise]![i]['reps']!.text.length,
+                                              );
+                                            },
+                                          ) : exerciseTypeAccess[exercise] == 'Timed' ? 
+                                            SizedBox(
+                                              height: 50, 
+                                              child: TimerScreen(
+                                                updateVariable: (int seconds){
+                                                  String value = seconds.toString();
+                                                  sets[exercise]![i]['weight'] = value;
+                                                  final result = checkSetPR(exercise, i, records);
+                                  
+                                                  applyPRResult(
+                                                    exercise,
+                                                    i,
+                                                    result,
+                                                    settings,
+                                                  );  
+                                                  updateExercises();
+                                                },
+                                              )
+                                            ) :
+                                          const Text(
+                                            '-',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 33.5,
+                                            ),
+                                          )
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if (exerciseTypeAccess[exercise] != 'Timed')
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: (boxErrors[exercise]?[i]?['reps'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(7.5)
+                                      ), 
+                                      child: Center(
+                                        child: TextFormField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
+                                          ],
+                                          keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                                          focusNode: _focusNodes[exercise]![i]['reps'],
+                                          controller: _controllers[exercise]![i]['reps'],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
+                                          ),
+                                          decoration: InputDecoration(
+                                            hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type'], workoutData),
+                                            border: InputBorder.none,
+                                            hintStyle: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 16, // Adjust hint text size
+                                            ),
+                                          ),
+                                          onChanged: (value) {
+                                            if (boxErrors[exercise]?[i]?['reps'] ?? false){
+                                              boxErrors[exercise] ??= {};
+                                              boxErrors[exercise][i] ??= {};
+                                              boxErrors[exercise][i]['reps'] = false;
+                                            }
+                                            value = (int.tryParse(value) ?? double.tryParse(value)).toString();
+                                            sets[exercise]![i]['reps'] = value != 'null' ? value : '';
                                             final result = checkSetPR(exercise, i, records);
-
+                                  
                                             applyPRResult(
                                               exercise,
                                               i,
@@ -486,107 +544,54 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                                             );  
                                             updateExercises();
                                           },
-                                        )
-                                      ) :
-                                    const Text(
-                                      '-',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 33.5,
-                                      ),
-                                    )
-                                ),
-                              ),
-                            ),
-                            if (exerciseTypeAccess[exercise] != 'Timed')
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: (boxErrors[exercise]?[i]?['reps'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(7.5)
-                                ), 
-                                child: Center(
-                                  child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
-                                    ],
-                                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                    focusNode: _focusNodes[exercise]![i]['reps'],
-                                    controller: _controllers[exercise]![i]['reps'],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
-                                    ),
-                                    decoration: InputDecoration(
-                                      hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type'], workoutData),
-                                      border: InputBorder.none,
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 16, // Adjust hint text size
+                                            onFieldSubmitted: (value) {
+                                              if (i == sets[exercise]!.length - 1) {
+                                                addNewSet(exercise, exerciseTypeAccess[exercise]);
+                                              } else {
+                                                FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
+                                              }
+                                          },
+                                          onTap: () {
+                                            _controllers[exercise]![i]['reps']!.selection = TextSelection(
+                                              baseOffset: 0,
+                                              extentOffset: _controllers[exercise]![i]['reps']!.text.length,
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
-                                    onChanged: (value) {
-                                      if (boxErrors[exercise]?[i]?['reps'] ?? false){
-                                        boxErrors[exercise] ??= {};
-                                        boxErrors[exercise][i] ??= {};
-                                        boxErrors[exercise][i]['reps'] = false;
-                                      }
-                                      value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                      sets[exercise]![i]['reps'] = value != 'null' ? value : '';
-                                      final result = checkSetPR(exercise, i, records);
-
-                                      applyPRResult(
-                                        exercise,
-                                        i,
-                                        result,
-                                        settings,
-                                      );  
-                                      updateExercises();
-                                    },
-                                      onFieldSubmitted: (value) {
-                                        if (i == sets[exercise]!.length - 1) {
-                                          addNewSet(exercise, exerciseTypeAccess[exercise]);
-                                        } else {
-                                          FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
-                                        }
-                                    },
-                                    onTap: () {
-                                      _controllers[exercise]![i]['reps']!.selection = TextSelection(
-                                        baseOffset: 0,
-                                        extentOffset: _controllers[exercise]![i]['reps']!.text.length,
-                                      );
-                                    },
                                   ),
                                 ),
-                              ),
-                            ),
-                            if (settings['Tick Boxes'] ?? false)
-                            Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Checkbox(
-                                checkColor: Colors.white,
-                                activeColor: Colors.green,
-                                value: _checkBoxStates[exercise]![i],
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _checkBoxStates[exercise]![i] = value!;
-                                  });
-                                  if (value ?? false){
-                                    final result = checkSetPR(exercise, i, records);
-
-                                    applyPRResult(
-                                      exercise,
-                                      i,
-                                      result,
-                                      settings,
-                                    );                                  
-                                  }
-                                },
-                              ),
+                                if (settings['Tick Boxes'] ?? false)
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: Checkbox(
+                                      checkColor: Colors.white,
+                                      activeColor: Colors.green,
+                                      value: _checkBoxStates[exercise]![i],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          _checkBoxStates[exercise]![i] = value!;
+                                        });
+                                        if (value ?? false){
+                                          final result = checkSetPR(exercise, i, records);
+                                  
+                                          applyPRResult(
+                                            exercise,
+                                            i,
+                                            result,
+                                            settings,
+                                          );                                  
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
                             )
-                          ],
+                          ),
                         )
                       ],
                     ),
@@ -727,13 +732,17 @@ class AddworkoutState extends ConsumerState<Addworkout> {
     );
   }
 
-void addNewSet(String exercise, String type) {
+void addNewSet(String exercise, String type, {Map<String, String>? data}) {
   setState(() {
-    sets[exercise]?.add({'weight':  type == 'Bodyweight' ? '1' : '', 'reps': '', 'type': 'Normal'});
+    sets[exercise]?.add({
+      'weight':  type == 'Bodyweight' ? '1' : '', 
+      'reps': '', 
+      'type': 'Normal',
+      ...data ?? {}
+    });
     _ensureExerciseFocusNodesAndControllers(exercise);
   });
   
-  // Use a more robust method to set focus
   WidgetsBinding.instance.addPostFrameCallback((_) {
     final lastSetIndex = sets[exercise]!.length - 1;
     FocusNode? focusNodeToUse;
