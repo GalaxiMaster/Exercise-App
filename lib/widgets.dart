@@ -445,3 +445,138 @@ Widget buildSettingsTile(BuildContext context, {
     ),
   );
 }
+
+class SwipeDismissable extends StatefulWidget {
+  final Widget child;
+  final Widget? background;
+
+  final DismissDirection direction;
+  final Future<bool?> Function(DismissDirection direction)? confirmDismiss;
+  final void Function(SwipeUpdateDetails details)? onUpdate;
+
+  final double maxSwipeFraction; // fraction of width to allow dragging
+  final double threshold; // fraction to trigger confirmDismiss
+  final double maxRadius; // max corner radius
+
+  const SwipeDismissable({
+    super.key,
+    required this.child,
+    this.background,
+    this.direction = DismissDirection.horizontal,
+    this.confirmDismiss,
+    this.onUpdate,
+    this.maxSwipeFraction = 0.25,
+    this.threshold = 0.5,
+    this.maxRadius = 16,
+  });
+
+  @override
+  State<SwipeDismissable> createState() => _SwipeDismissableState();
+}
+
+class _SwipeDismissableState extends State<SwipeDismissable>
+    with SingleTickerProviderStateMixin {
+  double dx = 0;
+  late final AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _animation = Tween<double>(begin: 0, end: 0).animate(_controller);
+    _controller.addListener(() => setState(() => dx = _animation.value));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool get allowLeft =>
+      widget.direction == DismissDirection.horizontal ||
+      widget.direction == DismissDirection.endToStart;
+
+  bool get allowRight =>
+      widget.direction == DismissDirection.horizontal ||
+      widget.direction == DismissDirection.startToEnd;
+
+  void _animateBack() {
+    _animation = Tween<double>(begin: dx, end: 0).animate(_controller);
+    _controller.reset();
+    _controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final width = constraints.maxWidth;
+      final max = width * widget.maxSwipeFraction;
+
+      final radius = widget.maxRadius *
+          (_controller.isAnimating
+              ? _animation.value.abs().clamp(0, 50) / max
+              : dx.abs().clamp(0, 50) / max);
+
+      return GestureDetector(
+        onHorizontalDragUpdate: (d) {
+          double next = dx + d.delta.dx;
+
+          if (!allowRight && next > 0) next = 0;
+          if (!allowLeft && next < 0) next = 0;
+
+          next = next.clamp(-max, max);
+          setState(() => dx = next);
+
+          widget.onUpdate?.call(
+            SwipeUpdateDetails(
+              direction: dx >= 0
+                  ? DismissDirection.startToEnd
+                  : DismissDirection.endToStart,
+              progress: dx.abs() / max,
+            ),
+          );
+        },
+        onHorizontalDragEnd: (_) async {
+          final dir = dx >= 0
+              ? DismissDirection.startToEnd
+              : DismissDirection.endToStart;
+          final progress = dx.abs() / max;
+
+          if (progress >= widget.threshold && widget.confirmDismiss != null) {
+            await widget.confirmDismiss!(dir);
+          }
+
+          _animateBack();
+        },
+        child: Stack(
+          children: [
+            if (widget.background != null)
+            Positioned.fill(child: widget.background!),
+            RepaintBoundary(
+              child: Transform.translate(
+                offset: Offset(dx, 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.horizontal(
+                    right: dx < 0 ? Radius.circular(radius) : Radius.zero,   // swipe left → round left
+                    left: dx > 0 ? Radius.circular(radius) : Radius.zero,  // swipe right → round right
+                  ),
+                  child: widget.child,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class SwipeUpdateDetails {
+  final double progress;
+  final DismissDirection direction;
+
+  SwipeUpdateDetails({required this.progress, required this.direction});
+}
