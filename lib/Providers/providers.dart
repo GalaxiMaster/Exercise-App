@@ -157,7 +157,9 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
     final recordsTemp = <String, Lift>{};
 
     for (final day in data.keys) {
-      final exercises = data[day]['sets'] as Map<String, dynamic>? ?? {};
+      final exercises = Map<String, dynamic>.from(
+        data[day]?['sets'] as Map? ?? {},
+      );
 
       for (final exercise in exercises.keys) {
         final setsList = exercises[exercise] as List<dynamic>? ?? [];

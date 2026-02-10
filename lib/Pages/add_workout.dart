@@ -37,13 +37,14 @@ class AddworkoutState extends ConsumerState<Addworkout> {
   Map<String, List<Map<String, TextEditingController>>> _controllers = {};
   Map<String, List<bool>> _checkBoxStates = {};
   Map exerciseTypeAccess = {};
-  bool loading = false;
+  bool loading = true;
 
   Map boxErrors = {};
   @override
   void initState() { // TODO clean up this page, specifically this initstate section and to do with currentWorkout
     super.initState();
-    loading = true;
+    stats['notes'] = widget.sets['stats']?['notes'] ?? {};
+
     if(widget.sets.isEmpty){
       ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
@@ -58,7 +59,6 @@ class AddworkoutState extends ConsumerState<Addworkout> {
       });
     }else {
       sets = widget.sets['sets'];
-      stats['notes'] = widget.sets['stats']?['notes'] ?? {};
       stats['startTime'] = startTime;
       repopulateExerciseTypeAccess();
     }
@@ -72,7 +72,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
   }
   @override
   void dispose() {
-    // Dispose of focus nodes and controllers
+    // Dispose of focus nodes and controllerps
     for (var exerciseNodes in _focusNodes.values) {
       for (var setNodes in exerciseNodes) {
         setNodes['weight']!.dispose();
@@ -330,7 +330,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: TextFormField(
-                        initialValue: stats['notes'][exercise] ?? '',
+                        initialValue: stats['notes']?[exercise] ?? '',
                         decoration: const InputDecoration(
                           hintText: 'Enter your notes here...',
                           border: InputBorder.none,
