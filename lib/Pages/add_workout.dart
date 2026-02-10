@@ -360,19 +360,28 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                         for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
                         SwipeDismissable(
                           key: ValueKey('$exercise-$i'),
-                          direction: DismissDirection.startToEnd,
+                          direction: DismissDirection.horizontal,
                           confirmDismiss: (direction) async {
-                            addNewSet(exercise, 'Bodyweight', data: sets[exercise][i]);
+                            if (direction == DismissDirection.startToEnd) {
+                              addNewSet(exercise, 'Bodyweight', data: sets[exercise][i]);
+                            } else {
+                              removeSet(exercise, i);
+                            }
                             return false;
                           },
                           maxSwipeFraction: 0.2,
-                          background: Container(
-                            color: Colors.teal,
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Icon(Icons.repeat),
-                            ),
+                          background: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Icon(Icons.repeat, color: Colors.teal),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 30),
+                                child: Icon(Icons.delete, color: Colors.red),
+                              ),
+                            ],
                           ),
                           child: Container(
                             color: _checkBoxStates[exercise]![i]
@@ -677,7 +686,22 @@ class AddworkoutState extends ConsumerState<Addworkout> {
     }
     return '0';
   }
-
+  void removeSet(String exercise, int setIndex){
+    setState(() {
+      if(setIndex == 0 && sets[exercise].length == 1){
+        sets.remove(exercise);
+        _controllers.remove(exercise);
+        _focusNodes.remove(exercise);
+        _checkBoxStates.remove(exercise);
+      } else {
+        sets[exercise]?.removeAt(setIndex);
+        _controllers[exercise]!.removeAt(setIndex);
+        _focusNodes[exercise]!.removeAt(setIndex);
+        _checkBoxStates[exercise]!.removeAt(setIndex);
+      }
+      updateExercises();
+    });
+  }
   void _showSetTypeMenu(String exercise, int setIndex) {
     showModalBottomSheet(
       context: context,
@@ -695,20 +719,7 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                 leading: const Icon(Icons.delete, color: Colors.red),
                 title: const Text('Remove Set', style: TextStyle(color: Colors.red)),
                 onTap: () {
-                  setState(() {
-                    if(setIndex == 0 && sets[exercise].length == 1){
-                      sets.remove(exercise);
-                      _controllers.remove(exercise);
-                      _focusNodes.remove(exercise);
-                      _checkBoxStates.remove(exercise);
-                    } else {
-                      sets[exercise]?.removeAt(setIndex);
-                      _controllers[exercise]!.removeAt(setIndex);
-                      _focusNodes[exercise]!.removeAt(setIndex);
-                      _checkBoxStates[exercise]!.removeAt(setIndex);
-                    }
-                    updateExercises();
-                  });
+                  removeSet(exercise, setIndex);
                   Navigator.pop(context);
                 },
               ),
