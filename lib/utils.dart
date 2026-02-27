@@ -174,3 +174,8 @@ dynamic deepCopy(dynamic value) {
   if (value is List) return value.map(deepCopy).toList();
   return value;
 }
+
+String capitalise(String value) {
+  final String fl = value[0];
+  return '${fl.toUpperCase()}${value.substring(1, value.length)}';
+}
