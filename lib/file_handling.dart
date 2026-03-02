@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +105,7 @@ Future<List?> getChoices(BuildContext context, String dialogueTitle) async{
       Map options = {
         'output': true,
         'records': true,
+        'routines': true,
         // 'settings': true
       };
       return StatefulBuilder(
@@ -118,11 +120,10 @@ Future<List?> getChoices(BuildContext context, String dialogueTitle) async{
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(option),
+                        Text(capitalise(option)),
                         Switch.adaptive(
                           value: options[option],
                           onChanged: (value) {
-                            debugPrint('balls $value ${options[option]}');
                             setState(() {
                               options[option] = value;
                             });

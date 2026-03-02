@@ -33,57 +33,20 @@ class _ImportingPageState extends ConsumerState<ImportingPage> {
     return Scaffold(
       appBar: myAppBar(context, 'Importing'),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from This', function: (){importDataThis(context, ref);}),
-          _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from Hevy', function: (){importDataHevy(context);}),
-          _buildSettingsBox(icon: Icons.import_contacts, label: 'Import from Strong', function: (){importDataStrong(context);})
+          settingsHeader('Import Workout Data', context),
+          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from This', function: (){importDataThis(context, ref);}),
+          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from Hevy', function: (){importDataHevy(context);}),
+          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from Strong', function: (){importDataStrong(context);}),
+          // settingsHeader('Import Routines', context),
+          // buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import routines', function: (){importDataStrong(context);}),
 
         ],
       ),
     );
   }
 }
-Widget _buildSettingsBox({
-    required IconData icon,
-    required String label,
-    required VoidCallback? function,
-    Widget? rightside
-  }) {
-    return GestureDetector(
-      onTap: function,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 173, 173, 173).withValues(alpha: 0.1), // Background color for the whole box
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Row(
-            children: [
-              Icon(icon),
-              const SizedBox(width: 8.0),
-              Text(
-                label,
-                style: const TextStyle(
-                   fontSize: 23,
-                ),
-              ),
-              const Spacer(),
-              rightside ??
-                Container(
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.arrow_forward_ios),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
 void importDataThis(BuildContext context, WidgetRef ref) async{
   try {

@@ -49,13 +49,11 @@ class AddworkoutState extends ConsumerState<Addworkout> {
       ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
           sets = data['sets'] ?? {};
+          repopulateExerciseTypeAccess();
           stats['notes'] = data['stats']?['notes'] ?? {};
-          if (sets.isNotEmpty){
-            startTime = data['stats']['startTime'];
-          }
+          startTime = data['stats']?['startTime'] ?? startTime;
           stats['startTime'] = startTime;
         });
-        repopulateExerciseTypeAccess();
       });
     }else {
       sets = widget.sets['sets'];
@@ -744,15 +742,25 @@ class AddworkoutState extends ConsumerState<Addworkout> {
   }
 
 void addNewSet(String exercise, String type, {Map<String, String>? data}) {
-  setState(() {
-    sets[exercise]?.add({
-      'weight':  type == 'Bodyweight' ? '1' : '', 
-      'reps': '', 
-      'type': 'Normal',
-      ...data ?? {}
+  try {
+    setState(() {
+      sets[exercise]?.add({
+        'weight':  type == 'Bodyweight' ? '1' : '', 
+        'reps': '', 
+        'type': 'Normal',
+        ...data ?? {}
+      });
+      _ensureExerciseFocusNodesAndControllers(exercise);
     });
-    _ensureExerciseFocusNodesAndControllers(exercise);
-  });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Something went wrong $e'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   
   WidgetsBinding.instance.addPostFrameCallback((_) {
     final lastSetIndex = sets[exercise]!.length - 1;

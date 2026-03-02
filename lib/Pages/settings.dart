@@ -164,7 +164,7 @@ class GoalOptions extends ConsumerStatefulWidget {
 }
 
 class _GoalOptionsState extends ConsumerState<GoalOptions> {
-  int _selectedIndex = 1; // Default selection
+  int _selectedIndex = 1; // Default selection = 1
   final List<String> _options = List.generate(7, (index) => '${index + 1}');
   late FixedExtentScrollController _scrollController;
 
@@ -181,7 +181,6 @@ class _GoalOptionsState extends ConsumerState<GoalOptions> {
     super.dispose();
   }
 
-  // Load the starting point asynchronously
   Future<void> _loadStartingPoint() async {
     String startingPoint = widget.initialGoal;
     setState(() {
@@ -268,7 +267,7 @@ void resetDataButton(BuildContext context, WidgetRef ref){
           TextButton(
             child: const Text('cancel'),
             onPressed: () {
-              Navigator.of(context).pop(); // Dismiss the dialog
+              Navigator.of(context).pop();
             },
           ),
           TextButton(
@@ -287,7 +286,7 @@ void resetDataButton(BuildContext context, WidgetRef ref){
                   debugPrint('${provider.key} could not be reset: $e');
                 }
               }
-              Navigator.of(context).pop(); // Dismiss the dialog
+              Navigator.of(context).pop();
             },
           ),
         ],
@@ -347,16 +346,14 @@ void moveExercises(BuildContext context, WidgetRef ref) async{
   if (resultToList == null) return;
   String resultTo = resultToList.first;
 
-  // Create a new map to preserve key order
   Map<String, dynamic> newData = {};
 
   for (var day in data.keys) {
     newData[day] = {
       'stats': {},
-      'sets': {}  // Create an empty 'sets' map to populate later
+      'sets': {}
     };
     
-    // Iterate over the original keys in order
     for (var exercise in data[day]['sets'].keys) {
       if (exercise == resultFrom) {
         newData[day]['stats'] = data[day]['stats'];
@@ -404,10 +401,9 @@ class MeasurementPopup extends ConsumerWidget{
                       fontSize: 18,
                     ),
                     decoration: const InputDecoration(
-                      // border: InputBorder.none,
                       hintStyle: TextStyle(
                         color: Colors.grey,
-                        fontSize: 16, // Adjust hint text size
+                        fontSize: 16,
                       ),
                     ),
                     onChanged: (value){
