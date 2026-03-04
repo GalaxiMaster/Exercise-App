@@ -272,9 +272,6 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
   
   void createRoutine(String name) {
     if (name != ''){
-      // if (widget.o_name != '' && name != widget.o_name){
-      //   deleteFile('routines/${widget.o_name}');
-      // }
       final String id = widget.sets['data']?['id'] ?? nanoid();
       ref.read(routineDataProvider.notifier).updateValue(
         id, 

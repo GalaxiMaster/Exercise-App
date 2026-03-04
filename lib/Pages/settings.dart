@@ -102,7 +102,7 @@ class Settings extends ConsumerWidget {
                 context,
                 icon: Icons.upload,
                 label: 'Export data',
-                function: () => exportJson(context),
+                function: () => ref.read(importExportProvider).exportJson(context),
               ),
               setttingDividor(),
               buildSettingsTile(

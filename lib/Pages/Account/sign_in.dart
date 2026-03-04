@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:exercise_app/Pages/Account/sign_up.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/encryption_controller.dart';
+import 'package:exercise_app/sync_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,7 +51,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
               if (isNew) {
                 // TODO createDefaultPermissions(userCredential);
               }
-              await restoreDataFromCloud();
+              await ref.read(syncServiceProvider).restoreDataFromCloud(ref);
               ref.invalidate(workoutDataProvider);
 
               if (mounted) {
@@ -165,18 +166,17 @@ class SignInPageState extends ConsumerState<SignInPage> {
                               email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
-                            await restoreDataFromCloud();
+                            await ref.read(syncServiceProvider).restoreDataFromCloud(ref);
                             
                             ref.invalidate(workoutDataProvider);
 
-                            // toDO getUserPermissions();
                             if (!context.mounted) return;
                             Navigator.popUntil(context, (route) => route.isFirst);
 
                             _encryptionService.writeToSecureStorage(
-                                key: 'password',
-                                value: _encryptionService
-                                    .encrypt(_passwordController.text));
+                              key: 'password',
+                              value: _encryptionService.encrypt(_passwordController.text)
+                            );
                           } on FirebaseAuthException catch (e) {
                             String message;
                             switch (e.code) {

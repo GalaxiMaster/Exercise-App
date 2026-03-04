@@ -1,11 +1,11 @@
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:intl/intl.dart';
-// TODO update page one day
 
-class Stats extends StatefulWidget {
+class Stats extends ConsumerStatefulWidget {
   const Stats({super.key});
 
   @override
@@ -13,7 +13,7 @@ class Stats extends StatefulWidget {
   _StatsState createState() => _StatsState();
 }
 
-class _StatsState extends State<Stats> {
+class _StatsState extends ConsumerState<Stats> {
   Map exerciseData = {};
   Map stats = {'days' : [], 'volume' : [], 'time' : [], 'sets' : 0, 'exercises' : 0};
   @override
@@ -22,7 +22,9 @@ class _StatsState extends State<Stats> {
     _loadData();
   }
   Future<void> _loadData() async {
-    var data = await gatherData();
+    var data = ref.read(workoutDataProvider).value;
+    if (data == null) return; // TODO properly move
+
     debugPrint(data.toString());
     Map totalVolume = {};
     List<int> totalTime = [];
@@ -113,11 +115,6 @@ class _StatsState extends State<Stats> {
       ),
     );
   }
-}
-
-Future<Map> gatherData() async {
-  Map exerciseData = await readData();
-  return exerciseData;
 }
 
 int nonZeroLen(List list){

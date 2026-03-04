@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -11,296 +10,275 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
 
-Future<Map<String, dynamic>> readData({String path = 'output'}) async {
-  final box = await Hive.openBox(path);
-  return Map<String, dynamic>.from(box.toMap());
-}
-
-Future<void> writeData(
-  Map<String, dynamic> newData, {
-  String path = 'output',
-  bool append = true,
-}) async {
-  final box = await Hive.openBox(path);
-
-  if (!append) {
-    await box.clear();
+class StorageService {
+  Future<Box> _getBox(String path) async {
+    return Hive.isBoxOpen(path) ? Hive.box(path) : await Hive.openBox(path);
   }
 
-  await box.putAll(newData);
-  debugPrint('Data written to Hive box: $path');
-}
-
-Future<void> deleteKey(String word, {String path = 'output'}) async {
-  final box = await Hive.openBox(path);
-  await box.delete(word);
-  debugPrint('Deleted word "$word" from box "$path"');
-}
-
-Future<void> writeKey(String key, dynamic data, {String path = 'output',}) async {
-  final box = await Hive.openBox(path);
-  box.put(key, data);
-  debugPrint('Writing Key "$key" from box "$path"');
-}
-
-Future<dynamic> readKey(String key, {String path = 'output', dynamic defaultValue}) async {
-  final box = await Hive.openBox(path);
-  return box.get(key, defaultValue: defaultValue);
-}
-
-Future<void> resetData(List<String>? boxes) async {
-  for (String choice in boxes ?? []){
-    final box = await Hive.openBox(choice);
-    await box.clear();
+  Future<Map<String, dynamic>> readData({String path = 'output'}) async {
+    final box = await _getBox(path);
+    return Map<String, dynamic>.from(box.toMap());
   }
-}
 
-Future<void> exportJson(BuildContext context) async {
-  LoadingOverlay loadingOverlay = LoadingOverlay();
-  try {
+  Future<void> writeData(
+    Map<String, dynamic> newData, {
+    String path = 'output',
+    bool append = true,
+  }) async {
+    final box = await _getBox(path);
+    if (!append) await box.clear();
+    await box.putAll(newData);
+    debugPrint('Data written to Hive box: $path');
+  }
 
-    List? exportChoices = await getChoices(context, 'Data to Export');
-    if (context.mounted) loadingOverlay.showLoadingOverlay(context);
-    Map data = {};
-    if (exportChoices == null) {
-      throw 'No choices selected';
-    }
-    for (String choice in exportChoices){
+  Future<void> deleteKey(String word, {String path = 'output'}) async {
+    final box = await Hive.openBox(path);
+    await box.delete(word);
+    debugPrint('Deleted word "$word" from box "$path"');
+  }
+
+  Future<void> writeKey(String key, dynamic data, {String path = 'output',}) async {
+    final box = await Hive.openBox(path);
+    box.put(key, data);
+    debugPrint('Writing Key "$key" from box "$path"');
+  }
+
+  Future<dynamic> readKey(String key, {String path = 'output', dynamic defaultValue}) async {
+    final box = await Hive.openBox(path);
+    return box.get(key, defaultValue: defaultValue);
+  }
+
+  Future<void> resetData(List<String>? boxes) async {
+    for (String choice in boxes ?? []){
       final box = await Hive.openBox(choice);
-      final boxData = Map<String, dynamic>.from(box.toMap());
-      data[choice] = boxData;
-    }
-
-
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/export.json';
-
-    final file = File(path);
-
-    // Write the JSON to a file
-    final jsonString = const JsonEncoder.withIndent('  ').convert(data);
-    await file.writeAsString(jsonString);
-
-    // Share the file
-    if (await file.exists()) {
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(path)],
-          text: 'Exported exercise history and records from Exercise App',
-        ),
-      );
-
-    } else {
-      debugPrint('Error: Exported JSON file does not exist');
-    }
-  } catch (e) {
-    debugPrint('Error exporting JSON: $e');
-  }
-  loadingOverlay.removeLoadingOverlay();
-}
-Future<List?> getChoices(BuildContext context, String dialogueTitle) async{
-  final List? choices = await showDialog(
-    context: context,
-    builder: (context) {
-      Map options = {
-        'output': true,
-        'records': true,
-        'routines': true,
-        // 'settings': true
-      };
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            title: Text(dialogueTitle),
-            content: IntrinsicHeight(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (String option in options.keys)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(capitalise(option)),
-                        Switch.adaptive(
-                          value: options[option],
-                          onChanged: (value) {
-                            setState(() {
-                              options[option] = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(options.entries.where((entry) => entry.value).map((entry)=> entry.key).toList()),
-                child: const Text('OK!'),
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
-  return choices;
-}
-Future<void> importData(BuildContext context) async {
-  try {
-    final result = await _pickJsonFile();
-    if (result == null) return;
-
-    final content = await _readFileContent(result);
-    if (content == null) return;
-
-    final jsonData = _parseJson(content);
-    if (jsonData == null) {
-      if (context.mounted) _showErrorDialog(context, "Invalid JSON file.");
-      return;
-    }
-    for (String key in jsonData.keys){
-      await writeData(jsonData[key], append: true, path: key);
-    }
-
-    if (!context.mounted) return; // resolves build_context_synchronously warning
-    _showSuccessDialog(context);
-
-    debugPrint("Parsed JSON data: $jsonData");
-  } catch (e) {
-    debugPrint("Error during import: $e");
-    if (context.mounted) {
-      _showErrorDialog(context, "Failed to import data. $e");
+      await box.clear();
     }
   }
-}
 
-Future<File?> _pickJsonFile() async {
-  final result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['json'],
-  );
-  if (result == null || result.files.isEmpty) return null;
+  Future<Map<String, dynamic>> getAllSettings() async{
+    Map<String, dynamic> settings = await readData(path: 'settings');
 
-  final path = result.files.single.path;
-  return path != null ? File(path) : null;
-}
-
-Future<String?> _readFileContent(File file) async {
-  try {
-    return await file.readAsString();
-  } catch (e) {
-    debugPrint("Failed to read file: $e");
-    return null;
-  }
-}
-
-Map<String, dynamic>? _parseJson(String content) {
-  try {
-    return jsonDecode(content) as Map<String, dynamic>;
-  } catch (e) {
-    debugPrint("JSON decode error: $e");
-    return null;
-  }
-}
-
-void _showSuccessDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-      title: const Text('Data Imported'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
-
-void _showErrorDialog(BuildContext context, String message) {
-  showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-      title: const Text('Error'),
-      content: Text(message),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
-
-Future<void> getUserPermissions() async {
-  Map<String, dynamic> permissions;
-  const defaultPermissions = {'canQuiz': false};
-
-  try {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      final doc = await FirebaseFirestore.instance
-          .collection('User-Permissions')
-          .doc(user.uid)
-          .get();
-      
-      permissions = doc.exists ? doc.data() as Map<String, dynamic> : defaultPermissions;
-    } else {
-      permissions = defaultPermissions;
-    }
-  } catch (e) {
-    debugPrint('Error fetching permissions: $e');
-    permissions = defaultPermissions;
-  }
-
-  final permissionsBox = Hive.box('permissions');
-
-  permissionsBox.put('canQuiz', permissions['canQuiz'] ?? false);
-}
-
-Future<Map<String, dynamic>> getAllSettings() async{
-  Map<String, dynamic> settings = await readData(path: 'settings');
-
-  double defaultMuscleGoal = 30;
-  Map<String, dynamic> defaultSettings = {
-    'Day Goal' : '1',
-    'Muscle Goals': {
-      'Core': defaultMuscleGoal,
-      'Legs': defaultMuscleGoal,
-      'Chest': defaultMuscleGoal,
-      'Back': defaultMuscleGoal,
-      'Shoulders': defaultMuscleGoal,
-      'Arms': defaultMuscleGoal,
-    },
-    'Exercise Goals': {
-      
-    },
-    'CalendarSettings': {
-      'MultiYear': {
-        'MultiColor': false,
-        'Buffer1st': false,
+    double defaultMuscleGoal = 30;
+    Map<String, dynamic> defaultSettings = {
+      'Day Goal' : '1',
+      'Muscle Goals': {
+        'Core': defaultMuscleGoal,
+        'Legs': defaultMuscleGoal,
+        'Chest': defaultMuscleGoal,
+        'Back': defaultMuscleGoal,
+        'Shoulders': defaultMuscleGoal,
+        'Arms': defaultMuscleGoal,
+      },
+      'Exercise Goals': {
+        
+      },
+      'CalendarSettings': {
+        'MultiYear': {
+          'MultiColor': false,
+          'Buffer1st': false,
+        }
+      },
+    };
+    // check if the settings file has all of the right fields
+    for (String key in defaultSettings.keys){
+      if (!settings.containsKey(key)){
+        settings[key] = defaultSettings[key];
       }
-    },
-  };
-  // check if the settings file has all of the right fields
-  for (String key in defaultSettings.keys){
-    if (!settings.containsKey(key)){
-      settings[key] = defaultSettings[key];
     }
+    return settings;
   }
-  return settings;
 }
 
-void deleteFile(String fileName) async{
-  final dir = await getApplicationDocumentsDirectory();
-  final path = '${dir.path}/$fileName.json';
-  final file = File(path);
-  if (await file.exists()) {
-    await file.delete();   
+final storageServiceProvider = Provider((ref) => StorageService());
+
+final importExportProvider = Provider((ref) {
+  final storage = ref.watch(storageServiceProvider);
+  return DataImportExportService(storage);
+});
+
+class DataImportExportService {
+  final StorageService _storage;
+  DataImportExportService(this._storage);
+  
+  Future<void> exportJson(BuildContext context) async {
+    LoadingOverlay loadingOverlay = LoadingOverlay();
+    try {
+
+      List? exportChoices = await getChoices(context, 'Data to Export');
+      if (context.mounted) loadingOverlay.showLoadingOverlay(context);
+      Map data = {};
+      if (exportChoices == null) {
+        throw 'No choices selected';
+      }
+      for (String choice in exportChoices){
+        final box = await Hive.openBox(choice);
+        final boxData = Map<String, dynamic>.from(box.toMap());
+        data[choice] = boxData;
+      }
+
+
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/export.json';
+
+      final file = File(path);
+
+      // Write the JSON to a file
+      final jsonString = const JsonEncoder.withIndent('  ').convert(data);
+      await file.writeAsString(jsonString);
+
+      // Share the file
+      if (await file.exists()) {
+        await SharePlus.instance.share(
+          ShareParams(
+            files: [XFile(path)],
+            text: 'Exported exercise history and records from Exercise App',
+          ),
+        );
+
+      } else {
+        debugPrint('Error: Exported JSON file does not exist');
+      }
+    } catch (e) {
+      debugPrint('Error exporting JSON: $e');
+    }
+    loadingOverlay.removeLoadingOverlay();
+  }
+
+  Future<void> importData(BuildContext context) async {
+    try {
+      final result = await _pickJsonFile();
+      if (result == null) return;
+
+      final content = await _readFileContent(result);
+      if (content == null) return;
+
+      final jsonData = _parseJson(content);
+      if (jsonData == null) {
+        if (context.mounted) _showErrorDialog(context, "Invalid JSON file.");
+        return;
+      }
+      for (String key in jsonData.keys){
+        await _storage.writeData(jsonData[key], append: true, path: key);
+      }
+
+      if (!context.mounted) return; // resolves build_context_synchronously warning
+      _showSuccessDialog(context);
+
+      debugPrint("Parsed JSON data: $jsonData");
+    } catch (e) {
+      debugPrint("Error during import: $e");
+      if (context.mounted) {
+        _showErrorDialog(context, "Failed to import data. $e");
+      }
+    }
+  }
+
+  Future<File?> _pickJsonFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['json'],
+    );
+    if (result == null || result.files.isEmpty) return null;
+
+    final path = result.files.single.path;
+    return path != null ? File(path) : null;
+  }
+
+  Future<String?> _readFileContent(File file) async {
+    try {
+      return await file.readAsString();
+    } catch (e) {
+      debugPrint("Failed to read file: $e");
+      return null;
+    }
+  }
+
+  Map<String, dynamic>? _parseJson(String content) {
+    try {
+      return jsonDecode(content) as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint("JSON decode error: $e");
+      return null;
+    }
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Data Imported'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+  Future<List?> getChoices(BuildContext context, String dialogueTitle) async{
+    final List? choices = await showDialog(
+      context: context,
+      builder: (context) {
+        Map options = {
+          'output': true,
+          'records': true,
+          'routines': true,
+          // 'settings': true
+        };
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(dialogueTitle),
+              content: IntrinsicHeight(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (String option in options.keys)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(capitalise(option)),
+                          Switch.adaptive(
+                            value: options[option],
+                            onChanged: (value) {
+                              setState(() {
+                                options[option] = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(options.entries.where((entry) => entry.value).map((entry)=> entry.key).toList()),
+                  child: const Text('OK!'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+    return choices;
   }
 }

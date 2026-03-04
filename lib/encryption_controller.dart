@@ -1,8 +1,4 @@
 import 'package:encrypt/encrypt.dart' as encrypts;
-import 'package:exercise_app/file_handling.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -64,48 +60,4 @@ class EncryptionService {
   Future<void> clearAllSecureStorage() async {
     await _storage.deleteAll();
   }
-}
-
-Future<void> syncData({String? user, data = false, records = false, settings = false}) async {
-  user ??= FirebaseAuth.instance.currentUser?.uid;
-  if (user == null) return;
-  if (!data && !records && !settings) {
-    data = true;
-    records = true;
-    settings = true;
-  }
-  Map respectiveData = {
-    'Output': data,
-    'Records': records,
-    'Settings': settings,
-  };
-  for (var entry in respectiveData.entries) {
-    if (entry.value) {
-      try {
-        Map<String, dynamic> dataMap = (await readData(path: entry.key.toLowerCase())).cast<String, dynamic>();
-        await FirebaseFirestore.instance
-          .collection('User Data')
-          .doc(user)
-          .set({entry.key: dataMap}, SetOptions(merge: true));
-      } catch (e) {
-        debugPrint('Failed to sync ${entry.key}: $e');
-      }
-    }
-  }
-}
-
-Future<bool?> restoreDataFromCloud() async{
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null){
-    String uuid = user.uid;
-    Map? data = (await FirebaseFirestore.instance
-        .collection('User Data')
-        .doc(uuid).get()).data();
-    if (data != null){
-      await writeData(data['Output']);
-      await writeData(data['Settings'], path: 'settings');
-      await writeData(data['Records'], path: 'records');
-    }
-  }
-  return true;
 }

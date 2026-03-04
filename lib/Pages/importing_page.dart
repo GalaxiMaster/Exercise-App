@@ -1,16 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:csv/csv.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/sync_controller.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
+enum ImportOption {
+  thisApp, hevy, strong
+}
 
 class ImportingPage extends ConsumerStatefulWidget {
   const ImportingPage({super.key});
@@ -36,19 +39,32 @@ class _ImportingPageState extends ConsumerState<ImportingPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           settingsHeader('Import Workout Data', context),
-          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from This', function: (){importDataThis(context, ref);}),
-          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from Hevy', function: (){importDataHevy(context);}),
-          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from Strong', function: (){importDataStrong(context);}),
+          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from This', function: (){_importData(ImportOption.thisApp, context, ref);}),
+          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from Hevy', function: (){_importData(ImportOption.hevy, context, ref);}),
+          buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import from Strong', function: (){_importData(ImportOption.strong, context, ref);}),
           // settingsHeader('Import Routines', context),
           // buildSettingsTile(context, icon: Icons.import_contacts, label: 'Import routines', function: (){importDataStrong(context);}),
-
         ],
       ),
     );
   }
 }
 
-void importDataThis(BuildContext context, WidgetRef ref) async{
+void _importData(ImportOption option, BuildContext context, WidgetRef ref){
+  final storageProvider = ref.read(storageServiceProvider);
+  switch (option) {
+    case ImportOption.thisApp:
+      _importDataThis(context, storageProvider);
+    case ImportOption.hevy:
+      _importDataHevy(context, storageProvider);
+    case ImportOption.strong: 
+      _importDataStrong(context, storageProvider);
+  }
+  ref.read(syncServiceProvider).syncData();
+  ref.invalidate(workoutDataProvider);
+}
+
+void _importDataThis(BuildContext context, StorageService storageProvider) async{
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -70,9 +86,8 @@ void importDataThis(BuildContext context, WidgetRef ref) async{
       Map<String, dynamic> jsonData = jsonDecode(content);
       // writeData({}, append: false);
       for (String key in jsonData.keys){
-        writeData(jsonData[key], append: true, path: key);
+        storageProvider.writeData(jsonData[key], append: true, path: key);
       }
-      ref.invalidate(workoutDataProvider);
 
       // Map data = await readData();
       showDialog(
@@ -93,7 +108,6 @@ void importDataThis(BuildContext context, WidgetRef ref) async{
           );
         },
       );
-      syncData();
       // Do something with the parsed JSON data
       debugPrint("Parsed JSON data: $jsonData");
         } else {
@@ -104,7 +118,7 @@ void importDataThis(BuildContext context, WidgetRef ref) async{
   }
   }
 
-void importDataHevy(BuildContext context) async{
+void _importDataHevy(BuildContext context, StorageService storageProvider) async{
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -114,11 +128,9 @@ void importDataHevy(BuildContext context) async{
     );
     
     if (result != null && result.files.isNotEmpty && ['csv', 'CSV'].contains(result.files.single.extension)) {
-      // Get the file path
       String? filePath = result.files.single.path;
 
-      // Read the content of the file
-                if (filePath == null) return; // TODO clean slightly
+      if (filePath == null) return; // TODO clean slightly
 
       final file = File(filePath).openRead();
 
@@ -127,10 +139,10 @@ void importDataHevy(BuildContext context) async{
           .transform(const LineSplitter()) // Convert stream to individual lines.
           .map((line) => const CsvToListConverter().convert(line)) // Convert each line to a list.
           .toList();
-      Map records = await readData(path: 'records');
-      Map<String, dynamic> data = formatHevyData(jsonData, records);
+      Map records = await storageProvider.readData(path: 'records');
+      Map<String, dynamic> data = _formatHevyData(jsonData, records);
       // writeData({}, append: false);
-      writeData(data, append: true);
+      storageProvider.writeData(data, append: true);
       // Map data = await readData();
       showDialog(
         // ignore: use_build_context_synchronously
@@ -150,7 +162,6 @@ void importDataHevy(BuildContext context) async{
           );
         },
       );
-      syncData();
       // Do something with the parsed JSON data
       debugPrint("Parsed JSON data: $data");
         } else {
@@ -160,7 +171,7 @@ void importDataHevy(BuildContext context) async{
     debugPrint("Error picking or reading file: $e");
   }
 }
-void importDataStrong(BuildContext context) async{
+void _importDataStrong(BuildContext context, StorageService storageProvider) async{
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -183,10 +194,9 @@ void importDataStrong(BuildContext context) async{
           .transform(const LineSplitter()) // Convert stream to individual lines.
           .map((line) => const CsvToListConverter(fieldDelimiter: ';').convert(line)) // Convert each line to a list.
           .toList();
-      Map records = await readData(path: 'records');
-      Map<String, dynamic> data = formatStrongData(jsonData, records);
+      Map<String, dynamic> data = _formatStrongData(jsonData);
       // writeData({}, append: false);
-      writeData(data, append: true);
+      storageProvider.writeData(data, append: true);
       // Map data = await readData();
       showDialog(
         // ignore: use_build_context_synchronously
@@ -206,7 +216,6 @@ void importDataStrong(BuildContext context) async{
           );
         },
       );
-      syncData();
       // Do something with the parsed JSON data
       debugPrint("Parsed JSON data: $data");
         } else {
@@ -216,7 +225,8 @@ void importDataStrong(BuildContext context) async{
     debugPrint("Error picking or reading file: $e");
   }
 }
-Map<String, dynamic> formatStrongData(List data, Map records){
+
+Map<String, dynamic> _formatStrongData(List data){
   Map<String, dynamic> formattedData = {};
   Map dailyExercises = {};
   data.removeAt(0);
@@ -257,20 +267,8 @@ Map<String, dynamic> formatStrongData(List data, Map records){
     }
     weight = findWeight(weight, distance);
     Map set = {'weight': weight ?? 1, 'reps': reps ?? 1, 'type': setType};
-    if (!records.containsKey(exercise)){
-      records[exercise] = set;
-      set['PR'] = 'yes';
-    }
-    else{
-      if (set['weight'] > double.parse(records[exercise]['weight'].toString())){
-        records[exercise] = set;
-        set['PR'] = 'yes';
-      } else if (set['weight'] == double.parse(records[exercise]['weight'].toString()) && set['reps'] > double.parse(records[exercise]['reps'].toString())){
-        records[exercise] = set;
-        set['PR'] = 'yes';
-      }
-    }
-    dailyExercises.putIfAbsent(key, () => []).insert(0, {'exercise': exercise, 'set': set}); // TODO understand putifabsent
+
+    dailyExercises.putIfAbsent(key, () => []).insert(0, {'exercise': exercise, 'set': set});
     }catch(e){
       debugPrint('failed: $e $row');
     }
@@ -316,7 +314,8 @@ double? findWeight(double? weight, double? distance, {double? duration}) {
   }
   return weight;
 }
-Map<String, dynamic> formatHevyData(List data, Map records){
+
+Map<String, dynamic> _formatHevyData(List data, Map records){
   Map<String, dynamic> formattedData = {};
   Map dailyExercises = {};
 
