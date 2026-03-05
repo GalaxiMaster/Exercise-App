@@ -1,0 +1,25 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+  
+      - name: Install deps
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build AAB
+        run: flutter build aab --release
