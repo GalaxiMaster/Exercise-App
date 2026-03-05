@@ -24,6 +24,9 @@ jobs:
       - name: Create and decode uplaod key
         run: echo "${{ secrets.UPLOAD_KEYSTORE_JKS }}" | base64 --decode > android/app/upload-keystore.jks
         
+      - name: Create key properties
+        run: echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+        
       - name: Create .env
         run: echo "${{ secrets.ENV }}" > .env
 
