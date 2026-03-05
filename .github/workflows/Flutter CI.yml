@@ -33,5 +33,11 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build APK
-        run: flutter build apk --release
+      - name: Build AAB
+        run: flutter build aab --release
+        
+      - name: Upload bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: build/app/outputs/bundle/release/app-release.aab
