@@ -24,124 +24,126 @@ class Settings extends ConsumerWidget {
         loading: () => const CircularProgressIndicator(),
         error: (e, _) => Text('Error: $e'),
         data: (settings) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              settingsHeader('Preferences', context),
-              buildSettingsTile(
-                context,
-                icon: Icons.person,
-                label: 'Account',
-                function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
-                  User? user = FirebaseAuth.instance.currentUser;
-                  if (user != null){
-                    user = FirebaseAuth.instance.currentUser;
-                    if (!context.mounted) return;
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                settingsHeader('Preferences', context),
+                buildSettingsTile(
+                  context,
+                  icon: Icons.person,
+                  label: 'Account',
+                  function: () async{ // When clicked, toggle a button somewhere that makes sure you can't click it twice, either by just having a backend variable or a loading widget on screen while its
+                    User? user = FirebaseAuth.instance.currentUser;
+                    if (user != null){
+                      user = FirebaseAuth.instance.currentUser;
+                      if (!context.mounted) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AccountPage(accountDetails: user!),
+                        ),
+                      );  
+                    }else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignInPage(),
+                        ),
+                      );  
+                    }
+                  },
+                ),
+                buildSettingsTile(
+                  context,
+                  icon: Icons.flag,
+                  label: 'Days per week goal',
+                  function: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return GoalOptions(initialGoal: settings['Day Goal'],);
+                      },
+                    ).then((res){
+                      if (res == null) return;
+                      ref.read(settingsProvider.notifier).updateValue('Day Goal', res);
+            
+                    });
+                  },
+                ),
+                buildSettingsTile(
+                  context,
+                  icon: Icons.accessibility,
+                  label: 'Measurements',
+                  function: () async{
+                    await showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return MeasurementPopup(initialMeasurement: (settings['Bodyweight'] ?? '0'),);
+                      },
+                    );
+                  },
+                ),
+                buildSettingsTile(
+                  context,
+                  icon: Icons.local_activity,
+                  label: 'Workout',
+                  function: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AccountPage(accountDetails: user!),
+                        builder: (context) => const Workoutsettings(),
                       ),
-                    );  
-                  }else{
+                    );              
+                  },
+                ),
+                // setttingDividor(),
+                settingsHeader('Functions', context),
+                buildSettingsTile(
+                  context,
+                  icon: Icons.upload,
+                  label: 'Export data',
+                  function: () => ref.read(importExportProvider).exportJson(context),
+                ),
+                setttingDividor(),
+                buildSettingsTile(
+                  context,
+                  icon: Icons.download,
+                  label: 'Import data',
+                  function: (){
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SignInPage(),
+                        builder: (context) => const ImportingPage(),
                       ),
-                    );  
-                  }
-                },
-              ),
-              buildSettingsTile(
-                context,
-                icon: Icons.flag,
-                label: 'Days per week goal',
-                function: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return GoalOptions(initialGoal: settings['Day Goal'],);
-                    },
-                  ).then((res){
-                    if (res == null) return;
-                    ref.read(settingsProvider.notifier).updateValue('Day Goal', res);
-
-                  });
-                },
-              ),
-              buildSettingsTile(
-                context,
-                icon: Icons.accessibility,
-                label: 'Measurements',
-                function: () async{
-                  await showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return MeasurementPopup(initialMeasurement: (settings['Bodyweight'] ?? '0'),);
-                    },
-                  );
-                },
-              ),
-              buildSettingsTile(
-                context,
-                icon: Icons.local_activity,
-                label: 'Workout',
-                function: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Workoutsettings(),
-                    ),
-                  );              
-                },
-              ),
-              // setttingDividor(),
-              settingsHeader('Functions', context),
-              buildSettingsTile(
-                context,
-                icon: Icons.upload,
-                label: 'Export data',
-                function: () => ref.read(importExportProvider).exportJson(context),
-              ),
-              setttingDividor(),
-              buildSettingsTile(
-                context,
-                icon: Icons.download,
-                label: 'Import data',
-                function: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ImportingPage(),
-                    ),
-                  );   
-                  // importData(context);
-                },
-              ),
-              buildSettingsTile(
-                context, 
-                icon: Icons.refresh,
-                label: 'Reset data',
-                function: (){resetDataButton(context, ref);},
-              ),
-              buildSettingsTile(
-                context, 
-                icon: Icons.move_down,
-                label: 'Move exercises',
-                function: (){
-                  moveExercises(context, ref);
-                },
-              ),
-              buildSettingsTile(
-                context, 
-                icon: Icons.check,
-                label: 'Validate Exercises',
-                function: (){
-                  validateExercises(ref);
-                },
-              ),
-            ],
+                    );   
+                    // importData(context);
+                  },
+                ),
+                buildSettingsTile(
+                  context, 
+                  icon: Icons.refresh,
+                  label: 'Reset data',
+                  function: (){resetDataButton(context, ref);},
+                ),
+                buildSettingsTile(
+                  context, 
+                  icon: Icons.move_down,
+                  label: 'Move exercises',
+                  function: (){
+                    moveExercises(context, ref);
+                  },
+                ),
+                buildSettingsTile(
+                  context, 
+                  icon: Icons.check,
+                  label: 'Validate Exercises',
+                  function: (){
+                    validateExercises(ref);
+                  },
+                ),
+              ],
+            ),
           );
       },
       ),
