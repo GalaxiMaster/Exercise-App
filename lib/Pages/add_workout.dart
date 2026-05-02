@@ -11,74 +11,79 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-// import 'package:vibration/vibration.dart';
 import 'choose_exercise.dart';
 
-class Addworkout extends ConsumerStatefulWidget {
-  final Map sets;
+class AddWorkout extends ConsumerStatefulWidget {
+  final Map initialSets;
   final bool editing;
   final WorkoutMetaData? metaData;
-  const Addworkout({
-    super.key, 
+
+  const AddWorkout({
+    super.key,
     Map? sets,
-    this.editing = false, 
+    this.editing = false,
     this.metaData,
-  }) : sets = sets ?? const {}; // Assign default if null passed through
+  }) : initialSets = sets ?? const {};
 
   @override
-  AddworkoutState createState() => AddworkoutState();
+  AddWorkoutState createState() => AddWorkoutState();
 }
 
-class AddworkoutState extends ConsumerState<Addworkout> {
+class AddWorkoutState extends ConsumerState<AddWorkout> {
   Map sets = {};
   Map stats = {};
-  String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()).toString();
+  String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
+
   Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   Map<String, List<Map<String, TextEditingController>>> _controllers = {};
   Map<String, List<bool>> _checkBoxStates = {};
   Map exerciseTypeAccess = {};
+  Map boxErrors = {};
+
+  final Map<String, String> _previousCache = {};
+
   bool loading = true;
 
-  Map boxErrors = {};
   @override
-  void initState() { // TODO clean up this page, specifically this initstate section and to do with currentWorkout
+  void initState() {
     super.initState();
-    stats['notes'] = widget.sets['stats']?['notes'] ?? {};
+    stats['notes'] = widget.initialSets['stats']?['notes'] ?? {};
 
-    if(widget.sets.isEmpty){
+    if (widget.initialSets.isEmpty) {
       ref.read(currentWorkoutProvider).whenData((data) {
         setState(() {
           sets = data['sets'] ?? {};
-          repopulateExerciseTypeAccess();
           stats['notes'] = data['stats']?['notes'] ?? {};
           startTime = data['stats']?['startTime'] ?? startTime;
           stats['startTime'] = startTime;
+          repopulateExerciseTypeAccess();
+          _initializeFocusNodesAndControllers();
+          loading = false;
         });
       });
-    }else {
-      sets = widget.sets['sets'];
+    } else {
+      sets = widget.initialSets['sets'];
       stats['startTime'] = startTime;
       repopulateExerciseTypeAccess();
+      _initializeFocusNodesAndControllers();
+      loading = false;
     }
 
-    if (widget.metaData != null){
-      Map metaDataMap = widget.metaData?.toMap() ?? {};
-      stats.addAll(metaDataMap);
+    if (widget.metaData != null) {
+      stats.addAll(widget.metaData!.toMap());
     }
-    _initializeFocusNodesAndControllers();
-    loading = false;
   }
+
   @override
   void dispose() {
-    // Dispose of focus nodes and controllerps
-    for (var exerciseNodes in _focusNodes.values) {
-      for (var setNodes in exerciseNodes) {
+    for (final exerciseNodes in _focusNodes.values) {
+      for (final setNodes in exerciseNodes) {
         setNodes['weight']!.dispose();
         setNodes['reps']!.dispose();
       }
     }
-    for (var exerciseControllers in _controllers.values) {
-      for (var setControllers in exerciseControllers) {
+    for (final exerciseControllers in _controllers.values) {
+      for (final setControllers in exerciseControllers) {
         setControllers['weight']!.dispose();
         setControllers['reps']!.dispose();
       }
@@ -86,109 +91,92 @@ class AddworkoutState extends ConsumerState<Addworkout> {
     super.dispose();
   }
 
-  Future<void> repopulateExerciseTypeAccess() async{
-    final customExerciseAsync = ref.read(customExercisesProvider);
-    for (String exercise in sets.keys){
-      String? type = exerciseMuscles[exercise]?['type'];
-      if (type == null){
-        customExerciseAsync.whenData((data){
-          if (data.containsKey(exercise)){
-            type = data[exercise]['type'];
-          }
-        });
-      }
-      type ??= 'Weighted';
+
+  void repopulateExerciseTypeAccess() {
+    final customExercises = ref.read(customExercisesProvider).value ?? {};
+    for (final exercise in sets.keys) {
+      final type = exerciseMuscles[exercise]?['type']
+          ?? customExercises[exercise]?['type']
+          ?? 'Weighted';
       exerciseTypeAccess[exercise] = type;
     }
   }
 
   void _initializeFocusNodesAndControllers() {
-    for (String exercise in sets.keys) {
+    for (final exercise in sets.keys) {
       _ensureExerciseFocusNodesAndControllers(exercise);
     }
   }
 
- void _ensureExerciseFocusNodesAndControllers(String exercise) {
-  // First cleanup any old controllers/nodes if exercise no longer exists
-  if (!sets.containsKey(exercise)) {
-    // Clean up old controllers and nodes
-    _focusNodes[exercise]?.forEach((nodeMap) {
-      nodeMap['weight']?.dispose();
-      nodeMap['reps']?.dispose();
-    });
-    _controllers[exercise]?.forEach((controllerMap) {
-      controllerMap['weight']?.dispose();
-      controllerMap['reps']?.dispose();
-    });
-    _focusNodes.remove(exercise);
-    _controllers.remove(exercise);
-    _checkBoxStates.remove(exercise);
-    return;
-  }
+  void _ensureExerciseFocusNodesAndControllers(String exercise) {
+    if (!sets.containsKey(exercise)) {
+      _focusNodes[exercise]?.forEach((nodeMap) {
+        nodeMap['weight']?.dispose();
+        nodeMap['reps']?.dispose();
+      });
+      _controllers[exercise]?.forEach((controllerMap) {
+        controllerMap['weight']?.dispose();
+        controllerMap['reps']?.dispose();
+      });
+      _focusNodes.remove(exercise);
+      _controllers.remove(exercise);
+      _checkBoxStates.remove(exercise);
+      return;
+    }
 
-  // Initialize if needed
-  if (!_focusNodes.containsKey(exercise)) {
-    _focusNodes[exercise] = [];
-    _controllers[exercise] = [];
-    _checkBoxStates[exercise] = [];
-  }
+    if (!_focusNodes.containsKey(exercise)) {
+      _focusNodes[exercise] = [];
+      _controllers[exercise] = [];
+      _checkBoxStates[exercise] = [];
+    }
 
-  // Now we know exercise exists in sets and all maps
-  while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
-    final weightFocusNode = FocusNode();
-    final repsFocusNode = FocusNode();
-    
-    // Use weak references to controllers to prevent null access if they're disposed
-    final controllerIndex = _focusNodes[exercise]!.length;
-    weightFocusNode.addListener(() {
-      if (weightFocusNode.hasFocus && 
-          _controllers.containsKey(exercise) &&
-          _controllers[exercise]!.length > controllerIndex) {
-        final controller = _controllers[exercise]![controllerIndex]['weight'];
-        if (controller != null) {
-          controller.selection = TextSelection(
+    while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
+      final controllerIndex = _focusNodes[exercise]!.length;
+      final weightFocusNode = FocusNode();
+      final repsFocusNode = FocusNode();
+
+      weightFocusNode.addListener(() {
+        if (weightFocusNode.hasFocus &&
+            _controllers.containsKey(exercise) &&
+            _controllers[exercise]!.length > controllerIndex) {
+          final controller = _controllers[exercise]![controllerIndex]['weight'];
+          controller?.selection = TextSelection(
             baseOffset: 0,
-            extentOffset: controller.text.length
+            extentOffset: controller.text.length,
           );
         }
-      }
-    });
+      });
 
-    repsFocusNode.addListener(() {
-      if (repsFocusNode.hasFocus && 
-          _controllers.containsKey(exercise) &&
-          _controllers[exercise]!.length > controllerIndex) {
-        final controller = _controllers[exercise]![controllerIndex]['reps'];
-        if (controller != null) {
-          controller.selection = TextSelection(
+      repsFocusNode.addListener(() {
+        if (repsFocusNode.hasFocus &&
+            _controllers.containsKey(exercise) &&
+            _controllers[exercise]!.length > controllerIndex) {
+          final controller = _controllers[exercise]![controllerIndex]['reps'];
+          controller?.selection = TextSelection(
             baseOffset: 0,
-            extentOffset: controller.text.length
+            extentOffset: controller.text.length,
           );
         }
-      }
-    });
+      });
 
-    _focusNodes[exercise]!.add({
-      'weight': weightFocusNode,
-      'reps': repsFocusNode,
-    });
-    _controllers[exercise]!.add({
-      'weight': TextEditingController(
-        text: sets[exercise]![_focusNodes[exercise]!.length - 1]['weight'].toString()
-      ),
-      'reps': TextEditingController(
-        text: sets[exercise]![_focusNodes[exercise]!.length - 1]['reps'].toString()
-      ),
-    });
-    _checkBoxStates[exercise]!.add(false);
+      _focusNodes[exercise]!.add({'weight': weightFocusNode, 'reps': repsFocusNode});
+      _controllers[exercise]!.add({
+        'weight': TextEditingController(
+          text: sets[exercise]![controllerIndex]['weight'].toString(),
+        ),
+        'reps': TextEditingController(
+          text: sets[exercise]![controllerIndex]['reps'].toString(),
+        ),
+      });
+      _checkBoxStates[exercise]!.add(false);
+    }
   }
-}
 
-  void updateExercises() async{
-    if (!widget.editing){
-      if (sets.isEmpty){
+  void updateExercises() {
+    if (!widget.editing) {
+      if (sets.isEmpty) {
         ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
-      } else{
+      } else {
         ref.read(currentWorkoutProvider.notifier).writeState({'stats': stats, 'sets': sets});
       }
     }
@@ -201,11 +189,14 @@ class AddworkoutState extends ConsumerState<Addworkout> {
     final Map workoutData = ref.watch(workoutDataProvider).value ?? {};
     final Map records = ref.watch(recordsProvider).value ?? {};
 
-    if (loading){
-      return CircularProgressIndicator();
+    if (loading) {
+      return const Center(child: CircularProgressIndicator());
     }
+
     return Scaffold(
-      appBar: myAppBar(context, 'Workout', 
+      appBar: myAppBar(
+        context,
+        'Workout',
         button: MyIconButton(
           icon: Icons.check,
           width: 37,
@@ -221,403 +212,23 @@ class AddworkoutState extends ConsumerState<Addworkout> {
           children: [
             ListView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(), // Disable ListView's own scrolling
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: sets.keys.length,
               itemBuilder: (context, index) {
-                String exercise = sets.keys.toList()[index];
+                final exercise = sets.keys.toList()[index];
                 _ensureExerciseFocusNodesAndControllers(exercise);
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ExerciseScreen(exercises: [exercise]))
-                              );
-                            },
-                            child: Text(
-                              exercise,
-                              style: const TextStyle(
-                                fontSize: 18
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              if (['Bodyweight', 'Assisted'].contains(exerciseTypeAccess[exercise]))
-                              Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: GestureDetector(
-                                  onTap: () async{
-                                    await showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) {
-                                        return MeasurementPopup(initialMeasurement: settings['Bodyweight'] ?? '0',);
-                                      },
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Icons.person_2_outlined, 
-                                    color: Colors.blueAccent
-                                  ),
-                                ),
-                              ),
-                              PopupMenuButton<String>(
-                                onSelected: (value) async{
-                                  switch (value){
-                                    case 'Swap': 
-                                      List? newExerciseList = await Navigator.push(
-                                        context,    
-                                        MaterialPageRoute(
-                                          builder: (context) => const WorkoutList(setting: 'choose', multiSelect: false)
-                                        )
-                                      );
-
-                                      if (newExerciseList != null && !sets.containsKey(newExerciseList.first)){
-                                        String newExercise = newExerciseList.first;
-                                        Map newSets = {};
-                                        final Map<String, List<Map<String, FocusNode>>> newFocusnodes = {};
-                                        final Map<String, List<Map<String, TextEditingController>>> newControllers = {};
-                                        final Map<String, List<bool>> newCheckboxstates = {};
-                                        for (String exerciseEntry in sets.keys){
-                                          newSets[exerciseEntry == exercise ? newExercise : exerciseEntry] = sets[exerciseEntry];
-                                          newFocusnodes[exerciseEntry == exercise ? newExercise : exerciseEntry] = _focusNodes[exerciseEntry]!;
-                                          newControllers[exerciseEntry == exercise ? newExercise : exerciseEntry] = _controllers[exerciseEntry]!;
-                                          newCheckboxstates[exerciseEntry == exercise ? newExercise : exerciseEntry] = _checkBoxStates[exerciseEntry]!;
-                                        }
-                                        setState(() {
-                                          sets = newSets;
-                                          _focusNodes = newFocusnodes;
-                                          _controllers = newControllers;
-                                          _checkBoxStates = newCheckboxstates;
-                                          _initializeFocusNodesAndControllers();
-                                          updateExercises();
-                                        });
-                                      }
-                                    case 'Delete':
-                                      setState(() {
-                                        sets.remove(exercise);
-                                        _focusNodes.remove(exercise);
-                                        _controllers.remove(exercise);
-                                        _checkBoxStates.remove(exercise);
-                                        updateExercises();
-                                      });
-                                  }
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return [
-                                    const PopupMenuItem(value: 'Swap', child: Text('Swap')),
-                                    const PopupMenuItem(value: 'Reorder', child: Text('Reorder', style: TextStyle(color: Colors.grey),)),    
-                                    const PopupMenuItem(value: 'Delete', child: Text('Delete', style: TextStyle(color: Colors.red),)),
-                                  ];
-                                },
-                                elevation: 2, 
-                                child: const Icon(Icons.more_vert, color: Colors.white)
-                              ),
-                            ]
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: TextFormField(
-                        initialValue: stats['notes']?[exercise] ?? '',
-                        decoration: const InputDecoration(
-                          hintText: 'Enter your notes here...',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          )
-                        ),
-                        onChanged: (value) {
-                          stats['notes'][exercise] = value;
-                          updateExercises();
-                        },
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        // header
-                        Row(
-                          children: [
-                            Expanded(flex: 1, child: Center(child: Text('Set'))),
-                            Expanded(flex: 2, child: Center(child: Text('Weight (kg)'))),
-                            Expanded(flex: 2, child: Center(child: Text('Reps'))),
-                            if (settings['Tick Boxes'] ?? false)
-                            Expanded(flex: 1, child: Center(child: Icon(Icons.check))),
-                          ],
-                        ),
-                        for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
-                        SwipeDismissable(
-                          key: ValueKey('$exercise-$i'),
-                          direction: DismissDirection.horizontal,
-                          confirmDismiss: (direction) async {
-                            if (direction == DismissDirection.startToEnd) {
-                              addNewSet(exercise, 'Bodyweight', data: sets[exercise][i]);
-                            } else {
-                              removeSet(exercise, i);
-                            }
-                            return false;
-                          },
-                          maxSwipeFraction: 0.2,
-                          background: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 30),
-                                child: Icon(Icons.repeat, color: Colors.teal),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 30),
-                                child: Icon(Icons.delete, color: Colors.red),
-                              ),
-                            ],
-                          ),
-                          child: Container(
-                            color: _checkBoxStates[exercise]![i]
-                                ? const Color.fromARGB(255, 111, 223, 36).withAlpha(175)
-                                : (i.isOdd ? ThemeColors.bg : ThemeColors.accent),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: InkWell(
-                                    onTap: () {
-                                      _showSetTypeMenu(exercise, i);
-                                    },
-                                    child: SizedBox(
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(
-                                          sets[exercise]![i]['type'] == 'Warmup'
-                                              ? 'W'
-                                              : sets[exercise]![i]['type'] == 'Failure'
-                                                  ? 'F'
-                                                  : sets[exercise]![i]['type'] == 'Dropset'
-                                                    ? 'D'
-                                                    : '${getNormalSetNumber(exercise, i, sets[exercise]!)}',
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: (boxErrors[exercise]?[i]?['weight'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
-                                        borderRadius: BorderRadius.circular(7.5)
-                                      ),
-                                      child: Center(
-                                        child: (exerciseMuscles[exercise]?['type'] ?? '') != 'Bodyweight' && (exerciseMuscles[exercise]?['type'] ?? '') != 'Timed'? 
-                                          TextFormField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
-                                            ],
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                            focusNode: _focusNodes[exercise]![i]['weight'],
-                                            controller: _controllers[exercise]![i]['weight'],
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
-                                            ),
-                                            decoration: InputDecoration(
-                                              hintText: getPrevious(exercise, i+1, 'Weight', sets[exercise][i]['type'], workoutData),
-                                              border: InputBorder.none,
-                                              hintStyle: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 16, // Adjust hint text size
-                                              ),
-                                            ),
-                                            onChanged: (value) {
-                                              if (boxErrors[exercise]?[i]['weight'] ?? false){
-                                                boxErrors[exercise] ??= {};
-                                                boxErrors[exercise][i] ??= {};
-                                                boxErrors[exercise][i]['weight'] = false;
-                                              }
-                                              value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                              sets[exercise]![i]['weight'] = value != 'null' ? value : '';
-                                              final result = checkSetPR(exercise, i, records);
-                                  
-                                              applyPRResult(
-                                                exercise,
-                                                i,
-                                                result,
-                                                settings,
-                                              );  
-                                              updateExercises();
-                                            },
-                                            onFieldSubmitted: (value) {
-                                              if (i == sets[exercise]!.length - 1) {
-                                                addNewSet(exercise, exerciseTypeAccess[exercise]);
-                                              } else {
-                                                FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
-                                              }
-                                            },
-                                            onTap: () {
-                                              _controllers[exercise]![i]['reps']!.selection = TextSelection(
-                                                baseOffset: 0,
-                                                extentOffset: _controllers[exercise]![i]['reps']!.text.length,
-                                              );
-                                            },
-                                          ) : exerciseTypeAccess[exercise] == 'Timed' ? 
-                                            SizedBox(
-                                              height: 50, 
-                                              child: TimerScreen(
-                                                updateVariable: (int seconds){
-                                                  String value = seconds.toString();
-                                                  sets[exercise]![i]['weight'] = value;
-                                                  final result = checkSetPR(exercise, i, records);
-                                  
-                                                  applyPRResult(
-                                                    exercise,
-                                                    i,
-                                                    result,
-                                                    settings,
-                                                  );  
-                                                  updateExercises();
-                                                },
-                                              )
-                                            ) :
-                                          const Text(
-                                            '-',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 33.5,
-                                            ),
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (exerciseTypeAccess[exercise] != 'Timed')
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: (boxErrors[exercise]?[i]?['reps'] ?? false) ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
-                                        borderRadius: BorderRadius.circular(7.5)
-                                      ), 
-                                      child: Center(
-                                        child: TextFormField(
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
-                                          ],
-                                          keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                          focusNode: _focusNodes[exercise]![i]['reps'],
-                                          controller: _controllers[exercise]![i]['reps'],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: sets[exercise][i]['PR'] == 'no' || sets[exercise][i]['PR'] == null ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.primary,
-                                          ),
-                                          decoration: InputDecoration(
-                                            hintText: getPrevious(exercise, i+1, 'Reps', sets[exercise][i]['type'], workoutData),
-                                            border: InputBorder.none,
-                                            hintStyle: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 16, // Adjust hint text size
-                                            ),
-                                          ),
-                                          onChanged: (value) {
-                                            if (boxErrors[exercise]?[i]?['reps'] ?? false){
-                                              boxErrors[exercise] ??= {};
-                                              boxErrors[exercise][i] ??= {};
-                                              boxErrors[exercise][i]['reps'] = false;
-                                            }
-                                            value = (int.tryParse(value) ?? double.tryParse(value)).toString();
-                                            sets[exercise]![i]['reps'] = value != 'null' ? value : '';
-                                            final result = checkSetPR(exercise, i, records);
-                                  
-                                            applyPRResult(
-                                              exercise,
-                                              i,
-                                              result,
-                                              settings,
-                                            );  
-                                            updateExercises();
-                                          },
-                                            onFieldSubmitted: (value) {
-                                              if (i == sets[exercise]!.length - 1) {
-                                                addNewSet(exercise, exerciseTypeAccess[exercise]);
-                                              } else {
-                                                FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
-                                              }
-                                          },
-                                          onTap: () {
-                                            _controllers[exercise]![i]['reps']!.selection = TextSelection(
-                                              baseOffset: 0,
-                                              extentOffset: _controllers[exercise]![i]['reps']!.text.length,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (settings['Tick Boxes'] ?? false)
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2),
-                                    child: Checkbox(
-                                      checkColor: Colors.white,
-                                      activeColor: Colors.green,
-                                      value: _checkBoxStates[exercise]![i],
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          _checkBoxStates[exercise]![i] = value!;
-                                        });
-                                        if (value ?? false){
-                                          final result = checkSetPR(exercise, i, records);
-                                  
-                                          applyPRResult(
-                                            exercise,
-                                            i,
-                                            result,
-                                            settings,
-                                          );                                  
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          ),
-                        )
-                      ],
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          addNewSet(exercise, exerciseTypeAccess[exercise]);
-                        },
-                        child: const Text('Add Set'),
-                      ),
-                    ),
-                  ],
+                return _buildExerciseCard(
+                  exercise,
+                  settings,
+                  records,
+                  workoutData,
+                  customExerciseAsync,
                 );
               },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // Navigate to WorkoutList and wait for the result
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -626,31 +237,23 @@ class AddworkoutState extends ConsumerState<Addworkout> {
                 );
 
                 if (result != null) {
-                  for (String exercise in result){
+                  final customExercises = customExerciseAsync.value ?? {};
+                  for (final exercise in result) {
                     if (!sets.containsKey(exercise)) {
-                      String? type = exerciseMuscles[exercise]?['type'];
-                      if (type == null){
-                        customExerciseAsync.whenData((data){
-                          if (data.containsKey(exercise)){
-                            type = data[exercise]['type'];
-                          }
-                        });
-                      }
-                      type ??= 'Weighted';
+                      final type = exerciseMuscles[exercise]?['type']
+                          ?? customExercises[exercise]?['type']
+                          ?? 'Weighted';
                       sets[exercise] = [
                         {
-                          'weight': type == 'Bodyweight' 
-                            ? '1' 
-                            : '', 
-                          'reps': type == 'Timed' 
-                            ? '1' 
-                            : '' , 
-                          'type': 'Normal'
+                          'weight': type == 'Bodyweight' ? '1' : '',
+                          'reps': type == 'Timed' ? '1' : '',
+                          'type': 'Normal',
                         }
-                      ]; // Initialize sets list for the new exercise
+                      ];
                       exerciseTypeAccess[exercise] = type;
                     }
                   }
+                  setState(() {});
                   updateExercises();
                 }
               },
@@ -661,45 +264,441 @@ class AddworkoutState extends ConsumerState<Addworkout> {
       ),
     );
   }
-  
-  String getPrevious(String tExercise, int setNum, String target, String type, Map workoutData){ // TODO this is very expensive, probably cache results
-    // TODO with the matching set types, it could be preferential instead of only. like if theres no sets with that index and set type, it just picks the last of that type
-    if (workoutData.isNotEmpty){
-      for (var day in workoutData.keys.toList().reversed.toList()){
-        for (var exercise in workoutData[day]['sets'].keys){
-          if (exercise == tExercise){
-            for (var i = 0; i < workoutData[day]['sets'][exercise].length; i++) {
-              var set = workoutData[day]['sets'][exercise][i];
-              if (i == setNum-1 && set['type'] == type) {
-                if (target == 'Weight') {
-                  return set['weight'].toString();
-                } else if (target == 'Reps') {
-                  return set['reps'].toString();
-                }
-              }
-            }
-          }
+
+  Widget _buildExerciseCard(
+    String exercise,
+    Map settings,
+    Map records,
+    Map workoutData,
+    AsyncValue customExerciseAsync,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseScreen(exercises: [exercise]),
+                    ),
+                  );
+                },
+                child: Text(
+                  exercise,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              Row(
+                children: [
+                  if (['Bodyweight', 'Assisted'].contains(exerciseTypeAccess[exercise]))
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: GestureDetector(
+                        onTap: () async {
+                          await showModalBottomSheet(
+                            context: context,
+                            builder: (context) => MeasurementPopup(
+                              initialMeasurement: settings['Bodyweight'] ?? '0',
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.person_2_outlined, color: Colors.blueAccent),
+                      ),
+                    ),
+                  PopupMenuButton<String>(
+                    onSelected: (value) async {
+                      switch (value) {
+                        case 'Swap':
+                          final newExerciseList = await Navigator.push<List>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const WorkoutList(setting: 'choose', multiSelect: false),
+                            ),
+                          );
+                          if (newExerciseList != null &&
+                              !sets.containsKey(newExerciseList.first)) {
+                            final newExercise = newExerciseList.first as String;
+                            final Map newSets = {};
+                            final Map<String, List<Map<String, FocusNode>>> newFocusNodes = {};
+                            final Map<String, List<Map<String, TextEditingController>>>
+                                newControllers = {};
+                            final Map<String, List<bool>> newCheckBoxStates = {};
+
+                            for (final entry in sets.keys) {
+                              final key = entry == exercise ? newExercise : entry;
+                              newSets[key] = sets[entry];
+                              newFocusNodes[key] = _focusNodes[entry]!;
+                              newControllers[key] = _controllers[entry]!;
+                              newCheckBoxStates[key] = _checkBoxStates[entry]!;
+                            }
+
+                            setState(() {
+                              sets = newSets;
+                              _focusNodes = newFocusNodes;
+                              _controllers = newControllers;
+                              _checkBoxStates = newCheckBoxStates;
+                              _initializeFocusNodesAndControllers();
+                            });
+                            updateExercises();
+                          }
+                        case 'Delete':
+                          setState(() {
+                            sets.remove(exercise);
+                            _focusNodes.remove(exercise);
+                            _controllers.remove(exercise);
+                            _checkBoxStates.remove(exercise);
+                          });
+                          updateExercises();
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      const PopupMenuItem(value: 'Swap', child: Text('Swap')),
+                      const PopupMenuItem(
+                        value: 'Reorder',
+                        child: Text('Reorder', style: TextStyle(color: Colors.grey)),
+                      ),
+                      const PopupMenuItem(
+                        value: 'Delete',
+                        child: Text('Delete', style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                    elevation: 2,
+                    child: const Icon(Icons.more_vert, color: Colors.white),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        // Notes field
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: TextFormField(
+            initialValue: stats['notes']?[exercise] ?? '',
+            decoration: const InputDecoration(
+              hintText: 'Enter your notes here...',
+              border: InputBorder.none,
+              hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+            onChanged: (value) {
+              stats['notes'][exercise] = value;
+              updateExercises();
+            },
+          ),
+        ),
+
+        // Sets table
+        Column(
+          children: [
+            _buildSetTableHeader(settings),
+            for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
+              _buildSetRow(exercise, i, settings, records, workoutData),
+          ],
+        ),
+
+        // Add set button
+        Center(
+          child: ElevatedButton(
+            onPressed: () => addNewSet(exercise, exerciseTypeAccess[exercise] as String),
+            child: const Text('Add Set'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSetTableHeader(Map settings) {
+    return Row(
+      children: [
+        const Expanded(flex: 1, child: Center(child: Text('Set'))),
+        const Expanded(flex: 2, child: Center(child: Text('Weight (kg)'))),
+        const Expanded(flex: 2, child: Center(child: Text('Reps'))),
+        if (settings['Tick Boxes'] ?? false)
+          const Expanded(flex: 1, child: Center(child: Icon(Icons.check))),
+      ],
+    );
+  }
+
+  Widget _buildSetRow(
+    String exercise,
+    int i,
+    Map settings,
+    Map records,
+    Map workoutData,
+  ) {
+    return SwipeDismissable(
+      key: ValueKey('$exercise-$i'),
+      direction: DismissDirection.horizontal,
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.startToEnd) {
+          addNewSet(exercise, 'Bodyweight', data: sets[exercise][i]);
+        } else {
+          removeSet(exercise, i);
         }
-      }
+        return false;
+      },
+      maxSwipeFraction: 0.2,
+      background: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: Icon(Icons.repeat, color: Colors.teal),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: Icon(Icons.delete, color: Colors.red),
+          ),
+        ],
+      ),
+      child: Container(
+        color: _checkBoxStates[exercise]![i]
+            ? const Color.fromARGB(255, 111, 223, 36).withAlpha(175)
+            : (i.isOdd ? ThemeColors.bg : ThemeColors.accent),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () => _showSetTypeMenu(exercise, i),
+                child: SizedBox(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      _setLabel(exercise, i),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            _buildWeightCell(exercise, i, settings, records, workoutData),
+
+            if (exerciseTypeAccess[exercise] != 'Timed')
+              _buildRepsCell(exercise, i, settings, records, workoutData),
+
+            if (settings['Tick Boxes'] ?? false)
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: Colors.green,
+                    value: _checkBoxStates[exercise]![i],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _checkBoxStates[exercise]![i] = value!;
+                      });
+                      if (value ?? false) {
+                        applyPRResult(
+                          exercise,
+                          i,
+                          checkSetPR(exercise, i, records),
+                          settings,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _setLabel(String exercise, int i) {
+    return switch (sets[exercise]![i]['type']) {
+      'Warmup'  => 'W',
+      'Failure' => 'F',
+      'Dropset' => 'D',
+      _         => '${getNormalSetNumber(exercise, i, sets[exercise]!)}',
+    };
+  }
+
+  Widget _buildWeightCell(
+    String exercise,
+    int i,
+    Map settings,
+    Map records,
+    Map workoutData,
+  ) {
+    final hasError = boxErrors[exercise]?[i]?['weight'] ?? false;
+
+    return Expanded(
+      flex: 2,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: hasError ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
+            borderRadius: BorderRadius.circular(7.5),
+          ),
+          child: Center(
+            child: _buildWeightInput(exercise, i, settings, records, workoutData),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeightInput(
+    String exercise,
+    int i,
+    Map settings,
+    Map records,
+    Map workoutData,
+  ) {
+    final type = exerciseTypeAccess[exercise] as String? ?? 'Weighted';
+    final isPR = sets[exercise][i]['PR'] != 'no' && sets[exercise][i]['PR'] != null;
+
+    if (type == 'Bodyweight') {
+      return const Text('-', style: TextStyle(color: Colors.white, fontSize: 33.5));
     }
-    return '0';
+
+    if (type == 'Timed') {
+      return SizedBox(
+        height: 50,
+        child: TimerScreen(
+          updateVariable: (int seconds) {
+            sets[exercise]![i]['weight'] = seconds.toString();
+            applyPRResult(exercise, i, checkSetPR(exercise, i, records), settings);
+            updateExercises();
+          },
+        ),
+      );
+    }
+
+    return TextFormField(
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,2}')),
+      ],
+      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+      focusNode: _focusNodes[exercise]![i]['weight'],
+      controller: _controllers[exercise]![i]['weight'],
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 18,
+        color: isPR
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurface,
+      ),
+      decoration: InputDecoration(
+        hintText: getPrevious(exercise, i + 1, 'Weight', sets[exercise][i]['type'], workoutData),
+        border: InputBorder.none,
+        hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
+      ),
+      onChanged: (value) {
+        if (boxErrors[exercise]?[i]?['weight'] ?? false) {
+          boxErrors[exercise] ??= {};
+          boxErrors[exercise][i] ??= {};
+          boxErrors[exercise][i]['weight'] = false;
+        }
+        final parsed = int.tryParse(value) ?? double.tryParse(value);
+        sets[exercise]![i]['weight'] = parsed != null ? parsed.toString() : '';
+        applyPRResult(exercise, i, checkSetPR(exercise, i, records), settings);
+        updateExercises();
+      },
+      onFieldSubmitted: (_) {
+        if (i == sets[exercise]!.length - 1) {
+          addNewSet(exercise, type);
+        } else {
+          FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
+        }
+      },
+      // FIX: was incorrectly selecting the reps controller
+      onTap: () {
+        final controller = _controllers[exercise]![i]['weight']!;
+        controller.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: controller.text.length,
+        );
+      },
+    );
   }
-  void removeSet(String exercise, int setIndex){
-    setState(() {
-      if(setIndex == 0 && sets[exercise].length == 1){
-        sets.remove(exercise);
-        _controllers.remove(exercise);
-        _focusNodes.remove(exercise);
-        _checkBoxStates.remove(exercise);
-      } else {
-        sets[exercise]?.removeAt(setIndex);
-        _controllers[exercise]!.removeAt(setIndex);
-        _focusNodes[exercise]!.removeAt(setIndex);
-        _checkBoxStates[exercise]!.removeAt(setIndex);
-      }
-      updateExercises();
-    });
+
+  Widget _buildRepsCell(
+    String exercise,
+    int i,
+    Map settings,
+    Map records,
+    Map workoutData,
+  ) {
+    final hasError = boxErrors[exercise]?[i]?['reps'] ?? false;
+    final isPR = sets[exercise][i]['PR'] != 'no' && sets[exercise][i]['PR'] != null;
+    final type = exerciseTypeAccess[exercise] as String? ?? 'Weighted';
+
+    return Expanded(
+      flex: 2,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: hasError ? Colors.redAccent.withValues(alpha: .7) : Colors.transparent,
+            borderRadius: BorderRadius.circular(7.5),
+          ),
+          child: Center(
+            child: TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d{0,1}')),
+              ],
+              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+              focusNode: _focusNodes[exercise]![i]['reps'],
+              controller: _controllers[exercise]![i]['reps'],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: isPR
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface,
+              ),
+              decoration: InputDecoration(
+                hintText: getPrevious(exercise, i + 1, 'Reps', sets[exercise][i]['type'], workoutData),
+                border: InputBorder.none,
+                hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+              onChanged: (value) {
+                if (boxErrors[exercise]?[i]?['reps'] ?? false) {
+                  boxErrors[exercise] ??= {};
+                  boxErrors[exercise][i] ??= {};
+                  boxErrors[exercise][i]['reps'] = false;
+                }
+                final parsed = int.tryParse(value) ?? double.tryParse(value);
+                sets[exercise]![i]['reps'] = parsed != null ? parsed.toString() : '';
+                applyPRResult(exercise, i, checkSetPR(exercise, i, records), settings);
+                updateExercises();
+              },
+              onFieldSubmitted: (_) {
+                if (i == sets[exercise]!.length - 1) {
+                  addNewSet(exercise, type);
+                } else {
+                  FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['reps']);
+                }
+              },
+              onTap: () {
+                final controller = _controllers[exercise]![i]['reps']!;
+                controller.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: controller.text.length,
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
+
   void _showSetTypeMenu(String exercise, int setIndex) {
     showModalBottomSheet(
       context: context,
@@ -741,70 +740,80 @@ class AddworkoutState extends ConsumerState<Addworkout> {
     );
   }
 
-void addNewSet(String exercise, String type, {Map<String, String>? data}) {
-  try {
-    setState(() {
-      sets[exercise]?.add({
-        'weight':  type == 'Bodyweight' ? '1' : '', 
-        'reps': '', 
-        'type': 'Normal',
-        ...data ?? {}
+  // -------------------------------------------------------------------------
+  // Add / remove sets
+  // -------------------------------------------------------------------------
+
+  void addNewSet(String exercise, String type, {Map<String, String>? data}) {
+    try {
+      setState(() {
+        sets[exercise]?.add({
+          'weight': type == 'Bodyweight' ? '1' : '',
+          'reps': '',
+          'type': 'Normal',
+          ...data ?? {},
+        });
+        _ensureExerciseFocusNodesAndControllers(exercise);
       });
-      _ensureExerciseFocusNodesAndControllers(exercise);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Something went wrong: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final lastIndex = sets[exercise]!.length - 1;
+
+      if (type == 'Timed') return;
+
+      final focusNode = type == 'Bodyweight'
+          ? _focusNodes[exercise]![lastIndex]['reps']!
+          : _focusNodes[exercise]![lastIndex]['weight']!;
+
+      final controller = type == 'Bodyweight'
+          ? _controllers[exercise]![lastIndex]['reps']!
+          : _controllers[exercise]![lastIndex]['weight']!;
+
+      FocusScope.of(context).requestFocus(focusNode);
+      controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: controller.text.length,
+      );
     });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Something went wrong $e'),
-        backgroundColor: Colors.red,
-      ),
-    );
   }
 
-  
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    final lastSetIndex = sets[exercise]!.length - 1;
-    FocusNode? focusNodeToUse;
+  void removeSet(String exercise, int setIndex) {
+    setState(() {
+      if (setIndex == 0 && sets[exercise].length == 1) {
+        sets.remove(exercise);
+        _controllers.remove(exercise);
+        _focusNodes.remove(exercise);
+        _checkBoxStates.remove(exercise);
+      } else {
+        sets[exercise]?.removeAt(setIndex);
+        _controllers[exercise]!.removeAt(setIndex);
+        _focusNodes[exercise]!.removeAt(setIndex);
+        _checkBoxStates[exercise]!.removeAt(setIndex);
+      }
+    });
+    updateExercises();
+  }
 
-    // Determine which node to focus based on exercise type
-    if (type == 'Bodyweight') {
-      // For Bodyweight, focus on reps
-      focusNodeToUse = _focusNodes[exercise]![lastSetIndex]['reps']!;
-    } else if (type == 'Timed') {
-      // For timed exercises, this will be handled differently
-      return;
-    } else {
-      // Default to weight node for weighted exercises
-      focusNodeToUse = _focusNodes[exercise]![lastSetIndex]['weight']!;
-    }
-    
-    // Ensure the focus node is associated with the widget
-    FocusScope.of(context).requestFocus(focusNodeToUse);
-    
-    // Ensure the text is selected
-    final controllerToUse = type== 'Bodyweight'
-        ? _controllers[exercise]![lastSetIndex]['reps']!
-        : _controllers[exercise]![lastSetIndex]['weight']!;
-    
-    controllerToUse.selection = TextSelection(
-      baseOffset: 0, 
-      extentOffset: controllerToUse.text.length
-    );
-  });
-}
-  
   void confirmExercises(Map sets) {
-    bool isValidWorkout = checkValidWorkout(sets);
-    if (isValidWorkout){
+    if (checkValidWorkout(sets)) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ConfirmWorkout(
             data: {
               'sets': sets,
-              'stats': widget.sets['stats'] ?? stats
-            }, 
-            editing: widget.editing, 
+              'stats': widget.initialSets['stats'] ?? stats,
+            },
+            editing: widget.editing,
           ),
         ),
       );
@@ -817,10 +826,8 @@ void addNewSet(String exercise, String type, {Map<String, String>? data}) {
             content: const Text('No empty inputs accepted. Please complete all fields.'),
             actions: [
               TextButton(
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog
-                },
               ),
             ],
           );
@@ -829,38 +836,67 @@ void addNewSet(String exercise, String type, {Map<String, String>? data}) {
     }
   }
 
-  bool checkValidWorkout(Map sets){ // could even put this in the save function maybe
-    bool isStillValid = true;
-    for (String exercise in sets.keys){
+  bool checkValidWorkout(Map sets) {
+    bool isValid = true;
+    for (final exercise in sets.keys) {
       for (int i = 0; i < sets[exercise].length; i++) {
-        Map set = sets[exercise][i];
-        if (set['reps'] == ''){
+        final set = sets[exercise][i];
+
+        if (set['reps'] == '') {
           setState(() {
             boxErrors[exercise] ??= {};
             boxErrors[exercise][i] ??= {};
             boxErrors[exercise][i]['reps'] = true;
           });
-          isStillValid = false;
-        } else if(set['weight'] == ''){
+          isValid = false;
+        }
+
+        if (set['weight'] == '') {
           setState(() {
             boxErrors[exercise] ??= {};
             boxErrors[exercise][i] ??= {};
             boxErrors[exercise][i]['weight'] = true;
           });
-          isStillValid = false;
+          isValid = false;
         }
       }
     }
-    return isStillValid;
+    return isValid;
   }
 
-  // ! START RECORDS
-  void applyPRResult(
+  String getPrevious(
     String exercise,
-    int index,
-    PRResult result,
-    Map settings,
+    int setNum,
+    String target,
+    String type,
+    Map workoutData,
   ) {
+    final cacheKey = '$exercise|$setNum|$target|$type';
+    if (_previousCache.containsKey(cacheKey)) return _previousCache[cacheKey]!;
+
+    if (workoutData.isNotEmpty) {
+      for (final day in workoutData.keys.toList().reversed) {
+        final exerciseSets = workoutData[day]['sets'];
+        if (!exerciseSets.containsKey(exercise)) continue;
+        final exSets = exerciseSets[exercise] as List;
+        if (setNum - 1 < exSets.length) {
+          final set = exSets[setNum - 1];
+          if (set['type'] == type) {
+            final result = target == 'Weight'
+                ? set['weight'].toString()
+                : set['reps'].toString();
+            _previousCache[cacheKey] = result;
+            return result;
+          }
+        }
+      }
+    }
+
+    _previousCache[cacheKey] = '0';
+    return '0';
+  }
+
+  void applyPRResult(String exercise, int index, PRResult result, Map settings) {
     setState(() {
       sets[exercise][index]['PR'] = result.isPR ? 'yes' : 'no';
     });
@@ -868,20 +904,14 @@ void addNewSet(String exercise, String type, {Map<String, String>? data}) {
     if (!result.isPR) return;
     if (settings['Tick Boxes'] ?? false) return;
 
-    String subtitle;
-    switch (result.type) {
-      case PRType.weight:
-        subtitle = "Heaviest Weight - ${sets[exercise][index]['weight']} kg";
-        break;
-      case PRType.reps:
-        subtitle = "Highest Reps - ${sets[exercise][index]['reps']}";
-        break;
-      case PRType.first:
-        subtitle = "First Record!";
-        break;
-      default:
-        return;
-    }
+    final String subtitle = switch (result.type) {
+      PRType.weight => 'Heaviest Weight - ${sets[exercise][index]['weight']} kg',
+      PRType.reps   => 'Highest Reps - ${sets[exercise][index]['reps']}',
+      PRType.first  => 'First Record!',
+      _             => '',
+    };
+
+    if (subtitle.isEmpty) return;
 
     AchievementPopup.show(
       context,
@@ -898,14 +928,9 @@ void addNewSet(String exercise, String type, {Map<String, String>? data}) {
     final bestIndex = bestSetIndex(sets[exercise]);
     if (bestIndex != index) return PRResult(false, PRType.none);
 
-    final recordLift = records.containsKey(exercise)
-        ? liftFromSet(records[exercise])
-        : null;
+    final recordLift = records.containsKey(exercise) ? liftFromSet(records[exercise]) : null;
 
-    return evaluatePR(
-      candidate: lift,
-      record: recordLift,
-    );
+    return evaluatePR(candidate: lift, record: recordLift);
   }
 
   int? bestSetIndex(List sets) {
@@ -915,7 +940,6 @@ void addNewSet(String exercise, String type, {Map<String, String>? data}) {
     for (int i = 0; i < sets.length; i++) {
       final lift = liftFromSet(sets[i]);
       if (lift == null) continue;
-
       if (bestLift == null || isBetter(lift, bestLift)) {
         bestLift = lift;
         bestIndex = i;
@@ -924,27 +948,21 @@ void addNewSet(String exercise, String type, {Map<String, String>? data}) {
     return bestIndex;
   }
 
-  PRResult evaluatePR({
-    required Lift candidate,
-    Lift? record,
-  }) {
+  PRResult evaluatePR({required Lift candidate, Lift? record}) {
     if (record == null) return PRResult(true, PRType.first);
-
-    if (candidate.weight > record.weight) {
-      return PRResult(true, PRType.weight);
-    }
-
-    if (candidate.weight == record.weight &&
-        candidate.reps > record.reps) {
+    if (candidate.weight > record.weight) return PRResult(true, PRType.weight);
+    if (candidate.weight == record.weight && candidate.reps > record.reps) {
       return PRResult(true, PRType.reps);
     }
-
     return PRResult(false, PRType.none);
   }
-  // !End records
 }
 
-class TimerScreen extends StatefulWidget { // TODO cleanup
+// ---------------------------------------------------------------------------
+// TimerScreen
+// ---------------------------------------------------------------------------
+
+class TimerScreen extends StatefulWidget {
   final Function(int seconds)? updateVariable;
 
   const TimerScreen({super.key, this.updateVariable});
@@ -958,39 +976,35 @@ class TimerScreenState extends State<TimerScreen> {
   int _seconds = 0;
   bool isRunning = false;
 
-  // Start the timer
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   void _startTimer() {
     if (_timer != null) return;
-    
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _seconds++;
-      });
-    });
-
-    setState(() {
-      isRunning = true;
+    setState(() { isRunning = true; });
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() { _seconds++; });
     });
   }
 
-  // Stop the timer
   void _stopTimer() {
+    _timer?.cancel();
+    _timer = null;
+    setState(() { isRunning = false; });
+  }
+
+  void _resetTimer() {
     _timer?.cancel();
     _timer = null;
     setState(() {
       isRunning = false;
-    });
-  }
-
-  // Reset the timer
-  void _resetTimer() {
-    _stopTimer();
-    setState(() {
       _seconds = 0;
     });
   }
 
-  // Format seconds into minutes:seconds
   String _formatTime(int seconds) {
     final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
     final secs = (seconds % 60).toString().padLeft(2, '0');
@@ -1010,15 +1024,17 @@ class TimerScreenState extends State<TimerScreen> {
               } else {
                 _seconds == 0 ? _startTimer() : _resetTimer();
               }
-              if (widget.updateVariable != null){
-                widget.updateVariable!(_seconds);
-              }
+              widget.updateVariable?.call(_seconds);
             },
             child: CircleAvatar(
               radius: 17,
               backgroundColor: Colors.blue,
               child: Icon(
-                isRunning ? Icons.pause : _seconds == 0 ? Icons.play_arrow : Icons.restart_alt_rounded,
+                isRunning
+                    ? Icons.pause
+                    : _seconds == 0
+                        ? Icons.play_arrow
+                        : Icons.restart_alt_rounded,
                 color: Colors.white,
                 size: 25,
               ),
@@ -1027,43 +1043,36 @@ class TimerScreenState extends State<TimerScreen> {
           const SizedBox(width: 10),
           Text(
             _formatTime(_seconds),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 30),
           ),
         ],
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 }
 
+
 class AchievementPopup {
-  static void show(BuildContext context, {required String title, required String subtitle, required IconData icon}) {
-    OverlayEntry overlayEntry = _createOverlayEntry(context, title, subtitle, icon);
+  static void show(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+  }) {
+    final overlayEntry = _createOverlayEntry(context, title, subtitle, icon);
     Overlay.of(context).insert(overlayEntry);
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      overlayEntry.markNeedsBuild();  // Trigger animation for expansion
-    });
-
-    // Remove popup after display duration
-    Future.delayed(const Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
+    Future.delayed(const Duration(seconds: 3), overlayEntry.remove);
   }
 
-  static OverlayEntry _createOverlayEntry(BuildContext context, String title, String subtitle, IconData icon) {
+  static OverlayEntry _createOverlayEntry(
+    BuildContext context,
+    String title,
+    String subtitle,
+    IconData icon,
+  ) {
     return OverlayEntry(
       builder: (context) {
-        bool isExpanded = false;
-
         return Positioned(
           top: 50.0,
           left: MediaQuery.of(context).size.width * 0.1,
@@ -1072,6 +1081,8 @@ class AchievementPopup {
             color: Colors.transparent,
             child: StatefulBuilder(
               builder: (context, setState) {
+                bool isExpanded = false;
+
                 Future.delayed(Duration.zero, () {
                   setState(() => isExpanded = true);
                 });
@@ -1083,10 +1094,10 @@ class AchievementPopup {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                     height: 60,
-                    width: isExpanded ? MediaQuery.of(context).size.width * 0.8 : 60,  // Starts small, expands to wide
+                    width: isExpanded ? MediaQuery.of(context).size.width * 0.8 : 60,
                     decoration: BoxDecoration(
                       color: Colors.black87,
-                      borderRadius: BorderRadius.circular(30),  // Circular shape for initial and expanded view
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

@@ -150,7 +150,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                       final result = await Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => Addworkout(sets: jsonDecode(jsonEncode(dayData)), editing: true),
+                          builder: (context) => AddWorkout(sets: jsonDecode(jsonEncode(dayData)), editing: true),
                         ),
                       );
                       if (result != null && dayData != result) { // Could add validation here

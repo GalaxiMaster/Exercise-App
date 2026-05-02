@@ -295,7 +295,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Navigator.of(context).pop(); // Dismiss the dialog
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Addworkout(sets: data, metaData: metaData,)),
+                    MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),
                   );
                 },
               ),
@@ -305,7 +305,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Navigator.of(context).pop(); // Dismiss the dialog
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Addworkout(sets: data, metaData: metaData,)),
+                    MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),
                   );
                 },
               ),
@@ -317,7 +317,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       if (!context.mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Addworkout(sets: data, metaData: metaData,)),
+        MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),
       );
     }
   }

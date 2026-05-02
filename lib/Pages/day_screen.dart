@@ -105,7 +105,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                           final result = await Navigator.push(
                             context, 
                             MaterialPageRoute(
-                              builder: (context) => Addworkout(sets: day.value, editing: true),
+                              builder: (context) => AddWorkout(sets: day.value, editing: true),
                             ),
                           );
                           if (result != null && day.value != result) { // Could add validation here
