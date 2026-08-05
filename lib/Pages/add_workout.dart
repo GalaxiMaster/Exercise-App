@@ -41,6 +41,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   Map boxErrors = {};
 
   final Map<String, String> _previousCache = {};
+  Map? _lastWorkoutData;
+
+  ProviderSubscription? _workoutSub;
 
   bool loading = true;
 
@@ -50,17 +53,26 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     stats['notes'] = widget.initialSets['stats']?['notes'] ?? {};
 
     if (widget.initialSets.isEmpty) {
-      ref.read(currentWorkoutProvider).whenData((data) {
-        setState(() {
-          sets = data['sets'] ?? {};
-          stats['notes'] = data['stats']?['notes'] ?? {};
-          startTime = data['stats']?['startTime'] ?? startTime;
-          stats['startTime'] = startTime;
-          repopulateExerciseTypeAccess();
-          _initializeFocusNodesAndControllers();
-          loading = false;
+      final initial = ref.read(currentWorkoutProvider);
+
+      if (initial.hasValue) {
+        _applyInitialData(initial.value ?? {});
+      } else if (initial.hasError) {
+        loading = false;
+      } else {
+        _workoutSub = ref.listenManual(currentWorkoutProvider, (previous, next) {
+          next.whenOrNull(
+            data: (data) {
+              if (mounted) setState(() => _applyInitialData(data));
+            },
+            error: (_, __) {
+              if (mounted) setState(() => loading = false);
+            },
+          );
+          _workoutSub?.close();
+          _workoutSub = null;
         });
-      });
+      }
     } else {
       sets = widget.initialSets['sets'];
       stats['startTime'] = startTime;
@@ -74,8 +86,19 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     }
   }
 
+  void _applyInitialData(Map data) {
+    sets = data['sets'] ?? {};
+    stats['notes'] = data['stats']?['notes'] ?? {};
+    startTime = data['stats']?['startTime'] ?? startTime;
+    stats['startTime'] = startTime;
+    repopulateExerciseTypeAccess();
+    _initializeFocusNodesAndControllers();
+    loading = false;
+  }
+
   @override
   void dispose() {
+    _workoutSub?.close();
     for (final exerciseNodes in _focusNodes.values) {
       for (final setNodes in exerciseNodes) {
         setNodes['weight']!.dispose();
@@ -184,13 +207,23 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   @override
   Widget build(BuildContext context) {
-    final customExerciseAsync = ref.read(customExercisesProvider);
+    final customExerciseAsync = ref.watch(customExercisesProvider);
     final Map settings = ref.watch(settingsProvider).value ?? {};
     final Map workoutData = ref.watch(workoutDataProvider).value ?? {};
     final Map records = ref.watch(recordsProvider).value ?? {};
 
+    if (!identical(workoutData, _lastWorkoutData)) {
+      _previousCache.clear();
+      _lastWorkoutData = workoutData;
+    }
+
     if (loading) {
       return const Center(child: CircularProgressIndicator());
+    }
+
+    final exerciseKeys = sets.keys.toList();
+    for (final exercise in exerciseKeys) {
+      _ensureExerciseFocusNodesAndControllers(exercise);
     }
 
     return Scaffold(
@@ -210,54 +243,51 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: sets.keys.length,
-              itemBuilder: (context, index) {
-                final exercise = sets.keys.toList()[index];
-                _ensureExerciseFocusNodesAndControllers(exercise);
-                return _buildExerciseCard(
-                  exercise,
-                  settings,
-                  records,
-                  workoutData,
-                  customExerciseAsync,
-                );
-              },
-            ),
+            for (final exercise in exerciseKeys)
+              _buildExerciseCard(
+                exercise,
+                settings,
+                records,
+                workoutData,
+                customExerciseAsync,
+              ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WorkoutList(setting: 'choose', preData: workoutData),
-                  ),
-                );
-
-                if (result != null) {
-                  final customExercises = customExerciseAsync.value ?? {};
-                  for (final exercise in result) {
-                    if (!sets.containsKey(exercise)) {
-                      final type = exerciseMuscles[exercise]?['type']
-                          ?? customExercises[exercise]?['type']
-                          ?? 'Weighted';
-                      sets[exercise] = [
-                        {
-                          'weight': type == 'Bodyweight' ? '1' : '',
-                          'reps': type == 'Timed' ? '1' : '',
-                          'type': 'Normal',
-                        }
-                      ];
-                      exerciseTypeAccess[exercise] = type;
+            Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WorkoutList(setting: 'choose', preData: workoutData),
+                    ),
+                  );
+              
+                  if (!mounted) return;
+              
+                  if (result != null) {
+                    final customExercises = customExerciseAsync.value ?? {};
+                    for (final exercise in result) {
+                      if (!sets.containsKey(exercise)) {
+                        final type = exerciseMuscles[exercise]?['type']
+                            ?? customExercises[exercise]?['type']
+                            ?? 'Weighted';
+                        sets[exercise] = [
+                          {
+                            'weight': type == 'Bodyweight' ? '1' : '',
+                            'reps': type == 'Timed' ? '1' : '',
+                            'type': 'Normal',
+                          }
+                        ];
+                        exerciseTypeAccess[exercise] = type;
+                      }
                     }
+                    setState(() {});
+                    updateExercises();
                   }
-                  setState(() {});
-                  updateExercises();
-                }
-              },
-              child: const Text('Select Exercise'),
+                },
+                child: const Text('Select Exercise'),
+              ),
             ),
           ],
         ),
@@ -322,6 +352,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                                   const WorkoutList(setting: 'choose', multiSelect: false),
                             ),
                           );
+
+                          if (!mounted) return;
+
                           if (newExerciseList != null &&
                               !sets.containsKey(newExerciseList.first)) {
                             final newExercise = newExerciseList.first as String;
@@ -361,10 +394,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     itemBuilder: (BuildContext context) => [
                       const PopupMenuItem(value: 'Swap', child: Text('Swap')),
                       const PopupMenuItem(
-                        value: 'Reorder',
-                        child: Text('Reorder', style: TextStyle(color: Colors.grey)),
-                      ),
-                      const PopupMenuItem(
                         value: 'Delete',
                         child: Text('Delete', style: TextStyle(color: Colors.red)),
                       ),
@@ -382,6 +411,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: TextFormField(
+            key: ValueKey('$exercise-notes'),
             initialValue: stats['notes']?[exercise] ?? '',
             decoration: const InputDecoration(
               hintText: 'Enter your notes here...',
@@ -604,8 +634,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           boxErrors[exercise][i] ??= {};
           boxErrors[exercise][i]['weight'] = false;
         }
-        final parsed = int.tryParse(value) ?? double.tryParse(value);
-        sets[exercise]![i]['weight'] = parsed != null ? parsed.toString() : '';
+        sets[exercise]![i]['weight'] = value;
         applyPRResult(exercise, i, checkSetPR(exercise, i, records), settings);
         updateExercises();
       },
@@ -616,7 +645,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           FocusScope.of(context).requestFocus(_focusNodes[exercise]![i + 1]['weight']);
         }
       },
-      // FIX: was incorrectly selecting the reps controller
       onTap: () {
         final controller = _controllers[exercise]![i]['weight']!;
         controller.selection = TextSelection(
@@ -673,8 +701,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   boxErrors[exercise][i] ??= {};
                   boxErrors[exercise][i]['reps'] = false;
                 }
-                final parsed = int.tryParse(value) ?? double.tryParse(value);
-                sets[exercise]![i]['reps'] = parsed != null ? parsed.toString() : '';
+                // Same rationale as the weight field: store the raw text.
+                sets[exercise]![i]['reps'] = value;
                 applyPRResult(exercise, i, checkSetPR(exercise, i, records), settings);
                 updateExercises();
               },
@@ -766,6 +794,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
       final lastIndex = sets[exercise]!.length - 1;
 
       if (type == 'Timed') return;
@@ -958,10 +988,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 }
 
-// ---------------------------------------------------------------------------
-// TimerScreen
-// ---------------------------------------------------------------------------
-
 class TimerScreen extends StatefulWidget {
   final Function(int seconds)? updateVariable;
 
@@ -995,6 +1021,10 @@ class TimerScreenState extends State<TimerScreen> {
     _timer = null;
     setState(() { isRunning = false; });
   }
+
+  // void _pauseTimer() {
+  //   setState(() { isRunning = false; });
+  // }
 
   void _resetTimer() {
     _timer?.cancel();
