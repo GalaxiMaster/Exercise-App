@@ -43,8 +43,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   final Map<String, String> _previousCache = {};
   Map? _lastWorkoutData;
 
-  ProviderSubscription? _workoutSub;
-
   bool loading = true;
 
   @override
@@ -53,26 +51,15 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     stats['notes'] = widget.initialSets['stats']?['notes'] ?? {};
 
     if (widget.initialSets.isEmpty) {
-      final initial = ref.read(currentWorkoutProvider);
-
-      if (initial.hasValue) {
-        _applyInitialData(initial.value ?? {});
-      } else if (initial.hasError) {
-        loading = false;
-      } else {
-        _workoutSub = ref.listenManual(currentWorkoutProvider, (previous, next) {
-          next.whenOrNull(
-            data: (data) {
-              if (mounted) setState(() => _applyInitialData(data));
-            },
-            error: (_, __) {
-              if (mounted) setState(() => loading = false);
-            },
-          );
-          _workoutSub?.close();
-          _workoutSub = null;
-        });
-      }
+      ref.read(currentWorkoutProvider).whenOrNull(
+        data: (data) {
+          if (mounted) setState(() => _applyInitialData(data));
+        },
+        error: (_, __) {
+          if (mounted) setState(() => loading = false);
+        },
+      );
+      loading = false;
     } else {
       sets = widget.initialSets['sets'];
       stats['startTime'] = startTime;
@@ -98,7 +85,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   @override
   void dispose() {
-    _workoutSub?.close();
     for (final exerciseNodes in _focusNodes.values) {
       for (final setNodes in exerciseNodes) {
         setNodes['weight']!.dispose();
@@ -428,7 +414,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         // Sets table
         Column(
           children: [
-            _buildSetTableHeader(settings),
+            _buildSetTableHeader(exercise, settings),
             for (int i = 0; i < (sets[exercise]?.length ?? 0); i++)
               _buildSetRow(exercise, i, settings, records, workoutData),
           ],
@@ -445,12 +431,17 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     );
   }
 
-  Widget _buildSetTableHeader(Map settings) {
+  Widget _buildSetTableHeader(String exercise, Map settings) {
     return Row(
       children: [
         const Expanded(flex: 1, child: Center(child: Text('Set'))),
-        const Expanded(flex: 2, child: Center(child: Text('Weight (kg)'))),
-        const Expanded(flex: 2, child: Center(child: Text('Reps'))),
+        if (exerciseTypeAccess[exercise] != 'Timed') ... [
+          const Expanded(flex: 2, child: Center(child: Text('Weight (kg)'))),
+          const Expanded(flex: 2, child: Center(child: Text('Reps'))),
+        ]
+        else ... [
+          const Expanded(flex: 2, child: Center(child: Text('Time (s)'))),
+        ],
         if (settings['Tick Boxes'] ?? false)
           const Expanded(flex: 1, child: Center(child: Icon(Icons.check))),
       ],
@@ -988,7 +979,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 }
 
-class TimerScreen extends StatefulWidget {
+class TimerScreen extends StatefulWidget { // todo add initial seconds
   final Function(int seconds)? updateVariable;
 
   const TimerScreen({super.key, this.updateVariable});
@@ -1036,9 +1027,10 @@ class TimerScreenState extends State<TimerScreen> {
   }
 
   String _formatTime(int seconds) {
-    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final hours = (seconds ~/ 3600).toString().padLeft(2, '0');
+    final minutes = (seconds % 3600 ~/ 60).toString().padLeft(2, '0');
     final secs = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutes:$secs';
+    return '$hours:$minutes:$secs';
   }
 
   @override
@@ -1073,8 +1065,16 @@ class TimerScreenState extends State<TimerScreen> {
           const SizedBox(width: 10),
           Text(
             _formatTime(_seconds),
-            style: const TextStyle(color: Colors.white, fontSize: 30),
+            style: const TextStyle(color: Colors.white, fontSize: 25),
           ),
+          // SizedBox(
+          //   height: 50,
+          //   width: 50,
+          //   child: TextField(
+          //     enabled: false,
+          //     controller: TextEditingController(text: _formatTime(_seconds)),
+          //   ),
+          // )
         ],
       ),
     );

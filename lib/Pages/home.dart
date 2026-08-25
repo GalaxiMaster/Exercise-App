@@ -277,10 +277,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void attemptStartWorkout({Map? data, WorkoutMetaData? metaData}) {
-    bool workoutInProgress = (ref.read(currentWorkoutProvider).value ?? {}).isNotEmpty;
+  void attemptStartWorkout({Map? data, WorkoutMetaData? metaData}) async{
 
-    if (workoutInProgress && context.mounted){
+
+    bool workoutInProgress = (await ref.read(currentWorkoutProvider.future)).isNotEmpty;
+    if (workoutInProgress && mounted){
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -302,7 +303,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               TextButton(
                 child: const Text('Resume'),
                 onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog
+                  Navigator.of(context).pop(); // Dismiss the dialog 7
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),

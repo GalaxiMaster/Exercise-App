@@ -236,6 +236,7 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
 final recordsProvider = AsyncNotifierProvider<RecordsNotifier, Map<String, dynamic>>(RecordsNotifier.new);
 
+
 class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
   @override
   Future<Map<String, dynamic>> build() async {
@@ -243,28 +244,28 @@ class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
     return await ref.read(storageServiceProvider).readData(path: 'current');
   }
 
-  void updateValue(String key, dynamic value) {
-    state = AsyncData({
-      ...state.value ?? {},
+  Future<void> updateValue(String key, dynamic value) async {
+    final currentState = state.value ?? {};
+    final updatedData = {
+      ...currentState,
       key: value,
-    });
-    state.whenData((data){
-      ref.read(storageServiceProvider).writeData(data, path: 'current');
-    });
+    };
+    
+    state = AsyncValue.data(updatedData);
+    await ref.read(storageServiceProvider).writeData(updatedData, path: 'current');
   }
   
   Future<void> writeState(Map<String, dynamic> data) async {
-    state = AsyncData(data);
+    state = AsyncValue.data(data);
     await ref.read(storageServiceProvider).writeData(data, path: 'current', append: false);
   }
 
   Future<void> deleteExercise(String key) async {
-    Map stateVal = state.value ?? {};
-    stateVal.remove(key);
-    state = AsyncData({
-      ...stateVal
-    });
-    ref.read(storageServiceProvider).deleteKey(key, path: 'current');
+    final currentState = Map<String, dynamic>.from(state.value ?? {});
+    currentState.remove(key);
+    
+    state = AsyncValue.data(currentState);
+    await ref.read(storageServiceProvider).deleteKey(key, path: 'current');
   }
 }
 
