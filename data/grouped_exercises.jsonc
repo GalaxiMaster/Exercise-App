@@ -1,0 +1,969 @@
+{
+    "Biceps Curl": {
+        "dumbbell_seated_inner_concentration": "dumbbell_seated_inner_biceps_curl",
+        "machine": "lever_biceps_curl",
+        "ez_barbell_close_grip": "ez_barbell_close_grip_curl",
+        "cable_v_bar": "cable_curl_v_bar",
+        "band_seated": "resistance_band_seated_biceps_curl",
+        "dumbbell_concentration": "dumbbell_concentration_curl",
+        "dumbbell_one_arm_standing": "dumbbell_one_arm_standing_curl",
+        "dumbbell_seated": "dumbbell_seated_curl",
+        "cable_seated_one_arm_concentration": "cable_seated_one_arm_concentration_curl",
+        "ez_barbell_arm_blaster": "ez_barbell_arm_blaster_biceps_curl",
+        "dumbbell_standing_concentration": "dumbbell_standing_concentration_curl",
+        "cable": "cable_curl",
+        "dumbbell_alternate": "dumbbell_alternate_biceps_curl",
+        "cable_overhead": "cable_overhead_curl",
+        "cable_seated": "cable_seated_curl",
+        "dumbbell_alternate_arm_blaster": "dumbbell_alternate_arm_blaster_biceps_curl",
+        "barbell_standing_close_grip": "barbell_standing_close_grip_curl",
+        "ez_barbell": "ez_barbell_curl",
+        "dumbbell_incline_alternate": "dumbbell_incline_alternate_bicep_curl",
+        "ez_barbell_standing_wide_grip": "ez_barbell_standing_wide_grip_biceps_curl",
+        "machine_alternate": "lever_alternate_biceps_curl",
+        "ez_barbell_seated": "ez_barbell_seated_curl",
+        "dumbbell_standing_inner": "dumbbell_standing_inner_biceps_curl",
+        "cable_standing_inner": "cable_standing_inner_curl",
+        "ez_barbell_seated_close_grip_concentration": "ez_bar_seated_close_grip_concentration_curl",
+        "barbell_seated_close_grip_concentration": "barbell_seated_close_grip_concentration_curl",
+        "barbell_arm_blaster": "barbell_biceps_curl_with_arm_blaster",
+        "dumbbell_standing": "dumbbell_standing_biceps_curl",
+        "dumbbell_incline": "dumbbell_incline_biceps_curl",
+        "dumbbell": "dumbbell_biceps_curl",
+        "cable_seated_floor_one_arm_concentration": "cable_seated_floor_one_arm_concentration_curl",
+        "cable_pulldown": "cable_pulldown_bicep_curl", // ?? unusual split (Forearms 50 dominant) for a "biceps curl" — combo lat-pulldown/curl movement
+        "cable_ez_bar": "cable_biceps_curl_ez_bar",
+        "barbell": "barbell_curl",
+        "dumbbell_lying_supine": "dumbbell_lying_supine_curl",
+        "cable_lying": "cable_lying_biceps_curl",
+        "cable_one_arm": "cable_one_arm_biceps_curl",
+        "suspender": "suspender_arm_curl",
+        "cable_close_grip": "cable_close_grip_curl",
+        "dumbbell_seated_reverse_concentration": "dumbbell_seated_reverse_concentration_curl", // ?? distinct split (Biceps60/Brachioradialis40) vs standard concentration curl entries, kept separate
+        "standing_kettlebell": "weighted_standing_kettlebell_curl"
+    },
+    "Good Morning": {
+        "barbell": "barbell_good_morning",
+        "smith_bent_knee": "smith_bent_knee_good_morning",
+        "barbell_seated": "barbell_seated_good_morning",
+        "barbell_stiff_leg": "barbell_stiff_leg_good_morning"
+    },
+    "Nordic Curl": {
+        "bodyweight_self_assisted": "self_assisted_nordic_hamstrings_curls",
+        "cable_assisted": "cable_assisted_nordic_hamstrings_curls",
+        "band_assisted": "resistance_band_assisted_nordic_hamstrings_curls",
+        "weighted": "nordic_hamstrings_curl"
+    },
+    "Romanian Deadlift": {
+        "barbell_stiff_legged": "barbell_stiff_legged_deadlift",
+        "dumbbell": "dumbbell_romanian_deadlift",
+        "barbell_straight_leg": "barbell_straight_leg_romanian_deadlift",
+        "landmine": "landmine_romanian_deadlift",
+        "dumbbell_death_march": "dumbbell_death_march_romanian_deadlift",
+        "cable_stiff_leg_stepbox": "cable_stiff_leg_stepbox_romanian_deadlift",
+        "barbell": "barbell_romanian_deadlift",
+        "barbell_sumo": "barbell_sumo_romanian_deadlift",
+        "dumbbell_stiff_leg": "dumbbell_stiff_leg_deadlift",
+        "smith_stiff_legged": "smith_stiff_legged_deadlift"
+    },
+    "Hip Thrust": {
+        "barbell": "barbell_hip_thrust",
+        "bodyweight": "hip_raise_bent_knee",
+        "weighted_one_leg": "weighted_one_leg_hip_thrust",
+        "barbell_glute_bridge": "barbell_glute_bridge_hip_thrust", // ?? move out? - other tag -> barbell_glute_bridge
+        "lever": "lever_hip_thrust",
+        "smith": "smith_hip_thrust",
+        "dumbbell": "dumbbell_hip_thrusts", // ?? slightly different split (Glutes70/Hamstrings30) vs other entries (Glutes80/Hamstrings20)
+        "single_leg": "single_leg_hip_thrust"
+    },
+    "Leg Press": {
+        "machine_seated": "lever_seated_leg_press",
+        "sled_lying": "sled_lying_leg_press",
+        "machine_horizontal_one_leg": "lever_horizontal_one_leg_press",
+        "sled_one_leg": "sled_one_leg_press",
+        "lever_seated_horizontal": "lever_seated_horizontal_leg_press",
+        "smith": "smith_leg_press",
+        "sled": "sled_leg_press"
+    },
+    "Reverse Fly": {
+        "cable_supine": "cable_supine_reverse_fly",
+        "dumbbell_incline": "dumbbell_incline_rear_lateral_raise",
+        "cable_crossover": "cable_crossover_reverse_fly",
+        "cable_one_arm": "cable_one_arm_reverse_fly",
+        "cable_incline_cross": "cable_incline_cross_reverse_fly",
+        "dumbbell_bent_over": "dumbbell_bent_over_reverse_fly",
+        "barbell": "barbell_reverse_fly",
+        "dumbbell_incline_t_raise": "dumbbell_incline_t_raise_reverse_fly",
+        "cable_seated": "cable_seated_reverse_fly",
+        "dumbbell": "dumbbell_reverse_fly",
+        "dumbbell_rotation": "dumbbell_rotation_reverse_fly",
+        "cable_seated_chest_support": "cable_seated_rear_delt_fly_with_chest_support",
+        "dumbbell_bent_over_alternate": "dumbbell_bent_over_alternate_rear_delt_fly",
+        "machine": "rear_delt_fly_machine",
+        "dumbbell_one_arm_support": "dumbbell_one_arm_reverse_fly_with_support",
+        "bent_over_single_arm": "bent_over_single_arm_rear_delt_fly",
+        "chest_supported_two_arm": "chest_supported_two_arm_rear_delt_fly",
+        "cable_standing_single_arm": "standing_single_arm_cable_rear_delt_fly",
+        "cable_standing_two_arm": "standing_two_arm_cable_rear_delt_fly"
+    },
+    "Russian Twist": {
+        "kettlebell": "kettlebell_russian_twist",
+        "weighted_legs_up": "weighted_russian_twist_legs_up",
+        "weighted": "russian_twist"
+    },
+    "Spider Curl": {
+        "barbell_spider": "barbell_spider_curl",
+        "barbell_prone_incline": "barbell_prone_incline_curl",
+        "dumbbell_prone_incline": "dumbbell_prone_incline_curl",
+        "dumbbell_reverse": "dumbbell_reverse_spider_curl",
+        "ez_barbell": "ez_barbell_spider_curl"
+    },
+    "Decline Bench Press": {
+        "dumbbell_hammer": "dumbbell_decline_hammer_press",
+        "barbell": "barbell_decline_bench_press",
+        "barbell_close_grip_to_skull": "barbell_decline_close_grip_to_skull_press",
+        "dumbbell": "dumbbell_decline_bench_press",
+        "barbell_wide_grip": "barbell_decline_wide_grip_press",
+        "smith_close_grip": "smith_machine_decline_close_grip_bench_press"
+    },
+    "Wrist Curl": {
+        "dumbbell_one_arm_reverse_extensors": "dumbbell_one_arm_revers_wrist_curl",
+        "dumbbell_one_arm_seated_neutral_flexors": "dumbbell_one_arm_seated_neutral_wrist_curl",
+        "barbell_palms_up_over_bench_flexors": "barbell_palms_up_wrist_curl_over_a_bench",
+        "dumbbell_seated_neutral_flexors": "dumbbell_seated_neutral_flexors_wrist_curl",
+        "barbell_palms_down_over_bench_extensors": "barbell_palms_down_over_bench_extensors_wrist_curl",
+        "smith_seated_flexors": "smith_seated_flexors_wrist_curl",
+        "smith_standing_extensors": "smith_standing_extensors_wrist_curl",
+        "cable_standing_extensors": "cable_standing_extensors_wrist_curl",
+        "cable_flexors": "cable_flexors_wrist_curl",
+        "dumbbell_over_bench_one_arm_reverse_extensors": "dumbbell_over_bench_one_arm_reverse_extensors_wrist_curl",
+        "dumbbell_seated_palms_up_flexors": "dumbbell_seated_palms_up_flexors_wrist_curl",
+        "cable_standing_flexors": "cable_standing_flexors_wrist_curl",
+        "dumbbell_seated_neutral": "dumbbell_seated_neutral_wrist_curl",
+        "weighted_seated_reverse": "weighted_seated_reverse_wrist_curl",
+        "weighted_seated_one_arm_reverse": "weighted_seated_one_arm_reverse_wrist_curl",
+        "cable": "cable_wrist_curl",
+        "hand_spring": "hand_spring_wrist_curl",
+        "cable_reverse": "cable_reverse_wrist_curl",
+        "dumbbell_one_arm": "dumbbell_one_arm_wrist_curl",
+        "barbell": "barbell_wrist_curl",
+        "barbell_standing_back": "barbell_standing_back_wrist_curl",
+        "ez_barbell_standing_reverse": "ez_barbell_standing_wrist_reverse_curl",
+        "barbell_reverse": "barbell_reverse_wrist_curl",
+        "dumbbell_reverse": "dumbbell_reverse_wrist_curl",
+        "dumbbell_over_bench_neutral": "dumbbell_over_bench_neutral_wrist_curl",
+        "dumbbell_over_bench": "dumbbell_over_bench_wrist_curl",
+        "dumbbell_over_bench_reverse": "dumbbell_over_bench_reverse_wrist_curl",
+        "dumbbell_over_bench_one_arm": "dumbbell_over_bench_one_arm_wrist_curl",
+        "dumbbell_over_bench_one_arm_reverse": "dumbbell_over_bench_one_arm_reverse_wrist_curl",
+        "barbell_behind_the_back": "barbell_behind_the_back_wrist_curls",
+        "cable_behind_the_back": "cable_behind_the_back_wrist_curls",
+        "cable_single_arm": "cable_single_arm_wrist_curl"
+    },
+    "Triceps Pushdown": {
+        "cable_reverse_grip": "cable_reverse_grip_pushdown",
+        "cable_one_arm_overhand": "cable_standing_one_arm_triceps_pushdown_overhand_grip",
+        "cable_incline": "cable_incline_pushdown",
+        "cable_one_arm_side": "cable_one_arm_side_triceps_pushdown",
+        "cable_one_arm": "cable_one_arm_triceps_pushdown",
+        "cable_v_bar_arm_blaster": "cable_v_bar_arm_blaster_triceps_pushdown",
+        "cable_rope": "cable_triceps_pushdown_rope",
+        "cable_single_arm_rope": "cable_single_arm_triceps_pushdown_rope",
+        "cable_v_bar": "cable_triceps_pushdown_v_bar",
+        "cable_ez_bar": "cable_triceps_pushdown_ez_bar",
+        "cable_straight_bar": "cable_triceps_pushdown_straight_bar"
+        // NOTE: "Cable Triceps Pushdown (V bar)" (source, lowercase "bar")
+        // skipped as an exact duplicate of "Cable Triceps Pushdown (V Bar)"
+        // above (same key would be needed — "cable_v_bar").
+    },
+    "Crunch": {
+        "bodyweight_reverse": "reverse_crunch",
+        "cable_kneeling": "cable_kneeling_crunch",
+        "bodyweight_decline_bent_leg_reverse": "bodyweight_decline_bent_leg_reverse_crunch",
+        "bodyweight_negative": "bodyweight_negative_crunch",
+        "bodyweight_decline": "bodyweight_decline_crunch",
+        "lying_scissor": "lying_scissor_crunch",
+        "lever_seated": "lever_seated_crunch",
+        "bodyweight_knee_touch": "knee_touch_crunch",
+        "cable_seated": "cable_seated_crunch",
+        "bench_circle_reverse": "bench_reverse_crunch_circle",
+        "bodyweight": "crunch", // note: source uses "Rectus Abdominis" muscle naming here vs "Abdominals" elsewhere — same muscle, inconsistent taxonomy
+        "weighted": "weighted_crunch",
+        "weighted_decline": "weighted_decline_crunch"
+    },
+    "Lateral Raise": {
+        "dumbbell_full_can": "dumbbell_full_can_lateral_raise",
+        "dumbbell_seated": "dumbbell_seated_lateral_raise",
+        "dumbbell_standing": "dumbbell_standing_lateral_raise",
+        "dumbbell": "dumbbell_lateral_raise",
+        "dumbbell_one_arm": "dumbbell_one_arm_lateral_raise",
+        "cable_two_arm": "cable_two_arm_lateral_raise",
+        "cable_single_arm": "cable_single_arm_lateral_raise",
+        "dumbbell_incline_single_arm": "dumbbell_incline_single_arm_lateral_raise"
+    },
+    "Shoulder Internal Rotation": {
+        "cable_seated": "cable_seated_shoulder_internal_rotation"
+    },
+    "Incline Row": {
+        "barbell": "barbell_incline_row",
+        "cable_bench": "cable_incline_bench_row"
+    },
+    "Toes to Bar": {
+        "bodyweight_hanging": "hanging_toes_to_bar"
+    },
+    "Front Raise": {
+        "dumbbell_seated": "dumbbell_seated_front_raise",
+        "dumbbell_seated_alternate": "dumbbell_seated_alternate_front_raise",
+        "dumbbell": "dumbbell_front_raise",
+        "cable_standing_variation": "cable_standing_front_raise_variation",
+        "barbell": "barbell_front_raise",
+        "cable_single_arm_neutral_grip": "cable_single_arm_neutral_grip_front_raise",
+        "cable": "cable_front_raise",
+        "dumbbell_incline": "dumbbell_incline_raise", // ?? "Incline Raise" — ambiguous whether this is a Front Raise variant or its own movement
+        "dumbbell_incline_front": "dumbbell_incline_front_raise",
+        "dumbbell_one_arm": "dumbbell_one_arm_front_raise"
+    },
+    "Shrug": {
+        "barbell": "barbell_shrug",
+        "barbell_behind_back": "barbell_behind_back_shrug",
+        "barbell_wide": "barbell_wide_shrug",
+        "cable_seated_horizontal": "cable_seated_horizontal_shrug",
+        "dumbbell": "dumbbell_shrug",
+        "incline": "incline_shrug" // ?? no equipment specified in source name
+    },
+    "Hammer Curl": {
+        "dumbbell_one_arm_seated": "dumbbell_one_arm_seated_hammer_curl",
+        "dumbbell": "dumbbell_hammer_curl",
+        "band": "resistance_band_hammer_curl",
+        "dumbbell_seated": "dumbbell_seated_hammer_curl",
+        "dumbbell_alternate_seated": "dumbbell_alternate_seated_hammer_curl",
+        "dumbbell_alternate_preacher": "dumbbell_alternate_preacher_hammer_curl",
+        "band_standing": "band_standing_hammer_curl",
+        "cable_rope": "cable_rope_hammer_curl",
+        "cable_rope_preacher": "cable_rope_preacher_hammer_curl",// ?? posibly seperate preacher and hammer_preacher for consistency
+        "dumbbell_prone_incline": "dumbbell_prone_incline_hammer_curl",
+        "dumbbell_incline_alternate": "dumbbell_incline_alternate_hammer_curl",
+        "dumbbell_cross_body": "dumbbell_cross_body_hammer_curl",
+        "dumbbell_preacher": "dumbbell_preacher_hammer_curl",
+        "dumbbell_one_arm_preacher": "dumbbell_one_arm_hammer_preacher_curl",
+        "dumbbell_one_arm_standing": "dumbbell_one_arm_standing_hammer_curl",
+        "dumbbell_arm_blaster": "dumbbell_hammer_curls_with_arm_blaster",
+        "dumbbell_incline": "dumbbell_incline_hammer_curl" // ?? muscle split conflicts with dumbbell_prone_incline, see NEEDS REVIEW`
+    },
+    "Pin Press": {
+        "barbell": "barbell_pin_presses"
+    },
+    "High Row": {
+        "cable_seated_v_bar": "cable_seated_high_row_v_bar",
+        "cable_kneeling_rope": "cable_kneeling_high_row_rope"
+    },
+    "Pullover": {
+        "barbell_decline": "barbell_decline_pullover",
+        "barbell_flat": "barbell_flat_pullover",
+        "cable_seated": "cable_seated_pullover",
+        "barbell_bent_arm": "barbell_bent_arm_pullover",
+        "barbell_decline_wide_grip": "barbell_decline_wide_grip_pullover",
+        "dumbbell_around": "dumbbell_around_pullover",
+        "dumbbell": "dumbbell_pullover",
+        "barbell_decline_bent_arm": "barbell_decline_bent_arm_pullover",
+        "dumbbell_straight_arm": "dumbbell_straight_arm_pullover",
+        "cable_lying_extension_rope": "cable_lying_extension_pullover_rope",
+        "cable": "cable_pullover",
+        "cable_rope": "lat_pullover_rope"
+    },
+    "Kettlebell Swing": {
+        "kettlebell": "kettlebell_swing"
+    },
+    "Upright Row": {
+        "cable": "cable_upright_row",
+        "barbell": "barbell_upright_row"
+    },
+    "Bench Row": {
+        "barbell_reverse_grip_incline": "barbell_reverse_grip_incline_bench_row",
+        "dumbbell_bent_over": "dumbbell_bent_over_bench_row",
+        "dumbbell_incline_chest_supported": "dumbbell_incline_chest_supported_row"
+    },
+    "Rear Delt Row": {
+        "barbell": "barbell_rear_delt_row",
+        "cable_kneeling_single_arm": "kneeling_single_arm_cable_rear_delt_row",
+        "cable_standing_single_arm": "standing_single_arm_cable_rear_delt_row"
+    },
+    "Seal Row": {
+        "barbell": "barbell_seal_row",
+        "barbell_underhand": "barbell_underhand_seal_row"
+    },
+    "Bent Over Row": {
+        "barbell": "barbell_bent_over_row",
+        "barbell_reverse_grip": "barbell_reverse_grip_bent_over_row",
+        "cable_reverse_grip": "cable_bent_over_reverse_grip_row",
+        "cable_one_arm": "cable_one_arm_bent_over_row",
+        "cable": "cable_bent_over_row",
+        "barbell_one_arm": "barbell_one_arm_bent_over_row",
+        "barbell_wide_grip": "barbell_bent_over_wide_grip_row",
+        "barbell_deadstop": "barbell_deadstop_row",
+        "wide_grip_overhand": "wide_grip_overhand_row" // ?? no equipment specified; split differs slightly from barbell_wide_grip, possible near-dup
+    },
+    "Split Squat": {
+        "barbell": "barbell_split_squat",
+        "dumbbell_goblet": "dumbbell_goblet_split_squat",
+        "bulgarian": "bulgarian_split_squat",
+        "dumbbell": "dumbbell_split_squat",
+        "smith": "smith_split_squat"
+    },
+    "Deadlift": {
+        "trap_bar": "trap_bar_deadlift",
+        "dumbbell": "dumbbell_deadlift",
+        "machine": "machine_deadlift",
+        "barbell_sumo": "barbell_sumo_deadlift",
+        "cable": "cable_deadlift",
+        "barbell": "barbell_deadlift",
+        "lever": "lever_deadlift",
+        "smith": "smith_deadlift"
+    },
+    "Face Pull": {
+        "band": "band_face_pull",
+        "cable_standing_rope": "cable_standing_rope_face_pull",
+        "cable_seated_rope": "cable_seated_face_pull_rope",
+        "cable_standing_crossover": "cable_standing_crossover_face_pull"
+    },
+    "Drag Curl": {
+        "cable": "cable_drag_curl",
+        "dumbbell": "dumbbell_drag_curl",
+        "barbell": "barbell_drag_curl",
+        "ez_barbell": "ez_bar_drag_bicep_curl"
+    },
+    "Pistol Squat": {
+        "weighted": "weighted_pistol_squat",
+        "bodyweight": "bodyweight_pistol_squat"
+    },
+    "Lat Pulldown": {
+        "unspecified": "lat_pulldown",
+        "machine": "machine_lat_pulldown",
+        "cable_one_arm": "cable_one_arm_lateral_pulldown",
+        "cable_close_grip": "cable_close_grip_lat_pulldown",
+        "cable_kneeling_one_arm": "cable_kneeling_one_arm_lat_pulldown",
+        "cable_neutral_grip": "cable_neutral_grip_lat_pulldown",
+        "cable_crossover": "cable_cross_over_lateral_pulldown",
+        "cable_rope": "cable_lateral_pulldown_rope",
+        "cable_v_bar": "cable_lateral_pulldown_v_bar",
+        "cable_reverse_grip": "cable_reverse_grip_pulldown",
+        "cable_wide_grip_neutral": "cable_wide_grip_neutral_lat_pulldown"
+    },
+    "Preacher Curl": {
+        "dumbbell_standing": "dumbbell_standing_preacher_curl",
+        "barbell": "barbell_preacher_curl",
+        "dumbbell_alternate": "dumbbell_alternate_preacher_curl",
+        "lever": "lever_preacher_curl",
+        "cable": "cable_preacher_curl",
+        "dumbbell_one_arm_zottman": "dumbbell_one_arm_zottman_preacher_curl",
+        "lever_plate_loaded": "lever_preacher_curl_plate_loaded",
+        "dumbbell_standing_zottman": "dumbbell_standing_zottman_preacher_curl",
+        "ez_barbell_close_grip": "ez_barbell_close_grip_preacher_curl",
+        "ez_barbell_standing": "ez_barbell_standing_preacher_curl",
+        "dumbbell_single_arm": "dumbbell_single_arm_preacher_curl",
+        "dumbbell": "dumbbell_preacher_curl",
+        "lever_hammer_grip": "lever_hammer_grip_preacher_curl",
+        "cable_one_arm": "cable_one_arm_preacher_curl"
+    },
+    "Reverse Preacher Curl": {
+        "dumbbell_one_arm": "dumbbell_one_arm_reverse_preacher_curl",
+        "barbell": "barbell_reverse_preacher_curl",
+        "dumbbell": "dumbbell_reverse_preacher_curl",
+        // --- batch 4 additions ---
+        "ez_barbell": "ez_barbell_reverse_grip_preacher_curl",
+        "cable": "cable_reverse_preacher_curl"
+    },
+    "Clean and Press": {
+        "barbell": "barbell_clean_and_press"
+    },
+    "Overhead Squat": {
+        "barbell": "barbell_overhead_squat"
+    },
+    "Shoulder Press": {
+        "dumbbell_one_arm": "dumbbell_one_arm_shoulder_press",
+        "cable": "cable_shoulder_press",
+        "lever_seated": "lever_seated_shoulder_press",
+        "dumbbell_seated_one_arm": "dumbbell_seated_one_arm_shoulder_press",
+        "dumbbell_seated": "dumbbell_seated_shoulder_press",
+        "landmine": "landmine_press",
+        "machine": "machine_shoulder_press"
+    },
+    "Pullover To Press": {
+        "barbell": "barbell_pullover_to_press"
+    },
+    "Arnold Press": {
+        "dumbbell_seated_one_arm": "dumbbell_seated_one_arm_arnold_press",
+        "dumbbell_alternate": "dumbbell_alternate_arnold_press",
+        "dumbbell": "dumbbell_arnold_press",
+        "dumbbell_seated": "dumbbell_seated_arnold_press"
+    },
+    "Overhead Press": {
+        "barbell_standing": "barbell_standing_overhead_press",
+        "barbell_seated": "seated_overhead_press_barbell",
+        "smith_standing": "smith_machine_standing_overhead_press"
+    },
+    "Side Press": {
+        "dumbbell_alternate": "dumbbell_alternate_side_press"
+    },
+    "Dip": {
+        "ring": "ring_dip",
+        "straight_bar": "chest_dip_on_straight_bar",
+        "band_assisted": "band_assisted_dips",
+        "floor": "triceps_dips_floor",
+        "bench": "bench_dip",
+        "lever_plate_loaded": "lever_triceps_dip_plate_loaded", // ?? source tags this "Bodyweight" despite "(plate loaded)" in the name
+        "lever_overhand": "lever_overhand_triceps_dip",
+        "lever_seated": "lever_seated_dip",
+        "weighted": "weighted_triceps_dips",
+        "bodyweight_chest": "chest_dip",
+        "bodyweight_triceps": "triceps_dips",
+        "assisted_chest": "assisted_chest_dips",
+        "assisted_triceps": "assisted_triceps_dips"
+    },
+    "Reverse Dip": {
+        "bodyweight": "reverse_dip"
+    },
+    "Muscle Up": {
+        "band_assisted": "band_assisted_muscle_up"
+    },
+    "Close Grip Bench Press": {
+        "barbell": "barbell_close_grip_bench_press",
+        "smith": "smith_close_grip_bench_press",
+        "ez_barbell": "ez_bar_close_grip_bench_press",
+        // --- batch 4 additions ---
+        "dumbbell": "dumbbell_close_grip_press", // ?? source name is "Close Grip Press" not "...Bench Press", kept here as closest match
+        "barbell_lying": "barbell_lying_close_grip_press"
+    },
+    "Incline Bench": {
+        "barbell_close_grip": "barbell_incline_close_grip_bench_press",
+        "dumbbell": "dumbbell_incline_bench_press",
+        "lever_chest_press_plate_loaded": "lever_incline_chest_press_plate_loaded",
+        "lever_hammer_chest_press": "lever_incline_hammer_chest_press",
+        "dumbbell_close_grip": "dumbbell_incline_close_grip_press_variation",
+        "dumbbell_one_arm": "dumbbell_one_arm_incline_chest_press",
+        "dumbbell_alternate": "dumbbell_incline_alternate_press",
+        // --- batch 4 additions ---
+        "cable": "cable_incline_bench_press",
+        "barbell": "barbell_incline_bench_press",
+        // --- batch 5 additions ---
+        "lever": "lever_incline_chest_press",
+        "smith": "smith_machine_incline_bench_press"
+    },
+    "JM Bench Press": {
+        "barbell": "barbell_jm_bench_press",
+        // --- batch 4 additions ---
+        "ez_barbell": "ez_barbell_jm_bench_press"
+    },
+    "Neutral Grip Bench Press": {
+        "dumbbell": "dumbbell_neutral_grip_bench_press"
+    },
+    "Chest Press": {
+        "lever_plate_loaded": "lever_chest_press_plate_loaded",
+        "cable_standing": "cable_standing_chest_press",
+        "dumbbell_lying_hammer": "dumbbell_lying_hammer_press",
+        "lever": "lever_chest_press",
+        "cable_seated": "cable_seated_chest_press",
+        "lever_decline": "lever_decline_chest_press",
+        // --- batch 4 additions ---
+        "dumbbell_incline_hammer": "dumbbell_incline_hammer_press",
+        // --- batch 5 additions ---
+        "dumbbell_lying_one_arm": "dumbbell_lying_one_arm_press"
+    },
+    "Triceps Extension": {
+        "dumbbell_lying": "dumbbell_lying_triceps_extension",
+        "cable_incline": "cable_incline_triceps_extension",
+        "barbell_lying": "barbell_lying_triceps_extension",
+        "bodyweight_kneeling": "bodyweight_kneeling_triceps_extension",
+        "cable_concentration_on_knee": "cable_concentration_extension_on_knee",
+        "cable_one_arm_high_pulley_overhead": "cable_one_arm_high_pulley_overhead_triceps_extension",
+        "lever": "lever_triceps_extension",
+        "cable_high": "cable_high_triceps_extension",
+        "cable_overhead_straight_bar": "cable_overhead_triceps_extension_straight_bar",
+        "ez_barbell_incline": "ez_barbell_incline_triceps_extension",
+        "weighted_seated": "weighted_seated_triceps_extension",
+        "dumbbell_lying_single_arm": "dumbbell_lying_single_arm_triceps_extension",
+        "cable_lying": "cable_lying_triceps_extension",
+        "dumbbell_seated": "dumbbell_seated_triceps_extension",
+        "barbell_lying_behind_head": "barbell_lying_back_of_the_head_triceps_extension",
+        "cable_high_pulley_overhead": "cable_high_pulley_overhead_triceps_extension",
+        "cable_alternate": "cable_alternate_triceps_extension",
+        "smith_incline": "smith_machine_incline_triceps_extension",
+        "barbell_seated_overhead": "barbell_seated_overhead_triceps_extension",
+        "ez_barbell_seated": "ez_barbell_seated_triceps_extension",
+        "ez_barbell_decline": "ez_barbell_decline_triceps_extension",
+        "ez_barbell_lying_close_grip_behind_head": "ez_bar_lying_close_grip_triceps_extension_behind_head",
+        "dumbbell_decline": "dumbbell_decline_triceps_extension",
+        // --- batch 4 additions ---
+        "barbell_standing_overhead": "barbell_standing_overhead_triceps_extension",
+        "dumbbell_incline": "dumbbell_incline_triceps_extension",
+        "dumbbell_seated_one_arm": "dumbbell_seated_one_arm_triceps_extension",
+        "cable_rope_incline": "cable_rope_incline_triceps_extension",
+        "cable_lying_rope": "cable_lying_triceps_extension_rope", // ?? possible dup of cable_lying, see NEEDS REVIEW
+        "dumbbell_lying_elbow_press": "dumbbell_lying_elbow_press", // ?? possible naming variant of dumbbell_lying_triceps_extension
+        // --- batch 5 additions ---
+        "cable_overhead_single_arm": "cable_overhead_single_arm_triceps_extension",
+        "cable_standing_high_cross": "cable_standing_high_cross_triceps_extension",
+        "dumbbell_seated_bench": "dumbbell_seated_bench_triceps_extension",
+        "suspender": "suspender_triceps_extension",
+        "cable_overhead_rope": "cable_overhead_triceps_extension_rope"
+    },
+    "Skullcrusher": {
+        "dumbbell_lying_floor": "dumbbell_lying_floor_skullcrusher",
+        "cable_incline": "cable_incline_skull_crusher",
+        "barbell_incline": "barbell_incline_triceps_extension_skull_crusher",
+        "ez_barbell_california": "ez_bar_california_skullcrusher",
+        "barbell_lying": "barbell_lying_triceps_extension_skull_crusher",
+        // --- batch 4 additions ---
+        "barbell_reverse_grip": "barbell_reverse_grip_skullcrusher"
+    },
+    "Thruster": {
+        "barbell": "barbell_thruster"
+    },
+    "Push Up": {
+        "incline": "incline_push_up",
+        "archer": "archer_push_up",
+        "finger": "finger_push_up",
+        "bodyweight_decline": "decline_push_up",
+        "weighted": "push_up", // ?? see BATCH 6 header note — likely key collision with the genuinely distinct "Weighted Push Up" entry below
+        // --- batch 4 additions ---
+        "diamond": "diamond_push_up",
+        "diamond_knees": "diamond_push_up_on_knees",
+        "elevated": "elevanted_push_up", // note: source spelling "Elevanted" kept in value, likely a typo of "Elevated"
+        "close_grip": "close_grip_push_up",
+        // --- batch 6 additions ---
+        "kneeling": "kneeling_push_up",
+        "weighted_full": "weighted_push_up" // ?? see BATCH 6 header note on key collision with existing "weighted" key
+    },
+    "Back Lever": {
+        "bodyweight": "back_lever"
+    },
+    "Battle Ropes": {
+        "unspecified": "battle_ropes"
+    },
+    "Fly": {
+        "dumbbell_incline_twisted": "dumbbell_incline_twisted_flyes",
+        "cable_standing_alternate_low": "cable_standing_alternate_low_fly",
+        "dumbbell_low": "dumbbell_low_fly",
+        "cable_middle": "cable_middle_fly",
+        "cable_incline": "cable_incline_fly",
+        "dumbbell_hyght": "hyght_dumbbell_fly",
+        "cable_chest_supported": "cable_fly_chest_supported",
+        "dumbbell_incline": "dumbbell_incline_fly",
+        "cable_low": "cable_low_fly",
+        "cable_lying": "cable_lying_fly",
+        "dumbbell_twisted": "dumbbell_twisted_fly",
+        "dumbbell_one_arm_low": "dumbbell_one_arm_low_fly",
+        "dumbbell_one_arm_bench": "dumbbell_one_arm_bench_fly",
+        "dumbbell_decline": "dumbbell_decline_fly",
+        "dumbbell": "dumbbell_fly",
+        "cable_standing": "cable_standing_fly",
+        "cable_seated_chest": "cable_seated_chest_fly",
+        "cable_standing_up_straight": "cable_standing_up_straight_crossovers", // ?? named "Crossovers" but data/structure matches a chest fly; kept here for muscle-pattern consistency, could also fit "Crossover" group
+        "cable_decline": "cable_decline_fly",
+        "machine": "machine_chest_fly",
+        "machine_pec_deck": "butterfly_pec_deck"
+    },
+    "Finger Curl": {
+        "dumbbell_behind_back": "dumbbell_behind_back_finger_curl",
+        "barbell_behind_back": "barbell_behind_back_finger_curl",
+        "dumbbell": "finger_curls" // ?? no equipment specified in source name ("Finger Curls", plural), unlike other entries in this group
+    },
+    "Calf Raise": {
+        "dumbbell_single_leg": "dumbbell_single_leg_calf_raise",
+        "donkey": "donkey_calf_raise",
+        "lever_donkey": "lever_donkey_calf_raise",
+        "lever_seated_squat_leg_press_machine": "lever_seated_squat_calf_raise_on_leg_press_machine",
+        "hack": "hack_calf_raise",
+        "lever_standing": "lever_standing_calf_raise",
+        "lever_seated": "lever_seated_calf_raise",
+        "dumbbell_standing": "dumbbell_standing_calf_raise",
+        "barbell_standing": "barbell_standing_calf_raise",
+        "lever_seated_single_leg": "lever_seated_single_leg_calf_raise",
+        "barbell_seated": "barbell_seated_calf_raise",
+        "dumbbell_seated": "dumbbell_seated_calf_raise",
+        "one_leg_floor": "one_leg_floor_calf_raise",
+        "smith": "smith_calf_raise",
+        "dumbbell_standing_single_leg": "dumbbell_standing_single_leg_calf_raise"
+    },
+    "Pendulum Squat": {
+        "lever": "lever_pendulum_squat"
+    },
+    "Wall Squat": {
+        "bodyweight": "wall_squat",
+        "weighted": "weighted_wall_squat"
+    },
+    "Wall sit": {
+        "bodyweight": "sit_wall"
+    },
+    "Squat": {
+        "dumbbell": "dumbbell_squat",
+        "sled_lying": "sled_lying_squat",
+        "kettlebell": "kettlebell_squat",
+        "barbell_high_bar": "barbell_high_bar_squat",
+        "bodyweight": "squat_bodyweight",
+        "band": "squat_with_band", 
+        "smith": "smith_squat",
+        "barbell": "barbell_squat",
+        "lever_seated": "lever_seated_squat",
+        "jumping": "jump_squat"
+    },
+    "Reverse Grip Curl": {
+        "cable_standing_straight_bar": "cable_standing_reverse_grip_curl_straight_bar",
+        "ez_barbell": "ez_barbell_reverse_grip_curl",
+        "dumbbell_seated": "dumbbell_seated_reverse_grip_biceps_curl",
+        "dumbbell": "dumbbell_biceps_curl_reverse_grip",
+        "barbell_standing": "barbell_standing_reverse_grip_curl",
+        "barbell": "barbell_reverse_curl",
+        "dumbbell_standing_one_arm": "dumbbell_standing_one_arm_reverse_curl",
+        "cable": "cable_reverse_curl",
+        "dumbbell_standing": "dumbbell_standing_reverse_curl",
+        "cable_reverse_one_arm": "cable_reverse_one_arm_curl"
+    },
+    "Lunge": {
+        "weighted_side": "side_lunge",
+        "dumbbell_goblet_curtsey": "dumbbell_goblet_curtsey_lunge",
+        "barbell": "barbell_lunge",
+        "dumbbell_side": "dumbbell_side_lunge",
+        "dumbbell": "dumbbell_lunge",
+        "smith": "smith_lunge",
+        "kettlebell_goblet_curtsey": "kettlebell_goblet_curtsey_lunge",
+        "landmine_rear": "landmine_rear_lunge",
+        "dumbbell_walking": "dumbbell_walking_lunges",
+        "Walking Lunge": "walking_lunge"
+    },
+    "Kickback": {
+        "cable": "cable_kickback",
+        "bent_leg_kneeling": "bent_leg_kickback_kneeling",
+        "bent_leg_kneeling_banded": "resistance_band_bent_leg_kickback_kneeling"
+    },
+    "Curl to Press": {
+        "dumbbell_standing": "dumbbell_standing_biceps_curl_to_shoulder_press",
+        "dumbbell_seated": "dumbbell_seated_biceps_curl_to_shoulder_press"
+    },
+    "Hammer Curl and Press": {
+        "dumbbell_standing_alternate": "dumbbell_standing_alternate_hammer_curl_and_press"
+    },
+    "Body Up": {
+        "bodyweight": "body_up"
+    },
+    "Flutter Kick": {
+        "weighted_seated": "seated_flutter_kick"
+    },
+    "Sumo Squat": {
+        "smith": "smith_sumo_squat",
+        "kettlebell": "kettlebell_sumo_squat",
+        "unspecified": "sumo_squat",
+        "barbell": "barbell_sumo_squat"
+    },
+    "Sissy Squat": {
+        "bodyweight_kneeling": "bodyweight_kneeling_sissy_squat",
+        "weighted": "weighted_sissy_squat",
+        "bodyweight": "sissy_squat_bodyweight"
+    },
+    "Front Squat": {
+        "kettlebell": "kettlebell_front_squat",
+        "barbell": "barbell_front_squat",
+        "smith": "smith_front_squat",
+        "dumbbell": "dumbbell_front_squat",
+        "landmine": "landmine_front_squat"
+    },
+    "Hack Squat": {
+        "smith": "smith_hack_squat",
+        "barbell": "barbell_hack_squat",
+        "machine": "hack_squat"
+    },
+    "Cossack Squat": {
+        "weighted": "weighted_cossack_squats"
+    },
+    "Curtsey Squat": {
+        "weighted": "weighted_curtsey_squat",
+        "bodyweight": "curtsey_squat"
+    },
+    "Reverse Grip Press": {
+        "dumbbell_one_arm": "dumbbell_one_arm_reverse_grip_press"
+    },
+    "Push Pull": {
+        "cable_half_kneeling": "cable_half_kneeling_push_pull"
+    },
+    "Rear Kick": {
+        "lever_standing": "lever_standing_rear_kick"
+    },
+    "Bench Press": {
+        "cable": "cable_bench_press",
+        "barbell": "barbell_bench_press",
+        "dumbbell_squeeze": "dumbbell_squeeze_bench_press",
+        "dumbbell": "dumbbell_bench_press",
+        "barbell_guillotine": "barbell_guillotine_bench_press",
+        "barbell_wide": "barbell_wide_bench_press",
+        "smith": "smith_machine_bench_press"
+    },
+    "Elbow to Knee": {
+        "weighted": "elbow_to_knee"
+    },
+    "Diamond Press": {
+        "weighted": "diamond_press"
+    },
+    "Crossover": {
+        "lever": "lever_crossovers",
+        "cable_upper_chest": "cable_upper_chest_crossovers",
+        "cable_variation": "cable_crossover_variation"
+    },
+    "Rear Delt Raise": {
+        "barbell": "barbell_rear_delt_raise",
+        "cable_seated": "cable_seated_rear_lateral_raise",
+        "dumbbell": "dumbbell_rear_delt_raise",
+        "dumbbell_lying": "dumbbell_lying_rear_lateral_raise",
+        "barbell_incline_lying": "barbell_incline_lying_rear_delt_raise"
+    },
+    "Leg Extension": {
+        "lever_plate_loaded": "lever_leg_extension_plate_loaded",
+        "lever": "lever_leg_extension",
+        "single_leg": "single_leg_leg_extension",
+        "band": "resistance_band_leg_extension"
+    },
+    "French Press": {
+        "ez_barbell_standing": "ez_bar_standing_french_press"
+    },
+    "Tiger Tail Hamstring": {
+        "weighted": "tiger_tail_hamstring"
+    },
+    "Calf Press": {
+        "sled_leg_press": "sled_calf_press_on_leg_press",
+        "lever": "lever_calf_press"
+    },
+    "Scissors": {
+        "weighted_advanced": "scissors_advanced"
+    },
+    "Scissor Kick": {
+        "lying": "lying_scissor_kick"
+    },
+    "Kicks": {
+        "weighted_leg_bent": "kicks_leg_bent"
+    },
+    "Hip Flexor": {
+        "weighted_kneeling": "kneeling_hip_flexor"
+    },
+    "Front Raise and Pullover": {
+        "barbell": "barbell_front_raise_and_pullover"
+    },
+    "Step Up": {
+        "smith_lateral": "smith_lateral_step_up",
+        "weighted_single_leg": "single_leg_step_up",
+        "dumbbell": "dumbbell_step_up",
+        "kettlebell": "kettlebell_step_up"
+    },
+    "Reverse Grip Bench Press": {
+        "barbell_wide": "barbell_wide_reverse_grip_bench_press",
+        "dumbbell": "dumbbell_reverse_bench_press"
+    },
+    "Y Raise": {
+        "dumbbell_incline": "dumbbell_incline_y_raise",
+        "cable": "cable_y_raise"
+    },
+    "Leg Curl": {
+        "lever_seated": "lever_seated_leg_curl",
+        "dumbbell_lying": "dumbbell_lying_hamstring_curl",
+        "lever_lying": "lever_lying_leg_curl",
+        "lever_lying_single_leg": "lever_lying_single_leg_leg_curl",
+        "lever_seated_one_leg": "lever_seated_one_leg_leg_curl",
+        "band_seated_single_leg": "resistance_band_seated_single_leg_curl",
+        "suspender": "suspender_leg_curl",
+        "suspender_straight_hip": "suspender_straight_hip_leg_curl"
+    },
+    "Pull Through": {
+        "cable_rope": "cable_pull_through_rope"
+    },
+    "Cocoons": {
+        "weighted": "cocoons"
+    },
+    "Leg Raise": {
+        "weighted_seated": "seated_leg_raise",
+        "weighted_hanging": "hanging_leg_raise",
+        "weighted_lying": "lying_leg_raise",
+        "bodyweight_captains_chair": "captain_seat_leg_raise",
+        "band": "resistance_band_leg_lift"
+    },
+    "Hang": {
+        "135_degree": "handboard_hang_with_135_degree_elbow",
+        "slope": "handboard_slope_hang",
+        "unspecified": "dead_hang"
+    },
+    "Knee Raise": {
+        "bodyweight_hanging_oblique": "hanging_oblique_knee_raise",
+        "bodyweight_hanging": "hanging_knee_raise"
+    },
+    "Sit Up": {
+        "weighted_v": "v_up",
+        "weighted_standard": "sit_up",
+        "weighted_incline_twisting": "incline_twisting_situp"
+    },
+    "Tuck Crunch": {
+        "bodyweight": "tuck_crunch",
+        "bodyweight_weighted_seated_floor": "weighted_seated_tuck_crunch_on_floor"
+    },
+    "Total Abdominal Crunch": {
+        "lever": "lever_total_abdominal_crunch"
+    },
+    "Oblique Crunch": {
+        "bodyweight_alternate": "alternate_oblique_crunch",
+        "bodyweight_floor": "oblique_crunches_floor"
+    },
+    "Cross Body Crunch": {
+        "bodyweight": "cross_body_crunch"
+    },
+    "Hand Opposite Knee Crunch": {
+        "bodyweight": "hand_opposite_knee_crunch"
+    },
+    "Otis Up": {
+        "weighted": "otis_up"
+    },
+    "Side Bend": {
+        "dumbbell": "dumbbell_side_bend",
+        "bench": "bench_side_bend",
+        "cable": "cable_side_bend",
+        "bodyweight": "side_bend"
+    },
+    "Clam": {
+        "side_lying": "side_lying_clam"
+    },
+    "Farmers Carry": {
+        "weighted": "farmer_walk"
+    },
+    "Side Walk": {
+        "band": "resistance_band_side_walk"
+    },
+    "External Rotation": {
+        "cable_kneeling": "cable_kneeling_external_rotation"
+    },
+    "Rack Pull": {
+        "barbell": "barbell_rack_pull"
+    },
+    "Rear Drive": {
+        "cable": "cable_rear_drive"
+    },
+    "Glute Ham Raise": {
+        "weighted": "glute_ham_raise"
+    },
+    "Triceps Press": {
+        "weighted": "triceps_press"
+    },
+    "Tate Press": {
+        "dumbbell": "dumbbell_tate_press"
+    },
+    "Svend Press": {
+        "dumbbell": "dumbbell_svend_press"
+    },
+    "Palm In Press": {
+        "dumbbell_incline": "dumbbell_incline_palm_in_press"
+    },
+    "Zottman Curl": {
+        "dumbbell": "dumbbell_zottman_curl"
+    },
+    "Seated Row": {
+        "cable_low": "cable_low_seated_row",
+        "cable": "cable_seated_row",
+        "cable_one_arm": "cable_one_arm_row",
+        "cable_bent_bar": "cable_seated_row_bent_bar",
+        "cable_rope": "cable_seated_row_rope",
+        "lever": "seated_lever_machine_row",
+        "machine": "seated_machine_row"
+    },
+    "T-Bar Row": {
+        "lying": "lying_t_bar_row"
+    },
+    "Narrow Row": {
+        "barbell": "barbell_narrow_row"
+    },
+    "Pendlay Row": {
+        "barbell": "barbell_pendlay_row"
+    },
+    "Pull Up": {
+        "weighted_neutral_grip": "weighted_neutral_grip_pull_up",
+        "assisted_neutral_grip": "assisted_neutral_grip_pull_ups",
+        "bodyweight_neutral_grip": "neutral_grip_pull_up",
+        "bodyweight_commando": "commando_pull_up",
+        "weighted_one_handed": "weighted_one_handed_pull_up",
+        "bodyweight_close_grip": "close_grip_pull_up",
+        "bodyweight_archer": "archer_pull_up",
+        "bodyweight": "pull_up",
+        "bodyweight_single_arm": "single_arm_pull_up",
+        "weighted_l": "l_pull_ups",
+        "weighted": "weighted_pull_up",
+        "assisted": "assisted_pull_up"
+    },
+    "Chin Up": {
+        "bodyweight": "chin_up",
+        "bodyweight_close_grip": "close_grip_chin_up",
+        "band_assisted": "band_assisted_chin_up",
+        "assisted_close_grip": "assisted_close_grip_chin_up",
+        "weighted": "weighted_chin_up",
+        "assisted": "assisted_chin_up"
+    },
+    "One Arm Chin Up": {
+        "band_assisted": "band_assisted_one_arm_chin_up"
+    },
+    "Back Extension": {
+        "weighted": "back_extensions",
+        "machine": "machine_back_extension"
+    },
+    "Hip Abduction": {
+        "cable": "cable_hip_abduction",
+        "machine": "machine_hip_abductor"
+    },
+    "Hip Adduction": {
+        "lever_seated": "lever_seated_hip_adduction",
+        "machine": "machine_hip_adduction"
+    },
+    "Hip Extension": {
+        "lever": "lever_hip_extension"
+    },
+    "Cobra Push Up": {
+        "bodyweight": "cobra_push_up"
+    },
+    "Cuban Press": {
+        "dumbbell": "dumbbell_cuban_press"
+    },
+    "Devils Press": {
+        "dumbbell": "dumbbell_devils_press"
+    },
+    "Assault Bike": {
+        "machine": "assault_bike"
+    },
+    "Stationary Bike": {
+        "machine": "stationary_bike"
+    },
+    "Stair Master": {
+        "machine": "stair_master"
+    },
+    "Running": {
+        "bodyweight": "running" // todo fix cardio
+    },
+    "Walking": {
+        "bodyweight": "walking"
+    },
+    "Jumping Jack": {
+        "bodyweight": "jumping_jack"
+    },
+    "Plank": {
+        "bodyweight": "plank"
+    },
+    "Reverse Plank": {
+        "bodyweight": "reverse_plank"
+    },
+    "Side Plank": {
+        "bodyweight": "side_plank"
+    },
+    "Pike Push Up": {
+        "bodyweight": "pike_pushup",
+        "bodyweight_decline": "decline_pike_pushup"
+    },
+    "Handstand Push Up": {
+        "bodyweight": "handstand_push_up"
+    },
+    "Wall Handstand": {
+        "bodyweight": "wall_handstand"
+    },
+    "Handstand Hold": {
+        "bodyweight": "handstand_hold"
+    }
+}

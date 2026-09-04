@@ -1,0 +1,6937 @@
+{
+  "lat_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Biceps": 15,
+      "Traps": 10,
+      "Rhomboids": 5
+    },
+    "type": "Weighted",
+    "name": "Lat Pulldown"
+  },
+  "dumbbell_standing_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Preacher Curl"
+  },
+  "barbell_clean_and_press": {
+    "Primary": {
+      "Front Delts": 30,
+      "Side Delts": 15,
+      "Traps": 35
+    },
+    "Secondary": {
+      "Quads": 10,
+      "Glutes": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Clean and Press"
+  },
+  "barbell_overhead_squat": {
+    "Primary": {
+      "Quads": 40,
+      "Front Delts": 20,
+      "Side Delts": 10
+    },
+    "Secondary": {
+      "Glutes": 15,
+      "Hamstrings": 15
+    },
+    "type": "Weighted",
+    "name": "Barbell Overhead Squat"
+  },
+  "dumbbell_one_arm_shoulder_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Shoulder Press"
+  },
+  "barbell_pullover_to_press": {
+    "Primary": {
+      "Chest": 40,
+      "Lats": 30,
+      "Front Delts": 20
+    },
+    "Secondary": {
+      "Triceps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Pullover to Press"
+  },
+  "dumbbell_seated_one_arm_arnold_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 20
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated One Arm Arnold Press"
+  },
+  "barbell_standing_overhead_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 20
+    },
+    "Secondary": {
+      "Triceps": 30
+    },
+    "type": "Weighted",
+    "name": "Barbell Standing Overhead Press"
+  },
+  "dumbbell_alternate_arnold_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 20
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Arnold Press"
+  },
+  "cable_shoulder_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Shoulder Press"
+  },
+  "lever_seated_shoulder_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Shoulder Press"
+  },
+  "dumbbell_seated_one_arm_shoulder_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated One Arm Shoulder Press"
+  },
+  "dumbbell_alternate_side_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Side Press"
+  },
+  "dumbbell_seated_shoulder_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Shoulder Press"
+  },
+  "reverse_dip": {
+    "Primary": {
+      "Triceps": 65,
+      "Chest": 25
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Reverse Dip"
+  },
+  "dumbbell_standing_biceps_curl_to_shoulder_press": {
+    "Primary": {
+      "Biceps": 50,
+      "Front Delts": 30,
+      "Side Delts": 10
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Biceps Curl to Shoulder Press"
+  },
+  "dumbbell_standing_alternate_hammer_curl_and_press": {
+    "Primary": {
+      "Biceps": 40,
+      "Brachialis": 30,
+      "Front Delts": 10,
+      "Side Delts": 10
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Alternate Hammer Curl and Press"
+  },
+  "body_up": {
+    "Primary": {
+      "Triceps": 60
+    },
+    "Secondary": {
+      "Chest": 30,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Body Up"
+  },
+  "dumbbell_seated_biceps_curl_to_shoulder_press": {
+    "Primary": {
+      "Biceps": 50,
+      "Front Delts": 30,
+      "Side Delts": 10
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Biceps Curl to Shoulder Press"
+  },
+  "ring_dip": {
+    "Primary": {
+      "Triceps": 65,
+      "Chest": 25
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Ring Dip"
+  },
+  "chest_dip_on_straight_bar": {
+    "Primary": {
+      "Triceps": 25,
+      "Chest": 65
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Chest Dip On Straight Bar"
+  },
+  "dumbbell_lying_triceps_extension": {
+    "Primary": {
+      "Triceps": 90
+    },
+    "Secondary": {
+      "Chest": 5,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Triceps Extension"
+  },
+  "barbell_thruster": {
+    "Primary": {
+      "Quads": 25,
+      "Front Delts": 15,
+      "Side Delts": 10
+    },
+    "Secondary": {
+      "Glutes": 25,
+      "Hamstrings": 12.5,
+      "Triceps": 12.5
+    },
+    "type": "Weighted",
+    "name": "Barbell Thruster"
+  },
+  "dumbbell_arnold_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 20
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Arnold Press"
+  },
+  "cable_incline_triceps_extension": {
+    "Primary": {
+      "Triceps": 90
+    },
+    "Secondary": {
+      "Chest": 5,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Triceps Extension"
+  },
+  "barbell_lying_triceps_extension": {
+    "Primary": {
+      "Triceps": 90
+    },
+    "Secondary": {
+      "Chest": 5,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Barbell Lying Triceps Extension"
+  },
+  "dumbbell_lying_floor_skullcrusher": {
+    "Primary": {
+      "Triceps": 90
+    },
+    "Secondary": {
+      "Chest": 5,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Floor Skull Crusher"
+  },
+  "incline_push_up": {
+    "Primary": {
+      "Chest": 50,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Bodyweight",
+    "name": "Incline Push Up"
+  },
+  "back_lever": {
+    "Primary": {
+      "Lats": 50,
+      "Abdominals": 30
+    },
+    "Secondary": {
+      "Rear Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Back Lever"
+  },
+  "band_assisted_dips": {
+    "Primary": {
+      "Triceps": 65,
+      "Chest": 25
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Banded",
+    "name": "Band Assisted Dips"
+  },
+  "band_assisted_muscle_up": {
+    "Primary": {
+      "Lats": 40,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Banded",
+    "name": "Band Assisted Muscle Up"
+  },
+  "landmine_press": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 10
+    },
+    "Secondary": {
+      "Triceps": 30,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Landmine Press"
+  },
+  "barbell_close_grip_bench_press": {
+    "Primary": {
+      "Triceps": 60
+    },
+    "Secondary": {
+      "Chest": 30,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Close Grip Bench Press"
+  },
+  "barbell_decline_close_grip_to_skull_press": {
+    "Primary": {
+      "Triceps": 60
+    },
+    "Secondary": {
+      "Chest": 30,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Decline Close Grip to Skull Press"
+  },
+  "barbell_incline_close_grip_bench_press": {
+    "Primary": {
+      "Upper Chest": 50,
+      "Triceps": 40
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Incline Close Grip Bench Press"
+  },
+  "barbell_jm_bench_press": {
+    "Primary": {
+      "Triceps": 60
+    },
+    "Secondary": {
+      "Chest": 30,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell JM Bench Press"
+  },
+  "battle_ropes": {
+    "Primary": {
+      "Front Delts": 20,
+      "Side Delts": 20,
+      "Arms": 30
+    },
+    "Secondary": {
+      "Abdominals": 30
+    },
+    "type": "Weighted",
+    "name": "Battle Ropes"
+  },
+  "bodyweight_kneeling_triceps_extension": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Bodyweight",
+    "name": "Bodyweight Kneeling Triceps Extension"
+  },
+  "cable_concentration_extension_on_knee": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Concentration Extension On Knee"
+  },
+  "machine_lat_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Biceps": 15,
+      "Traps": 10,
+      "Rhomboids": 5
+    },
+    "type": "Weighted",
+    "name": "Machine Lat Pulldown"
+  },
+  "dumbbell_incline_twisted_flyes": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Twisted Flyes"
+  },
+  "lever_chest_press_plate_loaded": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Chest Press Plate Loaded"
+  },
+  "dumbbell_incline_bench_press": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Bench Press"
+  },
+  "dumbbell_behind_back_finger_curl": {
+    "Primary": {
+      "Forearms": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Behind Back Finger Curl"
+  },
+  "lever_incline_chest_press_plate_loaded": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Incline Chest Press Plate Loaded"
+  },
+  "dumbbell_single_leg_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Single Leg Calf Raise"
+  },
+  "dumbbell_one_arm_reverse_preacher_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Reverse Preacher Curl"
+  },
+  "lever_pendulum_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Pendulum Squat"
+  },
+  "cable_standing_reverse_grip_curl_straight_bar": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Brachialis": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Reverse Grip Curl Straight Bar"
+  },
+  "side_lunge": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Adductors": 20
+    },
+    "type": "Weighted",
+    "name": "Side Lunge"
+  },
+  "cable_kickback": {
+    "Primary": {
+      "Glutes": 70
+    },
+    "Secondary": {
+      "Hamstrings": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Kickback"
+  },
+  "dumbbell_seated_inner_biceps_curl": {
+    "Primary": {
+      "Biceps (short head)": 70
+    },
+    "Secondary": {
+      "Biceps (long head)": 20,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Inner Biceps Curl"
+  },
+  "barbell_good_morning": {
+    "Primary": {
+      "Hamstrings": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Good Morning"
+  },
+  "lever_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Lever Biceps Curl"
+  },
+  "cable_one_arm_high_pulley_overhead_triceps_extension": {
+    "Primary": {
+      "Triceps (long head)": 80
+    },
+    "Secondary": {
+      "Triceps (lateral & medial heads)": 20
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm High Pulley Overhead Triceps Extension"
+  },
+  "self_assisted_nordic_hamstrings_curls": {
+    "Primary": {
+      "Hamstrings": 80
+    },
+    "Secondary": {
+      "Calves": 20
+    },
+    "type": "Weighted",
+    "name": "Self Assisted Nordic Hamstrings Curls"
+  },
+  "barbell_stiff_legged_deadlift": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Stiff Legged Deadlift"
+  },
+  "barbell_hip_thrust": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Hip Thrust"
+  },
+  "lever_seated_leg_press": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Leg Press"
+  },
+  "cable_supine_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Supine Reverse Fly"
+  },
+  "kettlebell_russian_twist": {
+    "Primary": {
+      "Obliques": 60
+    },
+    "Secondary": {
+      "Abdominals": 40
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Russian Twist"
+  },
+  "dumbbell_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Squat"
+  },
+  "weighted_russian_twist_legs_up": {
+    "Primary": {
+      "Obliques": 70
+    },
+    "Secondary": {
+      "Abdominals": 30
+    },
+    "type": "Weighted",
+    "name": "Weighted Russian Twist Legs Up"
+  },
+  "barbell_spider_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Spider Curl"
+  },
+  "lever_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Triceps Extension"
+  },
+  "barbell_prone_incline_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Prone Incline Curl"
+  },
+  "ez_barbell_close_grip_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Close Grip Curl"
+  },
+  "dumbbell_decline_hammer_press": {
+    "Primary": {
+      "Lower Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Decline Hammer Press"
+  },
+  "cable_curl_v_bar": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Curl V Bar"
+  },
+  "dumbbell_one_arm_revers_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Reverse Wrist Curl"
+  },
+  "cable_reverse_grip_pushdown": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Reverse Grip Pushdown"
+  },
+  "dumbbell_one_arm_seated_neutral_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Seated Neutral Wrist Curl"
+  },
+  "dumbbell_incline_rear_lateral_raise": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Rear Lateral Raise"
+  },
+  "dumbbell_neutral_grip_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Neutral Grip Bench Press"
+  },
+  "reverse_crunch": {
+    "Primary": {
+      "Lower Abdominals": 70
+    },
+    "Secondary": {
+      "Obliques": 30
+    },
+    "type": "Bodyweight",
+    "name": "Reverse Crunch"
+  },
+  "dumbbell_full_can_lateral_raise": {
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Full Can Lateral Raise"
+  },
+  "bent_leg_kickback_kneeling": {
+    "Primary": {
+      "Glutes": 70
+    },
+    "Secondary": {
+      "Hamstrings": 30
+    },
+    "type": "Weighted",
+    "name": "Bent Leg Kickback Kneeling"
+  },
+  "cable_seated_shoulder_internal_rotation": {
+    "Primary": {
+      "Subscapularis": 70
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Lats": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Shoulder Internal Rotation"
+  },
+  "dumbbell_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Romanian Deadlift"
+  },
+  "ez_barbell_reverse_grip_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Brachialis": 30
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Reverse Grip Curl"
+  },
+  "barbell_incline_row": {
+    "Primary": {
+      "Rhomboids": 30,
+      "Traps": 30
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Incline Row"
+  },
+  "dumbbell_seated_reverse_grip_biceps_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Brachialis": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Reverse Grip Biceps Curl"
+  },
+  "archer_push_up": {
+    "Primary": {
+      "Chest": 60
+    },
+    "Secondary": {
+      "Triceps": 40
+    },
+    "type": "Weighted",
+    "name": "Archer Push Up"
+  },
+  "wall_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Wall Squat"
+  },
+  "resistance_band_seated_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Banded",
+    "name": "Resistance Band Seated Biceps Curl"
+  },
+  "cable_standing_alternate_low_fly": {
+    "Primary": {
+      "Lower Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Alternate Low Fly"
+  },
+  "dumbbell_prone_incline_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Prone Incline Curl"
+  },
+  "hanging_toes_to_bar": {
+    "Primary": {
+      "Abdominals": 50,
+      "Lats": 30
+    },
+    "Secondary": {
+      "Hip Flexors": 20
+    },
+    "type": "Weighted",
+    "name": "Hanging Toes to Bar"
+  },
+  "dumbbell_seated_front_raise": {
+    "Primary": {
+      "Front Delts": 70
+    },
+    "Secondary": {
+      "Side Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Front Raise"
+  },
+  "seated_flutter_kick": {
+    "Primary": {
+      "Lower Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Weighted",
+    "name": "Seated Flutter Kick"
+  },
+  "barbell_shrug": {
+    "Primary": {
+      "Traps": 80
+    },
+    "Secondary": {
+      "Rhomboids": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Shrug"
+  },
+  "barbell_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Barbell Preacher Curl"
+  },
+  "cable_high_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable High Triceps Extension"
+  },
+  "dumbbell_one_arm_seated_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearm": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Seated Hammer Curl"
+  },
+  "barbell_pin_presses": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Pin Presses"
+  },
+  "cable_overhead_triceps_extension_straight_bar": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Overhead Triceps Extension Straight Bar"
+  },
+  "cable_seated_high_row_v_bar": {
+    "Primary": {
+      "Rhomboids": 30,
+      "Trapezius": 30
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Seated High Row V Bar"
+  },
+  "dumbbell_seated_lateral_raise": {
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Lateral Raise"
+  },
+  "triceps_dips_floor": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Bodyweight",
+    "name": "Triceps Dips Floor"
+  },
+  "dumbbell_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Hammer Curl"
+  },
+  "donkey_calf_raise": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Donkey Calf Raise"
+  },
+  "cable_standing_one_arm_triceps_pushdown_overhand_grip": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Standing One Arm Triceps Pushdown Overhand Grip"
+  },
+  "barbell_palms_up_wrist_curl_over_a_bench": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Palms Up Wrist Curl Over a Bench"
+  },
+  "smith_close_grip_bench_press": {
+    "Primary": {
+      "Triceps": 60,
+      "Chest": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Close Grip Bench Press"
+  },
+  "barbell_decline_pullover": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Decline Pullover"
+  },
+  "resistance_band_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Banded",
+    "name": "Resistance Band Hammer Curl"
+  },
+  "cable_incline_pushdown": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Pushdown"
+  },
+  "dumbbell_goblet_curtsey_lunge": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Adductors": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Goblet Curtsey Lunge"
+  },
+  "dumbbell_one_arm_reverse_grip_press": {
+    "Primary": {
+      "Chest": 60
+    },
+    "Secondary": {
+      "Triceps": 30,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Reverse Grip Press"
+  },
+  "cable_half_kneeling_push_pull": {
+    "Primary": {
+      "Chest": 40,
+      "Back": 40
+    },
+    "Secondary": {
+      "Triceps": 10,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Half Kneeling Push Pull"
+  },
+  "ez_barbell_incline_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Incline Triceps Extension"
+  },
+  "lever_incline_hammer_chest_press": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Incline Hammer Chest Press"
+  },
+  "kettlebell_swing": {
+    "Primary": {
+      "Glutes": 50,
+      "Hamstrings": 30
+    },
+    "Secondary": {
+      "Erectors": 10,
+      "Abdominals": 10
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Swing"
+  },
+  "smith_sumo_squat": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Adductors": 20
+    },
+    "type": "Weighted",
+    "name": "Smith Sumo Squat"
+  },
+  "cable_upright_row": {
+    "Primary": {
+      "Traps": 50,
+      "Side Delts": 40
+    },
+    "Secondary": {
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Upright Row"
+  },
+  "dumbbell_seated_neutral_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Neutral Wrist Curl"
+  },
+  "lever_standing_rear_kick": {
+    "Primary": {
+      "Glutes": 70
+    },
+    "Secondary": {
+      "Hamstrings": 30
+    },
+    "type": "Weighted",
+    "name": "Lever Standing Rear Kick"
+  },
+  "dumbbell_concentration_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Concentration Curl"
+  },
+  "cable_bent_over_reverse_grip_row": {
+    "Primary": {
+      "Lats": 60,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Bent Over Reverse Grip Row"
+  },
+  "cable_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Bench Press"
+  },
+  "barbell_rear_delt_row": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Rear Delt Row"
+  },
+  "dumbbell_low_fly": {
+    "Primary": {
+      "Lower Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Low Fly"
+  },
+  "weighted_seated_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Weighted Seated Triceps Extension"
+  },
+  "bodyweight_kneeling_sissy_squat": {
+    "Primary": {
+      "Quads": 80
+    },
+    "Secondary": {
+      "Knee Joint": 20
+    },
+    "type": "Bodyweight",
+    "name": "Bodyweight Kneeling Sissy Squat"
+  },
+  "lever_donkey_calf_raise": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Donkey Calf Raise"
+  },
+  "dumbbell_alternate_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Preacher Curl"
+  },
+  "weighted_seated_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Seated Reverse Wrist Curl"
+  },
+  "cable_assisted_nordic_hamstrings_curls": {
+    "Primary": {
+      "Hamstrings": 80
+    },
+    "Secondary": {
+      "Glutes": 10,
+      "Erectors": 10
+    },
+    "type": "Banded",
+    "name": "Cable Assisted Nordic Hamstrings Curls"
+  },
+  "resistance_band_assisted_nordic_hamstrings_curls": {
+    "Primary": {
+      "Hamstrings": 80
+    },
+    "Secondary": {
+      "Glutes": 10,
+      "Erectors": 10
+    },
+    "type": "Banded",
+    "name": "Resistance Band Assisted Nordic Hamstrings Curls"
+  },
+  "cable_standing_chest_press": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Triceps": 15,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Chest Press"
+  },
+  "barbell_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Bench Press"
+  },
+  "dumbbell_biceps_curl_reverse_grip": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Biceps Curl Reverse Grip"
+  },
+  "dumbbell_one_arm_standing_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Standing Curl"
+  },
+  "barbell_flat_pullover": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Flat Pullover"
+  },
+  "barbell_palms_down_over_bench_extensors_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Palms Down Over Bench Extensors Wrist Curl"
+  },
+  "elbow_to_knee": {
+    "Primary": {
+      "Obliques": 60
+    },
+    "Secondary": {
+      "Abdominals": 40
+    },
+    "type": "Weighted",
+    "name": "Elbow to Knee"
+  },
+  "smith_bent_knee_good_morning": {
+    "Primary": {
+      "Hamstrings": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Bent Knee Good Morning"
+  },
+  "hip_raise_bent_knee": {
+    "Primary": {
+      "Glutes": 70
+    },
+    "Secondary": {
+      "Hamstrings": 30
+    },
+    "type": "Weighted",
+    "name": "Hip Raise Bent Knee"
+  },
+  "barbell_straight_leg_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Straight Leg Romanian Deadlift"
+  },
+  "landmine_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Landmine Romanian Deadlift"
+  },
+  "dumbbell_death_march_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Death March Romanian Deadlift"
+  },
+  "cable_seated_one_arm_concentration_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Seated One Arm Concentration Curl"
+  },
+  "ez_barbell_arm_blaster_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Arm Blaster Biceps Curl"
+  },
+  "cable_middle_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Middle Fly"
+  },
+  "barbell_split_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Split Squat"
+  },
+  "weighted_sissy_squat": {
+    "Primary": {
+      "Quads": 80
+    },
+    "Secondary": {
+      "Knee Joint": 20
+    },
+    "type": "Weighted",
+    "name": "Weighted Sissy Squat"
+  },
+  "dumbbell_seated_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Hammer Curl"
+  },
+  "lever_seated_squat_calf_raise_on_leg_press_machine": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Quads": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Squat Calf Raise On Leg Press Machine"
+  },
+  "diamond_press": {
+    "Primary": {
+      "Triceps": 60,
+      "Inner Chest": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Diamond Press"
+  },
+  "trap_bar_deadlift": {
+    "Primary": {
+      "Quads": 40,
+      "Hamstrings": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Trap Bar Deadlift"
+  },
+  "cable_crossover_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Crossover Reverse Fly"
+  },
+  "sled_lying_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Sled Lying Squat"
+  },
+  "dumbbell_lying_hammer_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Hammer Press"
+  },
+  "smith_seated_flexors_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Seated Flexors Wrist Curl"
+  },
+  "lever_crossovers": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Crossovers"
+  },
+  "barbell_standing_reverse_grip_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Brachialis": 30
+    },
+    "type": "Weighted",
+    "name": "Barbell Standing Reverse Grip Curl"
+  },
+  "weighted_cossack_squats": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Weighted Cossack Squats"
+  },
+  "band_face_pull": {
+    "Primary": {
+      "Rear Delts": 60,
+      "Traps": 30
+    },
+    "Secondary": {
+      "Rhomboids": 10
+    },
+    "type": "Banded",
+    "name": "Band Face Pull"
+  },
+  "dumbbell_standing_concentration_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Concentration Curl"
+  },
+  "cable_seated_pullover": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Pullover"
+  },
+  "smith_standing_extensors_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Standing Extensors Wrist Curl"
+  },
+  "dumbbell_alternate_seated_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Seated Hammer Curl"
+  },
+  "finger_push_up": {
+    "Primary": {
+      "Chest": 60,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Finger Push Up"
+  },
+  "russian_twist": {
+    "Primary": {
+      "Obliques": 60
+    },
+    "Secondary": {
+      "Abdominals": 40
+    },
+    "type": "Weighted",
+    "name": "Russian Twist"
+  },
+  "barbell_behind_back_finger_curl": {
+    "Primary": {
+      "Forearms": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Behind Back Finger Curl"
+  },
+  "cable_standing_extensors_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Extensors Wrist Curl"
+  },
+  "barbell_lunge": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Lunge"
+  },
+  "dumbbell_alternate_preacher_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Preacher Hammer Curl"
+  },
+  "cable_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Wrist Curl"
+  },
+  "cable_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Curl"
+  },
+  "barbell_decline_bench_press": {
+    "Primary": {
+      "Lower Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Decline Bench Press"
+  },
+  "cable_one_arm_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Reverse Fly"
+  },
+  "dumbbell_deadlift": {
+    "Primary": {
+      "Hamstrings": 40,
+      "Quads": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Deadlift"
+  },
+  "lever_deadlift": {
+    "Primary": {
+      "Hamstrings": 40,
+      "Quads": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Deadlift"
+  },
+  "dumbbell_alternate_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Biceps Curl"
+  },
+  "lever_horizontal_one_leg_press": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Horizontal One Leg Press"
+  },
+  "weighted_curtsey_squat": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Weighted Curtsey Squat"
+  },
+  "curtsey_squat": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 20
+    },
+    "type": "Bodyweight",
+    "name": "Curtsey Squat"
+  },
+  "cable_drag_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Drag Curl"
+  },
+  "weighted_pistol_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 25,
+      "Hamstrings": 15
+    },
+    "type": "Weighted",
+    "name": "Weighted Pistol Squat"
+  },
+  "dumbbell_goblet_split_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Goblet Split Squat"
+  },
+  "kicks_leg_bent": {
+    "Primary": {
+      "Hamstrings": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Kicks Leg Bent"
+  },
+  "barbell_bent_arm_pullover": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Bent Arm Pullover"
+  },
+  "barbell_seated_good_morning": {
+    "Primary": {
+      "Hamstrings": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Seated Good Morning"
+  },
+  "lying_scissor_kick": {
+    "Primary": {
+      "Lower Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Weighted",
+    "name": "Lying Scissor Kick"
+  },
+  "cable_overhead_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Overhead Curl"
+  },
+  "dumbbell_side_lunge": {
+    "Primary": {
+      "Quads": 50,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Side Lunge"
+  },
+  "barbell_reverse_grip_incline_bench_row": {
+    "Primary": {
+      "Rhomboids": 30,
+      "Trapezius": 30,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Reverse Grip Incline Bench Row"
+  },
+  "lever_chest_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Chest Press"
+  },
+  "cable_incline_fly": {
+    "Primary": {
+      "Upper Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Fly"
+  },
+  "cable_one_arm_side_triceps_pushdown": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Side Triceps Pushdown"
+  },
+  "cable_incline_cross_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Cross Reverse Fly"
+  },
+  "dumbbell_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Reverse Fly"
+  },
+  "cable_seated_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Curl"
+  },
+  "hyght_dumbbell_fly": {
+    "Primary": {
+      "Upper Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Height Dumbbell Fly"
+  },
+  "cable_upper_chest_crossovers": {
+    "Primary": {
+      "Upper Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Upper Chest Crossovers"
+  },
+  "barbell_rear_delt_raise": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Barbell Rear Delt Raise"
+  },
+  "dumbbell_lateral_raise": {
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lateral Raise"
+  },
+  "dumbbell_alternate_arm_blaster_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Alternate Arm Blaster Biceps Curl"
+  },
+  "dumbbell_lying_single_arm_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Single Arm Triceps Extension"
+  },
+  "cable_lying_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Lying Triceps Extension"
+  },
+  "dumbbell_seated_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Triceps Extension"
+  },
+  "barbell_lying_back_of_the_head_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Lying Back of the Head Triceps Extension"
+  },
+  "barbell_underhand_seal_row": {
+    "Primary": {
+      "Biceps": 60
+    },
+    "Secondary": {
+      "Lats": 20,
+      "Rear Delts": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Underhand Seal Row"
+  },
+  "bulgarian_split_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Bulgarian Split Squat"
+  },
+  "cable_fly_chest_supported": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Fly Chest Supported"
+  },
+  "cable_one_arm_lateral_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Biceps": 20,
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Lateral Pulldown"
+  },
+  "barbell_reverse_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Reverse Curl"
+  },
+  "lever_leg_extension_plate_loaded": {
+    "Primary": {
+      "Quads": 90
+    },
+    "Secondary": {
+      "Knee Joint Stability": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Leg Extension Plate Loaded"
+  },
+  "band_standing_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Banded",
+    "name": "Band Standing Hammer Curl"
+  },
+  "cable_kneeling_crunch": {
+    "Primary": {
+      "Abdominals": 80
+    },
+    "Secondary": {
+      "Obliques": 20
+    },
+    "type": "Bodyweight",
+    "name": "Cable Kneeling Crunch"
+  },
+  "ez_bar_standing_french_press": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Bar Standing French Press"
+  },
+  "dumbbell_incline_fly": {
+    "Primary": {
+      "Upper Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Fly"
+  },
+  "tiger_tail_hamstring": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Calves": 30
+    },
+    "type": "Weighted",
+    "name": "Tiger Tail Hamstring"
+  },
+  "sled_calf_press_on_leg_press": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Quads": 10
+    },
+    "type": "Weighted",
+    "name": "Sled Calf Press On Leg Press"
+  },
+  "dumbbell_lunge": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lunge"
+  },
+  "cable_incline_skull_crusher": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Skull Crusher"
+  },
+  "barbell_decline_wide_grip_pullover": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Decline Wide Grip Pullover"
+  },
+  "dumbbell_over_bench_one_arm_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Over Bench One Arm Reverse Wrist Curl"
+  },
+  "cable_high_pulley_overhead_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Cable High Pulley Overhead Triceps Extension"
+  },
+  "barbell_incline_triceps_extension_skull_crusher": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Incline Triceps Extension Skull Crusher"
+  },
+  "cable_rope_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Rope Hammer Curl"
+  },
+  "cable_alternate_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Alternate Triceps Extension"
+  },
+  "scissors_advanced": {
+    "Primary": {
+      "Lower Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Weighted",
+    "name": "Scissors Advanced"
+  },
+  "barbell_standing_close_grip_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Standing Close Grip Curl"
+  },
+  "lever_standing_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "type": "Weighted",
+    "name": "Lever Standing Calf Raise"
+  },
+  "barbell_reverse_preacher_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Reverse Preacher Curl"
+  },
+  "barbell_reverse_grip_bent_over_row": {
+    "Primary": {
+      "Lats": 60,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Reverse Grip Bent Over Row"
+  },
+  "barbell_seal_row": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 10,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Seal Row"
+  },
+  "lying_scissor_crunch": {
+    "Primary": {
+      "Lower Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Bodyweight",
+    "name": "Lying Scissor Crunch"
+  },
+  "kneeling_hip_flexor": {
+    "Primary": {
+      "Hip Flexors": 70
+    },
+    "Secondary": {
+      "Quads": 30
+    },
+    "type": "Weighted",
+    "name": "Kneeling Hip Flexor"
+  },
+  "cable_rope_preacher_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Rope Preacher Hammer Curl"
+  },
+  "ez_bar_california_skullcrusher": {
+    "Primary": {
+      "Triceps (long head)": 80
+    },
+    "Secondary": {
+      "Triceps (lateral & medial heads)": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Bar California Skull Crusher"
+  },
+  "dumbbell_one_arm_low_fly": {
+    "Primary": {
+      "Lower Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Low Fly"
+  },
+  "dumbbell_squeeze_bench_press": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Triceps": 15,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Squeeze Bench Press"
+  },
+  "smith_machine_incline_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Smith Machine Incline Triceps Extension"
+  },
+  "ez_barbell_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Curl"
+  },
+  "barbell_sumo_deadlift": {
+    "Primary": {
+      "Quads": 40,
+      "Hamstrings": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Sumo Deadlift"
+  },
+  "cable_seated_chest_press": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Triceps": 15,
+      "Front Delts": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Chest Press"
+  },
+  "lever_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Lever Preacher Curl"
+  },
+  "kettlebell_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Squat"
+  },
+  "kettlebell_front_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 25,
+      "Hamstrings": 15
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Front Squat"
+  },
+  "kettlebell_sumo_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Sumo Squat"
+  },
+  "barbell_seated_overhead_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Seated Overhead Triceps Extension"
+  },
+  "dumbbell_incline_t_raise_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 60,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline T Raise Reverse Fly"
+  },
+  "decline_push_up": {
+    "Primary": {
+      "Upper Chest": 60,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Decline Push Up"
+  },
+  "cocoons": {
+    "Primary": {
+      "Abdominals": 50,
+      "Obliques": 40
+    },
+    "Secondary": {
+      "Hip Flexors": 10
+    },
+    "type": "Weighted",
+    "name": "Cocoons"
+  },
+  "dumbbell_reverse_preacher_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Reverse Preacher Curl"
+  },
+  "cable_one_arm_triceps_pushdown": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Triceps Pushdown"
+  },
+  "seated_leg_raise": {
+    "Primary": {
+      "Abdominals": 60
+    },
+    "Secondary": {
+      "Hip Flexors": 40
+    },
+    "type": "Weighted",
+    "name": "Seated Leg Raise"
+  },
+  "dumbbell_split_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Split Squat"
+  },
+  "dumbbell_incline_close_grip_press_variation": {
+    "Primary": {
+      "Upper Chest": 60,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Close Grip Press Variation"
+  },
+  "cable_low_fly": {
+    "Primary": {
+      "Lower Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Low Fly"
+  },
+  "weighted_one_leg_hip_thrust": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Weighted One Leg Hip Thrust"
+  },
+  "ez_barbell_seated_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Seated Triceps Extension"
+  },
+  "dumbbell_around_pullover": {
+    "Primary": {
+      "Lats": 50,
+      "Chest": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Around Pullover"
+  },
+  "cable_v_bar_arm_blaster_triceps_pushdown": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable V Bar Arm Blaster Triceps Pushdown"
+  },
+  "hack_calf_raise": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Hack Calf Raise"
+  },
+  "hand_spring_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Hand Spring Wrist Curl"
+  },
+  "sit_wall": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Sit Wall"
+  },
+  "cable_close_grip_lat_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Biceps": 20,
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Close Grip Lat Pulldown"
+  },
+  "dumbbell_prone_incline_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Prone Incline Hammer Curl"
+  },
+  "barbell_bent_over_row": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 10,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Bent Over Row"
+  },
+  "barbell_front_raise_and_pullover": {
+    "Primary": {
+      "Front Delts": 40,
+      "Lats": 40
+    },
+    "Secondary": {
+      "Triceps": 10,
+      "Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Front Raise and Pullover"
+  },
+  "smith_lateral_step_up": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Lateral Step Up"
+  },
+  "ez_bar_close_grip_bench_press": {
+    "Primary": {
+      "Triceps": 60,
+      "Chest": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "EZ Bar Close Grip Bench Press"
+  },
+  "barbell_wide_reverse_grip_bench_press": {
+    "Primary": {
+      "Upper Chest": 60
+    },
+    "Secondary": {
+      "Triceps": 30,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Wide Reverse Grip Bench Press"
+  },
+  "cable_standing_rope_face_pull": {
+    "Primary": {
+      "Rear Delts": 60,
+      "Traps": 30
+    },
+    "Secondary": {
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Rope Face Pull"
+  },
+  "dumbbell_incline_alternate_bicep_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Alternate Bicep Curl"
+  },
+  "dumbbell_incline_y_raise": {
+    "Primary": {
+      "Upper Traps": 50,
+      "Side Delts": 40
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Y Raise"
+  },
+  "cable_deadlift": {
+    "Primary": {
+      "Hamstrings": 40,
+      "Quads": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Deadlift"
+  },
+  "lever_seated_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Calf Raise"
+  },
+  "lever_seated_leg_curl": {
+    "Primary": {
+      "Hamstrings": 80
+    },
+    "Secondary": {
+      "Calves": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Leg Curl"
+  },
+  "barbell_front_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Front Squat"
+  },
+  "cable_seated_rear_lateral_raise": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Rear Lateral Raise"
+  },
+  "bodyweight_decline_bent_leg_reverse_crunch": {
+    "Primary": {
+      "Lower Abdominals": 70
+    },
+    "Secondary": {
+      "Obliques": 30
+    },
+    "type": "Bodyweight",
+    "name": "Bodyweight Decline Bent Leg Reverse Crunch"
+  },
+  "cable_kneeling_one_arm_lat_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Biceps": 20,
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Kneeling One Arm Lat Pulldown"
+  },
+  "bodyweight_negative_crunch": {
+    "Primary": {
+      "Abdominals": 80
+    },
+    "Secondary": {
+      "Obliques": 20
+    },
+    "type": "Bodyweight",
+    "name": "Bodyweight Negative Crunch"
+  },
+  "dumbbell_seated_palms_up_flexors_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Palms Up Flexors Wrist Curl"
+  },
+  "barbell_glute_bridge_hip_thrust": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Glute Bridge Hip Thrust"
+  },
+  "cable_pull_through_rope": {
+    "Primary": {
+      "Glutes": 70
+    },
+    "Secondary": {
+      "Hamstrings": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Pull Through Rope"
+  },
+  "dumbbell_one_arm_zottman_preacher_curl": {
+    "Primary": {
+      "Biceps": 45,
+      "Brachialis": 35
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Zottman Preacher Curl"
+  },
+  "cable_stiff_leg_stepbox_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Stiff Leg Stepbox Romanian Deadlift"
+  },
+  "dumbbell_standing_inner_biceps_curl": {
+    "Primary": {
+      "Biceps (short head)": 70
+    },
+    "Secondary": {
+      "Biceps (long head)": 20,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Inner Biceps Curl"
+  },
+  "dumbbell_drag_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Drag Curl"
+  },
+  "cable_lying_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Lying Fly"
+  },
+  "barbell_lying_triceps_extension_skull_crusher": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Lying Triceps Extension Skull Crusher"
+  },
+  "barbell_deadlift": {
+    "Primary": {
+      "Hamstrings": 40,
+      "Quads": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Deadlift"
+  },
+  "handboard_hang_with_135_degree_elbow": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Handboard Hang with 135 Degree Elbow"
+  },
+  "dumbbell_one_arm_bench_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Bench Fly"
+  },
+  "ez_barbell_standing_wide_grip_biceps_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Biceps": 20,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Standing Wide Grip Biceps Curl"
+  },
+  "dumbbell_standing_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Calf Raise"
+  },
+  "barbell_standing_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "type": "Weighted",
+    "name": "Barbell Standing Calf Raise"
+  },
+  "barbell_behind_back_shrug": {
+    "Primary": {
+      "Traps": 90
+    },
+    "Secondary": {
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Behind Back Shrug"
+  },
+  "weighted_seated_one_arm_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Seated One Arm Reverse Wrist Curl"
+  },
+  "barbell_high_bar_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell High Bar Squat"
+  },
+  "dumbbell_one_arm_incline_chest_press": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Incline Chest Press"
+  },
+  "dumbbell_incline_alternate_press": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Alternate Press"
+  },
+  "bodyweight_decline_crunch": {
+    "Primary": {
+      "Upper Abdominals": 70
+    },
+    "Secondary": {
+      "Obliques": 30
+    },
+    "type": "Bodyweight",
+    "name": "Bodyweight Decline Crunch"
+  },
+  "lever_alternate_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Lever Alternate Biceps Curl"
+  },
+  "smith_lunge": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Lunge"
+  },
+  "ez_barbell_seated_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Seated Curl"
+  },
+  "cable_standing_flexors_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Flexors Wrist Curl"
+  },
+  "dumbbell_pullover": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Chest": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Pullover"
+  },
+  "push_up": {
+    "Primary": {
+      "Chest": 60,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Push Up"
+  },
+  "dumbbell_twisted_fly": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Twisted Fly"
+  },
+  "ez_barbell_decline_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Upper Chest": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Decline Triceps Extension"
+  },
+  "dumbbell_standing_one_arm_reverse_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing One Arm Reverse Curl"
+  },
+  "cable_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Preacher Curl"
+  },
+  "cable_crossover_variation": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Crossover Variation"
+  },
+  "cable_one_arm_bent_over_row": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 10,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Bent Over Row"
+  },
+  "barbell_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Romanian Deadlift"
+  },
+  "ez_bar_lying_close_grip_triceps_extension_behind_head": {
+    "Primary": {
+      "Triceps (long head)": 80
+    },
+    "Secondary": {
+      "Triceps (lateral & medial heads)": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Bar Lying Close Grip Triceps Extension Behind Head"
+  },
+  "lever_decline_chest_press": {
+    "Primary": {
+      "Lower Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Decline Chest Press"
+  },
+  "bench_dip": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Bodyweight",
+    "name": "Bench Dip"
+  },
+  "barbell_sumo_romanian_deadlift": {
+    "Primary": {
+      "Hamstrings": 60,
+      "Adductors": 30
+    },
+    "Secondary": {
+      "Glutes": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Sumo Romanian Deadlift"
+  },
+  "lever_seated_crunch": {
+    "Primary": {
+      "Abdominals": 80
+    },
+    "Secondary": {
+      "Obliques": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Crunch"
+  },
+  "smith_front_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Front Squat"
+  },
+  "smith_hack_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Hack Squat"
+  },
+  "barbell_hack_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Hack Squat"
+  },
+  "sled_one_leg_press": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Sled One Leg Press"
+  },
+  "dumbbell_decline_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Upper Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Decline Triceps Extension"
+  },
+  "smith_split_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Split Squat"
+  },
+  "dumbbell_stiff_leg_deadlift": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Stiff Leg Deadlift"
+  },
+  "dumbbell_rotation_reverse_fly": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Rotation Reverse Fly"
+  },
+  "cable_standing_inner_curl": {
+    "Primary": {
+      "Biceps (short head)": 70
+    },
+    "Secondary": {
+      "Biceps (long head)": 20,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Inner Curl"
+  },
+  "cable_lying_triceps_extension_rope": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Lying Triceps Extension Rope"
+  },
+  "cable_rope_incline_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Rope Incline Triceps Extension"
+  },
+  "dumbbell_incline_alternate_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Alternate Hammer Curl"
+  },
+  "dumbbell_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Bench Press"
+  },
+  "cable_low_seated_row": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 10,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Low Seated Row"
+  },
+  "dumbbell_front_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Front Squat"
+  },
+  "ez_bar_seated_close_grip_concentration_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Bar Seated Close Grip Concentration Curl"
+  },
+  "lever_triceps_dip_plate_loaded": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Bodyweight",
+    "name": "Lever Triceps Dip Plate Loaded"
+  },
+  "lever_hip_thrust": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Hip Thrust"
+  },
+  "dumbbell_rear_delt_raise": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Rear Delt Raise"
+  },
+  "barbell_reverse_grip_skullcrusher": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Reverse Grip Skull Crusher"
+  },
+  "barbell_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Wrist Curl"
+  },
+  "dumbbell_seated_alternate_front_raise": {
+    "Primary": {
+      "Front Delts": 70
+    },
+    "Secondary": {
+      "Side Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Alternate Front Raise"
+  },
+  "dumbbell_decline_bench_press": {
+    "Primary": {
+      "Lower Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Decline Bench Press"
+  },
+  "lever_preacher_curl_plate_loaded": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 15,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Lever Preacher Curl Plate Loaded"
+  },
+  "cable_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Reverse Wrist Curl"
+  },
+  "dumbbell_decline_fly": {
+    "Primary": {
+      "Lower Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Decline Fly"
+  },
+  "squat_bodyweight": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Squat Bodyweight"
+  },
+  "cable_reverse_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Reverse Curl"
+  },
+  "dumbbell_lying_hamstring_curl": {
+    "Primary": {
+      "Hamstrings": 80
+    },
+    "Secondary": {
+      "Calves": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Hamstring Curl"
+  },
+  "smith_stiff_legged_deadlift": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Stiff Legged Deadlift"
+  },
+  "lever_seated_horizontal_leg_press": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Horizontal Leg Press"
+  },
+  "cable_rear_drive": {
+    "Primary": {
+      "Triceps": 60,
+      "Rear Delts": 40
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Cable Rear Drive"
+  },
+  "dumbbell_standing_reverse_curl": {
+    "Primary": {
+      "Brachialis": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Reverse Curl"
+  },
+  "barbell_seated_close_grip_concentration_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Seated Close Grip Concentration Curl"
+  },
+  "dumbbell_preacher_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Preacher Hammer Curl"
+  },
+  "side_lying_clam": {
+    "Primary": {
+      "Hip Abductors": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Side Lying Clam"
+  },
+  "cable_seated_rear_delt_fly_with_chest_support": {
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Rear Delt Fly with Chest Support"
+  },
+  "landmine_front_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Landmine Front Squat"
+  },
+  "dumbbell_cross_body_hammer_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachialis": 30
+    },
+    "Secondary": {
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Cross Body Hammer Curl"
+  },
+  "hanging_leg_raise": {
+    "Primary": {
+      "Abdominals": 60
+    },
+    "Secondary": {
+      "Hip Flexors": 40
+    },
+    "type": "Weighted",
+    "name": "Hanging Leg Raise"
+  },
+  "cable_kneeling_external_rotation": {
+    "Primary": {
+      "Rotator Cuff": 80
+    },
+    "Secondary": {
+      "Rear Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Kneeling External Rotation"
+  },
+  "cable_seated_row": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 10,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Row"
+  },
+  "hack_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Hack Squat"
+  },
+  "otis_up": {
+    "Primary": {
+      "Lats": 60
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Otis Up"
+  },
+  "barbell_guillotine_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Guillotine Bench Press"
+  },
+  "barbell_decline_wide_grip_press": {
+    "Primary": {
+      "Lower Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Decline Wide Grip Press"
+  },
+  "dumbbell_one_arm_lateral_raise": {
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Lateral Raise"
+  },
+  "dumbbell_front_raise": {
+    "Primary": {
+      "Front Delts": 70
+    },
+    "Secondary": {
+      "Side Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Front Raise"
+  },
+  "dumbbell_lying_elbow_press": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Elbow Press"
+  },
+  "dumbbell_one_arm_wrist_curl": {
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Wrist Curl"
+  },
+  "barbell_biceps_curl_with_arm_blaster": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Biceps Curl with Arm Blaster"
+  },
+  "dumbbell_svend_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Svend Press"
+  },
+  "dumbbell_reverse_spider_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Reverse Spider Curl"
+  },
+  "dumbbell_incline_palm_in_press": {
+    "Primary": {
+      "Triceps": 60,
+      "Upper Chest": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Palm In Press"
+  },
+  "cable_two_arm_lateral_raise": {
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Two Arm Lateral Raise"
+  },
+  "dumbbell_tate_press": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Tate Press"
+  },
+  "triceps_press": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Triceps Press"
+  },
+  "cable_neutral_grip_lat_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Biceps": 20,
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Neutral Grip Lat Pulldown"
+  },
+  "single_leg_step_up": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Single Leg Step Up"
+  },
+  "barbell_standing_overhead_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Lats": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Standing Overhead Triceps Extension"
+  },
+  "dumbbell_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Fly"
+  },
+  "barbell_wide_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Wide Bench Press"
+  },
+  "smith_deadlift": {
+    "Primary": {
+      "Hamstrings": 40,
+      "Quads": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Deadlift"
+  },
+  "knee_touch_crunch": {
+    "Primary": {
+      "Abdominals": 80
+    },
+    "Secondary": {
+      "Obliques": 20
+    },
+    "type": "Bodyweight",
+    "name": "Knee Touch Crunch"
+  },
+  "v_up": {
+    "Primary": {
+      "Abdominals": 60
+    },
+    "Secondary": {
+      "Hip Flexors": 40
+    },
+    "type": "Weighted",
+    "name": "V Up"
+  },
+  "cable_standing_front_raise_variation": {
+    "Primary": {
+      "Front Delts": 70
+    },
+    "Secondary": {
+      "Side Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Front Raise Variation"
+  },
+  "barbell_wide_shrug": {
+    "Primary": {
+      "Traps": 80
+    },
+    "Secondary": {
+      "Rhomboids": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Wide Shrug"
+  },
+  "squat_with_band": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Banded",
+    "name": "Squat with Band"
+  },
+  "barbell_rack_pull": {
+    "Primary": {
+      "Rhomboids": 20,
+      "Trapezius": 30,
+      "Erectors": 50
+    },
+    "Secondary": {
+      "Hamstrings": 10,
+      "Glutes": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Rack Pull"
+  },
+  "kettlebell_goblet_curtsey_lunge": {
+    "Primary": {
+      "Quads": 50
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Adductors": 20
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Goblet Curtsey Lunge"
+  },
+  "dumbbell_incline_triceps_extension": {
+    "Primary": {
+      "Triceps": 80
+    },
+    "Secondary": {
+      "Chest": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Triceps Extension"
+  },
+  "lever_seated_dip": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Dip"
+  },
+  "dumbbell_standing_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Biceps Curl"
+  },
+  "nordic_hamstrings_curl": {
+    "Primary": {
+      "Hamstrings": 80
+    },
+    "Secondary": {
+      "Glutes": 10,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Nordic Hamstrings Curl"
+  },
+  "barbell_front_raise": {
+    "Primary": {
+      "Front Delts": 70
+    },
+    "Secondary": {
+      "Side Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Barbell Front Raise"
+  },
+  "weighted_triceps_dips": {
+    "Primary": {
+      "Triceps": 65,
+      "Chest": 25
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Triceps Dips"
+  },
+  "ez_barbell_reverse_grip_preacher_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Reverse Grip Preacher Curl"
+  },
+  "lever_overhand_triceps_dip": {
+    "Primary": {
+      "Triceps": 70,
+      "Chest": 20
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Overhand Triceps Dip"
+  },
+  "cable_bent_over_row": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Rhomboids": 15,
+      "Traps": 15
+    },
+    "type": "Weighted",
+    "name": "Cable Bent Over Row"
+  },
+  "smith_hip_thrust": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Smith Hip Thrust"
+  },
+  "hanging_oblique_knee_raise": {
+    "Primary": {
+      "Obliques": 60,
+      "Abdominals": 20
+    },
+    "Secondary": {
+      "Hip Flexors": 15,
+      "Forearms": 5
+    },
+    "type": "Bodyweight",
+    "name": "Hanging Oblique Knee Raise"
+  },
+  "hanging_knee_raise": {
+    "Primary": {
+      "Abdominals": 70,
+      "Hip Flexors": 20
+    },
+    "Secondary": {
+      "Obliques": 10,
+      "Forearms": 5
+    },
+    "type": "Bodyweight",
+    "name": "Hanging Knee Raise"
+  },
+  "weighted_standing_kettlebell_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Standing Kettlebell Curl"
+  },
+  "lever_seated_single_leg_calf_raise": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Tibialis Anterior": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Single Leg Calf Raise"
+  },
+  "alternate_oblique_crunch": {
+    "Primary": {
+      "Obliques": 80
+    },
+    "Secondary": {
+      "Abdominals": 20
+    },
+    "type": "Bodyweight",
+    "name": "Alternate Oblique Crunch"
+  },
+  "barbell_seated_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Barbell Seated Calf Raise"
+  },
+  "cable_single_arm_lateral_raise": {
+    "Primary": {
+      "Side Delts": 85
+    },
+    "Secondary": {
+      "Front Delts": 10,
+      "Traps": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Single Arm Lateral Raise"
+  },
+  "diamond_push_up_on_knees": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Weighted",
+    "name": "Diamond Push Up On Knees"
+  },
+  "smith_squat": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 15,
+      "Hamstrings": 15
+    },
+    "type": "Weighted",
+    "name": "Smith Squat"
+  },
+  "dumbbell_seated_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Dumbbell Seated Calf Raise"
+  },
+  "cable_seated_row_bent_bar": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Rhomboids": 10,
+      "Traps": 10,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Row Bent Bar"
+  },
+  "cable_incline_bench_press": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Front Delts": 15,
+      "Triceps": 15
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Bench Press"
+  },
+  "incline_twisting_situp": {
+    "Primary": {
+      "Abdominals": 35,
+      "Obliques": 35
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Weighted",
+    "name": "Incline Twisting Sit-Up"
+  },
+  "dumbbell_seated_one_arm_triceps_extension": {
+    "Primary": {
+      "Triceps": 90
+    },
+    "Secondary": {
+      "Lats": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated One Arm Triceps Extension"
+  },
+  "hand_opposite_knee_crunch": {
+    "Primary": {
+      "Obliques": 70
+    },
+    "Secondary": {
+      "Abdominals": 30
+    },
+    "type": "Bodyweight",
+    "name": "Hand Opposite Knee Crunch"
+  },
+  "cable_seated_floor_one_arm_concentration_curl": {
+    "Primary": {
+      "Biceps": 90
+    },
+    "Secondary": {
+      "Brachialis": 5,
+      "Forearms": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Floor One Arm Concentration Curl"
+  },
+  "dumbbell_seated_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Curl"
+  },
+  "lying_leg_raise": {
+    "Primary": {
+      "Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Weighted",
+    "name": "Lying Leg Raise"
+  },
+  "sit_up": {
+    "Primary": {
+      "Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Weighted",
+    "name": "Sit Up"
+  },
+  "lever_calf_press": {
+    "Primary": {
+      "Calves": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Lever Calf Press"
+  },
+  "barbell_upright_row": {
+    "Primary": {
+      "Traps": 30,
+      "Side Delts": 30
+    },
+    "Secondary": {
+      "Biceps": 20,
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Upright Row"
+  },
+  "dumbbell_incline_hammer_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Front Delts": 15,
+      "Triceps": 15
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Hammer Press"
+  },
+  "barbell_drag_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Drag Curl"
+  },
+  "weighted_seated_tuck_crunch_on_floor": {
+    "Primary": {
+      "Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 15,
+      "Obliques": 15
+    },
+    "type": "Bodyweight",
+    "name": "Weighted Seated Tuck Crunch On Floor"
+  },
+  "dumbbell_incline_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Biceps Curl"
+  },
+  "cable_seated_row_rope": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Rhomboids": 10,
+      "Traps": 10,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Row Rope"
+  },
+  "barbell_incline_bench_press": {
+    "Primary": {
+      "Upper Chest": 70
+    },
+    "Secondary": {
+      "Front Delts": 15,
+      "Triceps": 15
+    },
+    "type": "Weighted",
+    "name": "Barbell Incline Bench Press"
+  },
+  "barbell_decline_bent_arm_pullover": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Chest": 15,
+      "Triceps": 15
+    },
+    "type": "Weighted",
+    "name": "Barbell Decline Bent Arm Pullover"
+  },
+  "smith_leg_press": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 10,
+      "Hamstrings": 10,
+      "Calves": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Leg Press"
+  },
+  "cable_pulldown_bicep_curl": {
+    "Primary": {
+      "Lats": 25,
+      "Biceps": 25
+    },
+    "Secondary": {
+      "Forearms": 50
+    },
+    "type": "Weighted",
+    "name": "Cable Pulldown Bicep Curl"
+  },
+  "cable_seated_face_pull_rope": {
+    "Primary": {
+      "Rear Delts": 35,
+      "Traps": 35
+    },
+    "Secondary": {
+      "Rhomboids": 15,
+      "Rotator Cuff": 15
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Face Pull Rope"
+  },
+  "cable_cross_over_lateral_pulldown": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Rear Delts": 15,
+      "Biceps": 15
+    },
+    "type": "Weighted",
+    "name": "Cable Cross Over Lateral Pulldown"
+  },
+  "sled_leg_press": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 10,
+      "Hamstrings": 10,
+      "Calves": 10
+    },
+    "type": "Weighted",
+    "name": "Sled Leg Press"
+  },
+  "dumbbell_step_up": {
+    "Primary": {
+      "Quads": 40,
+      "Glutes": 40
+    },
+    "Secondary": {
+      "Hamstrings": 10,
+      "Calves": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Step Up"
+  },
+  "tuck_crunch": {
+    "Primary": {
+      "Abdominals": 80
+    },
+    "Secondary": {
+      "Hip Flexors": 10,
+      "Obliques": 10
+    },
+    "type": "Bodyweight",
+    "name": "Tuck Crunch"
+  },
+  "dumbbell_close_grip_press": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 15,
+      "Front Delts": 15
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Close Grip Press"
+  },
+  "barbell_standing_back_wrist_curl": {
+    "Primary": {
+      "Forearm Extensors": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Barbell Standing Back Wrist Curl"
+  },
+  "cable_reverse_preacher_curl": {
+    "Primary": {
+      "Brachialis": 70
+    },
+    "Secondary": {
+      "Biceps": 15,
+      "Forearms": 15
+    },
+    "type": "Weighted",
+    "name": "Cable Reverse Preacher Curl"
+  },
+  "ez_bar_drag_bicep_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "EZ Bar Drag Bicep Curl"
+  },
+  "smith_machine_decline_close_grip_bench_press": {
+    "Primary": {
+      "Lower Chest": 35,
+      "Triceps": 35
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Smith Machine Decline Close Grip Bench Press"
+  },
+  "barbell_stiff_leg_good_morning": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 10,
+      "Erectors": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Stiff Leg Good Morning"
+  },
+  "dumbbell_standing_zottman_preacher_curl": {
+    "Primary": {
+      "Biceps": 45,
+      "Brachialis": 35
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Zottman Preacher Curl"
+  },
+  "dumbbell_zottman_curl": {
+    "Primary": {
+      "Biceps": 45,
+      "Brachialis": 35
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Zottman Curl"
+  },
+  "cable_seated_crunch": {
+    "Primary": {
+      "Abdominals": 80
+    },
+    "Secondary": {
+      "Obliques": 20
+    },
+    "type": "Bodyweight",
+    "name": "Cable Seated Crunch"
+  },
+  "barbell_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Curl"
+  },
+  "cable_biceps_curl_ez_bar": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Biceps Curl EZ Bar"
+  },
+  "dumbbell_incline_hammer_curl": {
+    "Primary": {
+      "Brachialis": 25,
+      "Biceps": 25
+    },
+    "Secondary": {
+      "Forearms": 50
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Hammer Curl"
+  },
+  "ez_barbell_standing_wrist_reverse_curl": {
+    "Primary": {
+      "Forearm Extensors": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "EZ Barbell Standing Wrist Reverse Curl"
+  },
+  "lever_total_abdominal_crunch": {
+    "Primary": {
+      "Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 15,
+      "Obliques": 15
+    },
+    "type": "Bodyweight",
+    "name": "Lever Total Abdominal Crunch"
+  },
+  "cable_incline_bench_row": {
+    "Primary": {
+      "Lats": 60,
+      "Rhomboids": 10,
+      "Trapezius": 10
+    },
+    "Secondary": {
+      "Rear Delts": 10,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Incline Bench Row"
+  },
+  "dumbbell_side_bend": {
+    "Primary": {
+      "Obliques": 70
+    },
+    "Secondary": {
+      "Lats": 15,
+      "Erectors": 15
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Side Bend"
+  },
+  "ez_barbell_jm_bench_press": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell JM Bench Press"
+  },
+  "cable_standing_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Fly"
+  },
+  "oblique_crunches_floor": {
+    "Primary": {
+      "Obliques": 70
+    },
+    "Secondary": {
+      "Abdominals": 30
+    },
+    "type": "Bodyweight",
+    "name": "Oblique Crunches Floor"
+  },
+  "ez_barbell_close_grip_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Close Grip Preacher Curl"
+  },
+  "dumbbell_incline_single_arm_lateral_raise": {
+    "Primary": {
+      "Side Delts": 80
+    },
+    "Secondary": {
+      "Front Delts": 10,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Single Arm Lateral Raise"
+  },
+  "cable_single_arm_neutral_grip_front_raise": {
+    "Primary": {
+      "Front Delts": 80
+    },
+    "Secondary": {
+      "Side Delts": 10,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Single Arm Neutral Grip Front Raise"
+  },
+  "cable_standing_crossover_face_pull": {
+    "Primary": {
+      "Rear Delts": 60,
+      "Traps": 20
+    },
+    "Secondary": {
+      "Rhomboids": 10,
+      "Rotator Cuff": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Crossover Face Pull"
+  },
+  "dumbbell_hammer_curls_with_arm_blaster": {
+    "Primary": {
+      "Brachialis": 50,
+      "Biceps": 50
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Dumbbell Hammer Curls with Arm Blaster"
+  },
+  "cable_front_raise": {
+    "Primary": {
+      "Front Delts": 80
+    },
+    "Secondary": {
+      "Side Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Front Raise"
+  },
+  "jump_squat": {
+    "Primary": {
+      "Quads": 50,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10,
+      "Calves": 10
+    },
+    "type": "Weighted",
+    "name": "Jump Squat"
+  },
+  "diamond_push_up": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Weighted",
+    "name": "Diamond Push Up"
+  },
+  "dumbbell_lying_rear_lateral_raise": {
+    "Primary": {
+      "Rear Delts": 80
+    },
+    "Secondary": {
+      "Traps": 10,
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Rear Lateral Raise"
+  },
+  "cable_reverse_one_arm_curl": {
+    "Primary": {
+      "Brachialis": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Reverse One Arm Curl"
+  },
+  "barbell_one_arm_bent_over_row": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Rear Delts": 15,
+      "Biceps": 15
+    },
+    "type": "Weighted",
+    "name": "Barbell One Arm Bent Over Row"
+  },
+  "barbell_incline_lying_rear_delt_raise": {
+    "Primary": {
+      "Rear Delts": 80
+    },
+    "Secondary": {
+      "Traps": 10,
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Incline Lying Rear Delt Raise"
+  },
+  "sissy_squat_bodyweight": {
+    "Primary": {
+      "Quads": 90
+    },
+    "Secondary": {
+      "Calves": 10
+    },
+    "type": "Bodyweight",
+    "name": "Sissy Squat Bodyweight"
+  },
+  "ez_barbell_standing_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Standing Preacher Curl"
+  },
+  "lever_hammer_grip_preacher_curl": {
+    "Primary": {
+      "Brachialis": 50,
+      "Biceps": 50
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Lever Hammer Grip Preacher Curl"
+  },
+  "cross_body_crunch": {
+    "Primary": {
+      "Obliques": 70
+    },
+    "Secondary": {
+      "Abdominals": 30
+    },
+    "type": "Bodyweight",
+    "name": "Cross Body Crunch"
+  },
+  "resistance_band_side_walk": {
+    "Primary": {
+      "Hip Abductors": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Banded",
+    "name": "Resistance Band Side Walk"
+  },
+  "ez_barbell_spider_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 20
+    },
+    "type": "Weighted",
+    "name": "EZ Barbell Spider Curl"
+  },
+  "dumbbell_incline_raise": {
+    "Primary": {
+      "Front Delts": 80
+    },
+    "Secondary": {
+      "Side Delts": 10,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Raise"
+  },
+  "cable_y_raise": {
+    "Primary": {
+      "Front Delts": 50,
+      "Side Delts": 50
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Cable Y Raise"
+  },
+  "dumbbell_lying_supine_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying Supine Curl"
+  },
+  "cable_standing_up_straight_crossovers": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Standing Up Straight Crossovers"
+  },
+  "glute_ham_raise": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 15,
+      "Calves": 15
+    },
+    "type": "Weighted",
+    "name": "Glute Ham Raise"
+  },
+  "sumo_squat": {
+    "Primary": {
+      "Quads": 40,
+      "Glutes": 30,
+      "Adductors": 20
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Sumo Squat"
+  },
+  "barbell_sumo_squat": {
+    "Primary": {
+      "Quads": 40,
+      "Glutes": 30,
+      "Adductors": 20
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Sumo Squat"
+  },
+  "handboard_slope_hang": {
+    "Primary": {
+      "Forearms": 50,
+      "Grip Strength": 50
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Handboard Slope Hang"
+  },
+  "dumbbell_bent_over_alternate_rear_delt_fly": {
+    "Primary": {
+      "Rear Delts": 80
+    },
+    "Secondary": {
+      "Traps": 10,
+      "Rhomboids": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Bent Over Alternate Rear Delt Fly"
+  },
+  "barbell_pendlay_row": {
+    "Primary": {
+      "Lats": 60,
+      "Traps": 20
+    },
+    "Secondary": {
+      "Rhomboids": 10,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Pendlay Row"
+  },
+  "dumbbell_hip_thrusts": {
+    "Primary": {
+      "Glutes": 70
+    },
+    "Secondary": {
+      "Hamstrings": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Hip Thrusts"
+  },
+  "dumbbell_one_arm_hammer_preacher_curl": {
+    "Primary": {
+      "Brachialis": 50,
+      "Biceps": 50
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Hammer Preacher Curl"
+  },
+  "dumbbell_incline_front_raise": {
+    "Primary": {
+      "Front Delts": 80
+    },
+    "Secondary": {
+      "Side Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Front Raise"
+  },
+  "dumbbell_one_arm_standing_hammer_curl": {
+    "Primary": {
+      "Brachialis": 50,
+      "Biceps": 50
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Standing Hammer Curl"
+  },
+  "dumbbell_straight_arm_pullover": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Chest": 15,
+      "Triceps": 15
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Straight Arm Pullover"
+  },
+  "barbell_narrow_row": {
+    "Primary": {
+      "Lats": 60,
+      "Traps": 20
+    },
+    "Secondary": {
+      "Rhomboids": 10,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Narrow Row"
+  },
+  "barbell_lying_close_grip_press": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Weighted",
+    "name": "Barbell Lying Close Grip Press"
+  },
+  "elevanted_push_up": {
+    "Primary": {
+      "Chest": 50,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Bodyweight",
+    "name": "Elevated Push Up"
+  },
+  "dumbbell_reverse_bench_press": {
+    "Primary": {
+      "Chest": 60
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Reverse Bench Press"
+  },
+  "close_grip_push_up": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Chest": 30
+    },
+    "type": "Weighted",
+    "name": "Close Grip Push Up"
+  },
+  "dumbbell_one_arm_front_raise": {
+    "Primary": {
+      "Front Delts": 80
+    },
+    "Secondary": {
+      "Side Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Front Raise"
+  },
+  "dumbbell_biceps_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 10,
+      "Forearms": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Biceps Curl"
+  },
+  "cable_seated_chest_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Chest Fly"
+  },
+  "bench_reverse_crunch_circle": {
+    "Primary": {
+      "Abdominals": 60
+    },
+    "Secondary": {
+      "Hip Flexors": 20,
+      "Obliques": 20
+    },
+    "type": "Bodyweight",
+    "name": "Bench Reverse Crunch Circle"
+  },
+  "dumbbell_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Preacher Curl"
+  },
+  "dumbbell_single_arm_preacher_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Brachialis": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Single Arm Preacher Curl"
+  },
+  "dumbbell_bent_over_bench_row": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Rear Delts": 15,
+      "Biceps": 20,
+      "Traps": 15
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Bent Over Bench Row"
+  },
+  "lying_t_bar_row": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Rear Delts": 10,
+      "Biceps": 20,
+      "Traps": 20
+    },
+    "type": "Weighted",
+    "name": "Lying T Bar Row"
+  },
+  "rear_delt_fly_machine": {
+    "Primary": {
+      "Rear Delts": 80
+    },
+    "Secondary": {
+      "Traps": 20
+    },
+    "type": "Weighted",
+    "name": "Rear Delt Fly Machine"
+  },
+  "triceps_dips": {
+    "Primary": {
+      "Triceps": 65,
+      "Chest": 25
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Triceps Dips"
+  },
+  "assisted_chest_dips": {
+    "Primary": {
+      "Triceps": 25,
+      "Chest": 65
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Assisted",
+    "name": "Assisted Chest Dips"
+  },
+  "assisted_triceps_dips": {
+    "Primary": {
+      "Triceps": 65,
+      "Chest": 25
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Assisted",
+    "name": "Assisted Triceps Dips"
+  },
+  "weighted_neutral_grip_pull_up": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Neutral Grip Pull Up"
+  },
+  "assisted_neutral_grip_pull_ups": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Assisted",
+    "name": "Assisted Neutral Grip Pull Ups"
+  },
+  "neutral_grip_pull_up": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Neutral Grip Pull Up"
+  },
+  "commando_pull_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Commando Pull Up"
+  },
+  "band_assisted_one_arm_chin_up": {
+    "Primary": {
+      "Lats": 40
+    },
+    "Secondary": {
+      "Biceps": 35,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Banded",
+    "name": "Band Assisted One Arm Chin Up"
+  },
+  "weighted_one_handed_pull_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted One Handed Pull Up"
+  },
+  "close_grip_pull_up": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Close Grip Pull Up"
+  },
+  "archer_pull_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Archer Pull Up"
+  },
+  "chin_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Chin Up"
+  },
+  "close_grip_chin_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Close Grip Chin Up"
+  },
+  "band_assisted_chin_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Banded",
+    "name": "Band Assisted Chin Up"
+  },
+  "assisted_close_grip_chin_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Assisted",
+    "name": "Assisted Close Grip Chin Up"
+  },
+  "pull_up": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Pull Up"
+  },
+  "single_arm_pull_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Single Arm Pull Up"
+  },
+  "l_pull_ups": {
+    "Primary": {
+      "Lats": 40
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10,
+      "Abdominals": 10
+    },
+    "type": "Weighted",
+    "name": "L Pull Ups"
+  },
+  "weighted_chin_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Chin Up"
+  },
+  "assisted_chin_up": {
+    "Primary": {
+      "Lats": 45
+    },
+    "Secondary": {
+      "Biceps": 30,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Assisted",
+    "name": "Assisted Chin Up"
+  },
+  "back_extensions": {
+    "Primary": {
+      "Erectors": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Back Extensions"
+  },
+  "barbell_bent_over_wide_grip_row": {
+    "Primary": {
+      "Rhomboids": 30,
+      "Trapezius": 30,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Bent Over Wide Grip Row"
+  },
+  "barbell_deadstop_row": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Erectors": 20
+    },
+    "type": "Weighted",
+    "name": "Barbell Deadstop Row"
+  },
+  "barbell_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Squat"
+  },
+  "barbell_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Barbell Reverse Wrist Curl"
+  },
+  "cable_decline_fly": {
+    "Primary": {
+      "Chest": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Decline Fly"
+  },
+  "cable_hip_abduction": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Outer Thighs": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Hip Abduction"
+  },
+  "cable_kneeling_high_row_rope": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Kneeling High Row Rope"
+  },
+  "cable_lateral_pulldown_rope": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Side Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Lateral Pulldown Rope"
+  },
+  "cable_lateral_pulldown_v_bar": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Side Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Lateral Pulldown V Bar"
+  },
+  "cable_lying_biceps_curl": {
+    "Primary": {
+      "Biceps": 75
+    },
+    "Secondary": {
+      "Forearms": 25
+    },
+    "type": "Weighted",
+    "name": "Cable Lying Biceps Curl"
+  },
+  "cable_lying_extension_pullover_rope": {
+    "Primary": {
+      "Lats": 50,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Lying Extension Pullover Rope"
+  },
+  "cable_one_arm_biceps_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Biceps Curl"
+  },
+  "cable_overhead_single_arm_triceps_extension": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Overhead Single Arm Triceps Extension"
+  },
+  "cable_triceps_pushdown_rope": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Triceps Pushdown Rope"
+  },
+  "cable_reverse_grip_pulldown": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Reverse Grip Pulldown"
+  },
+  "cable_single_arm_triceps_pushdown_rope": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Single Arm Triceps Pushdown Rope"
+  },
+  "cable_standing_high_cross_triceps_extension": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Standing High Cross Triceps Extension"
+  },
+  "cable_triceps_pushdown_v_bar": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Triceps Pushdown V Bar"
+  },
+  "chest_dip": {
+    "Primary": {
+      "Triceps": 25,
+      "Chest": 65
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Chest Dip"
+  },
+  "cobra_push_up": {
+    "Primary": {
+      "Triceps": 60,
+      "Chest": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Bodyweight",
+    "name": "Cobra Push Up"
+  },
+  "dumbbell_cuban_press": {
+    "Primary": {
+      "Side Delts": 40,
+      "Front Delts": 20,
+      "Traps": 30
+    },
+    "Secondary": {
+      "Triceps": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Cuban Press"
+  },
+  "dumbbell_devils_press": {
+    "Primary": {
+      "Chest": 40,
+      "Front Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Quads": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Devils Press"
+  },
+  "dumbbell_lying_one_arm_press": {
+    "Primary": {
+      "Chest": 50,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Lying One Arm Press"
+  },
+  "dumbbell_one_arm_reverse_fly_with_support": {
+    "Primary": {
+      "Rear Delts": 60
+    },
+    "Secondary": {
+      "Traps": 30,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell One Arm Reverse Fly with Support"
+  },
+  "dumbbell_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Reverse Wrist Curl"
+  },
+  "dumbbell_seated_bench_triceps_extension": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Bench Triceps Extension"
+  },
+  "dumbbell_walking_lunges": {
+    "Primary": {
+      "Quads": 50,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Walking Lunges"
+  },
+  "finger_curls": {
+    "Primary": {
+      "Forearms": 100
+    },
+    "type": "Weighted",
+    "name": "Finger Curls"
+  },
+  "kettlebell_step_up": {
+    "Primary": {
+      "Quads": 50,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Kettlebell Step Up"
+  },
+  "kneeling_push_up": {
+    "Primary": {
+      "Chest": 50,
+      "Lats": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Bodyweight",
+    "name": "Kneeling Push Up"
+  },
+  "landmine_rear_lunge": {
+    "Primary": {
+      "Glutes": 50,
+      "Quads": 30
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Weighted",
+    "name": "Landmine Rear Lunge"
+  },
+  "lever_hip_extension": {
+    "Primary": {
+      "Glutes": 60
+    },
+    "Secondary": {
+      "Erectors": 30,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Hip Extension"
+  },
+  "lever_incline_chest_press": {
+    "Primary": {
+      "Chest": 60,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Incline Chest Press"
+  },
+  "lever_leg_extension": {
+    "Primary": {
+      "Quads": 100
+    },
+    "type": "Weighted",
+    "name": "Lever Leg Extension"
+  },
+  "lever_lying_leg_curl": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Lever Lying Leg Curl"
+  },
+  "lever_lying_single_leg_leg_curl": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Lever Lying Single Leg Leg Curl"
+  },
+  "lever_seated_hip_adduction": {
+    "Primary": {
+      "Adductors": 80
+    },
+    "Secondary": {
+      "Glutes": 20
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Hip Adduction"
+  },
+  "lever_seated_one_leg_leg_curl": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Lever Seated One Leg Leg Curl"
+  },
+  "machine_back_extension": {
+    "Primary": {
+      "Erectors": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Machine Back Extension"
+  },
+  "machine_shoulder_press": {
+    "Primary": {
+      "Front Delts": 60
+    },
+    "Secondary": {
+      "Triceps": 30,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Machine Shoulder Press"
+  },
+  "one_leg_floor_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "One Leg Floor Calf Raise"
+  },
+  "single_leg_leg_extension": {
+    "Primary": {
+      "Quads": 100
+    },
+    "type": "Weighted",
+    "name": "Single Leg Leg Extension"
+  },
+  "resistance_band_bent_leg_kickback_kneeling": {
+    "Primary": {
+      "Glutes": 60
+    },
+    "Secondary": {
+      "Hamstrings": 30,
+      "Erectors": 10
+    },
+    "type": "Banded",
+    "name": "Resistance Band Bent Leg Kickback Kneeling"
+  },
+  "resistance_band_leg_extension": {
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Banded",
+    "name": "Resistance Band Leg Extension"
+  },
+  "resistance_band_leg_lift": {
+    "Primary": {
+      "Glutes": 60,
+      "Quads": 30
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Banded",
+    "name": "Resistance Band Leg Lift"
+  },
+  "resistance_band_seated_single_leg_curl": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Banded",
+    "name": "Resistance Band Seated Single Leg Curl"
+  },
+  "seated_lever_machine_row": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Seated Lever Machine Row"
+  },
+  "seated_machine_row": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 30
+    },
+    "Secondary": {
+      "Rear Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Seated Machine Row"
+  },
+  "seated_overhead_press_barbell": {
+    "Primary": {
+      "Front Delts": 60
+    },
+    "Secondary": {
+      "Triceps": 30,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Seated Overhead Press Barbell"
+  },
+  "single_leg_hip_thrust": {
+    "Primary": {
+      "Glutes": 60
+    },
+    "Secondary": {
+      "Hamstrings": 30,
+      "Erectors": 10
+    },
+    "type": "Weighted",
+    "name": "Single Leg Hip Thrust"
+  },
+  "bodyweight_pistol_squat": {
+    "Primary": {
+      "Quads": 60
+    },
+    "Secondary": {
+      "Glutes": 30,
+      "Hamstrings": 10
+    },
+    "type": "Bodyweight",
+    "name": "Bodyweight Pistol Squat"
+  },
+  "smith_calf_raise": {
+    "Primary": {
+      "Calves": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Smith Calf Raise"
+  },
+  "smith_machine_standing_overhead_press": {
+    "Primary": {
+      "Front Delts": 60
+    },
+    "Secondary": {
+      "Triceps": 30,
+      "Upper Chest": 10
+    },
+    "type": "Weighted",
+    "name": "Smith Machine Standing Overhead Press"
+  },
+  "suspender_arm_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "Suspender Arm Curl"
+  },
+  "suspender_leg_curl": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Suspender Leg Curl"
+  },
+  "suspender_straight_hip_leg_curl": {
+    "Primary": {
+      "Hamstrings": 70
+    },
+    "Secondary": {
+      "Glutes": 30
+    },
+    "type": "Weighted",
+    "name": "Suspender Straight Hip Leg Curl"
+  },
+  "suspender_triceps_extension": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Suspender Triceps Extension"
+  },
+  "walking_lunge": {
+    "Primary": {
+      "Quads": 50,
+      "Glutes": 30
+    },
+    "Secondary": {
+      "Hamstrings": 20
+    },
+    "type": "Bodyweight",
+    "name": "Walking Lunge"
+  },
+  "weighted_crunch": {
+    "Primary": {
+      "Abdominals": 70
+    },
+    "Secondary": {
+      "Hip Flexors": 30
+    },
+    "type": "Bodyweight",
+    "name": "Weighted Crunch"
+  },
+  "weighted_push_up": {
+    "Primary": {
+      "Chest": 50,
+      "Front Delts": 30
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Bodyweight",
+    "name": "Weighted Push Up"
+  },
+  "cable_seated_horizontal_shrug": {
+    "Primary": {
+      "Traps": 70
+    },
+    "Secondary": {
+      "Rear Delts": 20,
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Seated Horizontal Shrug"
+  },
+  "dumbbell_shrug": {
+    "Primary": {
+      "Traps": 80
+    },
+    "Secondary": {
+      "Rhomboids": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Shrug"
+  },
+  "incline_shrug": {
+    "Primary": {
+      "Traps": 80
+    },
+    "Secondary": {
+      "Rhomboids": 20
+    },
+    "type": "Weighted",
+    "name": "Incline Shrug"
+  },
+  "cable_triceps_pushdown_ez_bar": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Triceps Pushdown EZ Bar"
+  },
+  "cable_triceps_pushdown_straight_bar": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Triceps Pushdown Straight Bar"
+  },
+  "dumbbell_over_bench_neutral_wrist_curl": {
+    "Primary": {
+      "Forearms": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Over Bench Neutral Wrist Curl"
+  },
+  "dumbbell_over_bench_wrist_curl": {
+    "Primary": {
+      "Forearms": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Over Bench Wrist Curl"
+  },
+  "dumbbell_over_bench_reverse_wrist_curl": {
+    "Primary": {
+      "Forearms": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Over Bench Reverse Wrist Curl"
+  },
+  "dumbbell_over_bench_one_arm_wrist_curl": {
+    "Primary": {
+      "Forearms": 70
+    },
+    "Secondary": {
+      "Biceps": 30
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Over Bench One Arm Wrist Curl"
+  },
+  "machine_chest_fly": {
+    "Primary": {
+      "Chest": 80
+    },
+    "Secondary": {
+      "Front Delts": 20
+    },
+    "type": "Weighted",
+    "name": "Machine Chest Fly"
+  },
+  "cable_pullover": {
+    "Primary": {
+      "Lats": 70
+    },
+    "Secondary": {
+      "Chest": 15,
+      "Triceps": 15
+    },
+    "type": "Weighted",
+    "name": "Cable Pullover"
+  },
+  "dumbbell_incline_chest_supported_row": {
+    "Primary": {
+      "Rhomboids": 50
+    },
+    "Secondary": {
+      "Lats": 20,
+      "Rear Delts": 15,
+      "Biceps": 15
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Incline Chest Supported Row"
+  },
+  "assault_bike": {
+    "Primary": {
+      "Quads": 35,
+      "Hamstrings": 25,
+      "Glutes": 15,
+      "Calves": 10
+    },
+    "Secondary": {
+      "Forearms": 5,
+      "Biceps": 5,
+      "Rectus Abdominis": 10
+    },
+    "type": "Timed",
+    "name": "Assault Bike"
+  },
+  "barbell_behind_the_back_wrist_curls": {
+    "Primary": {
+      "Forearms": 90
+    },
+    "Secondary": {
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Barbell Behind the Back Wrist Curls"
+  },
+  "cable_behind_the_back_wrist_curls": {
+    "Primary": {
+      "Forearms": 90
+    },
+    "Secondary": {
+      "Biceps": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Behind the Back Wrist Curls"
+  },
+  "cable_one_arm_row": {
+    "Primary": {
+      "Lats": 40,
+      "Biceps": 20,
+      "Rear Delts": 20
+    },
+    "Secondary": {
+      "Forearms": 10,
+      "Traps": 10,
+      "Obliques": 5,
+      "Rectus Abdominis": 5
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Row"
+  },
+  "cable_wide_grip_neutral_lat_pulldown": {
+    "Primary": {
+      "Lats": 50,
+      "Biceps": 15,
+      "Rear Delts": 15
+    },
+    "Secondary": {
+      "Traps": 10,
+      "Forearms": 10,
+      "Rectus Abdominis": 5,
+      "Obliques": 5
+    },
+    "type": "Weighted",
+    "name": "Cable Wide Grip Neutral Lat Pulldown"
+  },
+  "captain_seat_leg_raise": {
+    "Primary": {
+      "Rectus Abdominis": 50,
+      "Obliques": 20,
+      "Hip Flexors": 30
+    },
+    "Secondary": {},
+    "type": "Bodyweight",
+    "name": "Captain Seat Leg Raise"
+  },
+  "dead_hang": {
+    "Primary": {
+      "Forearms": 60
+    },
+    "Secondary": {
+      "Lats": 30,
+      "Front Delts": 5,
+      "Side Delts": 5,
+      "Rear Delts": 5
+    },
+    "type": "Timed",
+    "name": "Dead Hang"
+  },
+  "farmer_walk": {
+    "Primary": {
+      "Forearms": 40,
+      "Traps": 20,
+      "Rectus Abdominis": 10,
+      "Obliques": 10
+    },
+    "Secondary": {
+      "Quads": 10,
+      "Glutes": 10
+    },
+    "type": "Distance",
+    "name": "Farmer Walk"
+  },
+  "smith_machine_bench_press": {
+    "Primary": {
+      "Chest": 60
+    },
+    "Secondary": {
+      "Front Delts": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Smith Machine Bench Press"
+  },
+  "smith_machine_incline_bench_press": {
+    "Primary": {
+      "Upper Chest": 60
+    },
+    "Secondary": {
+      "Front Delts": 20,
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Smith Machine Incline Bench Press"
+  },
+  "stationary_bike": {
+    "Primary": {
+      "Quads": 40,
+      "Hamstrings": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Calves": 10,
+      "Rectus Abdominis": 10
+    },
+    "type": "Timed",
+    "name": "Stationary Bike"
+  },
+  "weighted_pull_up": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Weighted",
+    "name": "Weighted Pull Up"
+  },
+  "wide_grip_overhand_row": {
+    "Primary": {
+      "Rhomboids": 50,
+      "Traps": 30
+    },
+    "Secondary": {
+      "Biceps": 10,
+      "Lats": 10
+    },
+    "type": "Weighted",
+    "name": "Wide Grip Overhand Row"
+  },
+  "stair_master": {
+    "Primary": {
+      "Quads": 40,
+      "Glutes": 30,
+      "Hamstrings": 20
+    },
+    "Secondary": {
+      "Calves": 10,
+      "Rectus Abdominis": 3
+    },
+    "type": "Timed",
+    "name": "Stair Master"
+  },
+  "assisted_pull_up": {
+    "Primary": {
+      "Lats": 50
+    },
+    "Secondary": {
+      "Biceps": 25,
+      "Rhomboids": 15,
+      "Traps": 10
+    },
+    "type": "Assisted",
+    "name": "Assisted Pull Up"
+  },
+  "machine_hip_abductor": {
+    "Primary": {
+      "Glutes": 80
+    },
+    "Secondary": {
+      "Hip Flexors": 20
+    },
+    "type": "Machine",
+    "name": "Machine Hip Abductor"
+  },
+  "crunch": {
+    "Primary": {
+      "Rectus Abdominis": 80
+    },
+    "Secondary": {
+      "Obliques": 20
+    },
+    "type": "Bodyweight",
+    "name": "Crunch"
+  },
+  "dumbbell_seated_arnold_press": {
+    "Primary": {
+      "Front Delts": 40,
+      "Side Delts": 40
+    },
+    "Secondary": {
+      "Triceps": 20
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Seated Arnold Press"
+  },
+  "dumbbell_seated_reverse_concentration_curl": {
+    "Primary": {
+      "Biceps": 60,
+      "Brachioradialis": 40
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Dumbbell Seated Reverse Concentration Curl"
+  },
+  "running": {
+    "Primary": {
+      "Quads": 30,
+      "Hamstrings": 25,
+      "Glutes": 25
+    },
+    "Secondary": {
+      "Calves": 20
+    },
+    "type": "Timed",
+    "name": "Running"
+  },
+  "walking": {
+    "Primary": {
+      "Glutes": 30,
+      "Quads": 30
+    },
+    "Secondary": {
+      "Calves": 20,
+      "Hamstrings": 20
+    },
+    "type": "Timed",
+    "name": "Walking"
+  },
+  "jumping_jack": {
+    "Primary": {
+      "Glutes": 30,
+      "Quads": 30
+    },
+    "Secondary": {
+      "Calves": 20,
+      "Side Delts": 20
+    },
+    "type": "Timed",
+    "name": "Jumping Jack"
+  },
+  "plank": {
+    "Primary": {
+      "Abdominis": 60
+    },
+    "Secondary": {
+      "Obliques": 20,
+      "Front Delts": 15,
+      "Glutes": 5
+    },
+    "type": "Bodyweight",
+    "name": "Plank"
+  },
+  "reverse_plank": {
+    "Primary": {
+      "Glutes": 40,
+      "Hamstrings": 30
+    },
+    "Secondary": {
+      "Lower Back": 15,
+      "Front Delts": 10,
+      "Triceps": 5
+    },
+    "type": "Bodyweight",
+    "name": "Reverse Plank"
+  },
+  "side_plank": {
+    "Primary": {
+      "Obliques": 60
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Side Delts": 20
+    },
+    "type": "Bodyweight",
+    "name": "Side Plank"
+  },
+  "cable_one_arm_preacher_curl": {
+    "Primary": {
+      "Biceps": 50,
+      "Brachialis": 35
+    },
+    "Secondary": {
+      "Forearms": 15
+    },
+    "type": "Weighted",
+    "name": "Cable One Arm Preacher Curl"
+  },
+  "handstand_push_up": {
+    "Primary": {
+      "Front Delts": 60,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Side Delts": 5,
+      "Traps": 5
+    },
+    "type": "Bodyweight",
+    "name": "Handstand Push Up"
+  },
+  "lever_seated_squat": {
+    "Primary": {
+      "Quads": 55,
+      "Glutes": 35
+    },
+    "Secondary": {
+      "Hamstrings": 10
+    },
+    "type": "Weighted",
+    "name": "Lever Seated Squat"
+  },
+  "wall_handstand": {
+    "Primary": {
+      "Front Delts": 50,
+      "Triceps": 30
+    },
+    "Secondary": {
+      "Side Delts": 10,
+      "Traps": 10
+    },
+    "type": "Bodyweight",
+    "name": "Wall Handstand"
+  },
+  "weighted_wall_squat": {
+    "Primary": {
+      "Quads": 60,
+      "Glutes": 25
+    },
+    "Secondary": {
+      "Hamstrings": 10,
+      "Core": 5
+    },
+    "type": "Weighted",
+    "name": "Weighted Wall Squat"
+  },
+  "cable_close_grip_curl": {
+    "Primary": {
+      "Biceps": 80
+    },
+    "Secondary": {
+      "Forearms": 20
+    },
+    "type": "Weighted",
+    "name": "Cable Close Grip Curl"
+  },
+  "bent_over_single_arm_rear_delt_fly": {
+    "Primary": {
+      "Rear Delts": 80
+    },
+    "Secondary": {
+      "Rhomboids": 20
+    },
+    "type": "Weighted",
+    "name": "Bent Over Single Arm Rear Delt Fly"
+  },
+  "butterfly_pec_deck": {
+    "Primary": {
+      "Chest": 85
+    },
+    "Secondary": {
+      "Front Delts": 15
+    },
+    "type": "Weighted",
+    "name": "Butterfly Pec Deck"
+  },
+  "chest_supported_two_arm_rear_delt_fly": {
+    "Primary": {
+      "Rear Delts": 75
+    },
+    "Secondary": {
+      "Rhomboids": 25
+    },
+    "type": "Weighted",
+    "name": "Chest Supported Two Arm Rear Delt Fly"
+  },
+  "decline_pike_pushup": {
+    "Primary": {
+      "Front Delts": 65
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Upper Chest": 15
+    },
+    "type": "Bodyweight",
+    "name": "Decline Pike Push-Up"
+  },
+  "dumbbell_standing_single_leg_calf_raise": {
+    "Primary": {
+      "Calves": 90
+    },
+    "Secondary": {
+      "Glutes": 10
+    },
+    "type": "Weighted",
+    "name": "Dumbbell Standing Single Leg Calf Raise"
+  },
+  "kneeling_single_arm_cable_rear_delt_row": {
+    "Primary": {
+      "Rear Delts": 60
+    },
+    "Secondary": {
+      "Rhomboids": 40
+    },
+    "type": "Weighted",
+    "name": "Kneeling Single Arm Cable Rear Delt Row"
+  },
+  "pike_pushup": {
+    "Primary": {
+      "Front Delts": 70
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Upper Chest": 10
+    },
+    "type": "Bodyweight",
+    "name": "Pike Push-Up"
+  },
+  "standing_single_arm_cable_rear_delt_fly": {
+    "Primary": {
+      "Rear Delts": 80
+    },
+    "Secondary": {
+      "Rhomboids": 20
+    },
+    "type": "Weighted",
+    "name": "Standing Single Arm Cable Rear Delt Fly"
+  },
+  "standing_single_arm_cable_rear_delt_row": {
+    "Primary": {
+      "Rear Delts": 55
+    },
+    "Secondary": {
+      "Rhomboids": 45
+    },
+    "type": "Weighted",
+    "name": "Standing Single Arm Cable Rear Delt Row"
+  },
+  "standing_two_arm_cable_rear_delt_fly": {
+    "Primary": {
+      "Rear Delts": 75
+    },
+    "Secondary": {
+      "Rhomboids": 25
+    },
+    "type": "Weighted",
+    "name": "Standing Two Arm Cable Rear Delt Fly"
+  },
+  "cable_single_arm_wrist_curl": {
+    "Primary": {
+      "Forearms": 100
+    },
+    "Secondary": {},
+    "type": "Weighted",
+    "name": "Cable Single Arm Wrist Curl"
+  },
+  "weighted_decline_crunch": {
+    "Primary": {
+      "Abdominals": 85
+    },
+    "Secondary": {
+      "Hip Flexors": 15
+    },
+    "type": "Weighted",
+    "name": "Weighted Decline Crunch"
+  },
+  "machine_hip_adduction": {
+    "Primary": {
+      "Adductors": 80
+    },
+    "Secondary": {
+      "Hip Flexors": 15,
+      "Glutes": 5
+    },
+    "type": "Weighted",
+    "name": "Machine Hip Adduction"
+  },
+  "bench_side_bend": {
+    "Primary": {
+      "Obliques": 85
+    },
+    "Secondary": {
+      "Hip Flexors": 15
+    },
+    "type": "Weighted",
+    "name": "Bench Side Bend"
+  },
+  "cable_side_bend": {
+    "Primary": {
+      "Obliques": 90
+    },
+    "Secondary": {
+      "Hip Flexors": 10
+    },
+    "type": "Weighted",
+    "name": "Cable Side Bend"
+  },
+  "side_bend": {
+    "Primary": {
+      "Obliques": 90
+    },
+    "Secondary": {
+      "Hip Flexors": 10
+    },
+    "type": "Bodyweight",
+    "name": "Side Bend"
+  },
+  "cable_overhead_triceps_extension_rope": {
+    "Primary": {
+      "Triceps": 70
+    },
+    "Secondary": {
+      "Front Delts": 30
+    },
+    "type": "Weighted",
+    "name": "Cable Overhead Triceps Extension Rope"
+  },
+  "lat_pullover_rope": {
+    "Primary": {
+      "Lats": 75
+    },
+    "Secondary": {
+      "Triceps": 15,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "name": "Lat Pullover Rope"
+  },
+  "handstand_hold": {
+    "Primary": {
+      "Front Delts": 40,
+      "Side Delts": 25
+    },
+    "Secondary": {
+      "Triceps": 20,
+      "Abdominals": 15
+    },
+    "type": "Bodyweight",
+    "name": "Handstand Hold"
+  },
+  "sled_lying_leg_press": {
+    "name": "Sled Lying Leg Press",
+    "Primary": {
+      "Quads": 70
+    },
+    "Secondary": {
+      "Glutes": 20,
+      "Hamstrings": 10
+    },
+    "type": "Weighted"
+  },
+  "dumbbell_bent_over_reverse_fly": {
+    "name": "Dumbbell Bent Over Reverse Fly",
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Rhomboids": 10
+    },
+    "type": "Weighted"
+  },
+  "barbell_reverse_fly": {
+    "name": "Barbell Reverse Fly",
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 30
+    },
+    "type": "Weighted"
+  },
+  "cable_seated_reverse_fly": {
+    "name": "Cable Seated Reverse Fly",
+    "Primary": {
+      "Rear Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Rhomboids": 10
+    },
+    "type": "Weighted"
+  },
+  "dumbbell_seated_neutral_flexors_wrist_curl": {
+    "name": "Dumbbell Seated Neutral Flexors Wrist Curl",
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted"
+  },
+  "cable_flexors_wrist_curl": {
+    "name": "Cable Flexors Wrist Curl",
+    "Primary": {
+      "Forearms (flexors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted"
+  },
+  "dumbbell_over_bench_one_arm_reverse_extensors_wrist_curl": {
+    "name": "Dumbbell Over Bench One Arm Reverse Extensors Wrist Curl",
+    "Primary": {
+      "Forearms (extensors)": 90
+    },
+    "Secondary": {
+      "Grip Strength": 10
+    },
+    "type": "Weighted"
+  },
+  "dumbbell_standing_lateral_raise": {
+    "name": "Dumbbell Standing Lateral Raise",
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted"
+  },
+  "machine_deadlift": {
+    "name": "Machine Deadlift",
+    "Primary": {
+      "Hamstrings": 40,
+      "Quads": 30,
+      "Glutes": 20
+    },
+    "Secondary": {
+      "Erectors": 10
+    },
+    "type": "Weighted"
+  }
+}

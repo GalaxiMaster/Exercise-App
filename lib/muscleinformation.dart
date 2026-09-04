@@ -6348,15 +6348,15 @@ Map<String, Map<String, dynamic>> exerciseMuscles = {
         "type": "Weighted"
     },
     "Handstand Hold": {
-        "Primary": {
-            "Front Delts": 40,
-            "Side Delts": 25
-        },
-        "Secondary": {
-            "Triceps": 20,
-            "Abdominals": 15
-        },
-        "type": "Bodyweight"
+      "Primary": {
+          "Front Delts": 40,
+          "Side Delts": 25
+      },
+      "Secondary": {
+          "Triceps": 20,
+          "Abdominals": 15
+      },
+      "type": "Bodyweight"
     },
 
 };
