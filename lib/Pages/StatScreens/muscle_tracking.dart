@@ -1,3 +1,4 @@
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/services.dart';
@@ -420,6 +421,7 @@ class WeeklyProgressChart extends ConsumerWidget {
 final weeklyMuscleDataProvider = Provider<Map>((ref) {
   final dataAsync = ref.watch(workoutDataProvider);
   final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  Map exercises = ref.watch(exercisesProvider);
 
   return dataAsync.maybeWhen(
     data: (data) {
@@ -437,7 +439,7 @@ final weeklyMuscleDataProvider = Provider<Map>((ref) {
           if (isCustom){
             exerciseData = customExercisesData[exercise];
           } else {
-            exerciseData = exerciseMuscles[exercise] ?? {};
+            exerciseData = exercises[exercise] ?? {};
           }
           String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
 
@@ -565,6 +567,7 @@ class SpeedometerPainter extends CustomPainter {
 final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);
   final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  Map exercises = ref.watch(exercisesProvider);
 
   return rawDataAsync.whenData((data) {
     Map groupedData = {}; // muscleData but grouped into their higher level muscle group
@@ -583,7 +586,7 @@ final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
         if (isCustom){
           exerciseData = customExercisesData[exercise];
         } else {
-          exerciseData = exerciseMuscles[exercise] ?? {};
+          exerciseData = exercises[exercise] ?? {};
         }
 
         if (exerciseData.isEmpty) continue;

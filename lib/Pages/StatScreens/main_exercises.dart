@@ -1,6 +1,7 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
@@ -237,6 +238,8 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
   final filters = ref.watch(chartFilterProvider);
 
   return rawDataAsync.whenData((data) {
+    Map exercises = ref.watch(exercisesProvider);
+
     Map exerciseMap = {};
     for (var day in data.keys) {
       Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
@@ -244,11 +247,11 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
       if (diff <= filters.range || filters.range == -1) {
         for (var exercise in data[day]['sets'].keys) {
           for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])) {
-            if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) ||
+            if ((exercises[exercise]?['Primary'].containsKey(muscle) ?? false) ||
                 filters.muscleSelected == 'All Muscles') {
               List sets = data[day]['sets'][exercise];
               String target = 'weight';
-              (exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
+              (exercises[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
               sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
               exerciseMap[exercise] = (exerciseMap[exercise] ?? 0) + 1;
               break;

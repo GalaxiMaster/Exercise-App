@@ -1,7 +1,7 @@
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -72,6 +72,8 @@ class _DayScreenState extends ConsumerState<DayScreen> {
     );
   }
   Widget dayBox(MapEntry day){
+    Map exercises = ref.watch(exercisesProvider);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
       child: Container(
@@ -175,7 +177,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                  child: Text(getBestSet(day.value['sets'][day.value['sets'].keys.toList()[i]], exerciseMuscles[day.value['sets'].keys.toList()[i]]?['type'] ?? 'Weighted')),
+                  child: Text(getBestSet(day.value['sets'][day.value['sets'].keys.toList()[i]], exercises[day.value['sets'].keys.toList()[i]]?['type'] ?? 'Weighted')),
                 )
               ],
             ),

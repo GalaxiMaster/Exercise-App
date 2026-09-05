@@ -3,6 +3,7 @@ import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/importing_page.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/Pages/SettingsPages/workout_settings.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -320,10 +321,11 @@ void validateExercises(WidgetRef ref) {
 }
 void moveExercises(BuildContext context, WidgetRef ref) async{
   Map data = ref.read(workoutDataProvider).value ?? {};
+  Map exercises = ref.watch(exercisesProvider);
   List? problemExercises = [];
   for (String day in data.keys){
     for (String exercise in data[day]['sets'].keys){
-      if (exerciseMuscles[exercise] == null && !problemExercises.contains(exercise)){
+      if (exercises[exercise] == null && !problemExercises.contains(exercise)){
         problemExercises.add(exercise);
       }
     }

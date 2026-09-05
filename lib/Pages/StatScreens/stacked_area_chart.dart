@@ -1,6 +1,6 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +51,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<
   final filters = ref.watch(chartFilterProvider);
   final rawDataAsync = ref.watch(workoutDataProvider);
   final customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  Map exercises = ref.watch(exercisesProvider);
 
   return rawDataAsync.whenData((data) {
     final Map<DateTime, Map<String, double>> byDate = {};
@@ -65,7 +66,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<
 
       for (final exercise in data[day]['sets'].keys) {
         final bool isCustom = customExercisesData.containsKey(exercise);
-        final exerciseData = isCustom ? customExercisesData[exercise] : exerciseMuscles[exercise];
+        final exerciseData = isCustom ? customExercisesData[exercise] : exercises[exercise];
 
         if (exerciseData == null) continue;
 

@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/startup_page.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(fontFamily: 'Poppins'),
-      home: const HomePage(),
+      home: const AppStartup(child: HomePage()),
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
         colorScheme: const ColorScheme.dark(

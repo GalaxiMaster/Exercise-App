@@ -1,6 +1,6 @@
 import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +29,8 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
 
   @override
   Widget build(BuildContext context) {
+    Map exercises = ref.watch(exercisesProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -192,7 +194,7 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
                     for (String exercise in result){
                       if (!sets.containsKey(exercise)) {
                         sets[exercise] = [
-                          {'weight': exerciseMuscles[exercise]?['type'] == 'Bodyweight' ? '1' : '', 'reps': exerciseMuscles[exercise]?['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'} // TODo fix up to account for cusotm exercises
+                          {'weight': exercises[exercise]?['type'] == 'Bodyweight' ? '1' : '', 'reps': exercises[exercise]?['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'} // TODo fix up to account for cusotm exercises
                         ]; // Initialize sets list for the new exercise
                       }
                     }

@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -144,6 +145,7 @@ class _StrengthGradiantState extends ConsumerState<StrengthGradiant> {
 final strengthGradientProvider = Provider.autoDispose.family<AsyncValue<List>, GradientCalcType>((ref, gradientCalcType) {
   final rawDataAsync = ref.watch(workoutDataProvider);
   final filters = ref.watch(chartFilterProvider);
+  Map exercises = ref.watch(exercisesProvider);
 
   return rawDataAsync.whenData((data) {
     Map exercisesMap = {};
@@ -153,11 +155,11 @@ final strengthGradientProvider = Provider.autoDispose.family<AsyncValue<List>, G
       if (diff <= filters.range || filters.range == -1){
         for (String exercise in data[day]['sets'].keys){
           for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])){
-            if ((exerciseMuscles[exercise]?['Primary'].containsKey(muscle) ?? false) || filters.muscleSelected == 'All Muscles'){ //  || (exerciseMuscles[exercise]?['Secondary'].containsKey(muscle) ?? false)
+            if ((exercises[exercise]?['Primary'].containsKey(muscle) ?? false) || filters.muscleSelected == 'All Muscles'){ //  || (exercises[exercise]?['Secondary'].containsKey(muscle) ?? false)
               // for (Map set in data[day]['sets'][exercise]){
               List sets = data[day]['sets'][exercise];
               String target = 'weight';
-              (exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
+              (exercises[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
               sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
               Map set = sets[sets.length-1];
               if (!exercisesMap.containsKey(exercise)){
@@ -178,7 +180,7 @@ final strengthGradientProvider = Provider.autoDispose.family<AsyncValue<List>, G
         List<num> y = [];
         exercisesMap[exercise] = exercisesMap[exercise].reversed.toList();
         for (var pair in exercisesMap[exercise]!) {
-          y.add((exerciseMuscles[exercise]?['type'] ?? 'Weighted') == 'Weighted' ?  double.parse(pair['weight'].toString()) : double.parse(pair['reps'].toString())); // x value is the first element
+          y.add((exercises[exercise]?['type'] ?? 'Weighted') == 'Weighted' ?  double.parse(pair['weight'].toString()) : double.parse(pair['reps'].toString())); // x value is the first element
         }
         x = List.generate(y.length, (index) => index);
 

@@ -5,8 +5,8 @@ import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -153,8 +153,11 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   @override
   void initState() {
     super.initState();
+
+    Map exercises = ref.watch(exercisesProvider);
+
     isBodyWeight = widget.exercises.every((exercise) {
-      return (exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
+      return (exercises[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
     });
 
     if (isBodyWeight) {
@@ -172,6 +175,8 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   }
 
   Widget exerciseTile(String exercise, int index, num increase, bool isBodyWeight, Map heaviestWeight, Map heaviestVolume) {
+      Map exercises = ref.watch(exercisesProvider);
+
       return Padding(
         padding: const EdgeInsets.all(8),
         child: Container(
@@ -194,11 +199,11 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                 const Divider(
                   thickness: .2,
                 ),
-                if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
+                if ((exercises[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
                 Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
-                if ((exerciseMuscles[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
+                if ((exercises[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
                 Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
-                if ((exerciseMuscles[exercise]?['type'] ?? 'weighted') == 'Bodyweight')
+                if ((exercises[exercise]?['type'] ?? 'weighted') == 'Bodyweight')
                 Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
                 Text('Increase: $increase%')
               ],
@@ -748,6 +753,7 @@ class _InfoBodyState extends ConsumerState<InfoBody> {
     Map primaryMuscles = {};
     Map secondaryMuscles = {};
     final Map customExercisesData = await ref.read(customExercisesProvider.future);
+    Map exercises = ref.watch(exercisesProvider);
 
     for (String exercise in widget.exercises){
       bool isCustom = customExercisesData.containsKey(exercise);
@@ -756,7 +762,7 @@ class _InfoBodyState extends ConsumerState<InfoBody> {
       if (isCustom && customExercisesData.containsKey(exercise)){
         muscleData = customExercisesData[exercise];
       } else {
-        muscleData = exerciseMuscles[exercise] ?? {};
+        muscleData = exercises[exercise] ?? {};
       }
 
       if (muscleData.isEmpty) continue;
@@ -1054,6 +1060,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
     // Using 'watch' ensures this provider recalculates when data changes.
     final customExercisesData = await ref.watch(customExercisesProvider.future);
     final workoutAsyncValue = ref.watch(workoutDataProvider);
+    Map exercises = ref.watch(exercisesProvider);
 
     // 2. Handle the AsyncValue of the workout provider
     return workoutAsyncValue.maybeWhen(
@@ -1079,7 +1086,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
               // Logic improvement: Handle missing exercise definitions gracefully
               final String type = isCustom 
                   ? customExercisesData[exercise]['type'] 
-                  : (exerciseMuscles[exercise]?['type'] ?? 'Unknown');
+                  : (exercises[exercise]?['type'] ?? 'Unknown');
 
               history[day]!['data']!.add(
                 ExerciseHistoryNode(

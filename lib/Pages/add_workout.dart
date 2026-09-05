@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:exercise_app/Pages/confirm_workout.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/settings.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
@@ -103,8 +103,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   void repopulateExerciseTypeAccess() {
     final customExercises = ref.read(customExercisesProvider).value ?? {};
+    final exercises = ref.read(exercisesProvider);
     for (final exercise in sets.keys) {
-      final type = exerciseMuscles[exercise]?['type']
+      final type = exercises[exercise]?.type
           ?? customExercises[exercise]?['type']
           ?? 'Weighted';
       exerciseTypeAccess[exercise] = type;
@@ -211,6 +212,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     for (final exercise in exerciseKeys) {
       _ensureExerciseFocusNodesAndControllers(exercise);
     }
+    
+    Map exercises = ref.watch(exercisesProvider);
 
     return Scaffold(
       appBar: myAppBar(
@@ -255,7 +258,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     final customExercises = customExerciseAsync.value ?? {};
                     for (final exercise in result) {
                       if (!sets.containsKey(exercise)) {
-                        final type = exerciseMuscles[exercise]?['type']
+                        final type = exercises[exercise]?['type']
                             ?? customExercises[exercise]?['type']
                             ?? 'Weighted';
                         sets[exercise] = [

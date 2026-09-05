@@ -1,7 +1,7 @@
 import 'package:exercise_app/Pages/add_custom_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +36,9 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   @override
   void initState() {
     super.initState();
-    exerciseList = exerciseMuscles.keys.toList()..sort();
+
+    Map exercises = ref.watch(exercisesProvider);
+    exerciseList = exercises.keys.toList()..sort();
     checkAssets();
   }
 
@@ -162,6 +164,12 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
     );
   }
 
+  String getMuscles(String exercise){
+    Map exercises = ref.watch(exercisesProvider);
+    var muscle = exercises[exercise]?['Primary']?.keys.toList()[0];
+    return muscle ?? 'No muscle';
+  }
+  
   @override
   Widget build(BuildContext context) {
     final customExercisesAsync = ref.read(customExercisesProvider);
@@ -326,11 +334,6 @@ class SearchBar extends StatelessWidget {
       ),
     );
   }
-}
-
-String getMuscles(String exercise){
-  var muscle = exerciseMuscles[exercise]?['Primary']?.keys.toList()[0];
-  return muscle ?? 'No muscle';
 }
 
 bool containsAllCharacters(String exercise, String query) {

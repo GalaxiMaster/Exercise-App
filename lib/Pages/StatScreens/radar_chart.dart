@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/utils.dart';
@@ -319,6 +320,8 @@ class PercentageDataRecords {
 }
 
 PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
+  Map exercises = ref.watch(exercisesProvider);
+
   Map<int, Map<String, double>> muscleData = {0: {}, 1: {}};
   final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
 
@@ -341,7 +344,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
         } else {
-          exerciseData = exerciseMuscles[exercise] ?? {};
+          exerciseData = exercises[exercise] ?? {};
         }
         
         if (exerciseData.isEmpty) continue;

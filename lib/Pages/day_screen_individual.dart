@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
@@ -50,15 +51,19 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
         body: const Center(child: CircularProgressIndicator()),
       );
     }
+
+    Map exercises = ref.watch(exercisesProvider);
+
+
     String dateStr = dayData['stats']['startTime'];
     String endTimeStr = dayData['stats']['endTime'];
     Duration length = DateTime.parse(endTimeStr).difference(DateTime.parse(dateStr));
     double volume = 0;
     int sets = 0;
     int prs = 0;
-    int exercises = 0;
+    int exerciseCount = 0;
     for (String exercise in dayData['sets'].keys){
-      exercises++;
+      exerciseCount++;
       for (Map set in dayData['sets'][exercise]){
         sets++;
         volume += double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs();
@@ -106,7 +111,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                   infoBox('Volume', '${volume.toStringAsFixed(2)}kg'),
                   infoBox("PR's", '$prs'),
                   infoBox('Sets', '$sets'),
-                  infoBox('Exercises', '$exercises'),
+                  infoBox('Exercises', '$exerciseCount'),
                 ],
               ),
             ),
@@ -238,7 +243,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                                   Text(set['type'].toLowerCase() == 'normal' ? (index + 1).toString() : set['type'][0], style: const TextStyle(fontSize: 24),),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 25),
-                                    child: Text((exerciseMuscles[exerciseName]?['type'] ?? 'Weighted') != 'Bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
+                                    child: Text((exercises[exerciseName]?['type'] ?? 'Weighted') != 'Bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
                                   ),
                                 ],
                               ),
@@ -345,6 +350,8 @@ Map sortMapByValue<K, V extends Comparable>(Map map, {bool descending = false}) 
 }
 final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, data) {
   final Map customExercisesData = ref.watch(customExercisesProvider).value ?? {};
+  Map exercises = ref.watch(exercisesProvider);
+
   Map percentages = {};
   Map musclegroups = {};
   for (String exercise in data['sets'].keys){
@@ -354,7 +361,7 @@ final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, dat
     if (isCustom && customExercisesData.containsKey(exercise)){
       exerciseData = customExercisesData[exercise];
     } else {
-      exerciseData = exerciseMuscles[exercise] ?? {};
+      exerciseData = exercises[exercise] ?? {};
     }
 
     if (exerciseData.isEmpty) continue;
