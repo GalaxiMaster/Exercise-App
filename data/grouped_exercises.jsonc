@@ -40,7 +40,8 @@
         "suspender": "suspender_arm_curl",
         "cable_close_grip": "cable_close_grip_curl",
         "dumbbell_seated_reverse_concentration": "dumbbell_seated_reverse_concentration_curl", // ?? distinct split (Biceps60/Brachioradialis40) vs standard concentration curl entries, kept separate
-        "standing_kettlebell": "weighted_standing_kettlebell_curl"
+        "standing_kettlebell": "weighted_standing_kettlebell_curl",
+        "bayesian": "bayesian_curl"
     },
     "Good Morning": {
         "barbell": "barbell_good_morning",
@@ -78,7 +79,6 @@
     },
     "Leg Press": {
         "machine_seated": "lever_seated_leg_press",
-        "sled_lying": "sled_lying_leg_press",
         "machine_horizontal_one_leg": "lever_horizontal_one_leg_press",
         "sled_one_leg": "sled_one_leg_press",
         "lever_seated_horizontal": "lever_seated_horizontal_leg_press",
@@ -92,9 +92,7 @@
         "cable_one_arm": "cable_one_arm_reverse_fly",
         "cable_incline_cross": "cable_incline_cross_reverse_fly",
         "dumbbell_bent_over": "dumbbell_bent_over_reverse_fly",
-        "barbell": "barbell_reverse_fly",
         "dumbbell_incline_t_raise": "dumbbell_incline_t_raise_reverse_fly",
-        "cable_seated": "cable_seated_reverse_fly",
         "dumbbell": "dumbbell_reverse_fly",
         "dumbbell_rotation": "dumbbell_rotation_reverse_fly",
         "cable_seated_chest_support": "cable_seated_rear_delt_fly_with_chest_support",
@@ -195,7 +193,6 @@
         "dumbbell_full_can": "dumbbell_full_can_lateral_raise",
         "dumbbell_seated": "dumbbell_seated_lateral_raise",
         "dumbbell_standing": "dumbbell_standing_lateral_raise",
-        "dumbbell": "dumbbell_lateral_raise",
         "dumbbell_one_arm": "dumbbell_one_arm_lateral_raise",
         "cable_two_arm": "cable_two_arm_lateral_raise",
         "cable_single_arm": "cable_single_arm_lateral_raise",
@@ -313,7 +310,7 @@
     "Deadlift": {
         "trap_bar": "trap_bar_deadlift",
         "dumbbell": "dumbbell_deadlift",
-        "machine": "machine_deadlift",
+        "machine": "lever_deadlift",
         "barbell_sumo": "barbell_sumo_deadlift",
         "cable": "cable_deadlift",
         "barbell": "barbell_deadlift",
@@ -369,7 +366,6 @@
         "dumbbell_one_arm": "dumbbell_one_arm_reverse_preacher_curl",
         "barbell": "barbell_reverse_preacher_curl",
         "dumbbell": "dumbbell_reverse_preacher_curl",
-        // --- batch 4 additions ---
         "ez_barbell": "ez_barbell_reverse_grip_preacher_curl",
         "cable": "cable_reverse_preacher_curl"
     },
@@ -513,7 +509,6 @@
         "barbell_incline": "barbell_incline_triceps_extension_skull_crusher",
         "ez_barbell_california": "ez_bar_california_skullcrusher",
         "barbell_lying": "barbell_lying_triceps_extension_skull_crusher",
-        // --- batch 4 additions ---
         "barbell_reverse_grip": "barbell_reverse_grip_skullcrusher"
     },
     "Thruster": {
@@ -525,7 +520,6 @@
         "finger": "finger_push_up",
         "bodyweight_decline": "decline_push_up",
         "weighted": "push_up", // ?? see BATCH 6 header note — likely key collision with the genuinely distinct "Weighted Push Up" entry below
-        // --- batch 4 additions ---
         "diamond": "diamond_push_up",
         "diamond_knees": "diamond_push_up_on_knees",
         "elevated": "elevanted_push_up", // note: source spelling "Elevanted" kept in value, likely a typo of "Elevated"

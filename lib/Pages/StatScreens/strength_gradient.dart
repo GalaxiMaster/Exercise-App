@@ -155,7 +155,7 @@ final strengthGradientProvider = Provider.autoDispose.family<AsyncValue<List>, G
       if (diff <= filters.range || filters.range == -1){
         for (String exercise in data[day]['sets'].keys){
           for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])){
-            if ((exercises[exercise]?['Primary'].containsKey(muscle) ?? false) || filters.muscleSelected == 'All Muscles'){ //  || (exercises[exercise]?['Secondary'].containsKey(muscle) ?? false)
+            if ((exercises[exercise]?.primary.containsKey(muscle) ?? false) || filters.muscleSelected == 'All Muscles'){ //  || (exercises[exercise]?['Secondary'].containsKey(muscle) ?? false)
               // for (Map set in data[day]['sets'][exercise]){
               List sets = data[day]['sets'][exercise];
               String target = 'weight';

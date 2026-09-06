@@ -46,6 +46,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - data/
     - assets/Exercises/
     - .env

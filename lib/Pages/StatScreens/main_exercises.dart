@@ -247,7 +247,7 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
       if (diff <= filters.range || filters.range == -1) {
         for (var exercise in data[day]['sets'].keys) {
           for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])) {
-            if ((exercises[exercise]?['Primary'].containsKey(muscle) ?? false) ||
+            if ((exercises[exercise]?.primary.containsKey(muscle) ?? false) ||
                 filters.muscleSelected == 'All Muscles') {
               List sets = data[day]['sets'][exercise];
               String target = 'weight';

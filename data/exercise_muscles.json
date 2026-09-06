@@ -255,14 +255,15 @@
   },
   "barbell_thruster": {
     "Primary": {
-      "Quads": 25,
-      "Front Delts": 15,
+      "Quads": 30,
+      "Glutes": 20,
+      "Front Delts": 20,
       "Side Delts": 10
     },
     "Secondary": {
-      "Glutes": 25,
-      "Hamstrings": 12.5,
-      "Triceps": 12.5
+      "Triceps": 10,
+      "Hamstrings": 6,
+      "Abs": 4
     },
     "type": "Weighted",
     "name": "Barbell Thruster"
@@ -514,6 +515,7 @@
     "Primary": {
       "Calves": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Dumbbell Single Leg Calf Raise"
   },
@@ -2110,17 +2112,6 @@
     "type": "Weighted",
     "name": "Barbell Rear Delt Raise"
   },
-  "dumbbell_lateral_raise": {
-    "Primary": {
-      "Side Delts": 70
-    },
-    "Secondary": {
-      "Traps": 20,
-      "Front Delts": 10
-    },
-    "type": "Weighted",
-    "name": "Dumbbell Lateral Raise"
-  },
   "dumbbell_alternate_arm_blaster_biceps_curl": {
     "Primary": {
       "Biceps": 80
@@ -2228,11 +2219,9 @@
   },
   "lever_leg_extension_plate_loaded": {
     "Primary": {
-      "Quads": 90
+      "Quads": 100
     },
-    "Secondary": {
-      "Knee Joint Stability": 10
-    },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Lever Leg Extension Plate Loaded"
   },
@@ -2404,6 +2393,7 @@
     "Primary": {
       "Calves": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Lever Standing Calf Raise"
   },
@@ -2894,6 +2884,7 @@
     "Primary": {
       "Calves": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Lever Seated Calf Raise"
   },
@@ -3100,6 +3091,7 @@
     "Primary": {
       "Calves": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Dumbbell Standing Calf Raise"
   },
@@ -3107,6 +3099,7 @@
     "Primary": {
       "Calves": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Barbell Standing Calf Raise"
   },
@@ -5660,6 +5653,16 @@
     "type": "Weighted",
     "name": "Cable One Arm Biceps Curl"
   },
+  "bayesian_curl": {
+    "Primary": {
+      "Biceps": 70
+    },
+    "Secondary": {
+      "Forearms": 30
+    },
+    "type": "Weighted",
+    "name": "Bayesian Curl"
+  },
   "cable_overhead_single_arm_triceps_extension": {
     "Primary": {
       "Triceps": 70
@@ -5824,6 +5827,7 @@
     "Primary": {
       "Forearms": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Finger Curls"
   },
@@ -5886,6 +5890,7 @@
     "Primary": {
       "Quads": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Lever Leg Extension"
   },
@@ -5963,6 +5968,7 @@
     "Primary": {
       "Quads": 100
     },
+    "Secondary": {},
     "type": "Weighted",
     "name": "Single Leg Leg Extension"
   },
@@ -6838,40 +6844,8 @@
     "type": "Bodyweight",
     "name": "Handstand Hold"
   },
-  "sled_lying_leg_press": {
-    "name": "Sled Lying Leg Press",
-    "Primary": {
-      "Quads": 70
-    },
-    "Secondary": {
-      "Glutes": 20,
-      "Hamstrings": 10
-    },
-    "type": "Weighted"
-  },
   "dumbbell_bent_over_reverse_fly": {
     "name": "Dumbbell Bent Over Reverse Fly",
-    "Primary": {
-      "Rear Delts": 70
-    },
-    "Secondary": {
-      "Traps": 20,
-      "Rhomboids": 10
-    },
-    "type": "Weighted"
-  },
-  "barbell_reverse_fly": {
-    "name": "Barbell Reverse Fly",
-    "Primary": {
-      "Rear Delts": 70
-    },
-    "Secondary": {
-      "Traps": 30
-    },
-    "type": "Weighted"
-  },
-  "cable_seated_reverse_fly": {
-    "name": "Cable Seated Reverse Fly",
     "Primary": {
       "Rear Delts": 70
     },
@@ -6919,18 +6893,6 @@
     "Secondary": {
       "Traps": 20,
       "Front Delts": 10
-    },
-    "type": "Weighted"
-  },
-  "machine_deadlift": {
-    "name": "Machine Deadlift",
-    "Primary": {
-      "Hamstrings": 40,
-      "Quads": 30,
-      "Glutes": 20
-    },
-    "Secondary": {
-      "Erectors": 10
     },
     "type": "Weighted"
   }

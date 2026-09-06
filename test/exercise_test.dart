@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -91,7 +93,7 @@ String scriptRelativePath(String relativePath) {
 
 void main() {
   test('All ids correctly formatted', () async {
-    Map muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.jsonc'));
+    Map muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
     
     for (var entry in muscleInfo.entries) {
       final id = entry.key;
@@ -100,7 +102,7 @@ void main() {
     }
   });
   test('Format all ids', () async {
-    Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.jsonc'));
+    Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
     Map<String, dynamic> fixMap = {};
     for (var entry in muscleInfo.entries) {
       final id = entry.key;
@@ -116,11 +118,11 @@ void main() {
       muscleInfo.remove(id);
       muscleInfo[newId] = entry.value;
     }
-    await writeJsonFile(scriptRelativePath('data/exercise_muscles.jsonc'), muscleInfo);
+    await writeJsonFile(scriptRelativePath('data/exercise_muscles.json'), muscleInfo);
     print('Fixed ids: ${fixMap.keys.join(', ')}');
   });
   test('All exercises exist', () async {
-    Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.jsonc'));
+    Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
 
     Map<String, dynamic> groupedExercises = await readJsoncFile(scriptRelativePath('data/grouped_exercises.jsonc'));
     List<String> flattenedGroups = groupedExercises.values.cast<Map<String, dynamic>>().expand((variants) => variants.values.cast<String>()).toList();
@@ -141,4 +143,61 @@ void main() {
     expect(notExistsInMuscleInfo, [], reason: 'The following exercises do not exist in grouped_exercises.jsonc: ${notExistsInMuscleInfo.join('\n - ')}');
     expect(notExistsInGrouped, [], reason: 'The following exercises do not exist in exercise_muscles.jsonc: ${notExistsInGrouped.join('\n - ')}');
   });
+
+  test('All images exist', () async {
+    void iterateThroughFolders(Directory rootDir, Map<String, dynamic> exerciseMuscles) {
+      if (!rootDir.existsSync()) {
+        print('Directory does not exist: ${rootDir.path}');
+        return;
+      }
+
+      rootDir.listSync(recursive: true).forEach((entity) {
+        if (entity is File) {
+          final fileName = entity.uri.pathSegments.last.split('.').first;
+          if (!exerciseMuscles.containsKey(fileName)) {
+            print(fileName);
+            // Uncomment the line below to delete the file if it's not in the dictionary
+            // entity.deleteSync();p
+          }
+        }
+      });
+    }
+    final scriptDir = File(Platform.script.toFilePath()).parent;
+    final basePath = Directory('${scriptDir.path}/assets/exercises');
+    final Map<String, dynamic> exerciseMuscles = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
+
+    print('########################################### Images that don\'t have dictionary #############################################');
+    iterateThroughFolders(basePath, exerciseMuscles);
+
+    print('########################################### Dictionary that don\'t have images #############################################');
+    for (var exercise in exerciseMuscles.entries) {
+      final key = exercise.key;
+      final value = exercise.value;
+      final filePath = '${basePath.path}/$key.png';
+      final file = File(filePath);
+      if (!file.existsSync()) {
+        print(value['name']);
+      }
+    }
+  });
+
+
+  test('Rename Images', () async {
+    final scriptDir = File(Platform.script.toFilePath()).parent;
+    final basePath = Directory('${scriptDir.path}/assets/exercises');
+    final Map<String, dynamic> exerciseMuscles = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
+
+    for (var exercise in exerciseMuscles.entries) {
+      final key = exercise.key;
+      final value = exercise.value;
+      final filePath = '${basePath.path}/${value['name']}.png';
+      final file = File(filePath);
+      if (file.existsSync()) {
+        print(value['name']);
+        file.renameSync('${basePath.path}/$key.png');
+      }
+    }
+  });
+  
+  // Add tests to verify json files for correct data structure
 }
