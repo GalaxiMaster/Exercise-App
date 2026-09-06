@@ -4,6 +4,7 @@ import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
@@ -280,7 +281,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                   data.key,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
-                const SizedBox(height: 4), // Space between label and bar
+                const SizedBox(height: 4),
                 // Full-width container to allow text positioning
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -300,7 +301,6 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                           ),
                         ),
                       ),
-                      // Percentage Text positioned just outside the bar
                       Positioned(
                         left: (data.value / 100) * MediaQuery.of(context).size.width - 0.7*data.value, // Add small offset
                         child: Container(
@@ -356,7 +356,7 @@ final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, dat
   Map musclegroups = {};
   for (String exercise in data['sets'].keys){
     bool isCustom = customExercisesData.containsKey(exercise);
-    Map exerciseData = {};
+    Exercise? exerciseData;
 
     if (isCustom && customExercisesData.containsKey(exercise)){
       exerciseData = customExercisesData[exercise];
@@ -364,13 +364,13 @@ final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, dat
       exerciseData = exercises[exercise] ?? {};
     }
 
-    if (exerciseData.isEmpty) continue;
+    if (exerciseData == null) continue;
 
-    for (var muscle in (exerciseData['Primary']?.keys ?? [])){
-      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData['Primary']![muscle]!/100*data['sets'][exercise].length);
+    for (var muscle in (exerciseData.primary.keys)){
+      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData.primary[muscle]!/100*data['sets'][exercise].length);
     }
-    for (var muscle in (exerciseData['Secondary']?.keys ?? [])){
-      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData['Secondary']![muscle]!/100*data['sets'][exercise].length);
+    for (var muscle in (exerciseData.secondary.keys)){
+      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData.secondary[muscle]!/100*data['sets'][exercise].length);
     }
   }
   for (String group in muscleGroups.keys){

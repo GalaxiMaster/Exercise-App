@@ -7,6 +7,7 @@ import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -757,7 +758,7 @@ class _InfoBodyState extends ConsumerState<InfoBody> {
 
     for (String exercise in widget.exercises){
       bool isCustom = customExercisesData.containsKey(exercise);
-      Map muscleData = {};
+      Exercise? muscleData;
 
       if (isCustom && customExercisesData.containsKey(exercise)){
         muscleData = customExercisesData[exercise];
@@ -765,13 +766,13 @@ class _InfoBodyState extends ConsumerState<InfoBody> {
         muscleData = exercises[exercise] ?? {};
       }
 
-      if (muscleData.isEmpty) continue;
+      if (muscleData == null) continue;
 
-      for (String muscle in muscleData['Primary'].keys){
-        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + muscleData['Primary'][muscle];
+      for (String muscle in muscleData.primary.keys){
+        primaryMuscles[muscle] = (primaryMuscles[muscle] ?? 0) + muscleData.primary[muscle];
       }     
-      for (String muscle in muscleData['Secondary'].keys){
-        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + muscleData['Secondary'][muscle];
+      for (String muscle in muscleData.secondary.keys){
+        secondaryMuscles[muscle] = (secondaryMuscles[muscle] ?? 0) + muscleData.secondary[muscle];
       }
     }
     num totalSum = [...primaryMuscles.values, ...secondaryMuscles.values].reduce((a, b) => a + b);

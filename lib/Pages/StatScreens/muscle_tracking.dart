@@ -1,5 +1,6 @@
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/services.dart';
 import 'package:exercise_app/muscleinformation.dart';
@@ -434,7 +435,7 @@ final weeklyMuscleDataProvider = Provider<Map>((ref) {
         groupedWeeklyData[weekRef] ??= {};
         for (var exercise in data[day]['sets'].keys){
           bool isCustom = customExercisesData.containsKey(exercise);
-          Map exerciseData = {};
+          Exercise? exerciseData;
 
           if (isCustom){
             exerciseData = customExercisesData[exercise];
@@ -443,9 +444,9 @@ final weeklyMuscleDataProvider = Provider<Map>((ref) {
           }
           String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
 
-          if (exerciseData.isEmpty) continue;
+          if (exerciseData == null) continue;
 
-          Map<String, int> allMuscles = {...(exerciseData['Primary'] ?? {}), ...(exerciseData['Secondary'] ?? {})};
+          Map<String, int> allMuscles = {...(exerciseData.primary ?? {}), ...(exerciseData.secondary ?? {})};
 
           for (int i = 0; i < data[day]['sets'][exercise].length; i++){
             for (MapEntry muscle in allMuscles.entries){
@@ -581,7 +582,7 @@ final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
       muscleData[weekRef] ??= {};
       for (var exercise in data[day]['sets'].keys){
         bool isCustom = customExercisesData.containsKey(exercise);
-        Map exerciseData = {};
+        Exercise? exerciseData;
 
         if (isCustom){
           exerciseData = customExercisesData[exercise];
@@ -589,21 +590,21 @@ final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
           exerciseData = exercises[exercise] ?? {};
         }
 
-        if (exerciseData.isEmpty) continue;
+        if (exerciseData == null) continue;
 
         for (int i = 0; i < data[day]['sets'][exercise].length; i++){
-          for (var muscle in (exerciseData['Primary'] ?? {}).keys){
+          for (var muscle in exerciseData.primary.keys){
             if (muscleData[weekRef].containsKey(muscle)){
-              muscleData[weekRef][muscle] += 1*(exerciseData['Primary']![muscle]!/100);
+              muscleData[weekRef][muscle] += 1*(exerciseData.primary[muscle]!/100);
             } else{
-              muscleData[weekRef][muscle] = 1*(exerciseData['Primary']![muscle]!/100);
+              muscleData[weekRef][muscle] = 1*(exerciseData.primary[muscle]!/100);
             }
           }
-          for (var muscle in (exerciseData['Secondary'] ?? {}).keys){
+          for (var muscle in exerciseData.secondary.keys){
             if (muscleData[weekRef].containsKey(muscle)){
-              muscleData[weekRef][muscle] += 1*(exerciseData['Secondary']![muscle]!/100);
+              muscleData[weekRef][muscle] += 1*(exerciseData.secondary[muscle]!/100);
             } else{
-              muscleData[weekRef][muscle] = 1*(exerciseData['Secondary']![muscle]!/100);
+              muscleData[weekRef][muscle] = 1*(exerciseData.secondary[muscle]!/100);
             }
           }
         }

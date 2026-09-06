@@ -39,6 +39,9 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   @override
   void initState() {
     super.initState();
+    Future.microtask((){
+      fetchInitialData();
+    });
   }
 
   void fetchInitialData() async{
@@ -54,8 +57,8 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
     for (String exercise in exerciseCachedList) {
       String filePath = "assets/Exercises/$exercise.png";
       bool exists = await fileExists(filePath);
-      ref.read(cacheProvider.notifier).put(exercise, exists ? 1 : 0);
       if (mounted){
+        ref.read(cacheProvider.notifier).put(exercise, exists ? 1 : 0);
         precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
       }
     }
@@ -160,7 +163,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
                   if (!isProblemExercise && customData == null)
                     Text(exerciseData.primary.keys.toList().join(', '))
                   else if (customData != null)
-                    Text('${customData['primary'].keys.toList().join(', ')}')
+                    Text('${customData['primary'].keys.toList().join(', ')}') // todo move custom exercises to Exercise class and consider merging the providers
                 ],
               ),
             ),
@@ -174,7 +177,6 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   Widget build(BuildContext context) {
     final customExercisesAsync = ref.read(customExercisesProvider);
 
-    fetchInitialData();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),

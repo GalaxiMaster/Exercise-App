@@ -1,6 +1,7 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
@@ -339,7 +340,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
     if (inRange != null){
       for (var exercise in data[day]['sets'].keys){
         bool isCustom = customExercisesData.containsKey(exercise);
-        Map exerciseData = {};
+        Exercise? exerciseData;
 
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
@@ -347,12 +348,12 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
           exerciseData = exercises[exercise] ?? {};
         }
         
-        if (exerciseData.isEmpty) continue;
+        if (exerciseData == null) continue;
         final Map<String, dynamic> musclesInExercise = {
-          ...?exerciseData['Primary'],
-          ...?exerciseData['Secondary'],
+          ...exerciseData.primary,
+          ...exerciseData.secondary,
         };
-        if (targetMuscleGroup != null && targetMuscleGroup != 'All Muscles'){ // DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
+        if (targetMuscleGroup != null && targetMuscleGroup != 'All Muscles'){ // todo DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
           List muscleGroupMembers = muscleGroups[targetMuscleGroup] ?? [];
           bool muscleExists = muscleGroupMembers.any((muscle){
             return musclesInExercise.containsKey(muscle);
