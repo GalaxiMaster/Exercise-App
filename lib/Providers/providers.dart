@@ -322,3 +322,22 @@ class RoutineDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
 final routineDataProvider = AsyncNotifierProvider<RoutineDataNotifier, Map<String, dynamic>>(RoutineDataNotifier.new);
 
+class CacheNotifier extends Notifier<Map<String, int>> {
+  @override
+  Map<String, int> build() => {};
+
+  void put(String key, int value) {
+    state = {...state, key: value};
+  }
+
+  void putAll(Map<String, int> entries) {
+    state = {...state, ...entries};
+  }
+
+  void remove(String key) {
+    final next = {...state}..remove(key);
+    state = next;
+  }
+
+  void clear() => state = {};
+}

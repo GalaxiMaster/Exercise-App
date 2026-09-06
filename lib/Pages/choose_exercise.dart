@@ -2,6 +2,7 @@ import 'package:exercise_app/Pages/add_custom_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,37 +32,42 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   late final List exerciseList;
   final List<String> selectedItems = [];
   bool multiSelect = false;
-  Map<String, bool> assetExists = {}; // cache for asset existence
+  bool loading = true;
+
+  final cacheProvider = NotifierProvider<CacheNotifier, Map<String, int>>(CacheNotifier.new);
 
   @override
   void initState() {
     super.initState();
+  }
 
+  void fetchInitialData() async{
+    if (!loading) return;
     Map exercises = ref.watch(exercisesProvider);
     exerciseList = exercises.keys.toList()..sort();
     checkAssets();
+    setState(()=>loading = false);
   }
 
-  void checkAssets() async {
+  Future<void> checkAssets() async {
     List exerciseCachedList = List.from(exerciseList);
     for (String exercise in exerciseCachedList) {
       String filePath = "assets/Exercises/$exercise.png";
       bool exists = await fileExists(filePath);
-      assetExists[exercise] = exists;
+      ref.read(cacheProvider.notifier).put(exercise, exists ? 1 : 0);
       if (mounted){
         precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
-        setState(() {}); // Trigger rebuild after checking asset TODO optomise?
       }
     }
   }
 
-  Widget _buildExerciseItem(String exercise, bool isProblemExercise, {Map? customData}) {
+  Widget _buildExerciseItem(Exercise exerciseData, bool isProblemExercise, {Map? customData}) {
     return InkWell(
       onTap: (){
         if (multiSelect){
           setState(() {
-            if (selectedItems.contains(exercise)){
-              selectedItems.remove(exercise);
+            if (selectedItems.contains(exerciseData.name)){
+              selectedItems.remove(exerciseData.name);
               if (selectedItems.isEmpty){
                 multiSelect = false;
               }
@@ -69,18 +75,18 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               if (!multiSelect){
                 multiSelect = true;
               }
-              selectedItems.add(exercise);
+              selectedItems.add(exerciseData.name);
             }  
           });
         }else{
           if(widget.setting == 'choose' ){
-            Navigator.pop(context, [exercise]);
+            Navigator.pop(context, [exerciseData.name]);
           }
           else{
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExerciseScreen(exercises: [exercise])
+                builder: (context) => ExerciseScreen(exercises: [exerciseData.name])
               )
             );
           }
@@ -89,8 +95,8 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       onLongPress: (){
         if (widget.multiSelect){
           setState(() {
-            if (selectedItems.contains(exercise)){
-              selectedItems.remove(exercise);
+            if (selectedItems.contains(exerciseData.name)){
+              selectedItems.remove(exerciseData.name);
               if (selectedItems.isEmpty){
                 multiSelect == false;
               }
@@ -98,7 +104,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               if (!multiSelect){
                 multiSelect = true;
               }
-              selectedItems.add(exercise);
+              selectedItems.add(exerciseData.name);
             }  
           });
         }
@@ -107,7 +113,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
         height: 60,
         child: Row(
           children: [
-            if (selectedItems.contains(exercise))
+            if (selectedItems.contains(exerciseData.name))
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Container(
@@ -127,34 +133,34 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
                       "assets/profile.svg",
                       height: 35,
                       width: 35,
-                      colorFilter: ColorFilter.mode(Colors.grey.shade700, BlendMode.srcATop),
+                      colorFilter: ColorFilter.mode(Colors.red.shade400, BlendMode.srcATop),
                     ),
                   )
-                  : assetExists[exercise] == true
-                      ? Image.asset(
-                          "assets/Exercises/$exercise.png",
-                          height: 50,
-                          width: 50,
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: SvgPicture.asset(
-                            "assets/profile.svg",
-                            height: 35,
-                            width: 35,
-                            colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
-                          ),
+                  : ref.watch(cacheProvider.select((map) => map[exerciseData.id])) == 1
+                    ? Image.asset(
+                        "assets/Exercises/${exerciseData.id}.png",
+                        height: 50,
+                        width: 50,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: SvgPicture.asset(
+                          "assets/profile.svg",
+                          height: 35,
+                          width: 35,
+                          colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
                         ),
+                      ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(exercise),
+                  Text(exerciseData.name),
                   if (!isProblemExercise && customData == null)
-                  Text(getMuscles(exercise))
+                    Text(exerciseData.primary.keys.toList().join(', '))
                   else if (customData != null)
-                  Text('${customData['Primary'].keys.toList().join(', ')}')
+                    Text('${customData['primary'].keys.toList().join(', ')}')
                 ],
               ),
             ),
@@ -163,16 +169,12 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       ),
     );
   }
-
-  String getMuscles(String exercise){
-    Map exercises = ref.watch(exercisesProvider);
-    var muscle = exercises[exercise]?['Primary']?.keys.toList()[0];
-    return muscle ?? 'No muscle';
-  }
   
   @override
   Widget build(BuildContext context) {
     final customExercisesAsync = ref.read(customExercisesProvider);
+
+    fetchInitialData();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),
@@ -190,7 +192,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
           ),
         ],
       ),
-      body: customExercisesAsync.when(
+      body: loading ? CircularProgressIndicator() : customExercisesAsync.when(
         data: (data) {
           exerciseList.addAll(data.keys.toList());
           exerciseList.sort();
@@ -258,7 +260,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _buildExerciseItem(
-                        filteredExercisesMap.keys.toList()[index], 
+                        ref.watch(exercisesProvider)[filteredExercisesMap.keys.toList()[index]]!,
                         false,
                         customData: data[filteredExercisesMap.keys.toList()[index]]
                       ),

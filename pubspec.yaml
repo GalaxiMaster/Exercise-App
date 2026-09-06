@@ -47,5 +47,5 @@ flutter:
   uses-material-design: true
   assets:
     - data/
-    - assets/Exercises/
+    - assets/
     - .env
