@@ -1,3 +1,4 @@
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

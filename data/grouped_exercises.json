@@ -31,7 +31,7 @@
         "dumbbell_incline": "dumbbell_incline_biceps_curl",
         "dumbbell": "dumbbell_biceps_curl",
         "cable_seated_floor_one_arm_concentration": "cable_seated_floor_one_arm_concentration_curl",
-        "cable_pulldown": "cable_pulldown_bicep_curl", // ?? unusual split (Forearms 50 dominant) for a "biceps curl" — combo lat-pulldown/curl movement
+        "cable_pulldown": "cable_pulldown_bicep_curl",
         "cable_ez_bar": "cable_biceps_curl_ez_bar",
         "barbell": "barbell_curl",
         "dumbbell_lying_supine": "dumbbell_lying_supine_curl",
@@ -39,7 +39,7 @@
         "cable_one_arm": "cable_one_arm_biceps_curl",
         "suspender": "suspender_arm_curl",
         "cable_close_grip": "cable_close_grip_curl",
-        "dumbbell_seated_reverse_concentration": "dumbbell_seated_reverse_concentration_curl", // ?? distinct split (Biceps60/Brachioradialis40) vs standard concentration curl entries, kept separate
+        "dumbbell_seated_reverse_concentration": "dumbbell_seated_reverse_concentration_curl",
         "standing_kettlebell": "weighted_standing_kettlebell_curl",
         "bayesian": "bayesian_curl"
     },
@@ -71,10 +71,10 @@
         "barbell": "barbell_hip_thrust",
         "bodyweight": "hip_raise_bent_knee",
         "weighted_one_leg": "weighted_one_leg_hip_thrust",
-        "barbell_glute_bridge": "barbell_glute_bridge_hip_thrust", // ?? move out? - other tag -> barbell_glute_bridge
+        "barbell_glute_bridge": "barbell_glute_bridge_hip_thrust",
         "lever": "lever_hip_thrust",
         "smith": "smith_hip_thrust",
-        "dumbbell": "dumbbell_hip_thrusts", // ?? slightly different split (Glutes70/Hamstrings30) vs other entries (Glutes80/Hamstrings20)
+        "dumbbell": "dumbbell_hip_thrusts",
         "single_leg": "single_leg_hip_thrust"
     },
     "Leg Press": {
@@ -170,9 +170,6 @@
         "cable_v_bar": "cable_triceps_pushdown_v_bar",
         "cable_ez_bar": "cable_triceps_pushdown_ez_bar",
         "cable_straight_bar": "cable_triceps_pushdown_straight_bar"
-        // NOTE: "Cable Triceps Pushdown (V bar)" (source, lowercase "bar")
-        // skipped as an exact duplicate of "Cable Triceps Pushdown (V Bar)"
-        // above (same key would be needed — "cable_v_bar").
     },
     "Crunch": {
         "bodyweight_reverse": "reverse_crunch",
@@ -185,7 +182,7 @@
         "bodyweight_knee_touch": "knee_touch_crunch",
         "cable_seated": "cable_seated_crunch",
         "bench_circle_reverse": "bench_reverse_crunch_circle",
-        "bodyweight": "crunch", // note: source uses "Rectus Abdominis" muscle naming here vs "Abdominals" elsewhere — same muscle, inconsistent taxonomy
+        "bodyweight": "crunch",
         "weighted": "weighted_crunch",
         "weighted_decline": "weighted_decline_crunch"
     },
@@ -216,7 +213,7 @@
         "barbell": "barbell_front_raise",
         "cable_single_arm_neutral_grip": "cable_single_arm_neutral_grip_front_raise",
         "cable": "cable_front_raise",
-        "dumbbell_incline": "dumbbell_incline_raise", // ?? "Incline Raise" — ambiguous whether this is a Front Raise variant or its own movement
+        "dumbbell_incline": "dumbbell_incline_raise",
         "dumbbell_incline_front": "dumbbell_incline_front_raise",
         "dumbbell_one_arm": "dumbbell_one_arm_front_raise"
     },
@@ -226,7 +223,7 @@
         "barbell_wide": "barbell_wide_shrug",
         "cable_seated_horizontal": "cable_seated_horizontal_shrug",
         "dumbbell": "dumbbell_shrug",
-        "incline": "incline_shrug" // ?? no equipment specified in source name
+        "incline": "incline_shrug"
     },
     "Hammer Curl": {
         "dumbbell_one_arm_seated": "dumbbell_one_arm_seated_hammer_curl",
@@ -237,7 +234,7 @@
         "dumbbell_alternate_preacher": "dumbbell_alternate_preacher_hammer_curl",
         "band_standing": "band_standing_hammer_curl",
         "cable_rope": "cable_rope_hammer_curl",
-        "cable_rope_preacher": "cable_rope_preacher_hammer_curl",// ?? posibly seperate preacher and hammer_preacher for consistency
+        "cable_rope_preacher": "cable_rope_preacher_hammer_curl",
         "dumbbell_prone_incline": "dumbbell_prone_incline_hammer_curl",
         "dumbbell_incline_alternate": "dumbbell_incline_alternate_hammer_curl",
         "dumbbell_cross_body": "dumbbell_cross_body_hammer_curl",
@@ -245,7 +242,7 @@
         "dumbbell_one_arm_preacher": "dumbbell_one_arm_hammer_preacher_curl",
         "dumbbell_one_arm_standing": "dumbbell_one_arm_standing_hammer_curl",
         "dumbbell_arm_blaster": "dumbbell_hammer_curls_with_arm_blaster",
-        "dumbbell_incline": "dumbbell_incline_hammer_curl" // ?? muscle split conflicts with dumbbell_prone_incline, see NEEDS REVIEW`
+        "dumbbell_incline": "dumbbell_incline_hammer_curl"
     },
     "Pin Press": {
         "barbell": "barbell_pin_presses"
@@ -298,7 +295,7 @@
         "barbell_one_arm": "barbell_one_arm_bent_over_row",
         "barbell_wide_grip": "barbell_bent_over_wide_grip_row",
         "barbell_deadstop": "barbell_deadstop_row",
-        "wide_grip_overhand": "wide_grip_overhand_row" // ?? no equipment specified; split differs slightly from barbell_wide_grip, possible near-dup
+        "wide_grip_overhand": "wide_grip_overhand_row"
     },
     "Split Squat": {
         "barbell": "barbell_split_squat",
@@ -407,7 +404,7 @@
         "band_assisted": "band_assisted_dips",
         "floor": "triceps_dips_floor",
         "bench": "bench_dip",
-        "lever_plate_loaded": "lever_triceps_dip_plate_loaded", // ?? source tags this "Bodyweight" despite "(plate loaded)" in the name
+        "lever_plate_loaded": "lever_triceps_dip_plate_loaded",
         "lever_overhand": "lever_overhand_triceps_dip",
         "lever_seated": "lever_seated_dip",
         "weighted": "weighted_triceps_dips",
@@ -426,8 +423,7 @@
         "barbell": "barbell_close_grip_bench_press",
         "smith": "smith_close_grip_bench_press",
         "ez_barbell": "ez_bar_close_grip_bench_press",
-        // --- batch 4 additions ---
-        "dumbbell": "dumbbell_close_grip_press", // ?? source name is "Close Grip Press" not "...Bench Press", kept here as closest match
+        "dumbbell": "dumbbell_close_grip_press",
         "barbell_lying": "barbell_lying_close_grip_press"
     },
     "Incline Bench": {
@@ -438,16 +434,13 @@
         "dumbbell_close_grip": "dumbbell_incline_close_grip_press_variation",
         "dumbbell_one_arm": "dumbbell_one_arm_incline_chest_press",
         "dumbbell_alternate": "dumbbell_incline_alternate_press",
-        // --- batch 4 additions ---
         "cable": "cable_incline_bench_press",
         "barbell": "barbell_incline_bench_press",
-        // --- batch 5 additions ---
         "lever": "lever_incline_chest_press",
         "smith": "smith_machine_incline_bench_press"
     },
     "JM Bench Press": {
         "barbell": "barbell_jm_bench_press",
-        // --- batch 4 additions ---
         "ez_barbell": "ez_barbell_jm_bench_press"
     },
     "Neutral Grip Bench Press": {
@@ -460,9 +453,7 @@
         "lever": "lever_chest_press",
         "cable_seated": "cable_seated_chest_press",
         "lever_decline": "lever_decline_chest_press",
-        // --- batch 4 additions ---
         "dumbbell_incline_hammer": "dumbbell_incline_hammer_press",
-        // --- batch 5 additions ---
         "dumbbell_lying_one_arm": "dumbbell_lying_one_arm_press"
     },
     "Triceps Extension": {
@@ -489,14 +480,11 @@
         "ez_barbell_decline": "ez_barbell_decline_triceps_extension",
         "ez_barbell_lying_close_grip_behind_head": "ez_bar_lying_close_grip_triceps_extension_behind_head",
         "dumbbell_decline": "dumbbell_decline_triceps_extension",
-        // --- batch 4 additions ---
         "barbell_standing_overhead": "barbell_standing_overhead_triceps_extension",
         "dumbbell_incline": "dumbbell_incline_triceps_extension",
         "dumbbell_seated_one_arm": "dumbbell_seated_one_arm_triceps_extension",
         "cable_rope_incline": "cable_rope_incline_triceps_extension",
-        "cable_lying_rope": "cable_lying_triceps_extension_rope", // ?? possible dup of cable_lying, see NEEDS REVIEW
-        "dumbbell_lying_elbow_press": "dumbbell_lying_elbow_press", // ?? possible naming variant of dumbbell_lying_triceps_extension
-        // --- batch 5 additions ---
+        "cable_lying_rope": "cable_lying_triceps_extension_rope",
         "cable_overhead_single_arm": "cable_overhead_single_arm_triceps_extension",
         "cable_standing_high_cross": "cable_standing_high_cross_triceps_extension",
         "dumbbell_seated_bench": "dumbbell_seated_bench_triceps_extension",
@@ -519,14 +507,13 @@
         "archer": "archer_push_up",
         "finger": "finger_push_up",
         "bodyweight_decline": "decline_push_up",
-        "weighted": "push_up", // ?? see BATCH 6 header note — likely key collision with the genuinely distinct "Weighted Push Up" entry below
+        "bodyweight": "push_up",
         "diamond": "diamond_push_up",
         "diamond_knees": "diamond_push_up_on_knees",
-        "elevated": "elevanted_push_up", // note: source spelling "Elevanted" kept in value, likely a typo of "Elevated"
+        "elevated": "elevated_push_up",
         "close_grip": "close_grip_push_up",
-        // --- batch 6 additions ---
         "kneeling": "kneeling_push_up",
-        "weighted_full": "weighted_push_up" // ?? see BATCH 6 header note on key collision with existing "weighted" key
+        "weighted": "weighted_push_up"
     },
     "Back Lever": {
         "bodyweight": "back_lever"
@@ -552,7 +539,7 @@
         "dumbbell": "dumbbell_fly",
         "cable_standing": "cable_standing_fly",
         "cable_seated_chest": "cable_seated_chest_fly",
-        "cable_standing_up_straight": "cable_standing_up_straight_crossovers", // ?? named "Crossovers" but data/structure matches a chest fly; kept here for muscle-pattern consistency, could also fit "Crossover" group
+        "cable_standing_up_straight": "cable_standing_up_straight_crossovers",
         "cable_decline": "cable_decline_fly",
         "machine": "machine_chest_fly",
         "machine_pec_deck": "butterfly_pec_deck"
@@ -560,7 +547,7 @@
     "Finger Curl": {
         "dumbbell_behind_back": "dumbbell_behind_back_finger_curl",
         "barbell_behind_back": "barbell_behind_back_finger_curl",
-        "dumbbell": "finger_curls" // ?? no equipment specified in source name ("Finger Curls", plural), unlike other entries in this group
+        "dumbbell": "finger_curls"
     },
     "Calf Raise": {
         "dumbbell_single_leg": "dumbbell_single_leg_calf_raise",
@@ -930,7 +917,7 @@
         "machine": "stair_master"
     },
     "Running": {
-        "bodyweight": "running" // todo fix cardio
+        "bodyweight": "running"
     },
     "Walking": {
         "bodyweight": "walking"

@@ -8,7 +8,7 @@ class ExerciseRepository {
   Future<Map<String, Exercise>> loadExercises() async {
     final raw = await rootBundle.loadString('data/exercise_muscles.json');
     final Map<String, dynamic> jsonMap = jsonDecode(raw) as Map<String, dynamic>;
-    
+
     return jsonMap.map(
       (key, value) => MapEntry(
         key,
@@ -56,3 +56,29 @@ class CustomExercisesNotifier extends AsyncNotifier<Map<String, dynamic>> {
 }
 
 final customExercisesProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map<String, dynamic>>(CustomExercisesNotifier.new);
+
+class ExerciseGroupingRepository {
+  Future<Map<String, Exercise>> loadExercises() async {
+    final raw = await rootBundle.loadString('data/exercise_muscles.json');
+    final Map<String, dynamic> jsonMap = jsonDecode(raw) as Map<String, dynamic>;
+
+    return jsonMap.map(
+      (key, value) => MapEntry(
+        key,
+        Exercise.fromJson(key, value as Map<String, dynamic>),
+      ),
+    );
+  }
+}
+
+final exerciseGroupingRepositoryProvider = Provider<ExerciseGroupingRepository>((ref) {
+  return ExerciseGroupingRepository();
+});
+final exerciseGroupingAsyncProvider = FutureProvider<Map<String, Exercise>>((ref) async {
+  final repo = ref.watch(exerciseGroupingRepositoryProvider);
+  return repo.loadExercises();
+});
+
+final exerciseGroupingProvider = Provider<Map<String, Exercise>>((ref) {
+  return ref.watch(exerciseGroupingAsyncProvider).value ?? {};
+});
