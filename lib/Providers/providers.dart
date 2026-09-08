@@ -49,33 +49,6 @@ class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
 final settingsProvider = AsyncNotifierProvider<SettingsNotifier, Map<String, dynamic>>(SettingsNotifier.new);
 
-class CustomExercisesNotifier extends AsyncNotifier<Map> {
-  @override
-  Future<Map<String, dynamic>> build() async {
-    ref.keepAlive();
-    return await ref.read(storageServiceProvider).readData(path: 'customExercises');
-  }
-
-  void updateValue(String key, dynamic value) {
-    state = AsyncData({
-      ...state.value ?? {},
-      key: value,
-    });
-    ref.read(storageServiceProvider).writeKey(key, value, path: 'customExercises');
-  }
-  
-  Future<void> deleteExercise(String key) async {
-    Map stateVal = state.value ?? {};
-    stateVal.remove(key);
-    state = AsyncData({
-      ...stateVal
-    });
-    ref.read(storageServiceProvider).deleteKey(key, path: 'customExercises');
-  }
-}
-
-final customExercisesProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map>(CustomExercisesNotifier.new);
-
 class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
   int sessions = 0;
   int streak = 0;

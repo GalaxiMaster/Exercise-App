@@ -1,4 +1,6 @@
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/sync_controller.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +76,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
   Widget build(BuildContext context) {
     quickStats = getStats();
     final theme = Theme.of(context);
-
+    final Map<String, Exercise> exercises = ref.read(exercisesProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Workout Summary'),
@@ -227,7 +229,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
                         padding: const EdgeInsets.symmetric(vertical: 2.0),
                         child: Row(
                           children: [
-                            Expanded(child: Text(exercise, style: theme.textTheme.bodySmall)),
+                            Expanded(child: Text(exercises[exercise]?.name ?? exercise, style: theme.textTheme.bodySmall)),
                             Text(
                               '${exerciseSets.length} sets',
                               style: theme.textTheme.bodySmall?.copyWith(

@@ -223,7 +223,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(exerciseName, style: const TextStyle(fontSize: 18),),
+                              child: Text(exercises[exerciseName]?.name ?? exerciseName, style: const TextStyle(fontSize: 18),),
                             ),
                           ],
                         ),

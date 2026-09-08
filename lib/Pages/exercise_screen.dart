@@ -90,9 +90,10 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.exercises.length == 1 ?  widget.exercises[0] : 'Exercises Data'),
+        title: Text(widget.exercises.length == 1 ?  exercises[widget.exercises[0]]?.name ?? widget.exercises[0] : 'Exercises Data'),
         actions: [
           if (_currentTab == TabItem.graph)
           IconButton(
@@ -150,15 +151,17 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   String week = '';
   num graphvalue = 0;
   Color activeColor = Colors.blue;
-  late final bool isBodyWeight;
+  bool isBodyWeight = false;
   @override
   void initState() {
     super.initState();
 
-    Map exercises = ref.watch(exercisesProvider);
-
-    isBodyWeight = widget.exercises.every((exercise) {
-      return (exercises[exercise]?['type'] ?? 'weighted') == 'Bodyweight';
+    Future.microtask(() {
+      Map<String, Exercise> exercises = ref.watch(exercisesProvider);
+      setState(()=>
+        isBodyWeight = widget.exercises.every((exercise) {
+          return (exercises[exercise]?.type ?? 'weighted') == 'Bodyweight';
+      }));
     });
 
     if (isBodyWeight) {
@@ -176,7 +179,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
   }
 
   Widget exerciseTile(String exercise, int index, num increase, bool isBodyWeight, Map heaviestWeight, Map heaviestVolume) {
-      Map exercises = ref.watch(exercisesProvider);
+      Map<String, Exercise> exercises = ref.watch(exercisesProvider);
 
       return Padding(
         padding: const EdgeInsets.all(8),
@@ -192,7 +195,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  exercise,
+                  exercises[exercise]?.name ?? exercise,
                   style: const TextStyle(
                     fontSize: 20
                   ),
@@ -200,11 +203,11 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                 const Divider(
                   thickness: .2,
                 ),
-                if ((exercises[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
+                if ((exercises[exercise]?.type ?? 'Weighted') != 'Bodyweight')
                 Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
-                if ((exercises[exercise]?['type'] ?? 'Weighted') != 'Bodyweight')
+                if ((exercises[exercise]?.type ?? 'Weighted') != 'Bodyweight')
                 Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
-                if ((exercises[exercise]?['type'] ?? 'weighted') == 'Bodyweight')
+                if ((exercises[exercise]?.type ?? 'weighted') == 'Bodyweight')
                 Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
                 Text('Increase: $increase%')
               ],

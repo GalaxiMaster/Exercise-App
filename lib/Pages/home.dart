@@ -1,6 +1,7 @@
 import 'package:exercise_app/Pages/routines.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/utils.dart';

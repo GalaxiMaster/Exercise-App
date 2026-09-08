@@ -172,7 +172,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
                   child: Text(
-                    day.value['sets'].keys.toList()[i]
+                    exercises[day.value['sets'].keys.toList()[i]]?.name ?? day.value['sets'].keys.toList()[i]
                   ),
                 ),
                 const Spacer(),

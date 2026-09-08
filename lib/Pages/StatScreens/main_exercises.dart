@@ -95,7 +95,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
 
   Widget _buildExerciseItem(String exercise, Map exerciseData, Map<String, bool> assetExists) {
     final isSelected = selectedItems.contains(exercise);
-    
+    final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
     return InkWell(
       onTap: () {
         if (multiSelect) {
@@ -167,7 +167,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(exercise),
+                  Text(exercises[exercise]?.name ?? exercise),
                   Text('${exerciseData[exercise]} times'),
                 ],
               ),

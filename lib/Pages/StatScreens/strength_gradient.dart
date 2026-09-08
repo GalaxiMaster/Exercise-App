@@ -29,6 +29,7 @@ class _StrengthGradiantState extends ConsumerState<StrengthGradiant> {
   @override
   Widget build(BuildContext context) {
     final dataProvider = ref.read(strengthGradientProvider(gradientCalcType));
+    final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
     return Scaffold(
       appBar: myAppBar(
         context, 
@@ -118,7 +119,7 @@ class _StrengthGradiantState extends ConsumerState<StrengthGradiant> {
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(maxWidth: 300), // Adjust width as needed
                               child: Text(
-                                '${msData[index].key}: ',
+                                '${exercises[msData[index].key]?.name ?? msData[index].key}: ',
                                 style: const TextStyle(fontSize: 20),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
