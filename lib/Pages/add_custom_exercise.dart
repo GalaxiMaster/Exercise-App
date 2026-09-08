@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/SettingsPages/custom_exercises_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
-import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
