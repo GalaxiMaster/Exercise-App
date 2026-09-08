@@ -5,6 +5,7 @@ import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
+import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/widgets.dart';
@@ -41,9 +42,9 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
   }
   @override
   build(BuildContext context) {
-    final dayData = ref.watch(
+    final WorkoutDetails? dayData = ref.watch(
       workoutDataProvider.select(
-        (asyncState) => asyncState.value?[dayKey],
+        (asyncState) => asyncState.value?[dayKey] != null ? WorkoutDetails.fromJson(Map<String, dynamic>.from(asyncState.value?[dayKey])) : null,
       ),
     );
     if (dayData == null) {
@@ -56,22 +57,22 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
     Map exercises = ref.watch(exercisesProvider);
 
 
-    String dateStr = dayData['stats']['startTime'];
-    String endTimeStr = dayData['stats']['endTime'];
+    String dateStr = dayData.startTime;
+    String endTimeStr = dayData.endTime ?? '';
     Duration length = DateTime.parse(endTimeStr).difference(DateTime.parse(dateStr));
     double volume = 0;
     int sets = 0;
     int prs = 0;
     int exerciseCount = 0;
-    for (String exercise in dayData['sets'].keys){
+    for (String exercise in dayData.sets.keys){
       exerciseCount++;
-      for (Map set in dayData['sets'][exercise]){
+      for (Map set in dayData.sets[exercise]!){
         sets++;
         volume += double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString()).abs();
         if (set['PR'] == 'yes') prs++;
       }
     }
-    final percentageData = ref.watch(percentageModelProvider(dayData));
+    final percentageData = ref.watch(percentageModelProvider(dayData.sets));
     return Scaffold(
       appBar: myAppBar(context, 'Workout Details'),
       body: SingleChildScrollView(
@@ -156,7 +157,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                       final result = await Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => AddWorkout(sets: jsonDecode(jsonEncode(dayData)), editing: true),
+                          builder: (context) => AddWorkout(initialData: WorkoutDetails.fromJson(jsonDecode(jsonEncode(dayData))), editing: true),
                         ),
                       );
                       if (result != null && dayData != result) { // Could add validation here
@@ -182,10 +183,10 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: dayData['sets'].keys.length,
+              itemCount: dayData.sets.keys.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index){
-                String exerciseName = dayData['sets'].keys.toList()[index];
+                String exerciseName = dayData.sets.keys.toList()[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Column(
@@ -229,10 +230,10 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                       ),
                       ListView.builder(
                         shrinkWrap: true,
-                        itemCount: dayData['sets'][exerciseName].length,
+                        itemCount: dayData.sets[exerciseName]?.length ?? 0,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index){
-                          Map set = dayData['sets'][exerciseName][index];
+                          Map set = dayData.sets[exerciseName]![index];
                           return Container(
                             decoration: BoxDecoration(
                               color: index % 2 == 0 ? ThemeColors.bg : ThemeColors.accent
@@ -244,7 +245,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                                   Text(set['type'].toLowerCase() == 'normal' ? (index + 1).toString() : set['type'][0], style: const TextStyle(fontSize: 24),),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 25),
-                                    child: Text((exercises[exerciseName]?['type'] ?? 'Weighted') != 'Bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
+                                    child: Text((exercises[exerciseName]?.type ?? 'Weighted') != 'Bodyweight' ? '${set['weight']} x ${set['reps']}' : 'x${set['reps']}', style: const TextStyle(fontSize: 20),),
                                   ),
                                 ],
                               ),
@@ -269,7 +270,6 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: dayData.map((data) {
-          debugPrint(data.toString());
           data =  data.entries.first;
           return data.value != 0 ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -348,29 +348,30 @@ Map sortMapByValue<K, V extends Comparable>(Map map, {bool descending = false}) 
   
   return Map.fromEntries(entries);
 }
+
 final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, data) {
   final Map customExercisesData = ref.watch(customExercisesProvider).value ?? {};
   Map exercises = ref.watch(exercisesProvider);
 
   Map percentages = {};
   Map musclegroups = {};
-  for (String exercise in data['sets'].keys){
+  for (String exercise in data.keys){
     bool isCustom = customExercisesData.containsKey(exercise);
     Exercise? exerciseData;
 
     if (isCustom && customExercisesData.containsKey(exercise)){
       exerciseData = customExercisesData[exercise];
     } else {
-      exerciseData = exercises[exercise] ?? {};
+      exerciseData = exercises[exercise];
     }
 
     if (exerciseData == null) continue;
 
     for (var muscle in (exerciseData.primary.keys)){
-      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData.primary[muscle]!/100*data['sets'][exercise].length);
+      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData.primary[muscle]!/100*data[exercise].length);
     }
     for (var muscle in (exerciseData.secondary.keys)){
-      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData.secondary[muscle]!/100*data['sets'][exercise].length);
+      musclegroups[muscle] = ((musclegroups[muscle] ?? 0) + exerciseData.secondary[muscle]!/100*data[exercise].length);
     }
   }
   for (String group in muscleGroups.keys){

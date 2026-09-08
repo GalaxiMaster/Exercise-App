@@ -69,8 +69,8 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       onTap: (){
         if (multiSelect){
           setState(() {
-            if (selectedItems.contains(exerciseData.name)){
-              selectedItems.remove(exerciseData.name);
+            if (selectedItems.contains(exerciseData.id)){
+              selectedItems.remove(exerciseData.id);
               if (selectedItems.isEmpty){
                 multiSelect = false;
               }
@@ -78,18 +78,18 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               if (!multiSelect){
                 multiSelect = true;
               }
-              selectedItems.add(exerciseData.name);
+              selectedItems.add(exerciseData.id);
             }  
           });
         }else{
           if(widget.setting == 'choose' ){
-            Navigator.pop(context, [exerciseData.name]);
+            Navigator.pop(context, [exerciseData.id]);
           }
           else{
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExerciseScreen(exercises: [exerciseData.name])
+                builder: (context) => ExerciseScreen(exercises: [exerciseData.id])
               )
             );
           }
@@ -98,8 +98,8 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       onLongPress: (){
         if (widget.multiSelect){
           setState(() {
-            if (selectedItems.contains(exerciseData.name)){
-              selectedItems.remove(exerciseData.name);
+            if (selectedItems.contains(exerciseData.id)){
+              selectedItems.remove(exerciseData.id);
               if (selectedItems.isEmpty){
                 multiSelect == false;
               }

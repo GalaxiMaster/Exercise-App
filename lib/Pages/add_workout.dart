@@ -4,6 +4,8 @@ import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
+import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
@@ -14,23 +16,23 @@ import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
 
 class AddWorkout extends ConsumerStatefulWidget {
-  final Map initialSets;
+  final WorkoutDetails? initialData;
   final bool editing;
   final WorkoutMetaData? metaData;
 
   const AddWorkout({
     super.key,
-    Map? sets,
+    this.initialData,
     this.editing = false,
     this.metaData,
-  }) : initialSets = sets ?? const {};
+  });
 
   @override
   AddWorkoutState createState() => AddWorkoutState();
 }
 
 class AddWorkoutState extends ConsumerState<AddWorkout> {
-  Map sets = {};
+  Map<String, List<Map<String, dynamic>>> sets = {};
   Map stats = {};
   String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
 
@@ -48,9 +50,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   @override
   void initState() {
     super.initState();
-    stats['notes'] = widget.initialSets['stats']?['notes'] ?? {};
+    stats['notes'] = widget.initialData?.notes ?? {};
 
-    if (widget.initialSets.isEmpty) {
+    if (widget.initialData == null) {
       ref.read(currentWorkoutProvider).whenOrNull(
         data: (data) {
           if (mounted) setState(() => _applyInitialData(data));
@@ -61,7 +63,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       );
       loading = false;
     } else {
-      sets = widget.initialSets['sets'];
+      sets = widget.initialData!.sets;
       stats['startTime'] = startTime;
       repopulateExerciseTypeAccess();
       _initializeFocusNodesAndControllers();
@@ -198,6 +200,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     final Map settings = ref.watch(settingsProvider).value ?? {};
     final Map workoutData = ref.watch(workoutDataProvider).value ?? {};
     final Map records = ref.watch(recordsProvider).value ?? {};
+    final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
 
     if (!identical(workoutData, _lastWorkoutData)) {
       _previousCache.clear();
@@ -213,8 +216,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       _ensureExerciseFocusNodesAndControllers(exercise);
     }
     
-    Map exercises = ref.watch(exercisesProvider);
-
     return Scaffold(
       appBar: myAppBar(
         context,
@@ -239,6 +240,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                 records,
                 workoutData,
                 customExerciseAsync,
+                exercises,
               ),
             const SizedBox(height: 20),
             Align(
@@ -258,8 +260,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     final customExercises = customExerciseAsync.value ?? {};
                     for (final exercise in result) {
                       if (!sets.containsKey(exercise)) {
-                        final type = exercises[exercise]?['type']
-                            ?? customExercises[exercise]?['type']
+                        final type = exercises[exercise]?.type
+                            ?? customExercises[exercise]?.type
                             ?? 'Weighted';
                         sets[exercise] = [
                           {
@@ -290,6 +292,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     Map records,
     Map workoutData,
     AsyncValue customExerciseAsync,
+    Map<String, Exercise> exercises,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,7 +312,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   );
                 },
                 child: Text(
-                  exercise,
+                  exercises[exercise]?.name ?? exercise,
                   style: const TextStyle(fontSize: 18),
                 ),
               ),
@@ -347,7 +350,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                           if (newExerciseList != null &&
                               !sets.containsKey(newExerciseList.first)) {
                             final newExercise = newExerciseList.first as String;
-                            final Map newSets = {};
+                            final Map<String, List<Map<String, dynamic>>> newSets = {};
                             final Map<String, List<Map<String, FocusNode>>> newFocusNodes = {};
                             final Map<String, List<Map<String, TextEditingController>>>
                                 newControllers = {};
@@ -355,7 +358,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
                             for (final entry in sets.keys) {
                               final key = entry == exercise ? newExercise : entry;
-                              newSets[key] = sets[entry];
+                              newSets[key] = sets[entry]!;
                               newFocusNodes[key] = _focusNodes[entry]!;
                               newControllers[key] = _controllers[entry]!;
                               newCheckBoxStates[key] = _checkBoxStates[entry]!;
@@ -463,7 +466,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       direction: DismissDirection.horizontal,
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
-          addNewSet(exercise, 'Bodyweight', data: sets[exercise][i]);
+          addNewSet(exercise, 'Bodyweight', data: sets[exercise]![i]);
         } else {
           removeSet(exercise, i);
         }
@@ -584,7 +587,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     Map workoutData,
   ) {
     final type = exerciseTypeAccess[exercise] as String? ?? 'Weighted';
-    final isPR = sets[exercise][i]['PR'] != 'no' && sets[exercise][i]['PR'] != null;
+    final isPR = sets[exercise]![i]['PR'] != 'no' && sets[exercise]![i]['PR'] != null;
 
     if (type == 'Bodyweight') {
       return const Text('-', style: TextStyle(color: Colors.white, fontSize: 33.5));
@@ -618,7 +621,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
             : Theme.of(context).colorScheme.onSurface,
       ),
       decoration: InputDecoration(
-        hintText: getPrevious(exercise, i + 1, 'Weight', sets[exercise][i]['type'], workoutData),
+        hintText: getPrevious(exercise, i + 1, 'Weight', sets[exercise]![i]['type'], workoutData),
         border: InputBorder.none,
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
       ),
@@ -657,7 +660,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     Map workoutData,
   ) {
     final hasError = boxErrors[exercise]?[i]?['reps'] ?? false;
-    final isPR = sets[exercise][i]['PR'] != 'no' && sets[exercise][i]['PR'] != null;
+    final isPR = sets[exercise]![i]['PR'] != 'no' && sets[exercise]![i]['PR'] != null;
     final type = exerciseTypeAccess[exercise] as String? ?? 'Weighted';
 
     return Expanded(
@@ -685,7 +688,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     : Theme.of(context).colorScheme.onSurface,
               ),
               decoration: InputDecoration(
-                hintText: getPrevious(exercise, i + 1, 'Reps', sets[exercise][i]['type'], workoutData),
+                hintText: getPrevious(exercise, i + 1, 'Reps', sets[exercise]![i]['type'], workoutData),
                 border: InputBorder.none,
                 hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
               ),
@@ -762,11 +765,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     );
   }
 
-  // -------------------------------------------------------------------------
-  // Add / remove sets
-  // -------------------------------------------------------------------------
-
-  void addNewSet(String exercise, String type, {Map<String, String>? data}) {
+  void addNewSet(String exercise, String type, {Map<String, dynamic>? data}) {
     try {
       setState(() {
         sets[exercise]?.add({
@@ -812,7 +811,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   void removeSet(String exercise, int setIndex) {
     setState(() {
-      if (setIndex == 0 && sets[exercise].length == 1) {
+      if (setIndex == 0 && sets[exercise]!.length == 1) {
         sets.remove(exercise);
         _controllers.remove(exercise);
         _focusNodes.remove(exercise);
@@ -827,16 +826,16 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     updateExercises();
   }
 
-  void confirmExercises(Map sets) {
+  void confirmExercises(Map<String, List<Map<String, dynamic>>> sets) {
     if (checkValidWorkout(sets)) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ConfirmWorkout(
-            data: {
-              'sets': sets,
-              'stats': widget.initialSets['stats'] ?? stats,
-            },
+            data: WorkoutDetails(
+              sets: sets,
+              startTime: startTime,
+            ),
             editing: widget.editing,
           ),
         ),
@@ -922,15 +921,15 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   void applyPRResult(String exercise, int index, PRResult result, Map settings) {
     setState(() {
-      sets[exercise][index]['PR'] = result.isPR ? 'yes' : 'no';
+      sets[exercise]![index]['PR'] = result.isPR ? 'yes' : 'no';
     });
 
     if (!result.isPR) return;
     if (settings['Tick Boxes'] ?? false) return;
 
     final String subtitle = switch (result.type) {
-      PRType.weight => 'Heaviest Weight - ${sets[exercise][index]['weight']} kg',
-      PRType.reps   => 'Highest Reps - ${sets[exercise][index]['reps']}',
+      PRType.weight => 'Heaviest Weight - ${sets[exercise]![index]['weight']} kg',
+      PRType.reps   => 'Highest Reps - ${sets[exercise]![index]['reps']}',
       PRType.first  => 'First Record!',
       _             => '',
     };
@@ -946,10 +945,10 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 
   PRResult checkSetPR(String exercise, int index, Map records) {
-    final lift = liftFromSet(sets[exercise][index]);
+    final lift = liftFromSet(sets[exercise]![index]);
     if (lift == null) return PRResult(false, PRType.none);
 
-    final bestIndex = bestSetIndex(sets[exercise]);
+    final bestIndex = bestSetIndex(sets[exercise]!);
     if (bestIndex != index) return PRResult(false, PRType.none);
 
     final recordLift = records.containsKey(exercise) ? liftFromSet(records[exercise]) : null;

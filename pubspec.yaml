@@ -48,4 +48,5 @@ flutter:
   assets:
     - data/
     - assets/
+    - assets/Exercises/
     - .env

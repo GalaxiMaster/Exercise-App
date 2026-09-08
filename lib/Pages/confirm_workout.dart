@@ -1,11 +1,12 @@
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/sync_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class ConfirmWorkout extends ConsumerStatefulWidget {
-  final Map data;
+  final WorkoutDetails data;
   final bool editing;
   const ConfirmWorkout({
     super.key,
@@ -27,9 +28,9 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
   Map getStats() {
     Map stats = {"Volume": 0, "Sets": 0, "Exercises": 0, "WorkoutTime": ''};
 
-    for (var exercise in widget.data['sets'].keys) {
+    for (var exercise in widget.data.sets.keys) {
       stats['Exercises'] += 1;
-      for (var set in widget.data['sets'][exercise]) {
+      for (var set in widget.data.sets[exercise]!) {
         stats['Sets'] += 1;
         stats['Volume'] += (double.parse(set['weight'].toString()).abs() *
                 double.parse(set['reps'].toString())).abs();
@@ -58,10 +59,8 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
   void initState() {
     super.initState();
     setState(() {
-      stats = widget.data['stats'] ?? {};
-      startTime = DateTime.tryParse(stats['startTime'] ?? '') ?? startTime;
-      endTime = DateTime.tryParse(stats['endTime'] ?? '') ?? endTime;
-      _workoutNotesController.text = stats['notes']?['Workout'] ?? '';
+      startTime = DateTime.tryParse(widget.data.startTime) ?? startTime;
+      _workoutNotesController.text = widget.data.endTime ?? '';
     });
   }
 
@@ -222,8 +221,8 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    ...widget.data['sets'].keys.map((exercise) {
-                      final exerciseSets = widget.data['sets'][exercise] as List;
+                    ...widget.data.sets.keys.map((exercise) {
+                      final exerciseSets = widget.data.sets[exercise]!;
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2.0),
                         child: Row(
@@ -284,7 +283,10 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
               height: 48,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  saveExercises(widget.data, startTime, endTime).then((res){
+                  saveExercises(widget.data.copyWith(
+                    startTime: startTime.toIso8601String(),
+                    endTime: endTime.toIso8601String(),
+                  )).then((res){
                     if (res != null && context.mounted) {
                       Navigator.pop(context, res);
                       Navigator.pop(context, res);
@@ -317,10 +319,10 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     );
   }
 
-  Future<Map<dynamic, dynamic>?> saveExercises(Map exerciseList, DateTime startTime, DateTime endTime) async {
-    String day = DateFormat('yyyy-MM-dd').format(startTime);
-    String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(startTime);
-    String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(endTime);
+  Future<Map<dynamic, dynamic>?> saveExercises(WorkoutDetails workoutStats) async {
+    String day = DateFormat('yyyy-MM-dd').format(DateTime.parse(workoutStats.startTime));
+    String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(workoutStats.startTime));
+    String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(workoutStats.endTime!));
 
     Map allData = await ref.read(workoutDataProvider.future);
     int num = 1;
@@ -336,7 +338,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     };
     Map<String, dynamic> data = {
       'stats': combinedStats,
-      'sets': exerciseList['sets']
+      'sets': workoutStats.sets
     };
     if (!widget.editing) {
       ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);

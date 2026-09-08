@@ -3,6 +3,7 @@ import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
@@ -238,7 +239,7 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
   final filters = ref.watch(chartFilterProvider);
 
   return rawDataAsync.whenData((data) {
-    Map exercises = ref.watch(exercisesProvider);
+    Map<String, Exercise> exercises = ref.watch(exercisesProvider);
 
     Map exerciseMap = {};
     for (var day in data.keys) {
@@ -251,7 +252,7 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
                 filters.muscleSelected == 'All Muscles') {
               List sets = data[day]['sets'][exercise];
               String target = 'weight';
-              (exercises[exercise]?['type'] ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
+              (exercises[exercise]?.type ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
               sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
               exerciseMap[exercise] = (exerciseMap[exercise] ?? 0) + 1;
               break;

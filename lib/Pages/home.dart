@@ -2,6 +2,7 @@ import 'package:exercise_app/Pages/routines.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:exercise_app/widgets.dart';
@@ -277,9 +278,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void attemptStartWorkout({Map? data, WorkoutMetaData? metaData}) async{
-
-
+  void attemptStartWorkout({Map<String, dynamic>? data, WorkoutMetaData? metaData}) async{
     bool workoutInProgress = (await ref.read(currentWorkoutProvider.future)).isNotEmpty;
     if (workoutInProgress && mounted){
       showDialog(
@@ -296,7 +295,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Navigator.of(context).pop(); // Dismiss the dialog
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),
+                    MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
                   );
                 },
               ),
@@ -306,7 +305,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Navigator.of(context).pop(); // Dismiss the dialog 7
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),
+                    MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
                   );
                 },
               ),
@@ -315,10 +314,10 @@ class _HomePageState extends ConsumerState<HomePage> {
         },
       );
     }else{
-      if (!context.mounted) return;
+      if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddWorkout(sets: data, metaData: metaData,)),
+        MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
       );
     }
   }

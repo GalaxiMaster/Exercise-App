@@ -345,7 +345,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
         if (isCustom && customExercisesData.containsKey(exercise)){
           exerciseData = customExercisesData[exercise];
         } else {
-          exerciseData = exercises[exercise] ?? {};
+          exerciseData = exercises[exercise];
         }
         
         if (exerciseData == null) continue;

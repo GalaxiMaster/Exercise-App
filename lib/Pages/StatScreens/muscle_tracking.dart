@@ -446,7 +446,7 @@ final weeklyMuscleDataProvider = Provider<Map>((ref) {
 
           if (exerciseData == null) continue;
 
-          Map<String, int> allMuscles = {...(exerciseData.primary ?? {}), ...(exerciseData.secondary ?? {})};
+          Map<String, int> allMuscles = {...exerciseData.primary, ...exerciseData.secondary};
 
           for (int i = 0; i < data[day]['sets'][exercise].length; i++){
             for (MapEntry muscle in allMuscles.entries){

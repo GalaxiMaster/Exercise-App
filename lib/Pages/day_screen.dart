@@ -2,6 +2,7 @@ import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/workout_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -107,7 +108,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                           final result = await Navigator.push(
                             context, 
                             MaterialPageRoute(
-                              builder: (context) => AddWorkout(sets: day.value, editing: true),
+                              builder: (context) => AddWorkout(initialData: WorkoutDetails.fromJson(day.value), editing: true),
                             ),
                           );
                           if (result != null && day.value != result) { // Could add validation here
@@ -177,7 +178,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                  child: Text(getBestSet(day.value['sets'][day.value['sets'].keys.toList()[i]], exercises[day.value['sets'].keys.toList()[i]]?['type'] ?? 'Weighted')),
+                  child: Text(getBestSet(day.value['sets'][day.value['sets'].keys.toList()[i]], exercises[day.value['sets'].keys.toList()[i]]?.type ?? 'Weighted')),
                 )
               ],
             ),
