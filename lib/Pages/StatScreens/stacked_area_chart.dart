@@ -50,7 +50,7 @@ class ChartData {
 final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<ChartData>>>>((ref) {
   final filters = ref.watch(chartFilterProvider);
   final rawDataAsync = ref.watch(workoutDataProvider);
-  final customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  final Map customExercisesData = ref.read(customExercisesProvider);
   Map exercises = ref.watch(exercisesProvider);
 
   return rawDataAsync.whenData((data) {

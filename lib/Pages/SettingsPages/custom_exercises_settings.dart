@@ -13,66 +13,60 @@ class CustomExerciseSettings extends ConsumerStatefulWidget {
 class CustomExerciseSettingsState extends ConsumerState<CustomExerciseSettings> {
   @override
   Widget build(BuildContext context) {
-    final customExercisesAsync = ref.watch(customExercisesProvider);
+    final Map customExercisesData = ref.read(customExercisesProvider);
     return Scaffold(
       appBar: myAppBar(
         context, 'Custom Exercise Settings',
       ),
-      body: customExercisesAsync.when(
-        data: (map) {
-          return Stack(
-            children: [
-              ListView.builder(
-                itemCount: map.length,
-                itemBuilder: (context, index){
-                  MapEntry exercise = map.entries.toList()[index];
-                  return _buildExerciseItem(exercise);
-                }
-              )
-              // if (multiSelect)
-              // Align(
-              //   alignment: Alignment.bottomCenter,
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 50),
-              //     child: GestureDetector(
-              //       onTap: (){
-              //         if(widget.setting == 'choose' ){
-              //           Navigator.pop(context, selectedItems);
-              //         }
-              //         else{
-              //           Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                 builder: (context) => ExerciseScreen(exercises: selectedItems)
-              //               )
-              //           );
-              //         }
-              //       },
-              //       child: Container(
-              //         decoration: BoxDecoration(
-              //           color: Colors.blue,
-              //           borderRadius: BorderRadius.circular(50)
-              //         ),
-              //         height: 50,
-              //         width: double.infinity,
-              //         child: Center(
-              //           child: Text(
-              //             'Choose ${selectedItems.length} exercise(s)',
-              //             style: const TextStyle(
-              //               fontSize: 20
-              //             ),
-              //           )
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ]
-          );
-        },
-        loading: () => CircularProgressIndicator(),
-        error: (err, stack) => Text('Error: $err'),
-      ),
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: customExercisesData.length,
+            itemBuilder: (context, index){
+              MapEntry exercise = customExercisesData.entries.toList()[index];
+              return _buildExerciseItem(exercise);
+            }
+          )
+          // if (multiSelect)
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 50),
+          //     child: GestureDetector(
+          //       onTap: (){
+          //         if(widget.setting == 'choose' ){
+          //           Navigator.pop(context, selectedItems);
+          //         }
+          //         else{
+          //           Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                 builder: (context) => ExerciseScreen(exercises: selectedItems)
+          //               )
+          //           );
+          //         }
+          //       },
+          //       child: Container(
+          //         decoration: BoxDecoration(
+          //           color: Colors.blue,
+          //           borderRadius: BorderRadius.circular(50)
+          //         ),
+          //         height: 50,
+          //         width: double.infinity,
+          //         child: Center(
+          //           child: Text(
+          //             'Choose ${selectedItems.length} exercise(s)',
+          //             style: const TextStyle(
+          //               fontSize: 20
+          //             ),
+          //           )
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+        ]
+      )
     );
   }
   Widget _buildExerciseItem(MapEntry exercise) {
@@ -183,7 +177,7 @@ class CustomExerciseSettingsState extends ConsumerState<CustomExerciseSettings> 
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: IconButton(
                 onPressed: (){
-                  ref.read(customExercisesProvider.notifier).deleteExercise(exercise.key);
+                  ref.read(customExercisesAsyncProvider.notifier).deleteExercise(exercise.key);
                 }, 
                 icon: Icon(Icons.delete)
               )

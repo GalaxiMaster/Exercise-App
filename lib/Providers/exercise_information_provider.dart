@@ -44,41 +44,40 @@ class CustomExercisesNotifier extends AsyncNotifier<Map<String, dynamic>> {
     });
     ref.read(storageServiceProvider).writeKey(key, value, path: 'customExercises');
   }
-  
+
   Future<void> deleteExercise(String key) async {
-    Map<String, dynamic> stateVal = state.value ?? {};
-    stateVal.remove(key);
-    state = AsyncData({
-      ...stateVal
-    });
-    ref.read(storageServiceProvider).deleteKey(key, path: 'customExercises');
+    final updated = {...state.value ?? {}}..remove(key);
+    state = AsyncData(updated);
+    await ref.read(storageServiceProvider).deleteKey(key, path: 'customExercises');
   }
 }
 
-final customExercisesProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map<String, dynamic>>(CustomExercisesNotifier.new);
+final customExercisesAsyncProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map<String, dynamic>>(
+  CustomExercisesNotifier.new,
+);
+
+final customExercisesProvider = Provider<Map<String, dynamic>>((ref) {
+  return ref.watch(customExercisesAsyncProvider).value ?? {};
+});
 
 class ExerciseGroupingRepository {
-  Future<Map<String, Exercise>> loadExercises() async {
-    final raw = await rootBundle.loadString('data/exercise_muscles.json');
-    final Map<String, dynamic> jsonMap = jsonDecode(raw) as Map<String, dynamic>;
+  Future<Map<String, Map>> loadExercises() async {
+    final raw = await rootBundle.loadString('data/grouped_exercises.json');
+    final Map<String, Map> jsonMap = jsonDecode(raw).cast<String, Map>();
 
-    return jsonMap.map(
-      (key, value) => MapEntry(
-        key,
-        Exercise.fromJson(key, value as Map<String, dynamic>),
-      ),
-    );
+    return jsonMap;
   }
 }
 
 final exerciseGroupingRepositoryProvider = Provider<ExerciseGroupingRepository>((ref) {
   return ExerciseGroupingRepository();
 });
-final exerciseGroupingAsyncProvider = FutureProvider<Map<String, Exercise>>((ref) async {
+
+final exerciseGroupingAsyncProvider = FutureProvider<Map<String, Map>>((ref) async {
   final repo = ref.watch(exerciseGroupingRepositoryProvider);
   return repo.loadExercises();
 });
 
-final exerciseGroupingProvider = Provider<Map<String, Exercise>>((ref) {
+final exerciseGroupingProvider = Provider<Map<String, Map>>((ref) {
   return ref.watch(exerciseGroupingAsyncProvider).value ?? {};
 });

@@ -350,7 +350,7 @@ Map sortMapByValue<K, V extends Comparable>(Map map, {bool descending = false}) 
 }
 
 final percentageModelProvider = Provider.autoDispose.family<List, Map>((ref, data) {
-  final Map customExercisesData = ref.watch(customExercisesProvider).value ?? {};
+  final Map customExercisesData = ref.read(customExercisesProvider);
   Map exercises = ref.watch(exercisesProvider);
 
   Map percentages = {};

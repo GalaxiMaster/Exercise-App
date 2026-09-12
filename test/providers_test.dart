@@ -293,11 +293,11 @@ void main() {
       final c = makeContainer(mockStorage);
       addTearDown(c.dispose);
 
-      await c.read(customExercisesProvider.future);
-      await c.read(customExercisesProvider.notifier).deleteExercise('Pull-up');
+      c.read(customExercisesProvider);
+      await c.read(customExercisesAsyncProvider.notifier).deleteExercise('Pull-up');
 
-      final state = c.read(customExercisesProvider).value;
-      expect(state?.containsKey('Pull-up'), false);
+      final state = c.read(customExercisesProvider);
+      expect(state.containsKey('Pull-up'), false);
     });
 
     test('deleteExercise() calls deleteKey on storage', () async {
@@ -307,8 +307,8 @@ void main() {
       final c = makeContainer(mockStorage);
       addTearDown(c.dispose);
 
-      await c.read(customExercisesProvider.future);
-      await c.read(customExercisesProvider.notifier).deleteExercise('Pull-up');
+      c.read(customExercisesProvider);
+      await c.read(customExercisesAsyncProvider.notifier).deleteExercise('Pull-up');
 
       verify(() => mockStorage.deleteKey('Pull-up', path: 'customExercises'))
           .called(1);

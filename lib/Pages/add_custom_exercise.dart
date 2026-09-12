@@ -120,7 +120,7 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
     final String exerciseName = _exerciseNameController.text.trim();
     final Map<String, int> muscleGroups = _selectedMuscleGroups.map((k, v) => MapEntry(k, v!));
 
-    ref.read(customExercisesProvider.notifier).updateValue(
+    ref.read(customExercisesAsyncProvider.notifier).updateValue(
       exerciseName, 
       {
         ...toPrimarySecondary(muscleGroups), 

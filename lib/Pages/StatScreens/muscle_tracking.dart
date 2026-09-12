@@ -421,7 +421,7 @@ class WeeklyProgressChart extends ConsumerWidget {
 
 final weeklyMuscleDataProvider = Provider<Map>((ref) {
   final dataAsync = ref.watch(workoutDataProvider);
-  final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  final Map customExercisesData = ref.read(customExercisesProvider);
   Map exercises = ref.watch(exercisesProvider);
 
   return dataAsync.maybeWhen(
@@ -567,7 +567,7 @@ class SpeedometerPainter extends CustomPainter {
 
 final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);
-  final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  final Map customExercisesData = ref.read(customExercisesProvider);
   Map exercises = ref.watch(exercisesProvider);
 
   return rawDataAsync.whenData((data) {

@@ -104,11 +104,11 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
 
   void repopulateExerciseTypeAccess() {
-    final customExercises = ref.read(customExercisesProvider).value ?? {};
+  final Map customExercisesData = ref.read(customExercisesProvider);
     final exercises = ref.read(exercisesProvider);
     for (final exercise in sets.keys) {
       final type = exercises[exercise]?.type
-          ?? customExercises[exercise]?['type']
+          ?? customExercisesData[exercise]?['type']
           ?? 'Weighted';
       exerciseTypeAccess[exercise] = type;
     }
@@ -196,7 +196,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   @override
   Widget build(BuildContext context) {
-    final customExerciseAsync = ref.watch(customExercisesProvider);
+    final customExerciseData = ref.watch(customExercisesProvider);
     final Map settings = ref.watch(settingsProvider).value ?? {};
     final Map workoutData = ref.watch(workoutDataProvider).value ?? {};
     final Map records = ref.watch(recordsProvider).value ?? {};
@@ -239,7 +239,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                 settings,
                 records,
                 workoutData,
-                customExerciseAsync,
+                customExerciseData, // todo think about if i need to pass this in
                 exercises,
               ),
             const SizedBox(height: 20),
@@ -257,11 +257,10 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   if (!mounted) return;
               
                   if (result != null) {
-                    final customExercises = customExerciseAsync.value ?? {};
                     for (final exercise in result) {
                       if (!sets.containsKey(exercise)) {
                         final type = exercises[exercise]?.type
-                            ?? customExercises[exercise]?.type
+                            ?? customExerciseData[exercise]?.type
                             ?? 'Weighted';
                         sets[exercise] = [
                           {
@@ -291,7 +290,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     Map settings,
     Map records,
     Map workoutData,
-    AsyncValue customExerciseAsync,
+    Map customExercisesData,
     Map<String, Exercise> exercises,
   ) {
     return Column(

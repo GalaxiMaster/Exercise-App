@@ -756,7 +756,7 @@ class _InfoBodyState extends ConsumerState<InfoBody> {
   Future<Map> getMusclePercentages() async {
     Map primaryMuscles = {};
     Map secondaryMuscles = {};
-    final Map customExercisesData = await ref.read(customExercisesProvider.future);
+    final Map customExercisesData = ref.read(customExercisesProvider);
     Map exercises = ref.watch(exercisesProvider);
 
     for (String exercise in widget.exercises){
@@ -1062,7 +1062,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
   final exerciseHistoryProvider = FutureProvider.family<Map<String, Map>, List<String>>((ref, targetExercises) async {
     // 1. Listen to the dependencies. 
     // Using 'watch' ensures this provider recalculates when data changes.
-    final customExercisesData = await ref.watch(customExercisesProvider.future);
+    final Map customExercisesData = ref.read(customExercisesProvider);
     final workoutAsyncValue = ref.watch(workoutDataProvider);
     Map exercises = ref.watch(exercisesProvider);
 

@@ -8,12 +8,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+enum ExerciseListType {
+  grouped,
+  individual,
+}
+
+class ListTypeNotifier extends Notifier<ExerciseListType> {
+  @override
+  ExerciseListType build() => ExerciseListType.grouped;
+
+  void set(ExerciseListType value) => state = value;
+}
+
+
 class WorkoutList extends ConsumerStatefulWidget {
   final String setting;
   final List? problemExercises;
   final String? problemExercisesTitle;
   final Map? preData;
   final bool multiSelect;
+
   const WorkoutList({
     super.key, 
     required this.setting, 
@@ -29,30 +43,30 @@ class WorkoutList extends ConsumerStatefulWidget {
 
 class _WorkoutListState extends ConsumerState<WorkoutList> {
   String query = '';
-  late final List exerciseList;
   final List<String> selectedItems = [];
   bool multiSelect = false;
   bool loading = true;
 
   final cacheProvider = NotifierProvider<CacheNotifier, Map<String, int>>(CacheNotifier.new);
+  final listTypeProvider = NotifierProvider<ListTypeNotifier, ExerciseListType>(ListTypeNotifier.new);
 
   @override
   void initState() {
     super.initState();
-    Future.microtask((){
-      fetchInitialData();
-    });
+    Future.microtask(()=>
+      fetchInitialData()
+    );
   }
 
   void fetchInitialData() async{
     if (!loading) return;
-    Map exercises = ref.watch(exercisesProvider);
-    exerciseList = exercises.keys.toList()..sort();
     checkAssets();
     setState(()=>loading = false);
   }
 
   Future<void> checkAssets() async {
+    final exerciseList = ref.read(exercisesProvider).keys.toList()..sort();
+
     List exerciseCachedList = List.from(exerciseList);
     for (String exercise in exerciseCachedList) {
       String filePath = "assets/Exercises/$exercise.png";
@@ -175,8 +189,46 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   
   @override
   Widget build(BuildContext context) {
-    final customExercisesAsync = ref.read(customExercisesProvider);
+    final exercises = ref.watch(exercisesProvider);
+    final customExercises = ref.watch(customExercisesProvider);
 
+    final filteredExercises = [...exercises.keys, ...customExercises.keys]
+        .where((exercise) => containsAllCharacters(exercise, query))
+        .toList();
+
+    filteredExercises.sort();
+
+    Map filteredExercisesMap = Map.fromEntries(
+      filteredExercises.map((value) => MapEntry(value, 0)),
+    );
+    if (widget.preData != null && query != ''){
+      for (String day in widget.preData!.keys){
+        for (String exercise in widget.preData![day]['sets'].keys){
+          if (filteredExercises.contains(exercise)){
+            filteredExercisesMap[exercise] += 1;
+          }
+        }
+      }
+      var sortedEntries = filteredExercisesMap.entries.toList();
+
+      sortedEntries.sort((a, b) {
+        if (a.value > 0 && b.value > 0) {
+          // Sort numerically where int > 0
+          return b.value.compareTo(a.value);
+        } else if (a.value == 0 && b.value == 0) {
+          // Sort alphabetically where int == 0
+          return a.key.compareTo(b.key);
+        } else {
+          // Keep sections separate: int > 0 before int == 0
+          return b.value.compareTo(a.value);
+        }
+      });
+      filteredExercisesMap = Map.fromEntries(sortedEntries);
+    }
+
+    final filteredProblemExercises = widget.problemExercises
+        ?.where((exercise) => containsAllCharacters(exercise, query))
+        .toList() ?? [];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise List'),
@@ -194,126 +246,89 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
           ),
         ],
       ),
-      body: loading ? CircularProgressIndicator() : customExercisesAsync.when(
-        data: (data) {
-          exerciseList.addAll(data.keys.toList());
-          exerciseList.sort();
-          final filteredExercises = exerciseList
-              .where((exercise) => containsAllCharacters(exercise, query))
-              .toList();
-
-          Map filteredExercisesMap = Map.fromEntries(
-            filteredExercises.map((value) => MapEntry(value, 0)),
-          );
-          if (widget.preData != null && query != ''){
-            for (String day in widget.preData!.keys){
-              for (String exercise in widget.preData![day]['sets'].keys){
-                if (filteredExercises.contains(exercise)){
-                  filteredExercisesMap[exercise] += 1;
-                }
-              }
-            }
-            var sortedEntries = filteredExercisesMap.entries.toList();
-
-            sortedEntries.sort((a, b) {
-              if (a.value > 0 && b.value > 0) {
-                // Sort numerically where int > 0
-                return b.value.compareTo(a.value);
-              } else if (a.value == 0 && b.value == 0) {
-                // Sort alphabetically where int == 0
-                return a.key.compareTo(b.key);
-              } else {
-                // Keep sections separate: int > 0 before int == 0
-                return b.value.compareTo(a.value);
-              }
-            });
-            filteredExercisesMap = Map.fromEntries(sortedEntries);
-          }
-
-          final filteredProblemExercises = widget.problemExercises
-              ?.where((exercise) => containsAllCharacters(exercise, query))
-              .toList() ?? [];
-          return Stack(
-            children: [
-              CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: SearchBar(onQueryChanged: (newQuery) {
-                      setState(() => query = newQuery);
-                    }),
-                  ),
-                  if (widget.problemExercises != null) ...[
-                    SliverToBoxAdapter(
-                      child: Text(widget.problemExercisesTitle ?? ''),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => _buildExerciseItem(
-                          filteredProblemExercises[index], 
-                          true
-                        ),
-                        childCount: filteredProblemExercises.length,
-                      ),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: Text('Normal Exercises'),
-                    ),
-                  ],
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildExerciseItem(
-                        ref.watch(exercisesProvider)[filteredExercisesMap.keys.toList()[index]]!,
-                        false,
-                        customData: data[filteredExercisesMap.keys.toList()[index]]
-                      ),
-                      childCount: filteredExercisesMap.length,
-                    ),
-                  ),
-                ],
+      body: loading ? CircularProgressIndicator() : Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SearchBar(onQueryChanged: (newQuery) {
+                  setState(() => query = newQuery);
+                }),
               ),
-              if (multiSelect)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: GestureDetector(
-                    onTap: (){
-                      if(widget.setting == 'choose' ){
-                        Navigator.pop(context, selectedItems);
-                      }
-                      else{
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseScreen(exercises: selectedItems)
-                            )
-                        );
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(50)
-                      ),
-                      height: 50,
-                      width: double.infinity,
-                      child: Center(
-                        child: Text(
-                          'Choose ${selectedItems.length} exercise(s)',
-                          style: const TextStyle(
-                            fontSize: 20
-                          ),
-                        )
-                      ),
+              if (widget.problemExercises != null) ...[
+                SliverToBoxAdapter(
+                  child: Text(widget.problemExercisesTitle ?? ''),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _buildExerciseItem(
+                      filteredProblemExercises[index], 
+                      true
                     ),
+                    childCount: filteredProblemExercises.length,
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: Text('Normal Exercises'),
+                ),
+              ],
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => _buildExerciseItem(
+                    ref.watch(exercisesProvider)[filteredExercisesMap.keys.toList()[index]] ?? Exercise(
+                      id: filteredExercisesMap.keys.toList()[index],
+                      name: filteredExercisesMap.keys.toList()[index],
+                      primary: {},
+                      secondary: {},
+                      type: '',
+                    ),
+                    false,
+                    customData: customExercises[filteredExercisesMap.keys.toList()[index]]
+                  ),
+                  childCount: filteredExercisesMap.length,
+                ),
+              ),
+            ],
+          ),
+          if (multiSelect)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: GestureDetector(
+                onTap: (){
+                  if(widget.setting == 'choose' ){
+                    Navigator.pop(context, selectedItems);
+                  }
+                  else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExerciseScreen(exercises: selectedItems)
+                        )
+                    );
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(50)
+                  ),
+                  height: 50,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      'Choose ${selectedItems.length} exercise(s)',
+                      style: const TextStyle(
+                        fontSize: 20
+                      ),
+                    )
                   ),
                 ),
               ),
-            ]
-          );
-        },
-        loading: () => CircularProgressIndicator(),
-        error: (err, stack) => Text('Error: $err'),
+            ),
+          ),
+        ]
       )
     );
   }
