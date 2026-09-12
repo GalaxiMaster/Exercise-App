@@ -191,10 +191,12 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   Widget build(BuildContext context) {
     final exercises = ref.watch(exercisesProvider);
     final customExercises = ref.watch(customExercisesProvider);
+    final groupedExercises = ref.watch(exerciseGroupingProvider);
 
-    final filteredExercises = [...exercises.keys, ...customExercises.keys]
-        .where((exercise) => containsAllCharacters(exercise, query))
-        .toList();
+    final filteredExercises = [
+       ...(ref.read(listTypeProvider) == ExerciseListType.grouped ? groupedExercises.keys : exercises.keys), // pick between lists based on search style
+        ...customExercises.keys
+      ].where((exercise) => containsAllCharacters(exercise, query)).toList();
 
     filteredExercises.sort();
 
@@ -275,13 +277,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => _buildExerciseItem(
-                    ref.watch(exercisesProvider)[filteredExercisesMap.keys.toList()[index]] ?? Exercise(
-                      id: filteredExercisesMap.keys.toList()[index],
-                      name: filteredExercisesMap.keys.toList()[index],
-                      primary: {},
-                      secondary: {},
-                      type: '',
-                    ),
+                    getExerciseById(filteredExercisesMap.keys.toList()[index], exercises, customExercises, groupedExercises),
                     false,
                     customData: customExercises[filteredExercisesMap.keys.toList()[index]]
                   ),
@@ -330,6 +326,26 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
           ),
         ]
       )
+    );
+  }
+
+  Exercise getExerciseById(String id, Map<String, Exercise> exercises, Map<String, dynamic> customExercises, Map<String, Map<dynamic, dynamic>> groupedExercises) {
+    Exercise? exercise;
+    switch (ref.read(listTypeProvider)) {
+      case ExerciseListType.grouped:
+        exercise = exercises[groupedExercises[id]?.values.first]?.copyWith(
+          name: id,
+        );
+      case ExerciseListType.individual:
+        exercise = exercises[id];
+    }
+
+    return exercise ?? Exercise(
+      id: id,
+      name: id,
+      primary: {},
+      secondary: {},
+      type: '',
     );
   }
 }

@@ -22,4 +22,20 @@ class Exercise {
       secondary: Map<String, int>.from(json['Secondary'] as Map),
     );
   }
+
+  Exercise copyWith({
+    String? id,
+    String? name,
+    String? type,
+    Map<String, int>? primary,
+    Map<String, int>? secondary,
+  }) {
+    return Exercise(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      primary: primary ?? this.primary,
+      secondary: secondary ?? this.secondary,
+    );
+  }
 }
