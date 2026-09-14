@@ -345,7 +345,8 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       name: id,
       primary: {},
       secondary: {},
-      type: '',
+      type: '', 
+      group: '',
     );
   }
 }

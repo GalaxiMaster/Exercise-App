@@ -4,13 +4,15 @@ class Exercise {
   final String type;
   final Map<String, int> primary;
   final Map<String, int> secondary;
+  final String group;
 
   const Exercise({
     required this.id,
     required this.name,
     required this.type,
     required this.primary,
-    required this.secondary,
+    required this.secondary, 
+    required this.group,
   });
 
   factory Exercise.fromJson(String id, Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Exercise {
       type: json['type'] as String,
       primary: Map<String, int>.from(json['Primary'] as Map),
       secondary: Map<String, int>.from(json['Secondary'] as Map),
+      group: json['Group'] as String? ?? '',
     );
   }
 
@@ -29,6 +32,7 @@ class Exercise {
     String? type,
     Map<String, int>? primary,
     Map<String, int>? secondary,
+    String? group,
   }) {
     return Exercise(
       id: id ?? this.id,
@@ -36,6 +40,7 @@ class Exercise {
       type: type ?? this.type,
       primary: primary ?? this.primary,
       secondary: secondary ?? this.secondary,
+      group: group ?? this.group,
     );
   }
 }

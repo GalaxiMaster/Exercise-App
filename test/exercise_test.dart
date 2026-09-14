@@ -124,7 +124,7 @@ void main() {
   test('All exercises exist', () async {
     Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
 
-    Map<String, dynamic> groupedExercises = await readJsoncFile(scriptRelativePath('data/grouped_exercises.jsonc'));
+    Map<String, dynamic> groupedExercises = await readJsoncFile(scriptRelativePath('data/grouped_exercises.json'));
     List<String> flattenedGroups = groupedExercises.values.cast<Map<String, dynamic>>().expand((variants) => variants.values.cast<String>()).toList();
     
     List<String> notExistsInMuscleInfo = [];
@@ -200,4 +200,39 @@ void main() {
   });
   
   // Add tests to verify json files for correct data structure
+
+  test('ensure exercise_muscles.json has correct structure', () async {
+    Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
+
+    for (var entry in muscleInfo.entries) {
+      final id = entry.key;
+      final value = entry.value;
+
+      expect(value, isA<Map<String, dynamic>>(), reason: 'Value for $id is not a Map');
+      expect(value.containsKey('Primary'), true, reason: 'Value for $id does not contain "Primary" key');
+      expect(value.containsKey('Secondary'), true, reason: 'Value for $id does not contain "Secondary" key');
+      expect(value.containsKey('type'), true, reason: 'Value for $id does not contain "type" key');
+      expect(value.containsKey('group'), true, reason: 'Value for $id does not contain "group" key');
+    }
+  });
+  test('add groupings', () async {
+    Map<String, dynamic> muscleInfo = await readJsoncFile(scriptRelativePath('data/exercise_muscles.json'));
+    Map<String, dynamic> groupedExercises = await readJsoncFile(scriptRelativePath('data/grouped_exercises.json'));
+
+    for (var entry in muscleInfo.entries) {
+      final id = entry.key;
+      final value = entry.value;
+
+      for (var groupEntry in groupedExercises.entries) {
+        final groupName = groupEntry.key;
+        final variants = groupEntry.value as Map<String, dynamic>;
+
+        if (variants.containsValue(id)) {
+          value['group'] = groupName;
+          break;
+        }
+      }
+    }
+    await writeJsonFile(scriptRelativePath('data/exercise_muscles.json'), muscleInfo);
+  });
 }

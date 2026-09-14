@@ -9,7 +9,8 @@
       "Rhomboids": 5
     },
     "type": "Weighted",
-    "name": "Lat Pulldown"
+    "name": "Lat Pulldown",
+    "group": "Lat Pulldown"
   },
   "dumbbell_standing_preacher_curl": {
     "Primary": {
@@ -20,7 +21,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Preacher Curl"
+    "name": "Dumbbell Standing Preacher Curl",
+    "group": "Preacher Curl"
   },
   "barbell_clean_and_press": {
     "Primary": {
@@ -33,7 +35,8 @@
       "Glutes": 10
     },
     "type": "Weighted",
-    "name": "Barbell Clean and Press"
+    "name": "Barbell Clean and Press",
+    "group": "Clean and Press"
   },
   "barbell_overhead_squat": {
     "Primary": {
@@ -46,7 +49,8 @@
       "Hamstrings": 15
     },
     "type": "Weighted",
-    "name": "Barbell Overhead Squat"
+    "name": "Barbell Overhead Squat",
+    "group": "Overhead Squat"
   },
   "dumbbell_one_arm_shoulder_press": {
     "Primary": {
@@ -57,7 +61,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Shoulder Press"
+    "name": "Dumbbell One Arm Shoulder Press",
+    "group": "Shoulder Press"
   },
   "barbell_pullover_to_press": {
     "Primary": {
@@ -69,7 +74,8 @@
       "Triceps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Pullover to Press"
+    "name": "Barbell Pullover to Press",
+    "group": "Pullover To Press"
   },
   "dumbbell_seated_one_arm_arnold_press": {
     "Primary": {
@@ -81,7 +87,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated One Arm Arnold Press"
+    "name": "Dumbbell Seated One Arm Arnold Press",
+    "group": "Arnold Press"
   },
   "barbell_standing_overhead_press": {
     "Primary": {
@@ -92,7 +99,8 @@
       "Triceps": 30
     },
     "type": "Weighted",
-    "name": "Barbell Standing Overhead Press"
+    "name": "Barbell Standing Overhead Press",
+    "group": "Overhead Press"
   },
   "dumbbell_alternate_arnold_press": {
     "Primary": {
@@ -104,7 +112,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Arnold Press"
+    "name": "Dumbbell Alternate Arnold Press",
+    "group": "Arnold Press"
   },
   "cable_shoulder_press": {
     "Primary": {
@@ -115,7 +124,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Cable Shoulder Press"
+    "name": "Cable Shoulder Press",
+    "group": "Shoulder Press"
   },
   "lever_seated_shoulder_press": {
     "Primary": {
@@ -126,7 +136,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Lever Seated Shoulder Press"
+    "name": "Lever Seated Shoulder Press",
+    "group": "Shoulder Press"
   },
   "dumbbell_seated_one_arm_shoulder_press": {
     "Primary": {
@@ -137,7 +148,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated One Arm Shoulder Press"
+    "name": "Dumbbell Seated One Arm Shoulder Press",
+    "group": "Shoulder Press"
   },
   "dumbbell_alternate_side_press": {
     "Primary": {
@@ -148,7 +160,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Side Press"
+    "name": "Dumbbell Alternate Side Press",
+    "group": "Side Press"
   },
   "dumbbell_seated_shoulder_press": {
     "Primary": {
@@ -159,7 +172,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Shoulder Press"
+    "name": "Dumbbell Seated Shoulder Press",
+    "group": "Shoulder Press"
   },
   "reverse_dip": {
     "Primary": {
@@ -170,7 +184,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Reverse Dip"
+    "name": "Reverse Dip",
+    "group": "Reverse Dip"
   },
   "dumbbell_standing_biceps_curl_to_shoulder_press": {
     "Primary": {
@@ -182,7 +197,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Biceps Curl to Shoulder Press"
+    "name": "Dumbbell Standing Biceps Curl to Shoulder Press",
+    "group": "Curl to Press"
   },
   "dumbbell_standing_alternate_hammer_curl_and_press": {
     "Primary": {
@@ -195,7 +211,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Alternate Hammer Curl and Press"
+    "name": "Dumbbell Standing Alternate Hammer Curl and Press",
+    "group": "Hammer Curl and Press"
   },
   "body_up": {
     "Primary": {
@@ -206,7 +223,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Body Up"
+    "name": "Body Up",
+    "group": "Body Up"
   },
   "dumbbell_seated_biceps_curl_to_shoulder_press": {
     "Primary": {
@@ -218,7 +236,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Biceps Curl to Shoulder Press"
+    "name": "Dumbbell Seated Biceps Curl to Shoulder Press",
+    "group": "Curl to Press"
   },
   "ring_dip": {
     "Primary": {
@@ -229,7 +248,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Ring Dip"
+    "name": "Ring Dip",
+    "group": "Dip"
   },
   "chest_dip_on_straight_bar": {
     "Primary": {
@@ -240,7 +260,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Chest Dip On Straight Bar"
+    "name": "Chest Dip On Straight Bar",
+    "group": "Dip"
   },
   "dumbbell_lying_triceps_extension": {
     "Primary": {
@@ -251,7 +272,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Triceps Extension"
+    "name": "Dumbbell Lying Triceps Extension",
+    "group": "Triceps Extension"
   },
   "barbell_thruster": {
     "Primary": {
@@ -266,7 +288,8 @@
       "Abs": 4
     },
     "type": "Weighted",
-    "name": "Barbell Thruster"
+    "name": "Barbell Thruster",
+    "group": "Thruster"
   },
   "dumbbell_arnold_press": {
     "Primary": {
@@ -278,7 +301,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Arnold Press"
+    "name": "Dumbbell Arnold Press",
+    "group": "Arnold Press"
   },
   "cable_incline_triceps_extension": {
     "Primary": {
@@ -289,7 +313,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Cable Incline Triceps Extension"
+    "name": "Cable Incline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "barbell_lying_triceps_extension": {
     "Primary": {
@@ -300,7 +325,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Barbell Lying Triceps Extension"
+    "name": "Barbell Lying Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_lying_floor_skullcrusher": {
     "Primary": {
@@ -311,7 +337,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Floor Skull Crusher"
+    "name": "Dumbbell Lying Floor Skull Crusher",
+    "group": "Skullcrusher"
   },
   "incline_push_up": {
     "Primary": {
@@ -322,7 +349,8 @@
       "Front Delts": 20
     },
     "type": "Bodyweight",
-    "name": "Incline Push Up"
+    "name": "Incline Push Up",
+    "group": "Push Up"
   },
   "back_lever": {
     "Primary": {
@@ -333,7 +361,8 @@
       "Rear Delts": 20
     },
     "type": "Weighted",
-    "name": "Back Lever"
+    "name": "Back Lever",
+    "group": "Back Lever"
   },
   "band_assisted_dips": {
     "Primary": {
@@ -344,7 +373,8 @@
       "Front Delts": 10
     },
     "type": "Banded",
-    "name": "Band Assisted Dips"
+    "name": "Band Assisted Dips",
+    "group": "Dip"
   },
   "band_assisted_muscle_up": {
     "Primary": {
@@ -356,7 +386,8 @@
       "Front Delts": 10
     },
     "type": "Banded",
-    "name": "Band Assisted Muscle Up"
+    "name": "Band Assisted Muscle Up",
+    "group": "Muscle Up"
   },
   "landmine_press": {
     "Primary": {
@@ -368,7 +399,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Landmine Press"
+    "name": "Landmine Press",
+    "group": "Shoulder Press"
   },
   "barbell_close_grip_bench_press": {
     "Primary": {
@@ -379,7 +411,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Close Grip Bench Press"
+    "name": "Barbell Close Grip Bench Press",
+    "group": "Close Grip Bench Press"
   },
   "barbell_decline_close_grip_to_skull_press": {
     "Primary": {
@@ -390,7 +423,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Decline Close Grip to Skull Press"
+    "name": "Barbell Decline Close Grip to Skull Press",
+    "group": "Decline Bench Press"
   },
   "barbell_incline_close_grip_bench_press": {
     "Primary": {
@@ -401,7 +435,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Incline Close Grip Bench Press"
+    "name": "Barbell Incline Close Grip Bench Press",
+    "group": "Incline Bench"
   },
   "barbell_jm_bench_press": {
     "Primary": {
@@ -412,7 +447,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell JM Bench Press"
+    "name": "Barbell JM Bench Press",
+    "group": "JM Bench Press"
   },
   "battle_ropes": {
     "Primary": {
@@ -424,7 +460,8 @@
       "Abdominals": 30
     },
     "type": "Weighted",
-    "name": "Battle Ropes"
+    "name": "Battle Ropes",
+    "group": "Battle Ropes"
   },
   "bodyweight_kneeling_triceps_extension": {
     "Primary": {
@@ -434,7 +471,8 @@
       "Front Delts": 30
     },
     "type": "Bodyweight",
-    "name": "Bodyweight Kneeling Triceps Extension"
+    "name": "Bodyweight Kneeling Triceps Extension",
+    "group": "Triceps Extension"
   },
   "cable_concentration_extension_on_knee": {
     "Primary": {
@@ -444,7 +482,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Concentration Extension On Knee"
+    "name": "Cable Concentration Extension On Knee",
+    "group": "Triceps Extension"
   },
   "machine_lat_pulldown": {
     "Primary": {
@@ -456,7 +495,8 @@
       "Rhomboids": 5
     },
     "type": "Weighted",
-    "name": "Machine Lat Pulldown"
+    "name": "Machine Lat Pulldown",
+    "group": "Lat Pulldown"
   },
   "dumbbell_incline_twisted_flyes": {
     "Primary": {
@@ -466,7 +506,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Twisted Flyes"
+    "name": "Dumbbell Incline Twisted Flyes",
+    "group": "Fly"
   },
   "lever_chest_press_plate_loaded": {
     "Primary": {
@@ -477,7 +518,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Chest Press Plate Loaded"
+    "name": "Lever Chest Press Plate Loaded",
+    "group": "Chest Press"
   },
   "dumbbell_incline_bench_press": {
     "Primary": {
@@ -488,7 +530,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Bench Press"
+    "name": "Dumbbell Incline Bench Press",
+    "group": "Incline Bench"
   },
   "dumbbell_behind_back_finger_curl": {
     "Primary": {
@@ -498,7 +541,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Behind Back Finger Curl"
+    "name": "Dumbbell Behind Back Finger Curl",
+    "group": "Finger Curl"
   },
   "lever_incline_chest_press_plate_loaded": {
     "Primary": {
@@ -509,7 +553,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Incline Chest Press Plate Loaded"
+    "name": "Lever Incline Chest Press Plate Loaded",
+    "group": "Incline Bench"
   },
   "dumbbell_single_leg_calf_raise": {
     "Primary": {
@@ -517,7 +562,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell Single Leg Calf Raise"
+    "name": "Dumbbell Single Leg Calf Raise",
+    "group": "Calf Raise"
   },
   "dumbbell_one_arm_reverse_preacher_curl": {
     "Primary": {
@@ -528,7 +574,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Reverse Preacher Curl"
+    "name": "Dumbbell One Arm Reverse Preacher Curl",
+    "group": "Reverse Preacher Curl"
   },
   "lever_pendulum_squat": {
     "Primary": {
@@ -539,7 +586,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Pendulum Squat"
+    "name": "Lever Pendulum Squat",
+    "group": "Pendulum Squat"
   },
   "cable_standing_reverse_grip_curl_straight_bar": {
     "Primary": {
@@ -549,7 +597,8 @@
       "Brachialis": 30
     },
     "type": "Weighted",
-    "name": "Cable Standing Reverse Grip Curl Straight Bar"
+    "name": "Cable Standing Reverse Grip Curl Straight Bar",
+    "group": "Reverse Grip Curl"
   },
   "side_lunge": {
     "Primary": {
@@ -560,7 +609,8 @@
       "Adductors": 20
     },
     "type": "Weighted",
-    "name": "Side Lunge"
+    "name": "Side Lunge",
+    "group": "Lunge"
   },
   "cable_kickback": {
     "Primary": {
@@ -570,7 +620,8 @@
       "Hamstrings": 30
     },
     "type": "Weighted",
-    "name": "Cable Kickback"
+    "name": "Cable Kickback",
+    "group": "Kickback"
   },
   "dumbbell_seated_inner_biceps_curl": {
     "Primary": {
@@ -581,7 +632,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Inner Biceps Curl"
+    "name": "Dumbbell Seated Inner Biceps Curl",
+    "group": "Biceps Curl"
   },
   "barbell_good_morning": {
     "Primary": {
@@ -592,7 +644,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Good Morning"
+    "name": "Barbell Good Morning",
+    "group": "Good Morning"
   },
   "lever_biceps_curl": {
     "Primary": {
@@ -603,7 +656,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Lever Biceps Curl"
+    "name": "Lever Biceps Curl",
+    "group": "Biceps Curl"
   },
   "cable_one_arm_high_pulley_overhead_triceps_extension": {
     "Primary": {
@@ -613,7 +667,8 @@
       "Triceps (lateral & medial heads)": 20
     },
     "type": "Weighted",
-    "name": "Cable One Arm High Pulley Overhead Triceps Extension"
+    "name": "Cable One Arm High Pulley Overhead Triceps Extension",
+    "group": "Triceps Extension"
   },
   "self_assisted_nordic_hamstrings_curls": {
     "Primary": {
@@ -623,7 +678,8 @@
       "Calves": 20
     },
     "type": "Weighted",
-    "name": "Self Assisted Nordic Hamstrings Curls"
+    "name": "Self Assisted Nordic Hamstrings Curls",
+    "group": "Nordic Curl"
   },
   "barbell_stiff_legged_deadlift": {
     "Primary": {
@@ -634,7 +690,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Stiff Legged Deadlift"
+    "name": "Barbell Stiff Legged Deadlift",
+    "group": "Romanian Deadlift"
   },
   "barbell_hip_thrust": {
     "Primary": {
@@ -644,7 +701,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Barbell Hip Thrust"
+    "name": "Barbell Hip Thrust",
+    "group": "Hip Thrust"
   },
   "lever_seated_leg_press": {
     "Primary": {
@@ -655,7 +713,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Seated Leg Press"
+    "name": "Lever Seated Leg Press",
+    "group": "Leg Press"
   },
   "cable_supine_reverse_fly": {
     "Primary": {
@@ -665,7 +724,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Cable Supine Reverse Fly"
+    "name": "Cable Supine Reverse Fly",
+    "group": "Reverse Fly"
   },
   "kettlebell_russian_twist": {
     "Primary": {
@@ -675,7 +735,8 @@
       "Abdominals": 40
     },
     "type": "Weighted",
-    "name": "Kettlebell Russian Twist"
+    "name": "Kettlebell Russian Twist",
+    "group": "Russian Twist"
   },
   "dumbbell_squat": {
     "Primary": {
@@ -686,7 +747,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Squat"
+    "name": "Dumbbell Squat",
+    "group": "Squat"
   },
   "weighted_russian_twist_legs_up": {
     "Primary": {
@@ -696,7 +758,8 @@
       "Abdominals": 30
     },
     "type": "Weighted",
-    "name": "Weighted Russian Twist Legs Up"
+    "name": "Weighted Russian Twist Legs Up",
+    "group": "Russian Twist"
   },
   "barbell_spider_curl": {
     "Primary": {
@@ -706,7 +769,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Barbell Spider Curl"
+    "name": "Barbell Spider Curl",
+    "group": "Spider Curl"
   },
   "lever_triceps_extension": {
     "Primary": {
@@ -716,7 +780,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Lever Triceps Extension"
+    "name": "Lever Triceps Extension",
+    "group": "Triceps Extension"
   },
   "barbell_prone_incline_curl": {
     "Primary": {
@@ -726,7 +791,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Barbell Prone Incline Curl"
+    "name": "Barbell Prone Incline Curl",
+    "group": "Spider Curl"
   },
   "ez_barbell_close_grip_curl": {
     "Primary": {
@@ -736,7 +802,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Close Grip Curl"
+    "name": "EZ Barbell Close Grip Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_decline_hammer_press": {
     "Primary": {
@@ -747,7 +814,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Decline Hammer Press"
+    "name": "Dumbbell Decline Hammer Press",
+    "group": "Decline Bench Press"
   },
   "cable_curl_v_bar": {
     "Primary": {
@@ -757,7 +825,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Curl V Bar"
+    "name": "Cable Curl V Bar",
+    "group": "Biceps Curl"
   },
   "dumbbell_one_arm_revers_wrist_curl": {
     "Primary": {
@@ -767,7 +836,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Reverse Wrist Curl"
+    "name": "Dumbbell One Arm Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "cable_reverse_grip_pushdown": {
     "Primary": {
@@ -777,7 +847,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Reverse Grip Pushdown"
+    "name": "Cable Reverse Grip Pushdown",
+    "group": "Triceps Pushdown"
   },
   "dumbbell_one_arm_seated_neutral_wrist_curl": {
     "Primary": {
@@ -787,7 +858,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Seated Neutral Wrist Curl"
+    "name": "Dumbbell One Arm Seated Neutral Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_incline_rear_lateral_raise": {
     "Primary": {
@@ -797,7 +869,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Rear Lateral Raise"
+    "name": "Dumbbell Incline Rear Lateral Raise",
+    "group": "Reverse Fly"
   },
   "dumbbell_neutral_grip_bench_press": {
     "Primary": {
@@ -808,7 +881,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Neutral Grip Bench Press"
+    "name": "Dumbbell Neutral Grip Bench Press",
+    "group": "Neutral Grip Bench Press"
   },
   "reverse_crunch": {
     "Primary": {
@@ -818,7 +892,8 @@
       "Obliques": 30
     },
     "type": "Bodyweight",
-    "name": "Reverse Crunch"
+    "name": "Reverse Crunch",
+    "group": "Crunch"
   },
   "dumbbell_full_can_lateral_raise": {
     "Primary": {
@@ -829,7 +904,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Full Can Lateral Raise"
+    "name": "Dumbbell Full Can Lateral Raise",
+    "group": "Lateral Raise"
   },
   "bent_leg_kickback_kneeling": {
     "Primary": {
@@ -839,7 +915,8 @@
       "Hamstrings": 30
     },
     "type": "Weighted",
-    "name": "Bent Leg Kickback Kneeling"
+    "name": "Bent Leg Kickback Kneeling",
+    "group": "Kickback"
   },
   "cable_seated_shoulder_internal_rotation": {
     "Primary": {
@@ -850,7 +927,8 @@
       "Lats": 10
     },
     "type": "Weighted",
-    "name": "Cable Seated Shoulder Internal Rotation"
+    "name": "Cable Seated Shoulder Internal Rotation",
+    "group": "Shoulder Internal Rotation"
   },
   "dumbbell_romanian_deadlift": {
     "Primary": {
@@ -861,7 +939,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Romanian Deadlift"
+    "name": "Dumbbell Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "ez_barbell_reverse_grip_curl": {
     "Primary": {
@@ -871,7 +950,8 @@
       "Brachialis": 30
     },
     "type": "Weighted",
-    "name": "EZ Barbell Reverse Grip Curl"
+    "name": "EZ Barbell Reverse Grip Curl",
+    "group": "Reverse Grip Curl"
   },
   "barbell_incline_row": {
     "Primary": {
@@ -883,7 +963,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Incline Row"
+    "name": "Barbell Incline Row",
+    "group": "Incline Row"
   },
   "dumbbell_seated_reverse_grip_biceps_curl": {
     "Primary": {
@@ -893,7 +974,8 @@
       "Brachialis": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Reverse Grip Biceps Curl"
+    "name": "Dumbbell Seated Reverse Grip Biceps Curl",
+    "group": "Reverse Grip Curl"
   },
   "archer_push_up": {
     "Primary": {
@@ -903,7 +985,8 @@
       "Triceps": 40
     },
     "type": "Weighted",
-    "name": "Archer Push Up"
+    "name": "Archer Push Up",
+    "group": "Push Up"
   },
   "wall_squat": {
     "Primary": {
@@ -913,7 +996,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Wall Squat"
+    "name": "Wall Squat",
+    "group": "Wall Squat"
   },
   "resistance_band_seated_biceps_curl": {
     "Primary": {
@@ -923,7 +1007,8 @@
       "Forearms": 20
     },
     "type": "Banded",
-    "name": "Resistance Band Seated Biceps Curl"
+    "name": "Resistance Band Seated Biceps Curl",
+    "group": "Biceps Curl"
   },
   "cable_standing_alternate_low_fly": {
     "Primary": {
@@ -933,7 +1018,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Standing Alternate Low Fly"
+    "name": "Cable Standing Alternate Low Fly",
+    "group": "Fly"
   },
   "dumbbell_prone_incline_curl": {
     "Primary": {
@@ -943,7 +1029,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Prone Incline Curl"
+    "name": "Dumbbell Prone Incline Curl",
+    "group": "Spider Curl"
   },
   "hanging_toes_to_bar": {
     "Primary": {
@@ -954,7 +1041,8 @@
       "Hip Flexors": 20
     },
     "type": "Weighted",
-    "name": "Hanging Toes to Bar"
+    "name": "Hanging Toes to Bar",
+    "group": "Toes to Bar"
   },
   "dumbbell_seated_front_raise": {
     "Primary": {
@@ -964,7 +1052,8 @@
       "Side Delts": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Front Raise"
+    "name": "Dumbbell Seated Front Raise",
+    "group": "Front Raise"
   },
   "seated_flutter_kick": {
     "Primary": {
@@ -974,7 +1063,8 @@
       "Hip Flexors": 30
     },
     "type": "Weighted",
-    "name": "Seated Flutter Kick"
+    "name": "Seated Flutter Kick",
+    "group": "Flutter Kick"
   },
   "barbell_shrug": {
     "Primary": {
@@ -984,7 +1074,8 @@
       "Rhomboids": 20
     },
     "type": "Weighted",
-    "name": "Barbell Shrug"
+    "name": "Barbell Shrug",
+    "group": "Shrug"
   },
   "barbell_preacher_curl": {
     "Primary": {
@@ -995,7 +1086,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Barbell Preacher Curl"
+    "name": "Barbell Preacher Curl",
+    "group": "Preacher Curl"
   },
   "cable_high_triceps_extension": {
     "Primary": {
@@ -1005,7 +1097,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable High Triceps Extension"
+    "name": "Cable High Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_one_arm_seated_hammer_curl": {
     "Primary": {
@@ -1016,7 +1109,8 @@
       "Forearm": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Seated Hammer Curl"
+    "name": "Dumbbell One Arm Seated Hammer Curl",
+    "group": "Hammer Curl"
   },
   "barbell_pin_presses": {
     "Primary": {
@@ -1027,7 +1121,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Pin Presses"
+    "name": "Barbell Pin Presses",
+    "group": "Pin Press"
   },
   "cable_overhead_triceps_extension_straight_bar": {
     "Primary": {
@@ -1037,7 +1132,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Cable Overhead Triceps Extension Straight Bar"
+    "name": "Cable Overhead Triceps Extension Straight Bar",
+    "group": "Triceps Extension"
   },
   "cable_seated_high_row_v_bar": {
     "Primary": {
@@ -1049,7 +1145,8 @@
       "Biceps": 20
     },
     "type": "Weighted",
-    "name": "Cable Seated High Row V Bar"
+    "name": "Cable Seated High Row V Bar",
+    "group": "High Row"
   },
   "dumbbell_seated_lateral_raise": {
     "Primary": {
@@ -1060,7 +1157,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Lateral Raise"
+    "name": "Dumbbell Seated Lateral Raise",
+    "group": "Lateral Raise"
   },
   "triceps_dips_floor": {
     "Primary": {
@@ -1070,7 +1168,8 @@
       "Chest": 30
     },
     "type": "Bodyweight",
-    "name": "Triceps Dips Floor"
+    "name": "Triceps Dips Floor",
+    "group": "Dip"
   },
   "dumbbell_hammer_curl": {
     "Primary": {
@@ -1081,7 +1180,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Hammer Curl"
+    "name": "Dumbbell Hammer Curl",
+    "group": "Hammer Curl"
   },
   "donkey_calf_raise": {
     "Primary": {
@@ -1091,7 +1191,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Donkey Calf Raise"
+    "name": "Donkey Calf Raise",
+    "group": "Calf Raise"
   },
   "cable_standing_one_arm_triceps_pushdown_overhand_grip": {
     "Primary": {
@@ -1101,7 +1202,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Standing One Arm Triceps Pushdown Overhand Grip"
+    "name": "Cable Standing One Arm Triceps Pushdown Overhand Grip",
+    "group": "Triceps Pushdown"
   },
   "barbell_palms_up_wrist_curl_over_a_bench": {
     "Primary": {
@@ -1111,7 +1213,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Barbell Palms Up Wrist Curl Over a Bench"
+    "name": "Barbell Palms Up Wrist Curl Over a Bench",
+    "group": "Wrist Curl"
   },
   "smith_close_grip_bench_press": {
     "Primary": {
@@ -1122,7 +1225,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Smith Close Grip Bench Press"
+    "name": "Smith Close Grip Bench Press",
+    "group": "Close Grip Bench Press"
   },
   "barbell_decline_pullover": {
     "Primary": {
@@ -1133,7 +1237,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Barbell Decline Pullover"
+    "name": "Barbell Decline Pullover",
+    "group": "Pullover"
   },
   "resistance_band_hammer_curl": {
     "Primary": {
@@ -1144,7 +1249,8 @@
       "Forearms": 10
     },
     "type": "Banded",
-    "name": "Resistance Band Hammer Curl"
+    "name": "Resistance Band Hammer Curl",
+    "group": "Hammer Curl"
   },
   "cable_incline_pushdown": {
     "Primary": {
@@ -1154,7 +1260,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Cable Incline Pushdown"
+    "name": "Cable Incline Pushdown",
+    "group": "Triceps Pushdown"
   },
   "dumbbell_goblet_curtsey_lunge": {
     "Primary": {
@@ -1165,7 +1272,8 @@
       "Adductors": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Goblet Curtsey Lunge"
+    "name": "Dumbbell Goblet Curtsey Lunge",
+    "group": "Lunge"
   },
   "dumbbell_one_arm_reverse_grip_press": {
     "Primary": {
@@ -1176,7 +1284,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Reverse Grip Press"
+    "name": "Dumbbell One Arm Reverse Grip Press",
+    "group": "Reverse Grip Press"
   },
   "cable_half_kneeling_push_pull": {
     "Primary": {
@@ -1188,7 +1297,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Half Kneeling Push Pull"
+    "name": "Cable Half Kneeling Push Pull",
+    "group": "Push Pull"
   },
   "ez_barbell_incline_triceps_extension": {
     "Primary": {
@@ -1198,7 +1308,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Incline Triceps Extension"
+    "name": "EZ Barbell Incline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "lever_incline_hammer_chest_press": {
     "Primary": {
@@ -1209,7 +1320,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Incline Hammer Chest Press"
+    "name": "Lever Incline Hammer Chest Press",
+    "group": "Incline Bench"
   },
   "kettlebell_swing": {
     "Primary": {
@@ -1221,7 +1333,8 @@
       "Abdominals": 10
     },
     "type": "Weighted",
-    "name": "Kettlebell Swing"
+    "name": "Kettlebell Swing",
+    "group": "Kettlebell Swing"
   },
   "smith_sumo_squat": {
     "Primary": {
@@ -1232,7 +1345,8 @@
       "Adductors": 20
     },
     "type": "Weighted",
-    "name": "Smith Sumo Squat"
+    "name": "Smith Sumo Squat",
+    "group": "Sumo Squat"
   },
   "cable_upright_row": {
     "Primary": {
@@ -1243,7 +1357,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Upright Row"
+    "name": "Cable Upright Row",
+    "group": "Upright Row"
   },
   "dumbbell_seated_neutral_wrist_curl": {
     "Primary": {
@@ -1253,7 +1368,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Neutral Wrist Curl"
+    "name": "Dumbbell Seated Neutral Wrist Curl",
+    "group": "Wrist Curl"
   },
   "lever_standing_rear_kick": {
     "Primary": {
@@ -1263,7 +1379,8 @@
       "Hamstrings": 30
     },
     "type": "Weighted",
-    "name": "Lever Standing Rear Kick"
+    "name": "Lever Standing Rear Kick",
+    "group": "Rear Kick"
   },
   "dumbbell_concentration_curl": {
     "Primary": {
@@ -1273,7 +1390,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Concentration Curl"
+    "name": "Dumbbell Concentration Curl",
+    "group": "Biceps Curl"
   },
   "cable_bent_over_reverse_grip_row": {
     "Primary": {
@@ -1284,7 +1402,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable Bent Over Reverse Grip Row"
+    "name": "Cable Bent Over Reverse Grip Row",
+    "group": "Bent Over Row"
   },
   "cable_bench_press": {
     "Primary": {
@@ -1295,7 +1414,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable Bench Press"
+    "name": "Cable Bench Press",
+    "group": "Bench Press"
   },
   "barbell_rear_delt_row": {
     "Primary": {
@@ -1306,7 +1426,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Rear Delt Row"
+    "name": "Barbell Rear Delt Row",
+    "group": "Rear Delt Row"
   },
   "dumbbell_low_fly": {
     "Primary": {
@@ -1316,7 +1437,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Low Fly"
+    "name": "Dumbbell Low Fly",
+    "group": "Fly"
   },
   "weighted_seated_triceps_extension": {
     "Primary": {
@@ -1326,7 +1448,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Weighted Seated Triceps Extension"
+    "name": "Weighted Seated Triceps Extension",
+    "group": "Triceps Extension"
   },
   "bodyweight_kneeling_sissy_squat": {
     "Primary": {
@@ -1336,7 +1459,8 @@
       "Knee Joint": 20
     },
     "type": "Bodyweight",
-    "name": "Bodyweight Kneeling Sissy Squat"
+    "name": "Bodyweight Kneeling Sissy Squat",
+    "group": "Sissy Squat"
   },
   "lever_donkey_calf_raise": {
     "Primary": {
@@ -1346,7 +1470,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Donkey Calf Raise"
+    "name": "Lever Donkey Calf Raise",
+    "group": "Calf Raise"
   },
   "dumbbell_alternate_preacher_curl": {
     "Primary": {
@@ -1357,7 +1482,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Preacher Curl"
+    "name": "Dumbbell Alternate Preacher Curl",
+    "group": "Preacher Curl"
   },
   "weighted_seated_reverse_wrist_curl": {
     "Primary": {
@@ -1367,7 +1493,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Weighted Seated Reverse Wrist Curl"
+    "name": "Weighted Seated Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "cable_assisted_nordic_hamstrings_curls": {
     "Primary": {
@@ -1378,7 +1505,8 @@
       "Erectors": 10
     },
     "type": "Banded",
-    "name": "Cable Assisted Nordic Hamstrings Curls"
+    "name": "Cable Assisted Nordic Hamstrings Curls",
+    "group": "Nordic Curl"
   },
   "resistance_band_assisted_nordic_hamstrings_curls": {
     "Primary": {
@@ -1389,7 +1517,8 @@
       "Erectors": 10
     },
     "type": "Banded",
-    "name": "Resistance Band Assisted Nordic Hamstrings Curls"
+    "name": "Resistance Band Assisted Nordic Hamstrings Curls",
+    "group": "Nordic Curl"
   },
   "cable_standing_chest_press": {
     "Primary": {
@@ -1400,7 +1529,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Cable Standing Chest Press"
+    "name": "Cable Standing Chest Press",
+    "group": "Chest Press"
   },
   "barbell_bench_press": {
     "Primary": {
@@ -1411,7 +1541,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Bench Press"
+    "name": "Barbell Bench Press",
+    "group": "Bench Press"
   },
   "dumbbell_biceps_curl_reverse_grip": {
     "Primary": {
@@ -1422,7 +1553,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Biceps Curl Reverse Grip"
+    "name": "Dumbbell Biceps Curl Reverse Grip",
+    "group": "Reverse Grip Curl"
   },
   "dumbbell_one_arm_standing_curl": {
     "Primary": {
@@ -1432,7 +1564,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Standing Curl"
+    "name": "Dumbbell One Arm Standing Curl",
+    "group": "Biceps Curl"
   },
   "barbell_flat_pullover": {
     "Primary": {
@@ -1443,7 +1576,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Barbell Flat Pullover"
+    "name": "Barbell Flat Pullover",
+    "group": "Pullover"
   },
   "barbell_palms_down_over_bench_extensors_wrist_curl": {
     "Primary": {
@@ -1453,7 +1587,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Barbell Palms Down Over Bench Extensors Wrist Curl"
+    "name": "Barbell Palms Down Over Bench Extensors Wrist Curl",
+    "group": "Wrist Curl"
   },
   "elbow_to_knee": {
     "Primary": {
@@ -1463,7 +1598,8 @@
       "Abdominals": 40
     },
     "type": "Weighted",
-    "name": "Elbow to Knee"
+    "name": "Elbow to Knee",
+    "group": "Elbow to Knee"
   },
   "smith_bent_knee_good_morning": {
     "Primary": {
@@ -1474,7 +1610,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Smith Bent Knee Good Morning"
+    "name": "Smith Bent Knee Good Morning",
+    "group": "Good Morning"
   },
   "hip_raise_bent_knee": {
     "Primary": {
@@ -1484,7 +1621,8 @@
       "Hamstrings": 30
     },
     "type": "Weighted",
-    "name": "Hip Raise Bent Knee"
+    "name": "Hip Raise Bent Knee",
+    "group": "Hip Thrust"
   },
   "barbell_straight_leg_romanian_deadlift": {
     "Primary": {
@@ -1495,7 +1633,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Straight Leg Romanian Deadlift"
+    "name": "Barbell Straight Leg Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "landmine_romanian_deadlift": {
     "Primary": {
@@ -1506,7 +1645,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Landmine Romanian Deadlift"
+    "name": "Landmine Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "dumbbell_death_march_romanian_deadlift": {
     "Primary": {
@@ -1517,7 +1657,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Death March Romanian Deadlift"
+    "name": "Dumbbell Death March Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "cable_seated_one_arm_concentration_curl": {
     "Primary": {
@@ -1527,7 +1668,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Seated One Arm Concentration Curl"
+    "name": "Cable Seated One Arm Concentration Curl",
+    "group": "Biceps Curl"
   },
   "ez_barbell_arm_blaster_biceps_curl": {
     "Primary": {
@@ -1537,7 +1679,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Arm Blaster Biceps Curl"
+    "name": "EZ Barbell Arm Blaster Biceps Curl",
+    "group": "Biceps Curl"
   },
   "cable_middle_fly": {
     "Primary": {
@@ -1547,7 +1690,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Middle Fly"
+    "name": "Cable Middle Fly",
+    "group": "Fly"
   },
   "barbell_split_squat": {
     "Primary": {
@@ -1558,7 +1702,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Barbell Split Squat"
+    "name": "Barbell Split Squat",
+    "group": "Split Squat"
   },
   "weighted_sissy_squat": {
     "Primary": {
@@ -1568,7 +1713,8 @@
       "Knee Joint": 20
     },
     "type": "Weighted",
-    "name": "Weighted Sissy Squat"
+    "name": "Weighted Sissy Squat",
+    "group": "Sissy Squat"
   },
   "dumbbell_seated_hammer_curl": {
     "Primary": {
@@ -1579,7 +1725,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Hammer Curl"
+    "name": "Dumbbell Seated Hammer Curl",
+    "group": "Hammer Curl"
   },
   "lever_seated_squat_calf_raise_on_leg_press_machine": {
     "Primary": {
@@ -1589,7 +1736,8 @@
       "Quads": 10
     },
     "type": "Weighted",
-    "name": "Lever Seated Squat Calf Raise On Leg Press Machine"
+    "name": "Lever Seated Squat Calf Raise On Leg Press Machine",
+    "group": "Calf Raise"
   },
   "diamond_press": {
     "Primary": {
@@ -1600,7 +1748,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Diamond Press"
+    "name": "Diamond Press",
+    "group": "Diamond Press"
   },
   "trap_bar_deadlift": {
     "Primary": {
@@ -1612,7 +1761,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Trap Bar Deadlift"
+    "name": "Trap Bar Deadlift",
+    "group": "Deadlift"
   },
   "cable_crossover_reverse_fly": {
     "Primary": {
@@ -1622,7 +1772,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Cable Crossover Reverse Fly"
+    "name": "Cable Crossover Reverse Fly",
+    "group": "Reverse Fly"
   },
   "sled_lying_squat": {
     "Primary": {
@@ -1633,7 +1784,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Sled Lying Squat"
+    "name": "Sled Lying Squat",
+    "group": "Squat"
   },
   "dumbbell_lying_hammer_press": {
     "Primary": {
@@ -1644,7 +1796,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Hammer Press"
+    "name": "Dumbbell Lying Hammer Press",
+    "group": "Chest Press"
   },
   "smith_seated_flexors_wrist_curl": {
     "Primary": {
@@ -1654,7 +1807,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Smith Seated Flexors Wrist Curl"
+    "name": "Smith Seated Flexors Wrist Curl",
+    "group": "Wrist Curl"
   },
   "lever_crossovers": {
     "Primary": {
@@ -1664,7 +1818,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Lever Crossovers"
+    "name": "Lever Crossovers",
+    "group": "Crossover"
   },
   "barbell_standing_reverse_grip_curl": {
     "Primary": {
@@ -1674,7 +1829,8 @@
       "Brachialis": 30
     },
     "type": "Weighted",
-    "name": "Barbell Standing Reverse Grip Curl"
+    "name": "Barbell Standing Reverse Grip Curl",
+    "group": "Reverse Grip Curl"
   },
   "weighted_cossack_squats": {
     "Primary": {
@@ -1685,7 +1841,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Weighted Cossack Squats"
+    "name": "Weighted Cossack Squats",
+    "group": "Cossack Squat"
   },
   "band_face_pull": {
     "Primary": {
@@ -1696,7 +1853,8 @@
       "Rhomboids": 10
     },
     "type": "Banded",
-    "name": "Band Face Pull"
+    "name": "Band Face Pull",
+    "group": "Face Pull"
   },
   "dumbbell_standing_concentration_curl": {
     "Primary": {
@@ -1706,7 +1864,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Concentration Curl"
+    "name": "Dumbbell Standing Concentration Curl",
+    "group": "Biceps Curl"
   },
   "cable_seated_pullover": {
     "Primary": {
@@ -1717,7 +1876,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Cable Seated Pullover"
+    "name": "Cable Seated Pullover",
+    "group": "Pullover"
   },
   "smith_standing_extensors_wrist_curl": {
     "Primary": {
@@ -1727,7 +1887,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Smith Standing Extensors Wrist Curl"
+    "name": "Smith Standing Extensors Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_alternate_seated_hammer_curl": {
     "Primary": {
@@ -1738,7 +1899,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Seated Hammer Curl"
+    "name": "Dumbbell Alternate Seated Hammer Curl",
+    "group": "Hammer Curl"
   },
   "finger_push_up": {
     "Primary": {
@@ -1749,7 +1911,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Finger Push Up"
+    "name": "Finger Push Up",
+    "group": "Push Up"
   },
   "russian_twist": {
     "Primary": {
@@ -1759,7 +1922,8 @@
       "Abdominals": 40
     },
     "type": "Weighted",
-    "name": "Russian Twist"
+    "name": "Russian Twist",
+    "group": "Russian Twist"
   },
   "barbell_behind_back_finger_curl": {
     "Primary": {
@@ -1769,7 +1933,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Barbell Behind Back Finger Curl"
+    "name": "Barbell Behind Back Finger Curl",
+    "group": "Finger Curl"
   },
   "cable_standing_extensors_wrist_curl": {
     "Primary": {
@@ -1779,7 +1944,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Cable Standing Extensors Wrist Curl"
+    "name": "Cable Standing Extensors Wrist Curl",
+    "group": "Wrist Curl"
   },
   "barbell_lunge": {
     "Primary": {
@@ -1790,7 +1956,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Barbell Lunge"
+    "name": "Barbell Lunge",
+    "group": "Lunge"
   },
   "dumbbell_alternate_preacher_hammer_curl": {
     "Primary": {
@@ -1801,7 +1968,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Preacher Hammer Curl"
+    "name": "Dumbbell Alternate Preacher Hammer Curl",
+    "group": "Hammer Curl"
   },
   "cable_wrist_curl": {
     "Primary": {
@@ -1811,7 +1979,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Cable Wrist Curl"
+    "name": "Cable Wrist Curl",
+    "group": "Wrist Curl"
   },
   "cable_curl": {
     "Primary": {
@@ -1821,7 +1990,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Curl"
+    "name": "Cable Curl",
+    "group": "Biceps Curl"
   },
   "barbell_decline_bench_press": {
     "Primary": {
@@ -1832,7 +2002,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Decline Bench Press"
+    "name": "Barbell Decline Bench Press",
+    "group": "Decline Bench Press"
   },
   "cable_one_arm_reverse_fly": {
     "Primary": {
@@ -1843,7 +2014,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Cable One Arm Reverse Fly"
+    "name": "Cable One Arm Reverse Fly",
+    "group": "Reverse Fly"
   },
   "dumbbell_deadlift": {
     "Primary": {
@@ -1855,7 +2027,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Deadlift"
+    "name": "Dumbbell Deadlift",
+    "group": "Deadlift"
   },
   "lever_deadlift": {
     "Primary": {
@@ -1867,7 +2040,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Lever Deadlift"
+    "name": "Lever Deadlift",
+    "group": "Deadlift"
   },
   "dumbbell_alternate_biceps_curl": {
     "Primary": {
@@ -1877,7 +2051,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Biceps Curl"
+    "name": "Dumbbell Alternate Biceps Curl",
+    "group": "Biceps Curl"
   },
   "lever_horizontal_one_leg_press": {
     "Primary": {
@@ -1888,7 +2063,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Horizontal One Leg Press"
+    "name": "Lever Horizontal One Leg Press",
+    "group": "Leg Press"
   },
   "weighted_curtsey_squat": {
     "Primary": {
@@ -1899,7 +2075,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Weighted Curtsey Squat"
+    "name": "Weighted Curtsey Squat",
+    "group": "Curtsey Squat"
   },
   "curtsey_squat": {
     "Primary": {
@@ -1910,7 +2087,8 @@
       "Hamstrings": 20
     },
     "type": "Bodyweight",
-    "name": "Curtsey Squat"
+    "name": "Curtsey Squat",
+    "group": "Curtsey Squat"
   },
   "cable_drag_curl": {
     "Primary": {
@@ -1920,7 +2098,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Drag Curl"
+    "name": "Cable Drag Curl",
+    "group": "Drag Curl"
   },
   "weighted_pistol_squat": {
     "Primary": {
@@ -1931,7 +2110,8 @@
       "Hamstrings": 15
     },
     "type": "Weighted",
-    "name": "Weighted Pistol Squat"
+    "name": "Weighted Pistol Squat",
+    "group": "Pistol Squat"
   },
   "dumbbell_goblet_split_squat": {
     "Primary": {
@@ -1942,7 +2122,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Goblet Split Squat"
+    "name": "Dumbbell Goblet Split Squat",
+    "group": "Split Squat"
   },
   "kicks_leg_bent": {
     "Primary": {
@@ -1953,7 +2134,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Kicks Leg Bent"
+    "name": "Kicks Leg Bent",
+    "group": "Kicks"
   },
   "barbell_bent_arm_pullover": {
     "Primary": {
@@ -1964,7 +2146,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Barbell Bent Arm Pullover"
+    "name": "Barbell Bent Arm Pullover",
+    "group": "Pullover"
   },
   "barbell_seated_good_morning": {
     "Primary": {
@@ -1975,7 +2158,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Seated Good Morning"
+    "name": "Barbell Seated Good Morning",
+    "group": "Good Morning"
   },
   "lying_scissor_kick": {
     "Primary": {
@@ -1985,7 +2169,8 @@
       "Hip Flexors": 30
     },
     "type": "Weighted",
-    "name": "Lying Scissor Kick"
+    "name": "Lying Scissor Kick",
+    "group": "Scissor Kick"
   },
   "cable_overhead_curl": {
     "Primary": {
@@ -1995,7 +2180,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Overhead Curl"
+    "name": "Cable Overhead Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_side_lunge": {
     "Primary": {
@@ -2006,7 +2192,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Side Lunge"
+    "name": "Dumbbell Side Lunge",
+    "group": "Lunge"
   },
   "barbell_reverse_grip_incline_bench_row": {
     "Primary": {
@@ -2018,7 +2205,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Reverse Grip Incline Bench Row"
+    "name": "Barbell Reverse Grip Incline Bench Row",
+    "group": "Bench Row"
   },
   "lever_chest_press": {
     "Primary": {
@@ -2029,7 +2217,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Chest Press"
+    "name": "Lever Chest Press",
+    "group": "Chest Press"
   },
   "cable_incline_fly": {
     "Primary": {
@@ -2039,7 +2228,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Incline Fly"
+    "name": "Cable Incline Fly",
+    "group": "Fly"
   },
   "cable_one_arm_side_triceps_pushdown": {
     "Primary": {
@@ -2049,7 +2239,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable One Arm Side Triceps Pushdown"
+    "name": "Cable One Arm Side Triceps Pushdown",
+    "group": "Triceps Pushdown"
   },
   "cable_incline_cross_reverse_fly": {
     "Primary": {
@@ -2059,7 +2250,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Cable Incline Cross Reverse Fly"
+    "name": "Cable Incline Cross Reverse Fly",
+    "group": "Reverse Fly"
   },
   "dumbbell_reverse_fly": {
     "Primary": {
@@ -2070,7 +2262,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Reverse Fly"
+    "name": "Dumbbell Reverse Fly",
+    "group": "Reverse Fly"
   },
   "cable_seated_curl": {
     "Primary": {
@@ -2080,7 +2273,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Seated Curl"
+    "name": "Cable Seated Curl",
+    "group": "Biceps Curl"
   },
   "hyght_dumbbell_fly": {
     "Primary": {
@@ -2090,7 +2284,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Height Dumbbell Fly"
+    "name": "Height Dumbbell Fly",
+    "group": "Fly"
   },
   "cable_upper_chest_crossovers": {
     "Primary": {
@@ -2100,7 +2295,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Upper Chest Crossovers"
+    "name": "Cable Upper Chest Crossovers",
+    "group": "Crossover"
   },
   "barbell_rear_delt_raise": {
     "Primary": {
@@ -2110,7 +2306,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Barbell Rear Delt Raise"
+    "name": "Barbell Rear Delt Raise",
+    "group": "Rear Delt Raise"
   },
   "dumbbell_alternate_arm_blaster_biceps_curl": {
     "Primary": {
@@ -2120,7 +2317,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Alternate Arm Blaster Biceps Curl"
+    "name": "Dumbbell Alternate Arm Blaster Biceps Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_lying_single_arm_triceps_extension": {
     "Primary": {
@@ -2130,7 +2328,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Single Arm Triceps Extension"
+    "name": "Dumbbell Lying Single Arm Triceps Extension",
+    "group": "Triceps Extension"
   },
   "cable_lying_triceps_extension": {
     "Primary": {
@@ -2140,7 +2339,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Cable Lying Triceps Extension"
+    "name": "Cable Lying Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_seated_triceps_extension": {
     "Primary": {
@@ -2150,7 +2350,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Triceps Extension"
+    "name": "Dumbbell Seated Triceps Extension",
+    "group": "Triceps Extension"
   },
   "barbell_lying_back_of_the_head_triceps_extension": {
     "Primary": {
@@ -2160,7 +2361,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Barbell Lying Back of the Head Triceps Extension"
+    "name": "Barbell Lying Back of the Head Triceps Extension",
+    "group": "Triceps Extension"
   },
   "barbell_underhand_seal_row": {
     "Primary": {
@@ -2172,7 +2374,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Barbell Underhand Seal Row"
+    "name": "Barbell Underhand Seal Row",
+    "group": "Seal Row"
   },
   "bulgarian_split_squat": {
     "Primary": {
@@ -2183,7 +2386,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Bulgarian Split Squat"
+    "name": "Bulgarian Split Squat",
+    "group": "Split Squat"
   },
   "cable_fly_chest_supported": {
     "Primary": {
@@ -2193,7 +2397,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Fly Chest Supported"
+    "name": "Cable Fly Chest Supported",
+    "group": "Fly"
   },
   "cable_one_arm_lateral_pulldown": {
     "Primary": {
@@ -2204,7 +2409,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable One Arm Lateral Pulldown"
+    "name": "Cable One Arm Lateral Pulldown",
+    "group": "Lat Pulldown"
   },
   "barbell_reverse_curl": {
     "Primary": {
@@ -2215,7 +2421,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Barbell Reverse Curl"
+    "name": "Barbell Reverse Curl",
+    "group": "Reverse Grip Curl"
   },
   "lever_leg_extension_plate_loaded": {
     "Primary": {
@@ -2223,7 +2430,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Lever Leg Extension Plate Loaded"
+    "name": "Lever Leg Extension Plate Loaded",
+    "group": "Leg Extension"
   },
   "band_standing_hammer_curl": {
     "Primary": {
@@ -2234,7 +2442,8 @@
       "Forearms": 10
     },
     "type": "Banded",
-    "name": "Band Standing Hammer Curl"
+    "name": "Band Standing Hammer Curl",
+    "group": "Hammer Curl"
   },
   "cable_kneeling_crunch": {
     "Primary": {
@@ -2244,7 +2453,8 @@
       "Obliques": 20
     },
     "type": "Bodyweight",
-    "name": "Cable Kneeling Crunch"
+    "name": "Cable Kneeling Crunch",
+    "group": "Crunch"
   },
   "ez_bar_standing_french_press": {
     "Primary": {
@@ -2254,7 +2464,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "EZ Bar Standing French Press"
+    "name": "EZ Bar Standing French Press",
+    "group": "French Press"
   },
   "dumbbell_incline_fly": {
     "Primary": {
@@ -2264,7 +2475,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Fly"
+    "name": "Dumbbell Incline Fly",
+    "group": "Fly"
   },
   "tiger_tail_hamstring": {
     "Primary": {
@@ -2274,7 +2486,8 @@
       "Calves": 30
     },
     "type": "Weighted",
-    "name": "Tiger Tail Hamstring"
+    "name": "Tiger Tail Hamstring",
+    "group": "Tiger Tail Hamstring"
   },
   "sled_calf_press_on_leg_press": {
     "Primary": {
@@ -2284,7 +2497,8 @@
       "Quads": 10
     },
     "type": "Weighted",
-    "name": "Sled Calf Press On Leg Press"
+    "name": "Sled Calf Press On Leg Press",
+    "group": "Calf Press"
   },
   "dumbbell_lunge": {
     "Primary": {
@@ -2295,7 +2509,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Lunge"
+    "name": "Dumbbell Lunge",
+    "group": "Lunge"
   },
   "cable_incline_skull_crusher": {
     "Primary": {
@@ -2305,7 +2520,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Cable Incline Skull Crusher"
+    "name": "Cable Incline Skull Crusher",
+    "group": "Skullcrusher"
   },
   "barbell_decline_wide_grip_pullover": {
     "Primary": {
@@ -2316,7 +2532,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Barbell Decline Wide Grip Pullover"
+    "name": "Barbell Decline Wide Grip Pullover",
+    "group": "Pullover"
   },
   "dumbbell_over_bench_one_arm_reverse_wrist_curl": {
     "Primary": {
@@ -2326,7 +2543,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Over Bench One Arm Reverse Wrist Curl"
+    "name": "Dumbbell Over Bench One Arm Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "cable_high_pulley_overhead_triceps_extension": {
     "Primary": {
@@ -2336,7 +2554,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Cable High Pulley Overhead Triceps Extension"
+    "name": "Cable High Pulley Overhead Triceps Extension",
+    "group": "Triceps Extension"
   },
   "barbell_incline_triceps_extension_skull_crusher": {
     "Primary": {
@@ -2346,7 +2565,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Barbell Incline Triceps Extension Skull Crusher"
+    "name": "Barbell Incline Triceps Extension Skull Crusher",
+    "group": "Skullcrusher"
   },
   "cable_rope_hammer_curl": {
     "Primary": {
@@ -2357,7 +2577,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Cable Rope Hammer Curl"
+    "name": "Cable Rope Hammer Curl",
+    "group": "Hammer Curl"
   },
   "cable_alternate_triceps_extension": {
     "Primary": {
@@ -2367,7 +2588,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Alternate Triceps Extension"
+    "name": "Cable Alternate Triceps Extension",
+    "group": "Triceps Extension"
   },
   "scissors_advanced": {
     "Primary": {
@@ -2377,7 +2599,8 @@
       "Hip Flexors": 30
     },
     "type": "Weighted",
-    "name": "Scissors Advanced"
+    "name": "Scissors Advanced",
+    "group": "Scissors"
   },
   "barbell_standing_close_grip_curl": {
     "Primary": {
@@ -2387,7 +2610,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Barbell Standing Close Grip Curl"
+    "name": "Barbell Standing Close Grip Curl",
+    "group": "Biceps Curl"
   },
   "lever_standing_calf_raise": {
     "Primary": {
@@ -2395,7 +2619,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Lever Standing Calf Raise"
+    "name": "Lever Standing Calf Raise",
+    "group": "Calf Raise"
   },
   "barbell_reverse_preacher_curl": {
     "Primary": {
@@ -2406,7 +2631,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Barbell Reverse Preacher Curl"
+    "name": "Barbell Reverse Preacher Curl",
+    "group": "Reverse Preacher Curl"
   },
   "barbell_reverse_grip_bent_over_row": {
     "Primary": {
@@ -2417,7 +2643,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Reverse Grip Bent Over Row"
+    "name": "Barbell Reverse Grip Bent Over Row",
+    "group": "Bent Over Row"
   },
   "barbell_seal_row": {
     "Primary": {
@@ -2429,7 +2656,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Seal Row"
+    "name": "Barbell Seal Row",
+    "group": "Seal Row"
   },
   "lying_scissor_crunch": {
     "Primary": {
@@ -2439,7 +2667,8 @@
       "Hip Flexors": 30
     },
     "type": "Bodyweight",
-    "name": "Lying Scissor Crunch"
+    "name": "Lying Scissor Crunch",
+    "group": "Crunch"
   },
   "kneeling_hip_flexor": {
     "Primary": {
@@ -2449,7 +2678,8 @@
       "Quads": 30
     },
     "type": "Weighted",
-    "name": "Kneeling Hip Flexor"
+    "name": "Kneeling Hip Flexor",
+    "group": "Hip Flexor"
   },
   "cable_rope_preacher_hammer_curl": {
     "Primary": {
@@ -2460,7 +2690,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Cable Rope Preacher Hammer Curl"
+    "name": "Cable Rope Preacher Hammer Curl",
+    "group": "Hammer Curl"
   },
   "ez_bar_california_skullcrusher": {
     "Primary": {
@@ -2470,7 +2701,8 @@
       "Triceps (lateral & medial heads)": 20
     },
     "type": "Weighted",
-    "name": "EZ Bar California Skull Crusher"
+    "name": "EZ Bar California Skull Crusher",
+    "group": "Skullcrusher"
   },
   "dumbbell_one_arm_low_fly": {
     "Primary": {
@@ -2480,7 +2712,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Low Fly"
+    "name": "Dumbbell One Arm Low Fly",
+    "group": "Fly"
   },
   "dumbbell_squeeze_bench_press": {
     "Primary": {
@@ -2491,7 +2724,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Dumbbell Squeeze Bench Press"
+    "name": "Dumbbell Squeeze Bench Press",
+    "group": "Bench Press"
   },
   "smith_machine_incline_triceps_extension": {
     "Primary": {
@@ -2501,7 +2735,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Smith Machine Incline Triceps Extension"
+    "name": "Smith Machine Incline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "ez_barbell_curl": {
     "Primary": {
@@ -2511,7 +2746,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Curl"
+    "name": "EZ Barbell Curl",
+    "group": "Biceps Curl"
   },
   "barbell_sumo_deadlift": {
     "Primary": {
@@ -2523,7 +2759,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Sumo Deadlift"
+    "name": "Barbell Sumo Deadlift",
+    "group": "Deadlift"
   },
   "cable_seated_chest_press": {
     "Primary": {
@@ -2534,7 +2771,8 @@
       "Front Delts": 5
     },
     "type": "Weighted",
-    "name": "Cable Seated Chest Press"
+    "name": "Cable Seated Chest Press",
+    "group": "Chest Press"
   },
   "lever_preacher_curl": {
     "Primary": {
@@ -2545,7 +2783,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Lever Preacher Curl"
+    "name": "Lever Preacher Curl",
+    "group": "Preacher Curl"
   },
   "kettlebell_squat": {
     "Primary": {
@@ -2556,7 +2795,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Kettlebell Squat"
+    "name": "Kettlebell Squat",
+    "group": "Squat"
   },
   "kettlebell_front_squat": {
     "Primary": {
@@ -2567,7 +2807,8 @@
       "Hamstrings": 15
     },
     "type": "Weighted",
-    "name": "Kettlebell Front Squat"
+    "name": "Kettlebell Front Squat",
+    "group": "Front Squat"
   },
   "kettlebell_sumo_squat": {
     "Primary": {
@@ -2578,7 +2819,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Kettlebell Sumo Squat"
+    "name": "Kettlebell Sumo Squat",
+    "group": "Sumo Squat"
   },
   "barbell_seated_overhead_triceps_extension": {
     "Primary": {
@@ -2588,7 +2830,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Barbell Seated Overhead Triceps Extension"
+    "name": "Barbell Seated Overhead Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_incline_t_raise_reverse_fly": {
     "Primary": {
@@ -2599,7 +2842,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline T Raise Reverse Fly"
+    "name": "Dumbbell Incline T Raise Reverse Fly",
+    "group": "Reverse Fly"
   },
   "decline_push_up": {
     "Primary": {
@@ -2610,7 +2854,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Decline Push Up"
+    "name": "Decline Push Up",
+    "group": "Push Up"
   },
   "cocoons": {
     "Primary": {
@@ -2621,7 +2866,8 @@
       "Hip Flexors": 10
     },
     "type": "Weighted",
-    "name": "Cocoons"
+    "name": "Cocoons",
+    "group": "Cocoons"
   },
   "dumbbell_reverse_preacher_curl": {
     "Primary": {
@@ -2632,7 +2878,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Reverse Preacher Curl"
+    "name": "Dumbbell Reverse Preacher Curl",
+    "group": "Reverse Preacher Curl"
   },
   "cable_one_arm_triceps_pushdown": {
     "Primary": {
@@ -2642,7 +2889,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable One Arm Triceps Pushdown"
+    "name": "Cable One Arm Triceps Pushdown",
+    "group": "Triceps Pushdown"
   },
   "seated_leg_raise": {
     "Primary": {
@@ -2652,7 +2900,8 @@
       "Hip Flexors": 40
     },
     "type": "Weighted",
-    "name": "Seated Leg Raise"
+    "name": "Seated Leg Raise",
+    "group": "Leg Raise"
   },
   "dumbbell_split_squat": {
     "Primary": {
@@ -2663,7 +2912,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Split Squat"
+    "name": "Dumbbell Split Squat",
+    "group": "Split Squat"
   },
   "dumbbell_incline_close_grip_press_variation": {
     "Primary": {
@@ -2674,7 +2924,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Close Grip Press Variation"
+    "name": "Dumbbell Incline Close Grip Press Variation",
+    "group": "Incline Bench"
   },
   "cable_low_fly": {
     "Primary": {
@@ -2684,7 +2935,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Low Fly"
+    "name": "Cable Low Fly",
+    "group": "Fly"
   },
   "weighted_one_leg_hip_thrust": {
     "Primary": {
@@ -2694,7 +2946,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Weighted One Leg Hip Thrust"
+    "name": "Weighted One Leg Hip Thrust",
+    "group": "Hip Thrust"
   },
   "ez_barbell_seated_triceps_extension": {
     "Primary": {
@@ -2704,7 +2957,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Seated Triceps Extension"
+    "name": "EZ Barbell Seated Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_around_pullover": {
     "Primary": {
@@ -2715,7 +2969,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Around Pullover"
+    "name": "Dumbbell Around Pullover",
+    "group": "Pullover"
   },
   "cable_v_bar_arm_blaster_triceps_pushdown": {
     "Primary": {
@@ -2725,7 +2980,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable V Bar Arm Blaster Triceps Pushdown"
+    "name": "Cable V Bar Arm Blaster Triceps Pushdown",
+    "group": "Triceps Pushdown"
   },
   "hack_calf_raise": {
     "Primary": {
@@ -2735,7 +2991,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Hack Calf Raise"
+    "name": "Hack Calf Raise",
+    "group": "Calf Raise"
   },
   "hand_spring_wrist_curl": {
     "Primary": {
@@ -2745,7 +3002,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Hand Spring Wrist Curl"
+    "name": "Hand Spring Wrist Curl",
+    "group": "Wrist Curl"
   },
   "sit_wall": {
     "Primary": {
@@ -2755,7 +3013,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Sit Wall"
+    "name": "Sit Wall",
+    "group": "Wall sit"
   },
   "cable_close_grip_lat_pulldown": {
     "Primary": {
@@ -2766,7 +3025,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable Close Grip Lat Pulldown"
+    "name": "Cable Close Grip Lat Pulldown",
+    "group": "Lat Pulldown"
   },
   "dumbbell_prone_incline_hammer_curl": {
     "Primary": {
@@ -2777,7 +3037,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Prone Incline Hammer Curl"
+    "name": "Dumbbell Prone Incline Hammer Curl",
+    "group": "Hammer Curl"
   },
   "barbell_bent_over_row": {
     "Primary": {
@@ -2789,7 +3050,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Bent Over Row"
+    "name": "Barbell Bent Over Row",
+    "group": "Bent Over Row"
   },
   "barbell_front_raise_and_pullover": {
     "Primary": {
@@ -2801,7 +3063,8 @@
       "Chest": 10
     },
     "type": "Weighted",
-    "name": "Barbell Front Raise and Pullover"
+    "name": "Barbell Front Raise and Pullover",
+    "group": "Front Raise and Pullover"
   },
   "smith_lateral_step_up": {
     "Primary": {
@@ -2812,7 +3075,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Smith Lateral Step Up"
+    "name": "Smith Lateral Step Up",
+    "group": "Step Up"
   },
   "ez_bar_close_grip_bench_press": {
     "Primary": {
@@ -2823,7 +3087,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "EZ Bar Close Grip Bench Press"
+    "name": "EZ Bar Close Grip Bench Press",
+    "group": "Close Grip Bench Press"
   },
   "barbell_wide_reverse_grip_bench_press": {
     "Primary": {
@@ -2834,7 +3099,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Wide Reverse Grip Bench Press"
+    "name": "Barbell Wide Reverse Grip Bench Press",
+    "group": "Reverse Grip Bench Press"
   },
   "cable_standing_rope_face_pull": {
     "Primary": {
@@ -2845,7 +3111,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Standing Rope Face Pull"
+    "name": "Cable Standing Rope Face Pull",
+    "group": "Face Pull"
   },
   "dumbbell_incline_alternate_bicep_curl": {
     "Primary": {
@@ -2855,7 +3122,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Alternate Bicep Curl"
+    "name": "Dumbbell Incline Alternate Bicep Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_incline_y_raise": {
     "Primary": {
@@ -2866,7 +3134,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Y Raise"
+    "name": "Dumbbell Incline Y Raise",
+    "group": "Y Raise"
   },
   "cable_deadlift": {
     "Primary": {
@@ -2878,7 +3147,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Cable Deadlift"
+    "name": "Cable Deadlift",
+    "group": "Deadlift"
   },
   "lever_seated_calf_raise": {
     "Primary": {
@@ -2886,7 +3156,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Lever Seated Calf Raise"
+    "name": "Lever Seated Calf Raise",
+    "group": "Calf Raise"
   },
   "lever_seated_leg_curl": {
     "Primary": {
@@ -2896,7 +3167,8 @@
       "Calves": 20
     },
     "type": "Weighted",
-    "name": "Lever Seated Leg Curl"
+    "name": "Lever Seated Leg Curl",
+    "group": "Leg Curl"
   },
   "barbell_front_squat": {
     "Primary": {
@@ -2907,7 +3179,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Barbell Front Squat"
+    "name": "Barbell Front Squat",
+    "group": "Front Squat"
   },
   "cable_seated_rear_lateral_raise": {
     "Primary": {
@@ -2917,7 +3190,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Cable Seated Rear Lateral Raise"
+    "name": "Cable Seated Rear Lateral Raise",
+    "group": "Rear Delt Raise"
   },
   "bodyweight_decline_bent_leg_reverse_crunch": {
     "Primary": {
@@ -2927,7 +3201,8 @@
       "Obliques": 30
     },
     "type": "Bodyweight",
-    "name": "Bodyweight Decline Bent Leg Reverse Crunch"
+    "name": "Bodyweight Decline Bent Leg Reverse Crunch",
+    "group": "Crunch"
   },
   "cable_kneeling_one_arm_lat_pulldown": {
     "Primary": {
@@ -2938,7 +3213,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable Kneeling One Arm Lat Pulldown"
+    "name": "Cable Kneeling One Arm Lat Pulldown",
+    "group": "Lat Pulldown"
   },
   "bodyweight_negative_crunch": {
     "Primary": {
@@ -2948,7 +3224,8 @@
       "Obliques": 20
     },
     "type": "Bodyweight",
-    "name": "Bodyweight Negative Crunch"
+    "name": "Bodyweight Negative Crunch",
+    "group": "Crunch"
   },
   "dumbbell_seated_palms_up_flexors_wrist_curl": {
     "Primary": {
@@ -2958,7 +3235,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Palms Up Flexors Wrist Curl"
+    "name": "Dumbbell Seated Palms Up Flexors Wrist Curl",
+    "group": "Wrist Curl"
   },
   "barbell_glute_bridge_hip_thrust": {
     "Primary": {
@@ -2968,7 +3246,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Barbell Glute Bridge Hip Thrust"
+    "name": "Barbell Glute Bridge Hip Thrust",
+    "group": "Hip Thrust"
   },
   "cable_pull_through_rope": {
     "Primary": {
@@ -2978,7 +3257,8 @@
       "Hamstrings": 30
     },
     "type": "Weighted",
-    "name": "Cable Pull Through Rope"
+    "name": "Cable Pull Through Rope",
+    "group": "Pull Through"
   },
   "dumbbell_one_arm_zottman_preacher_curl": {
     "Primary": {
@@ -2989,7 +3269,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Zottman Preacher Curl"
+    "name": "Dumbbell One Arm Zottman Preacher Curl",
+    "group": "Preacher Curl"
   },
   "cable_stiff_leg_stepbox_romanian_deadlift": {
     "Primary": {
@@ -3000,7 +3281,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Cable Stiff Leg Stepbox Romanian Deadlift"
+    "name": "Cable Stiff Leg Stepbox Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "dumbbell_standing_inner_biceps_curl": {
     "Primary": {
@@ -3011,7 +3293,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Inner Biceps Curl"
+    "name": "Dumbbell Standing Inner Biceps Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_drag_curl": {
     "Primary": {
@@ -3021,7 +3304,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Drag Curl"
+    "name": "Dumbbell Drag Curl",
+    "group": "Drag Curl"
   },
   "cable_lying_fly": {
     "Primary": {
@@ -3031,7 +3315,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Lying Fly"
+    "name": "Cable Lying Fly",
+    "group": "Fly"
   },
   "barbell_lying_triceps_extension_skull_crusher": {
     "Primary": {
@@ -3041,7 +3326,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Barbell Lying Triceps Extension Skull Crusher"
+    "name": "Barbell Lying Triceps Extension Skull Crusher",
+    "group": "Skullcrusher"
   },
   "barbell_deadlift": {
     "Primary": {
@@ -3053,7 +3339,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Deadlift"
+    "name": "Barbell Deadlift",
+    "group": "Deadlift"
   },
   "handboard_hang_with_135_degree_elbow": {
     "Primary": {
@@ -3064,7 +3351,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Handboard Hang with 135 Degree Elbow"
+    "name": "Handboard Hang with 135 Degree Elbow",
+    "group": "Hang"
   },
   "dumbbell_one_arm_bench_fly": {
     "Primary": {
@@ -3074,7 +3362,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Bench Fly"
+    "name": "Dumbbell One Arm Bench Fly",
+    "group": "Fly"
   },
   "ez_barbell_standing_wide_grip_biceps_curl": {
     "Primary": {
@@ -3085,7 +3374,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "EZ Barbell Standing Wide Grip Biceps Curl"
+    "name": "EZ Barbell Standing Wide Grip Biceps Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_standing_calf_raise": {
     "Primary": {
@@ -3093,7 +3383,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell Standing Calf Raise"
+    "name": "Dumbbell Standing Calf Raise",
+    "group": "Calf Raise"
   },
   "barbell_standing_calf_raise": {
     "Primary": {
@@ -3101,7 +3392,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Barbell Standing Calf Raise"
+    "name": "Barbell Standing Calf Raise",
+    "group": "Calf Raise"
   },
   "barbell_behind_back_shrug": {
     "Primary": {
@@ -3111,7 +3403,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Barbell Behind Back Shrug"
+    "name": "Barbell Behind Back Shrug",
+    "group": "Shrug"
   },
   "weighted_seated_one_arm_reverse_wrist_curl": {
     "Primary": {
@@ -3121,7 +3414,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Weighted Seated One Arm Reverse Wrist Curl"
+    "name": "Weighted Seated One Arm Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "barbell_high_bar_squat": {
     "Primary": {
@@ -3132,7 +3426,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Barbell High Bar Squat"
+    "name": "Barbell High Bar Squat",
+    "group": "Squat"
   },
   "dumbbell_one_arm_incline_chest_press": {
     "Primary": {
@@ -3143,7 +3438,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Incline Chest Press"
+    "name": "Dumbbell One Arm Incline Chest Press",
+    "group": "Incline Bench"
   },
   "dumbbell_incline_alternate_press": {
     "Primary": {
@@ -3154,7 +3450,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Alternate Press"
+    "name": "Dumbbell Incline Alternate Press",
+    "group": "Incline Bench"
   },
   "bodyweight_decline_crunch": {
     "Primary": {
@@ -3164,7 +3461,8 @@
       "Obliques": 30
     },
     "type": "Bodyweight",
-    "name": "Bodyweight Decline Crunch"
+    "name": "Bodyweight Decline Crunch",
+    "group": "Crunch"
   },
   "lever_alternate_biceps_curl": {
     "Primary": {
@@ -3175,7 +3473,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Lever Alternate Biceps Curl"
+    "name": "Lever Alternate Biceps Curl",
+    "group": "Biceps Curl"
   },
   "smith_lunge": {
     "Primary": {
@@ -3186,7 +3485,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Smith Lunge"
+    "name": "Smith Lunge",
+    "group": "Lunge"
   },
   "ez_barbell_seated_curl": {
     "Primary": {
@@ -3196,7 +3496,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Seated Curl"
+    "name": "EZ Barbell Seated Curl",
+    "group": "Biceps Curl"
   },
   "cable_standing_flexors_wrist_curl": {
     "Primary": {
@@ -3206,7 +3507,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Cable Standing Flexors Wrist Curl"
+    "name": "Cable Standing Flexors Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_pullover": {
     "Primary": {
@@ -3217,7 +3519,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Pullover"
+    "name": "Dumbbell Pullover",
+    "group": "Pullover"
   },
   "push_up": {
     "Primary": {
@@ -3228,7 +3531,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Push Up"
+    "name": "Push Up",
+    "group": "Push Up"
   },
   "dumbbell_twisted_fly": {
     "Primary": {
@@ -3238,7 +3542,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Twisted Fly"
+    "name": "Dumbbell Twisted Fly",
+    "group": "Fly"
   },
   "ez_barbell_decline_triceps_extension": {
     "Primary": {
@@ -3248,7 +3553,8 @@
       "Upper Chest": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Decline Triceps Extension"
+    "name": "EZ Barbell Decline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_standing_one_arm_reverse_curl": {
     "Primary": {
@@ -3259,7 +3565,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing One Arm Reverse Curl"
+    "name": "Dumbbell Standing One Arm Reverse Curl",
+    "group": "Reverse Grip Curl"
   },
   "cable_preacher_curl": {
     "Primary": {
@@ -3270,7 +3577,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Cable Preacher Curl"
+    "name": "Cable Preacher Curl",
+    "group": "Preacher Curl"
   },
   "cable_crossover_variation": {
     "Primary": {
@@ -3280,7 +3588,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Crossover Variation"
+    "name": "Cable Crossover Variation",
+    "group": "Crossover"
   },
   "cable_one_arm_bent_over_row": {
     "Primary": {
@@ -3292,7 +3601,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Cable One Arm Bent Over Row"
+    "name": "Cable One Arm Bent Over Row",
+    "group": "Bent Over Row"
   },
   "barbell_romanian_deadlift": {
     "Primary": {
@@ -3303,7 +3613,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Romanian Deadlift"
+    "name": "Barbell Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "ez_bar_lying_close_grip_triceps_extension_behind_head": {
     "Primary": {
@@ -3313,7 +3624,8 @@
       "Triceps (lateral & medial heads)": 20
     },
     "type": "Weighted",
-    "name": "EZ Bar Lying Close Grip Triceps Extension Behind Head"
+    "name": "EZ Bar Lying Close Grip Triceps Extension Behind Head",
+    "group": "Triceps Extension"
   },
   "lever_decline_chest_press": {
     "Primary": {
@@ -3324,7 +3636,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Decline Chest Press"
+    "name": "Lever Decline Chest Press",
+    "group": "Chest Press"
   },
   "bench_dip": {
     "Primary": {
@@ -3334,7 +3647,8 @@
       "Chest": 30
     },
     "type": "Bodyweight",
-    "name": "Bench Dip"
+    "name": "Bench Dip",
+    "group": "Dip"
   },
   "barbell_sumo_romanian_deadlift": {
     "Primary": {
@@ -3345,7 +3659,8 @@
       "Glutes": 10
     },
     "type": "Weighted",
-    "name": "Barbell Sumo Romanian Deadlift"
+    "name": "Barbell Sumo Romanian Deadlift",
+    "group": "Romanian Deadlift"
   },
   "lever_seated_crunch": {
     "Primary": {
@@ -3355,7 +3670,8 @@
       "Obliques": 20
     },
     "type": "Weighted",
-    "name": "Lever Seated Crunch"
+    "name": "Lever Seated Crunch",
+    "group": "Crunch"
   },
   "smith_front_squat": {
     "Primary": {
@@ -3366,7 +3682,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Smith Front Squat"
+    "name": "Smith Front Squat",
+    "group": "Front Squat"
   },
   "smith_hack_squat": {
     "Primary": {
@@ -3377,7 +3694,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Smith Hack Squat"
+    "name": "Smith Hack Squat",
+    "group": "Hack Squat"
   },
   "barbell_hack_squat": {
     "Primary": {
@@ -3388,7 +3706,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Barbell Hack Squat"
+    "name": "Barbell Hack Squat",
+    "group": "Hack Squat"
   },
   "sled_one_leg_press": {
     "Primary": {
@@ -3399,7 +3718,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Sled One Leg Press"
+    "name": "Sled One Leg Press",
+    "group": "Leg Press"
   },
   "dumbbell_decline_triceps_extension": {
     "Primary": {
@@ -3409,7 +3729,8 @@
       "Upper Chest": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Decline Triceps Extension"
+    "name": "Dumbbell Decline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "smith_split_squat": {
     "Primary": {
@@ -3420,7 +3741,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Smith Split Squat"
+    "name": "Smith Split Squat",
+    "group": "Split Squat"
   },
   "dumbbell_stiff_leg_deadlift": {
     "Primary": {
@@ -3431,7 +3753,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Stiff Leg Deadlift"
+    "name": "Dumbbell Stiff Leg Deadlift",
+    "group": "Romanian Deadlift"
   },
   "dumbbell_rotation_reverse_fly": {
     "Primary": {
@@ -3442,7 +3765,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Rotation Reverse Fly"
+    "name": "Dumbbell Rotation Reverse Fly",
+    "group": "Reverse Fly"
   },
   "cable_standing_inner_curl": {
     "Primary": {
@@ -3453,7 +3777,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Cable Standing Inner Curl"
+    "name": "Cable Standing Inner Curl",
+    "group": "Biceps Curl"
   },
   "cable_lying_triceps_extension_rope": {
     "Primary": {
@@ -3463,7 +3788,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Cable Lying Triceps Extension Rope"
+    "name": "Cable Lying Triceps Extension Rope",
+    "group": "Triceps Extension"
   },
   "cable_rope_incline_triceps_extension": {
     "Primary": {
@@ -3473,7 +3799,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Cable Rope Incline Triceps Extension"
+    "name": "Cable Rope Incline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_incline_alternate_hammer_curl": {
     "Primary": {
@@ -3484,7 +3811,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Alternate Hammer Curl"
+    "name": "Dumbbell Incline Alternate Hammer Curl",
+    "group": "Hammer Curl"
   },
   "dumbbell_bench_press": {
     "Primary": {
@@ -3495,7 +3823,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Bench Press"
+    "name": "Dumbbell Bench Press",
+    "group": "Bench Press"
   },
   "cable_low_seated_row": {
     "Primary": {
@@ -3507,7 +3836,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Cable Low Seated Row"
+    "name": "Cable Low Seated Row",
+    "group": "Seated Row"
   },
   "dumbbell_front_squat": {
     "Primary": {
@@ -3518,7 +3848,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Front Squat"
+    "name": "Dumbbell Front Squat",
+    "group": "Front Squat"
   },
   "ez_bar_seated_close_grip_concentration_curl": {
     "Primary": {
@@ -3528,7 +3859,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "EZ Bar Seated Close Grip Concentration Curl"
+    "name": "EZ Bar Seated Close Grip Concentration Curl",
+    "group": "Biceps Curl"
   },
   "lever_triceps_dip_plate_loaded": {
     "Primary": {
@@ -3538,7 +3870,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Lever Triceps Dip Plate Loaded"
+    "name": "Lever Triceps Dip Plate Loaded",
+    "group": "Dip"
   },
   "lever_hip_thrust": {
     "Primary": {
@@ -3548,7 +3881,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Lever Hip Thrust"
+    "name": "Lever Hip Thrust",
+    "group": "Hip Thrust"
   },
   "dumbbell_rear_delt_raise": {
     "Primary": {
@@ -3558,7 +3892,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Rear Delt Raise"
+    "name": "Dumbbell Rear Delt Raise",
+    "group": "Rear Delt Raise"
   },
   "barbell_reverse_grip_skullcrusher": {
     "Primary": {
@@ -3568,7 +3903,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Barbell Reverse Grip Skull Crusher"
+    "name": "Barbell Reverse Grip Skull Crusher",
+    "group": "Skullcrusher"
   },
   "barbell_wrist_curl": {
     "Primary": {
@@ -3578,7 +3914,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Barbell Wrist Curl"
+    "name": "Barbell Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_seated_alternate_front_raise": {
     "Primary": {
@@ -3588,7 +3925,8 @@
       "Side Delts": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Alternate Front Raise"
+    "name": "Dumbbell Seated Alternate Front Raise",
+    "group": "Front Raise"
   },
   "dumbbell_decline_bench_press": {
     "Primary": {
@@ -3599,7 +3937,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Decline Bench Press"
+    "name": "Dumbbell Decline Bench Press",
+    "group": "Decline Bench Press"
   },
   "lever_preacher_curl_plate_loaded": {
     "Primary": {
@@ -3610,7 +3949,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Lever Preacher Curl Plate Loaded"
+    "name": "Lever Preacher Curl Plate Loaded",
+    "group": "Preacher Curl"
   },
   "cable_reverse_wrist_curl": {
     "Primary": {
@@ -3620,7 +3960,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Cable Reverse Wrist Curl"
+    "name": "Cable Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_decline_fly": {
     "Primary": {
@@ -3630,7 +3971,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Decline Fly"
+    "name": "Dumbbell Decline Fly",
+    "group": "Fly"
   },
   "squat_bodyweight": {
     "Primary": {
@@ -3641,7 +3983,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Squat Bodyweight"
+    "name": "Squat Bodyweight",
+    "group": "Squat"
   },
   "cable_reverse_curl": {
     "Primary": {
@@ -3652,7 +3995,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Cable Reverse Curl"
+    "name": "Cable Reverse Curl",
+    "group": "Reverse Grip Curl"
   },
   "dumbbell_lying_hamstring_curl": {
     "Primary": {
@@ -3662,7 +4006,8 @@
       "Calves": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Hamstring Curl"
+    "name": "Dumbbell Lying Hamstring Curl",
+    "group": "Leg Curl"
   },
   "smith_stiff_legged_deadlift": {
     "Primary": {
@@ -3673,7 +4018,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Smith Stiff Legged Deadlift"
+    "name": "Smith Stiff Legged Deadlift",
+    "group": "Romanian Deadlift"
   },
   "lever_seated_horizontal_leg_press": {
     "Primary": {
@@ -3684,7 +4030,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Seated Horizontal Leg Press"
+    "name": "Lever Seated Horizontal Leg Press",
+    "group": "Leg Press"
   },
   "cable_rear_drive": {
     "Primary": {
@@ -3693,7 +4040,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Cable Rear Drive"
+    "name": "Cable Rear Drive",
+    "group": "Rear Drive"
   },
   "dumbbell_standing_reverse_curl": {
     "Primary": {
@@ -3704,7 +4052,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Reverse Curl"
+    "name": "Dumbbell Standing Reverse Curl",
+    "group": "Reverse Grip Curl"
   },
   "barbell_seated_close_grip_concentration_curl": {
     "Primary": {
@@ -3714,7 +4063,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Barbell Seated Close Grip Concentration Curl"
+    "name": "Barbell Seated Close Grip Concentration Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_preacher_hammer_curl": {
     "Primary": {
@@ -3725,7 +4075,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Preacher Hammer Curl"
+    "name": "Dumbbell Preacher Hammer Curl",
+    "group": "Hammer Curl"
   },
   "side_lying_clam": {
     "Primary": {
@@ -3735,7 +4086,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Side Lying Clam"
+    "name": "Side Lying Clam",
+    "group": "Clam"
   },
   "cable_seated_rear_delt_fly_with_chest_support": {
     "Primary": {
@@ -3745,7 +4097,8 @@
       "Traps": 30
     },
     "type": "Weighted",
-    "name": "Cable Seated Rear Delt Fly with Chest Support"
+    "name": "Cable Seated Rear Delt Fly with Chest Support",
+    "group": "Reverse Fly"
   },
   "landmine_front_squat": {
     "Primary": {
@@ -3756,7 +4109,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Landmine Front Squat"
+    "name": "Landmine Front Squat",
+    "group": "Front Squat"
   },
   "dumbbell_cross_body_hammer_curl": {
     "Primary": {
@@ -3767,7 +4121,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Cross Body Hammer Curl"
+    "name": "Dumbbell Cross Body Hammer Curl",
+    "group": "Hammer Curl"
   },
   "hanging_leg_raise": {
     "Primary": {
@@ -3777,7 +4132,8 @@
       "Hip Flexors": 40
     },
     "type": "Weighted",
-    "name": "Hanging Leg Raise"
+    "name": "Hanging Leg Raise",
+    "group": "Leg Raise"
   },
   "cable_kneeling_external_rotation": {
     "Primary": {
@@ -3787,7 +4143,8 @@
       "Rear Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Kneeling External Rotation"
+    "name": "Cable Kneeling External Rotation",
+    "group": "External Rotation"
   },
   "cable_seated_row": {
     "Primary": {
@@ -3799,7 +4156,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Cable Seated Row"
+    "name": "Cable Seated Row",
+    "group": "Seated Row"
   },
   "hack_squat": {
     "Primary": {
@@ -3810,7 +4168,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Hack Squat"
+    "name": "Hack Squat",
+    "group": "Hack Squat"
   },
   "otis_up": {
     "Primary": {
@@ -3821,7 +4180,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Otis Up"
+    "name": "Otis Up",
+    "group": "Otis Up"
   },
   "barbell_guillotine_bench_press": {
     "Primary": {
@@ -3832,7 +4192,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Guillotine Bench Press"
+    "name": "Barbell Guillotine Bench Press",
+    "group": "Bench Press"
   },
   "barbell_decline_wide_grip_press": {
     "Primary": {
@@ -3843,7 +4204,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Decline Wide Grip Press"
+    "name": "Barbell Decline Wide Grip Press",
+    "group": "Decline Bench Press"
   },
   "dumbbell_one_arm_lateral_raise": {
     "Primary": {
@@ -3854,7 +4216,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Lateral Raise"
+    "name": "Dumbbell One Arm Lateral Raise",
+    "group": "Lateral Raise"
   },
   "dumbbell_front_raise": {
     "Primary": {
@@ -3864,7 +4227,8 @@
       "Side Delts": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Front Raise"
+    "name": "Dumbbell Front Raise",
+    "group": "Front Raise"
   },
   "dumbbell_one_arm_wrist_curl": {
     "Primary": {
@@ -3874,7 +4238,8 @@
       "Grip Strength": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Wrist Curl"
+    "name": "Dumbbell One Arm Wrist Curl",
+    "group": "Wrist Curl"
   },
   "barbell_biceps_curl_with_arm_blaster": {
     "Primary": {
@@ -3884,7 +4249,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Barbell Biceps Curl with Arm Blaster"
+    "name": "Barbell Biceps Curl with Arm Blaster",
+    "group": "Biceps Curl"
   },
   "dumbbell_svend_press": {
     "Primary": {
@@ -3894,7 +4260,8 @@
       "Triceps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Svend Press"
+    "name": "Dumbbell Svend Press",
+    "group": "Svend Press"
   },
   "dumbbell_reverse_spider_curl": {
     "Primary": {
@@ -3904,7 +4271,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Reverse Spider Curl"
+    "name": "Dumbbell Reverse Spider Curl",
+    "group": "Spider Curl"
   },
   "dumbbell_incline_palm_in_press": {
     "Primary": {
@@ -3915,7 +4283,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Palm In Press"
+    "name": "Dumbbell Incline Palm In Press",
+    "group": "Palm In Press"
   },
   "cable_two_arm_lateral_raise": {
     "Primary": {
@@ -3926,7 +4295,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable Two Arm Lateral Raise"
+    "name": "Cable Two Arm Lateral Raise",
+    "group": "Lateral Raise"
   },
   "dumbbell_tate_press": {
     "Primary": {
@@ -3936,7 +4306,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Tate Press"
+    "name": "Dumbbell Tate Press",
+    "group": "Tate Press"
   },
   "triceps_press": {
     "Primary": {
@@ -3946,7 +4317,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Triceps Press"
+    "name": "Triceps Press",
+    "group": "Triceps Press"
   },
   "cable_neutral_grip_lat_pulldown": {
     "Primary": {
@@ -3957,7 +4329,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Cable Neutral Grip Lat Pulldown"
+    "name": "Cable Neutral Grip Lat Pulldown",
+    "group": "Lat Pulldown"
   },
   "single_leg_step_up": {
     "Primary": {
@@ -3968,7 +4341,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Single Leg Step Up"
+    "name": "Single Leg Step Up",
+    "group": "Step Up"
   },
   "barbell_standing_overhead_triceps_extension": {
     "Primary": {
@@ -3978,7 +4352,8 @@
       "Lats": 20
     },
     "type": "Weighted",
-    "name": "Barbell Standing Overhead Triceps Extension"
+    "name": "Barbell Standing Overhead Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_fly": {
     "Primary": {
@@ -3988,7 +4363,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Fly"
+    "name": "Dumbbell Fly",
+    "group": "Fly"
   },
   "barbell_wide_bench_press": {
     "Primary": {
@@ -3999,7 +4375,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Wide Bench Press"
+    "name": "Barbell Wide Bench Press",
+    "group": "Bench Press"
   },
   "smith_deadlift": {
     "Primary": {
@@ -4011,7 +4388,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Smith Deadlift"
+    "name": "Smith Deadlift",
+    "group": "Deadlift"
   },
   "knee_touch_crunch": {
     "Primary": {
@@ -4021,7 +4399,8 @@
       "Obliques": 20
     },
     "type": "Bodyweight",
-    "name": "Knee Touch Crunch"
+    "name": "Knee Touch Crunch",
+    "group": "Crunch"
   },
   "v_up": {
     "Primary": {
@@ -4031,7 +4410,8 @@
       "Hip Flexors": 40
     },
     "type": "Weighted",
-    "name": "V Up"
+    "name": "V Up",
+    "group": "Sit Up"
   },
   "cable_standing_front_raise_variation": {
     "Primary": {
@@ -4041,7 +4421,8 @@
       "Side Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Standing Front Raise Variation"
+    "name": "Cable Standing Front Raise Variation",
+    "group": "Front Raise"
   },
   "barbell_wide_shrug": {
     "Primary": {
@@ -4051,7 +4432,8 @@
       "Rhomboids": 20
     },
     "type": "Weighted",
-    "name": "Barbell Wide Shrug"
+    "name": "Barbell Wide Shrug",
+    "group": "Shrug"
   },
   "squat_with_band": {
     "Primary": {
@@ -4062,7 +4444,8 @@
       "Hamstrings": 10
     },
     "type": "Banded",
-    "name": "Squat with Band"
+    "name": "Squat with Band",
+    "group": "Squat"
   },
   "barbell_rack_pull": {
     "Primary": {
@@ -4075,7 +4458,8 @@
       "Glutes": 10
     },
     "type": "Weighted",
-    "name": "Barbell Rack Pull"
+    "name": "Barbell Rack Pull",
+    "group": "Rack Pull"
   },
   "kettlebell_goblet_curtsey_lunge": {
     "Primary": {
@@ -4086,7 +4470,8 @@
       "Adductors": 20
     },
     "type": "Weighted",
-    "name": "Kettlebell Goblet Curtsey Lunge"
+    "name": "Kettlebell Goblet Curtsey Lunge",
+    "group": "Lunge"
   },
   "dumbbell_incline_triceps_extension": {
     "Primary": {
@@ -4096,7 +4481,8 @@
       "Chest": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Triceps Extension"
+    "name": "Dumbbell Incline Triceps Extension",
+    "group": "Triceps Extension"
   },
   "lever_seated_dip": {
     "Primary": {
@@ -4106,7 +4492,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Lever Seated Dip"
+    "name": "Lever Seated Dip",
+    "group": "Dip"
   },
   "dumbbell_standing_biceps_curl": {
     "Primary": {
@@ -4116,7 +4503,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Biceps Curl"
+    "name": "Dumbbell Standing Biceps Curl",
+    "group": "Biceps Curl"
   },
   "nordic_hamstrings_curl": {
     "Primary": {
@@ -4127,7 +4515,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Nordic Hamstrings Curl"
+    "name": "Nordic Hamstrings Curl",
+    "group": "Nordic Curl"
   },
   "barbell_front_raise": {
     "Primary": {
@@ -4137,7 +4526,8 @@
       "Side Delts": 30
     },
     "type": "Weighted",
-    "name": "Barbell Front Raise"
+    "name": "Barbell Front Raise",
+    "group": "Front Raise"
   },
   "weighted_triceps_dips": {
     "Primary": {
@@ -4148,7 +4538,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Weighted Triceps Dips"
+    "name": "Weighted Triceps Dips",
+    "group": "Dip"
   },
   "ez_barbell_reverse_grip_preacher_curl": {
     "Primary": {
@@ -4158,7 +4549,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "EZ Barbell Reverse Grip Preacher Curl"
+    "name": "EZ Barbell Reverse Grip Preacher Curl",
+    "group": "Reverse Preacher Curl"
   },
   "lever_overhand_triceps_dip": {
     "Primary": {
@@ -4169,7 +4561,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Overhand Triceps Dip"
+    "name": "Lever Overhand Triceps Dip",
+    "group": "Dip"
   },
   "cable_bent_over_row": {
     "Primary": {
@@ -4180,7 +4573,8 @@
       "Traps": 15
     },
     "type": "Weighted",
-    "name": "Cable Bent Over Row"
+    "name": "Cable Bent Over Row",
+    "group": "Bent Over Row"
   },
   "smith_hip_thrust": {
     "Primary": {
@@ -4190,7 +4584,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Smith Hip Thrust"
+    "name": "Smith Hip Thrust",
+    "group": "Hip Thrust"
   },
   "hanging_oblique_knee_raise": {
     "Primary": {
@@ -4202,7 +4597,8 @@
       "Forearms": 5
     },
     "type": "Bodyweight",
-    "name": "Hanging Oblique Knee Raise"
+    "name": "Hanging Oblique Knee Raise",
+    "group": "Knee Raise"
   },
   "hanging_knee_raise": {
     "Primary": {
@@ -4214,7 +4610,8 @@
       "Forearms": 5
     },
     "type": "Bodyweight",
-    "name": "Hanging Knee Raise"
+    "name": "Hanging Knee Raise",
+    "group": "Knee Raise"
   },
   "weighted_standing_kettlebell_curl": {
     "Primary": {
@@ -4225,7 +4622,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Weighted Standing Kettlebell Curl"
+    "name": "Weighted Standing Kettlebell Curl",
+    "group": "Biceps Curl"
   },
   "lever_seated_single_leg_calf_raise": {
     "Primary": {
@@ -4235,7 +4633,8 @@
       "Tibialis Anterior": 10
     },
     "type": "Weighted",
-    "name": "Lever Seated Single Leg Calf Raise"
+    "name": "Lever Seated Single Leg Calf Raise",
+    "group": "Calf Raise"
   },
   "alternate_oblique_crunch": {
     "Primary": {
@@ -4245,7 +4644,8 @@
       "Abdominals": 20
     },
     "type": "Bodyweight",
-    "name": "Alternate Oblique Crunch"
+    "name": "Alternate Oblique Crunch",
+    "group": "Oblique Crunch"
   },
   "barbell_seated_calf_raise": {
     "Primary": {
@@ -4253,7 +4653,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Barbell Seated Calf Raise"
+    "name": "Barbell Seated Calf Raise",
+    "group": "Calf Raise"
   },
   "cable_single_arm_lateral_raise": {
     "Primary": {
@@ -4264,7 +4665,8 @@
       "Traps": 5
     },
     "type": "Weighted",
-    "name": "Cable Single Arm Lateral Raise"
+    "name": "Cable Single Arm Lateral Raise",
+    "group": "Lateral Raise"
   },
   "diamond_push_up_on_knees": {
     "Primary": {
@@ -4274,7 +4676,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Diamond Push Up On Knees"
+    "name": "Diamond Push Up On Knees",
+    "group": "Push Up"
   },
   "smith_squat": {
     "Primary": {
@@ -4285,7 +4688,8 @@
       "Hamstrings": 15
     },
     "type": "Weighted",
-    "name": "Smith Squat"
+    "name": "Smith Squat",
+    "group": "Squat"
   },
   "dumbbell_seated_calf_raise": {
     "Primary": {
@@ -4293,7 +4697,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell Seated Calf Raise"
+    "name": "Dumbbell Seated Calf Raise",
+    "group": "Calf Raise"
   },
   "cable_seated_row_bent_bar": {
     "Primary": {
@@ -4305,7 +4710,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Seated Row Bent Bar"
+    "name": "Cable Seated Row Bent Bar",
+    "group": "Seated Row"
   },
   "cable_incline_bench_press": {
     "Primary": {
@@ -4316,7 +4722,8 @@
       "Triceps": 15
     },
     "type": "Weighted",
-    "name": "Cable Incline Bench Press"
+    "name": "Cable Incline Bench Press",
+    "group": "Incline Bench"
   },
   "incline_twisting_situp": {
     "Primary": {
@@ -4327,7 +4734,8 @@
       "Hip Flexors": 30
     },
     "type": "Weighted",
-    "name": "Incline Twisting Sit-Up"
+    "name": "Incline Twisting Sit-Up",
+    "group": "Sit Up"
   },
   "dumbbell_seated_one_arm_triceps_extension": {
     "Primary": {
@@ -4337,7 +4745,8 @@
       "Lats": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated One Arm Triceps Extension"
+    "name": "Dumbbell Seated One Arm Triceps Extension",
+    "group": "Triceps Extension"
   },
   "hand_opposite_knee_crunch": {
     "Primary": {
@@ -4347,7 +4756,8 @@
       "Abdominals": 30
     },
     "type": "Bodyweight",
-    "name": "Hand Opposite Knee Crunch"
+    "name": "Hand Opposite Knee Crunch",
+    "group": "Hand Opposite Knee Crunch"
   },
   "cable_seated_floor_one_arm_concentration_curl": {
     "Primary": {
@@ -4358,7 +4768,8 @@
       "Forearms": 5
     },
     "type": "Weighted",
-    "name": "Cable Seated Floor One Arm Concentration Curl"
+    "name": "Cable Seated Floor One Arm Concentration Curl",
+    "group": "Biceps Curl"
   },
   "dumbbell_seated_curl": {
     "Primary": {
@@ -4369,7 +4780,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Curl"
+    "name": "Dumbbell Seated Curl",
+    "group": "Biceps Curl"
   },
   "lying_leg_raise": {
     "Primary": {
@@ -4379,7 +4791,8 @@
       "Hip Flexors": 30
     },
     "type": "Weighted",
-    "name": "Lying Leg Raise"
+    "name": "Lying Leg Raise",
+    "group": "Leg Raise"
   },
   "sit_up": {
     "Primary": {
@@ -4389,7 +4802,8 @@
       "Hip Flexors": 30
     },
     "type": "Weighted",
-    "name": "Sit Up"
+    "name": "Sit Up",
+    "group": "Sit Up"
   },
   "lever_calf_press": {
     "Primary": {
@@ -4397,7 +4811,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Lever Calf Press"
+    "name": "Lever Calf Press",
+    "group": "Calf Press"
   },
   "barbell_upright_row": {
     "Primary": {
@@ -4409,7 +4824,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Barbell Upright Row"
+    "name": "Barbell Upright Row",
+    "group": "Upright Row"
   },
   "dumbbell_incline_hammer_press": {
     "Primary": {
@@ -4420,7 +4836,8 @@
       "Triceps": 15
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Hammer Press"
+    "name": "Dumbbell Incline Hammer Press",
+    "group": "Chest Press"
   },
   "barbell_drag_curl": {
     "Primary": {
@@ -4431,7 +4848,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Barbell Drag Curl"
+    "name": "Barbell Drag Curl",
+    "group": "Drag Curl"
   },
   "weighted_seated_tuck_crunch_on_floor": {
     "Primary": {
@@ -4442,7 +4860,8 @@
       "Obliques": 15
     },
     "type": "Bodyweight",
-    "name": "Weighted Seated Tuck Crunch On Floor"
+    "name": "Weighted Seated Tuck Crunch On Floor",
+    "group": "Tuck Crunch"
   },
   "dumbbell_incline_biceps_curl": {
     "Primary": {
@@ -4453,7 +4872,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Biceps Curl"
+    "name": "Dumbbell Incline Biceps Curl",
+    "group": "Biceps Curl"
   },
   "cable_seated_row_rope": {
     "Primary": {
@@ -4465,7 +4885,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Seated Row Rope"
+    "name": "Cable Seated Row Rope",
+    "group": "Seated Row"
   },
   "barbell_incline_bench_press": {
     "Primary": {
@@ -4476,7 +4897,8 @@
       "Triceps": 15
     },
     "type": "Weighted",
-    "name": "Barbell Incline Bench Press"
+    "name": "Barbell Incline Bench Press",
+    "group": "Incline Bench"
   },
   "barbell_decline_bent_arm_pullover": {
     "Primary": {
@@ -4487,7 +4909,8 @@
       "Triceps": 15
     },
     "type": "Weighted",
-    "name": "Barbell Decline Bent Arm Pullover"
+    "name": "Barbell Decline Bent Arm Pullover",
+    "group": "Pullover"
   },
   "smith_leg_press": {
     "Primary": {
@@ -4499,7 +4922,8 @@
       "Calves": 10
     },
     "type": "Weighted",
-    "name": "Smith Leg Press"
+    "name": "Smith Leg Press",
+    "group": "Leg Press"
   },
   "cable_pulldown_bicep_curl": {
     "Primary": {
@@ -4510,7 +4934,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Pulldown Bicep Curl"
+    "name": "Cable Pulldown Bicep Curl",
+    "group": "Biceps Curl"
   },
   "cable_seated_face_pull_rope": {
     "Primary": {
@@ -4522,7 +4947,8 @@
       "Rotator Cuff": 15
     },
     "type": "Weighted",
-    "name": "Cable Seated Face Pull Rope"
+    "name": "Cable Seated Face Pull Rope",
+    "group": "Face Pull"
   },
   "cable_cross_over_lateral_pulldown": {
     "Primary": {
@@ -4533,7 +4959,8 @@
       "Biceps": 15
     },
     "type": "Weighted",
-    "name": "Cable Cross Over Lateral Pulldown"
+    "name": "Cable Cross Over Lateral Pulldown",
+    "group": "Lat Pulldown"
   },
   "sled_leg_press": {
     "Primary": {
@@ -4545,7 +4972,8 @@
       "Calves": 10
     },
     "type": "Weighted",
-    "name": "Sled Leg Press"
+    "name": "Sled Leg Press",
+    "group": "Leg Press"
   },
   "dumbbell_step_up": {
     "Primary": {
@@ -4557,7 +4985,8 @@
       "Calves": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Step Up"
+    "name": "Dumbbell Step Up",
+    "group": "Step Up"
   },
   "tuck_crunch": {
     "Primary": {
@@ -4568,7 +4997,8 @@
       "Obliques": 10
     },
     "type": "Bodyweight",
-    "name": "Tuck Crunch"
+    "name": "Tuck Crunch",
+    "group": "Tuck Crunch"
   },
   "dumbbell_close_grip_press": {
     "Primary": {
@@ -4579,7 +5009,8 @@
       "Front Delts": 15
     },
     "type": "Weighted",
-    "name": "Dumbbell Close Grip Press"
+    "name": "Dumbbell Close Grip Press",
+    "group": "Close Grip Bench Press"
   },
   "barbell_standing_back_wrist_curl": {
     "Primary": {
@@ -4587,7 +5018,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Barbell Standing Back Wrist Curl"
+    "name": "Barbell Standing Back Wrist Curl",
+    "group": "Wrist Curl"
   },
   "cable_reverse_preacher_curl": {
     "Primary": {
@@ -4598,7 +5030,8 @@
       "Forearms": 15
     },
     "type": "Weighted",
-    "name": "Cable Reverse Preacher Curl"
+    "name": "Cable Reverse Preacher Curl",
+    "group": "Reverse Preacher Curl"
   },
   "ez_bar_drag_bicep_curl": {
     "Primary": {
@@ -4609,7 +5042,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "EZ Bar Drag Bicep Curl"
+    "name": "EZ Bar Drag Bicep Curl",
+    "group": "Drag Curl"
   },
   "smith_machine_decline_close_grip_bench_press": {
     "Primary": {
@@ -4620,7 +5054,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Smith Machine Decline Close Grip Bench Press"
+    "name": "Smith Machine Decline Close Grip Bench Press",
+    "group": "Decline Bench Press"
   },
   "barbell_stiff_leg_good_morning": {
     "Primary": {
@@ -4631,7 +5066,8 @@
       "Erectors": 20
     },
     "type": "Weighted",
-    "name": "Barbell Stiff Leg Good Morning"
+    "name": "Barbell Stiff Leg Good Morning",
+    "group": "Good Morning"
   },
   "dumbbell_standing_zottman_preacher_curl": {
     "Primary": {
@@ -4642,7 +5078,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Zottman Preacher Curl"
+    "name": "Dumbbell Standing Zottman Preacher Curl",
+    "group": "Preacher Curl"
   },
   "dumbbell_zottman_curl": {
     "Primary": {
@@ -4653,7 +5090,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Zottman Curl"
+    "name": "Dumbbell Zottman Curl",
+    "group": "Zottman Curl"
   },
   "cable_seated_crunch": {
     "Primary": {
@@ -4663,7 +5101,8 @@
       "Obliques": 20
     },
     "type": "Bodyweight",
-    "name": "Cable Seated Crunch"
+    "name": "Cable Seated Crunch",
+    "group": "Crunch"
   },
   "barbell_curl": {
     "Primary": {
@@ -4674,7 +5113,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Barbell Curl"
+    "name": "Barbell Curl",
+    "group": "Biceps Curl"
   },
   "cable_biceps_curl_ez_bar": {
     "Primary": {
@@ -4685,7 +5125,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Cable Biceps Curl EZ Bar"
+    "name": "Cable Biceps Curl EZ Bar",
+    "group": "Biceps Curl"
   },
   "dumbbell_incline_hammer_curl": {
     "Primary": {
@@ -4694,7 +5135,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell Incline Hammer Curl"
+    "name": "Dumbbell Incline Hammer Curl",
+    "group": "Hammer Curl"
   },
   "ez_barbell_standing_wrist_reverse_curl": {
     "Primary": {
@@ -4702,7 +5144,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "EZ Barbell Standing Wrist Reverse Curl"
+    "name": "EZ Barbell Standing Wrist Reverse Curl",
+    "group": "Wrist Curl"
   },
   "lever_total_abdominal_crunch": {
     "Primary": {
@@ -4713,7 +5156,8 @@
       "Obliques": 15
     },
     "type": "Bodyweight",
-    "name": "Lever Total Abdominal Crunch"
+    "name": "Lever Total Abdominal Crunch",
+    "group": "Total Abdominal Crunch"
   },
   "cable_incline_bench_row": {
     "Primary": {
@@ -4726,7 +5170,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Incline Bench Row"
+    "name": "Cable Incline Bench Row",
+    "group": "Incline Row"
   },
   "dumbbell_side_bend": {
     "Primary": {
@@ -4737,7 +5182,8 @@
       "Erectors": 15
     },
     "type": "Weighted",
-    "name": "Dumbbell Side Bend"
+    "name": "Dumbbell Side Bend",
+    "group": "Side Bend"
   },
   "ez_barbell_jm_bench_press": {
     "Primary": {
@@ -4748,7 +5194,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "EZ Barbell JM Bench Press"
+    "name": "EZ Barbell JM Bench Press",
+    "group": "JM Bench Press"
   },
   "cable_standing_fly": {
     "Primary": {
@@ -4758,7 +5205,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Standing Fly"
+    "name": "Cable Standing Fly",
+    "group": "Fly"
   },
   "oblique_crunches_floor": {
     "Primary": {
@@ -4768,7 +5216,8 @@
       "Abdominals": 30
     },
     "type": "Bodyweight",
-    "name": "Oblique Crunches Floor"
+    "name": "Oblique Crunches Floor",
+    "group": "Oblique Crunch"
   },
   "ez_barbell_close_grip_preacher_curl": {
     "Primary": {
@@ -4778,7 +5227,8 @@
       "Brachialis": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Close Grip Preacher Curl"
+    "name": "EZ Barbell Close Grip Preacher Curl",
+    "group": "Preacher Curl"
   },
   "dumbbell_incline_single_arm_lateral_raise": {
     "Primary": {
@@ -4789,7 +5239,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Single Arm Lateral Raise"
+    "name": "Dumbbell Incline Single Arm Lateral Raise",
+    "group": "Lateral Raise"
   },
   "cable_single_arm_neutral_grip_front_raise": {
     "Primary": {
@@ -4800,7 +5251,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Cable Single Arm Neutral Grip Front Raise"
+    "name": "Cable Single Arm Neutral Grip Front Raise",
+    "group": "Front Raise"
   },
   "cable_standing_crossover_face_pull": {
     "Primary": {
@@ -4812,7 +5264,8 @@
       "Rotator Cuff": 10
     },
     "type": "Weighted",
-    "name": "Cable Standing Crossover Face Pull"
+    "name": "Cable Standing Crossover Face Pull",
+    "group": "Face Pull"
   },
   "dumbbell_hammer_curls_with_arm_blaster": {
     "Primary": {
@@ -4821,7 +5274,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell Hammer Curls with Arm Blaster"
+    "name": "Dumbbell Hammer Curls with Arm Blaster",
+    "group": "Hammer Curl"
   },
   "cable_front_raise": {
     "Primary": {
@@ -4831,7 +5285,8 @@
       "Side Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Front Raise"
+    "name": "Cable Front Raise",
+    "group": "Front Raise"
   },
   "jump_squat": {
     "Primary": {
@@ -4843,7 +5298,8 @@
       "Calves": 10
     },
     "type": "Weighted",
-    "name": "Jump Squat"
+    "name": "Jump Squat",
+    "group": "Squat"
   },
   "diamond_push_up": {
     "Primary": {
@@ -4853,7 +5309,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Diamond Push Up"
+    "name": "Diamond Push Up",
+    "group": "Push Up"
   },
   "dumbbell_lying_rear_lateral_raise": {
     "Primary": {
@@ -4864,7 +5321,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Rear Lateral Raise"
+    "name": "Dumbbell Lying Rear Lateral Raise",
+    "group": "Rear Delt Raise"
   },
   "cable_reverse_one_arm_curl": {
     "Primary": {
@@ -4874,7 +5332,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Cable Reverse One Arm Curl"
+    "name": "Cable Reverse One Arm Curl",
+    "group": "Reverse Grip Curl"
   },
   "barbell_one_arm_bent_over_row": {
     "Primary": {
@@ -4885,7 +5344,8 @@
       "Biceps": 15
     },
     "type": "Weighted",
-    "name": "Barbell One Arm Bent Over Row"
+    "name": "Barbell One Arm Bent Over Row",
+    "group": "Bent Over Row"
   },
   "barbell_incline_lying_rear_delt_raise": {
     "Primary": {
@@ -4896,7 +5356,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Barbell Incline Lying Rear Delt Raise"
+    "name": "Barbell Incline Lying Rear Delt Raise",
+    "group": "Rear Delt Raise"
   },
   "sissy_squat_bodyweight": {
     "Primary": {
@@ -4906,7 +5367,8 @@
       "Calves": 10
     },
     "type": "Bodyweight",
-    "name": "Sissy Squat Bodyweight"
+    "name": "Sissy Squat Bodyweight",
+    "group": "Sissy Squat"
   },
   "ez_barbell_standing_preacher_curl": {
     "Primary": {
@@ -4916,7 +5378,8 @@
       "Brachialis": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Standing Preacher Curl"
+    "name": "EZ Barbell Standing Preacher Curl",
+    "group": "Preacher Curl"
   },
   "lever_hammer_grip_preacher_curl": {
     "Primary": {
@@ -4925,7 +5388,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Lever Hammer Grip Preacher Curl"
+    "name": "Lever Hammer Grip Preacher Curl",
+    "group": "Preacher Curl"
   },
   "cross_body_crunch": {
     "Primary": {
@@ -4935,7 +5399,8 @@
       "Abdominals": 30
     },
     "type": "Bodyweight",
-    "name": "Cross Body Crunch"
+    "name": "Cross Body Crunch",
+    "group": "Cross Body Crunch"
   },
   "resistance_band_side_walk": {
     "Primary": {
@@ -4945,7 +5410,8 @@
       "Glutes": 30
     },
     "type": "Banded",
-    "name": "Resistance Band Side Walk"
+    "name": "Resistance Band Side Walk",
+    "group": "Side Walk"
   },
   "ez_barbell_spider_curl": {
     "Primary": {
@@ -4955,7 +5421,8 @@
       "Brachialis": 20
     },
     "type": "Weighted",
-    "name": "EZ Barbell Spider Curl"
+    "name": "EZ Barbell Spider Curl",
+    "group": "Spider Curl"
   },
   "dumbbell_incline_raise": {
     "Primary": {
@@ -4966,7 +5433,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Raise"
+    "name": "Dumbbell Incline Raise",
+    "group": "Front Raise"
   },
   "cable_y_raise": {
     "Primary": {
@@ -4975,7 +5443,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Cable Y Raise"
+    "name": "Cable Y Raise",
+    "group": "Y Raise"
   },
   "dumbbell_lying_supine_curl": {
     "Primary": {
@@ -4986,7 +5455,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying Supine Curl"
+    "name": "Dumbbell Lying Supine Curl",
+    "group": "Biceps Curl"
   },
   "cable_standing_up_straight_crossovers": {
     "Primary": {
@@ -4996,7 +5466,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Standing Up Straight Crossovers"
+    "name": "Cable Standing Up Straight Crossovers",
+    "group": "Fly"
   },
   "glute_ham_raise": {
     "Primary": {
@@ -5007,7 +5478,8 @@
       "Calves": 15
     },
     "type": "Weighted",
-    "name": "Glute Ham Raise"
+    "name": "Glute Ham Raise",
+    "group": "Glute Ham Raise"
   },
   "sumo_squat": {
     "Primary": {
@@ -5019,7 +5491,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Sumo Squat"
+    "name": "Sumo Squat",
+    "group": "Sumo Squat"
   },
   "barbell_sumo_squat": {
     "Primary": {
@@ -5031,7 +5504,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Barbell Sumo Squat"
+    "name": "Barbell Sumo Squat",
+    "group": "Sumo Squat"
   },
   "handboard_slope_hang": {
     "Primary": {
@@ -5040,7 +5514,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Handboard Slope Hang"
+    "name": "Handboard Slope Hang",
+    "group": "Hang"
   },
   "dumbbell_bent_over_alternate_rear_delt_fly": {
     "Primary": {
@@ -5051,7 +5526,8 @@
       "Rhomboids": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Bent Over Alternate Rear Delt Fly"
+    "name": "Dumbbell Bent Over Alternate Rear Delt Fly",
+    "group": "Reverse Fly"
   },
   "barbell_pendlay_row": {
     "Primary": {
@@ -5063,7 +5539,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Pendlay Row"
+    "name": "Barbell Pendlay Row",
+    "group": "Pendlay Row"
   },
   "dumbbell_hip_thrusts": {
     "Primary": {
@@ -5073,7 +5550,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Hip Thrusts"
+    "name": "Dumbbell Hip Thrusts",
+    "group": "Hip Thrust"
   },
   "dumbbell_one_arm_hammer_preacher_curl": {
     "Primary": {
@@ -5082,7 +5560,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell One Arm Hammer Preacher Curl"
+    "name": "Dumbbell One Arm Hammer Preacher Curl",
+    "group": "Hammer Curl"
   },
   "dumbbell_incline_front_raise": {
     "Primary": {
@@ -5092,7 +5571,8 @@
       "Side Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Front Raise"
+    "name": "Dumbbell Incline Front Raise",
+    "group": "Front Raise"
   },
   "dumbbell_one_arm_standing_hammer_curl": {
     "Primary": {
@@ -5101,7 +5581,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Dumbbell One Arm Standing Hammer Curl"
+    "name": "Dumbbell One Arm Standing Hammer Curl",
+    "group": "Hammer Curl"
   },
   "dumbbell_straight_arm_pullover": {
     "Primary": {
@@ -5112,7 +5593,8 @@
       "Triceps": 15
     },
     "type": "Weighted",
-    "name": "Dumbbell Straight Arm Pullover"
+    "name": "Dumbbell Straight Arm Pullover",
+    "group": "Pullover"
   },
   "barbell_narrow_row": {
     "Primary": {
@@ -5124,7 +5606,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Narrow Row"
+    "name": "Barbell Narrow Row",
+    "group": "Narrow Row"
   },
   "barbell_lying_close_grip_press": {
     "Primary": {
@@ -5134,7 +5617,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Barbell Lying Close Grip Press"
+    "name": "Barbell Lying Close Grip Press",
+    "group": "Close Grip Bench Press"
   },
   "elevated_push_up": {
     "Primary": {
@@ -5145,7 +5629,8 @@
       "Front Delts": 20
     },
     "type": "Bodyweight",
-    "name": "Elevated Push Up"
+    "name": "Elevated Push Up",
+    "group": "Push Up"
   },
   "dumbbell_reverse_bench_press": {
     "Primary": {
@@ -5156,7 +5641,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Reverse Bench Press"
+    "name": "Dumbbell Reverse Bench Press",
+    "group": "Reverse Grip Bench Press"
   },
   "close_grip_push_up": {
     "Primary": {
@@ -5166,7 +5652,8 @@
       "Chest": 30
     },
     "type": "Weighted",
-    "name": "Close Grip Push Up"
+    "name": "Close Grip Push Up",
+    "group": "Push Up"
   },
   "dumbbell_one_arm_front_raise": {
     "Primary": {
@@ -5176,7 +5663,8 @@
       "Side Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Front Raise"
+    "name": "Dumbbell One Arm Front Raise",
+    "group": "Front Raise"
   },
   "dumbbell_biceps_curl": {
     "Primary": {
@@ -5187,7 +5675,8 @@
       "Forearms": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Biceps Curl"
+    "name": "Dumbbell Biceps Curl",
+    "group": "Biceps Curl"
   },
   "cable_seated_chest_fly": {
     "Primary": {
@@ -5197,7 +5686,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Seated Chest Fly"
+    "name": "Cable Seated Chest Fly",
+    "group": "Fly"
   },
   "bench_reverse_crunch_circle": {
     "Primary": {
@@ -5208,7 +5698,8 @@
       "Obliques": 20
     },
     "type": "Bodyweight",
-    "name": "Bench Reverse Crunch Circle"
+    "name": "Bench Reverse Crunch Circle",
+    "group": "Crunch"
   },
   "dumbbell_preacher_curl": {
     "Primary": {
@@ -5218,7 +5709,8 @@
       "Brachialis": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Preacher Curl"
+    "name": "Dumbbell Preacher Curl",
+    "group": "Preacher Curl"
   },
   "dumbbell_single_arm_preacher_curl": {
     "Primary": {
@@ -5228,7 +5720,8 @@
       "Brachialis": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Single Arm Preacher Curl"
+    "name": "Dumbbell Single Arm Preacher Curl",
+    "group": "Preacher Curl"
   },
   "dumbbell_bent_over_bench_row": {
     "Primary": {
@@ -5240,7 +5733,8 @@
       "Traps": 15
     },
     "type": "Weighted",
-    "name": "Dumbbell Bent Over Bench Row"
+    "name": "Dumbbell Bent Over Bench Row",
+    "group": "Bench Row"
   },
   "lying_t_bar_row": {
     "Primary": {
@@ -5252,7 +5746,8 @@
       "Traps": 20
     },
     "type": "Weighted",
-    "name": "Lying T Bar Row"
+    "name": "Lying T Bar Row",
+    "group": "T-Bar Row"
   },
   "rear_delt_fly_machine": {
     "Primary": {
@@ -5262,7 +5757,8 @@
       "Traps": 20
     },
     "type": "Weighted",
-    "name": "Rear Delt Fly Machine"
+    "name": "Rear Delt Fly Machine",
+    "group": "Reverse Fly"
   },
   "triceps_dips": {
     "Primary": {
@@ -5273,7 +5769,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Triceps Dips"
+    "name": "Triceps Dips",
+    "group": "Dip"
   },
   "assisted_chest_dips": {
     "Primary": {
@@ -5284,7 +5781,8 @@
       "Front Delts": 10
     },
     "type": "Assisted",
-    "name": "Assisted Chest Dips"
+    "name": "Assisted Chest Dips",
+    "group": "Dip"
   },
   "assisted_triceps_dips": {
     "Primary": {
@@ -5295,7 +5793,8 @@
       "Front Delts": 10
     },
     "type": "Assisted",
-    "name": "Assisted Triceps Dips"
+    "name": "Assisted Triceps Dips",
+    "group": "Dip"
   },
   "weighted_neutral_grip_pull_up": {
     "Primary": {
@@ -5307,7 +5806,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Weighted Neutral Grip Pull Up"
+    "name": "Weighted Neutral Grip Pull Up",
+    "group": "Pull Up"
   },
   "assisted_neutral_grip_pull_ups": {
     "Primary": {
@@ -5319,7 +5819,8 @@
       "Traps": 10
     },
     "type": "Assisted",
-    "name": "Assisted Neutral Grip Pull Ups"
+    "name": "Assisted Neutral Grip Pull Ups",
+    "group": "Pull Up"
   },
   "neutral_grip_pull_up": {
     "Primary": {
@@ -5331,7 +5832,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Neutral Grip Pull Up"
+    "name": "Neutral Grip Pull Up",
+    "group": "Pull Up"
   },
   "commando_pull_up": {
     "Primary": {
@@ -5343,7 +5845,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Commando Pull Up"
+    "name": "Commando Pull Up",
+    "group": "Pull Up"
   },
   "band_assisted_one_arm_chin_up": {
     "Primary": {
@@ -5355,7 +5858,8 @@
       "Traps": 10
     },
     "type": "Banded",
-    "name": "Band Assisted One Arm Chin Up"
+    "name": "Band Assisted One Arm Chin Up",
+    "group": "One Arm Chin Up"
   },
   "weighted_one_handed_pull_up": {
     "Primary": {
@@ -5367,7 +5871,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Weighted One Handed Pull Up"
+    "name": "Weighted One Handed Pull Up",
+    "group": "Pull Up"
   },
   "close_grip_pull_up": {
     "Primary": {
@@ -5379,7 +5884,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Close Grip Pull Up"
+    "name": "Close Grip Pull Up",
+    "group": "Pull Up"
   },
   "archer_pull_up": {
     "Primary": {
@@ -5391,7 +5897,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Archer Pull Up"
+    "name": "Archer Pull Up",
+    "group": "Pull Up"
   },
   "chin_up": {
     "Primary": {
@@ -5403,7 +5910,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Chin Up"
+    "name": "Chin Up",
+    "group": "Chin Up"
   },
   "close_grip_chin_up": {
     "Primary": {
@@ -5415,7 +5923,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Close Grip Chin Up"
+    "name": "Close Grip Chin Up",
+    "group": "Chin Up"
   },
   "band_assisted_chin_up": {
     "Primary": {
@@ -5427,7 +5936,8 @@
       "Traps": 10
     },
     "type": "Banded",
-    "name": "Band Assisted Chin Up"
+    "name": "Band Assisted Chin Up",
+    "group": "Chin Up"
   },
   "assisted_close_grip_chin_up": {
     "Primary": {
@@ -5439,7 +5949,8 @@
       "Traps": 10
     },
     "type": "Assisted",
-    "name": "Assisted Close Grip Chin Up"
+    "name": "Assisted Close Grip Chin Up",
+    "group": "Chin Up"
   },
   "pull_up": {
     "Primary": {
@@ -5451,7 +5962,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Pull Up"
+    "name": "Pull Up",
+    "group": "Pull Up"
   },
   "single_arm_pull_up": {
     "Primary": {
@@ -5463,7 +5975,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Single Arm Pull Up"
+    "name": "Single Arm Pull Up",
+    "group": "Pull Up"
   },
   "l_pull_ups": {
     "Primary": {
@@ -5476,7 +5989,8 @@
       "Abdominals": 10
     },
     "type": "Weighted",
-    "name": "L Pull Ups"
+    "name": "L Pull Ups",
+    "group": "Pull Up"
   },
   "weighted_chin_up": {
     "Primary": {
@@ -5488,7 +6002,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Weighted Chin Up"
+    "name": "Weighted Chin Up",
+    "group": "Chin Up"
   },
   "assisted_chin_up": {
     "Primary": {
@@ -5500,7 +6015,8 @@
       "Traps": 10
     },
     "type": "Assisted",
-    "name": "Assisted Chin Up"
+    "name": "Assisted Chin Up",
+    "group": "Chin Up"
   },
   "back_extensions": {
     "Primary": {
@@ -5511,7 +6027,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Back Extensions"
+    "name": "Back Extensions",
+    "group": "Back Extension"
   },
   "barbell_bent_over_wide_grip_row": {
     "Primary": {
@@ -5523,7 +6040,8 @@
       "Rear Delts": 10
     },
     "type": "Weighted",
-    "name": "Barbell Bent Over Wide Grip Row"
+    "name": "Barbell Bent Over Wide Grip Row",
+    "group": "Bent Over Row"
   },
   "barbell_deadstop_row": {
     "Primary": {
@@ -5534,7 +6052,8 @@
       "Erectors": 20
     },
     "type": "Weighted",
-    "name": "Barbell Deadstop Row"
+    "name": "Barbell Deadstop Row",
+    "group": "Bent Over Row"
   },
   "barbell_squat": {
     "Primary": {
@@ -5545,7 +6064,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Barbell Squat"
+    "name": "Barbell Squat",
+    "group": "Squat"
   },
   "barbell_reverse_wrist_curl": {
     "Primary": {
@@ -5555,7 +6075,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Barbell Reverse Wrist Curl"
+    "name": "Barbell Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "cable_decline_fly": {
     "Primary": {
@@ -5565,7 +6086,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Decline Fly"
+    "name": "Cable Decline Fly",
+    "group": "Fly"
   },
   "cable_hip_abduction": {
     "Primary": {
@@ -5575,7 +6097,8 @@
       "Outer Thighs": 20
     },
     "type": "Weighted",
-    "name": "Cable Hip Abduction"
+    "name": "Cable Hip Abduction",
+    "group": "Hip Abduction"
   },
   "cable_kneeling_high_row_rope": {
     "Primary": {
@@ -5586,7 +6109,8 @@
       "Rear Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Kneeling High Row Rope"
+    "name": "Cable Kneeling High Row Rope",
+    "group": "High Row"
   },
   "cable_lateral_pulldown_rope": {
     "Primary": {
@@ -5597,7 +6121,8 @@
       "Side Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Lateral Pulldown Rope"
+    "name": "Cable Lateral Pulldown Rope",
+    "group": "Lat Pulldown"
   },
   "cable_lateral_pulldown_v_bar": {
     "Primary": {
@@ -5608,7 +6133,8 @@
       "Side Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Lateral Pulldown V Bar"
+    "name": "Cable Lateral Pulldown V Bar",
+    "group": "Lat Pulldown"
   },
   "cable_lying_biceps_curl": {
     "Primary": {
@@ -5618,7 +6144,8 @@
       "Forearms": 25
     },
     "type": "Weighted",
-    "name": "Cable Lying Biceps Curl"
+    "name": "Cable Lying Biceps Curl",
+    "group": "Biceps Curl"
   },
   "cable_lying_extension_pullover_rope": {
     "Primary": {
@@ -5629,7 +6156,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Cable Lying Extension Pullover Rope"
+    "name": "Cable Lying Extension Pullover Rope",
+    "group": "Pullover"
   },
   "cable_one_arm_biceps_curl": {
     "Primary": {
@@ -5639,7 +6167,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Cable One Arm Biceps Curl"
+    "name": "Cable One Arm Biceps Curl",
+    "group": "Biceps Curl"
   },
   "bayesian_curl": {
     "Primary": {
@@ -5649,7 +6178,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Bayesian Curl"
+    "name": "Bayesian Curl",
+    "group": "Biceps Curl"
   },
   "cable_overhead_single_arm_triceps_extension": {
     "Primary": {
@@ -5659,7 +6189,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Overhead Single Arm Triceps Extension"
+    "name": "Cable Overhead Single Arm Triceps Extension",
+    "group": "Triceps Extension"
   },
   "cable_triceps_pushdown_rope": {
     "Primary": {
@@ -5669,7 +6200,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Triceps Pushdown Rope"
+    "name": "Cable Triceps Pushdown Rope",
+    "group": "Triceps Pushdown"
   },
   "cable_reverse_grip_pulldown": {
     "Primary": {
@@ -5680,7 +6212,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Reverse Grip Pulldown"
+    "name": "Cable Reverse Grip Pulldown",
+    "group": "Lat Pulldown"
   },
   "cable_single_arm_triceps_pushdown_rope": {
     "Primary": {
@@ -5690,7 +6223,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Single Arm Triceps Pushdown Rope"
+    "name": "Cable Single Arm Triceps Pushdown Rope",
+    "group": "Triceps Pushdown"
   },
   "cable_standing_high_cross_triceps_extension": {
     "Primary": {
@@ -5700,7 +6234,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Standing High Cross Triceps Extension"
+    "name": "Cable Standing High Cross Triceps Extension",
+    "group": "Triceps Extension"
   },
   "cable_triceps_pushdown_v_bar": {
     "Primary": {
@@ -5710,7 +6245,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Cable Triceps Pushdown V Bar"
+    "name": "Cable Triceps Pushdown V Bar",
+    "group": "Triceps Pushdown"
   },
   "chest_dip": {
     "Primary": {
@@ -5721,7 +6257,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Chest Dip"
+    "name": "Chest Dip",
+    "group": "Dip"
   },
   "cobra_push_up": {
     "Primary": {
@@ -5732,7 +6269,8 @@
       "Front Delts": 10
     },
     "type": "Bodyweight",
-    "name": "Cobra Push Up"
+    "name": "Cobra Push Up",
+    "group": "Cobra Push Up"
   },
   "dumbbell_cuban_press": {
     "Primary": {
@@ -5744,7 +6282,8 @@
       "Triceps": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Cuban Press"
+    "name": "Dumbbell Cuban Press",
+    "group": "Cuban Press"
   },
   "dumbbell_devils_press": {
     "Primary": {
@@ -5756,7 +6295,8 @@
       "Quads": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Devils Press"
+    "name": "Dumbbell Devils Press",
+    "group": "Devils Press"
   },
   "dumbbell_lying_one_arm_press": {
     "Primary": {
@@ -5767,7 +6307,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Lying One Arm Press"
+    "name": "Dumbbell Lying One Arm Press",
+    "group": "Chest Press"
   },
   "dumbbell_one_arm_reverse_fly_with_support": {
     "Primary": {
@@ -5778,7 +6319,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell One Arm Reverse Fly with Support"
+    "name": "Dumbbell One Arm Reverse Fly with Support",
+    "group": "Reverse Fly"
   },
   "dumbbell_reverse_wrist_curl": {
     "Primary": {
@@ -5788,7 +6330,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Reverse Wrist Curl"
+    "name": "Dumbbell Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_seated_bench_triceps_extension": {
     "Primary": {
@@ -5798,7 +6341,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Bench Triceps Extension"
+    "name": "Dumbbell Seated Bench Triceps Extension",
+    "group": "Triceps Extension"
   },
   "dumbbell_walking_lunges": {
     "Primary": {
@@ -5809,7 +6353,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Walking Lunges"
+    "name": "Dumbbell Walking Lunges",
+    "group": "Lunge"
   },
   "finger_curls": {
     "Primary": {
@@ -5817,7 +6362,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Finger Curls"
+    "name": "Finger Curls",
+    "group": "Finger Curl"
   },
   "kettlebell_step_up": {
     "Primary": {
@@ -5828,7 +6374,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Kettlebell Step Up"
+    "name": "Kettlebell Step Up",
+    "group": "Step Up"
   },
   "kneeling_push_up": {
     "Primary": {
@@ -5839,7 +6386,8 @@
       "Triceps": 20
     },
     "type": "Bodyweight",
-    "name": "Kneeling Push Up"
+    "name": "Kneeling Push Up",
+    "group": "Push Up"
   },
   "landmine_rear_lunge": {
     "Primary": {
@@ -5850,7 +6398,8 @@
       "Hamstrings": 20
     },
     "type": "Weighted",
-    "name": "Landmine Rear Lunge"
+    "name": "Landmine Rear Lunge",
+    "group": "Lunge"
   },
   "lever_hip_extension": {
     "Primary": {
@@ -5861,7 +6410,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Hip Extension"
+    "name": "Lever Hip Extension",
+    "group": "Hip Extension"
   },
   "lever_incline_chest_press": {
     "Primary": {
@@ -5872,7 +6422,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lever Incline Chest Press"
+    "name": "Lever Incline Chest Press",
+    "group": "Incline Bench"
   },
   "lever_leg_extension": {
     "Primary": {
@@ -5880,7 +6431,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Lever Leg Extension"
+    "name": "Lever Leg Extension",
+    "group": "Leg Extension"
   },
   "lever_lying_leg_curl": {
     "Primary": {
@@ -5890,7 +6442,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Lever Lying Leg Curl"
+    "name": "Lever Lying Leg Curl",
+    "group": "Leg Curl"
   },
   "lever_lying_single_leg_leg_curl": {
     "Primary": {
@@ -5900,7 +6453,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Lever Lying Single Leg Leg Curl"
+    "name": "Lever Lying Single Leg Leg Curl",
+    "group": "Leg Curl"
   },
   "lever_seated_hip_adduction": {
     "Primary": {
@@ -5910,7 +6464,8 @@
       "Glutes": 20
     },
     "type": "Weighted",
-    "name": "Lever Seated Hip Adduction"
+    "name": "Lever Seated Hip Adduction",
+    "group": "Hip Adduction"
   },
   "lever_seated_one_leg_leg_curl": {
     "Primary": {
@@ -5920,7 +6475,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Lever Seated One Leg Leg Curl"
+    "name": "Lever Seated One Leg Leg Curl",
+    "group": "Leg Curl"
   },
   "machine_back_extension": {
     "Primary": {
@@ -5931,7 +6487,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Machine Back Extension"
+    "name": "Machine Back Extension",
+    "group": "Back Extension"
   },
   "machine_shoulder_press": {
     "Primary": {
@@ -5942,7 +6499,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Machine Shoulder Press"
+    "name": "Machine Shoulder Press",
+    "group": "Shoulder Press"
   },
   "one_leg_floor_calf_raise": {
     "Primary": {
@@ -5950,7 +6508,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "One Leg Floor Calf Raise"
+    "name": "One Leg Floor Calf Raise",
+    "group": "Calf Raise"
   },
   "single_leg_leg_extension": {
     "Primary": {
@@ -5958,7 +6517,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Single Leg Leg Extension"
+    "name": "Single Leg Leg Extension",
+    "group": "Leg Extension"
   },
   "resistance_band_bent_leg_kickback_kneeling": {
     "Primary": {
@@ -5969,7 +6529,8 @@
       "Erectors": 10
     },
     "type": "Banded",
-    "name": "Resistance Band Bent Leg Kickback Kneeling"
+    "name": "Resistance Band Bent Leg Kickback Kneeling",
+    "group": "Kickback"
   },
   "resistance_band_leg_extension": {
     "Primary": {
@@ -5979,7 +6540,8 @@
       "Hip Flexors": 30
     },
     "type": "Banded",
-    "name": "Resistance Band Leg Extension"
+    "name": "Resistance Band Leg Extension",
+    "group": "Leg Extension"
   },
   "resistance_band_leg_lift": {
     "Primary": {
@@ -5990,7 +6552,8 @@
       "Hamstrings": 10
     },
     "type": "Banded",
-    "name": "Resistance Band Leg Lift"
+    "name": "Resistance Band Leg Lift",
+    "group": "Leg Raise"
   },
   "resistance_band_seated_single_leg_curl": {
     "Primary": {
@@ -6000,7 +6563,8 @@
       "Glutes": 30
     },
     "type": "Banded",
-    "name": "Resistance Band Seated Single Leg Curl"
+    "name": "Resistance Band Seated Single Leg Curl",
+    "group": "Leg Curl"
   },
   "seated_lever_machine_row": {
     "Primary": {
@@ -6011,7 +6575,8 @@
       "Rear Delts": 20
     },
     "type": "Weighted",
-    "name": "Seated Lever Machine Row"
+    "name": "Seated Lever Machine Row",
+    "group": "Seated Row"
   },
   "seated_machine_row": {
     "Primary": {
@@ -6022,7 +6587,8 @@
       "Rear Delts": 20
     },
     "type": "Weighted",
-    "name": "Seated Machine Row"
+    "name": "Seated Machine Row",
+    "group": "Seated Row"
   },
   "seated_overhead_press_barbell": {
     "Primary": {
@@ -6033,7 +6599,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Seated Overhead Press Barbell"
+    "name": "Seated Overhead Press Barbell",
+    "group": "Overhead Press"
   },
   "single_leg_hip_thrust": {
     "Primary": {
@@ -6044,7 +6611,8 @@
       "Erectors": 10
     },
     "type": "Weighted",
-    "name": "Single Leg Hip Thrust"
+    "name": "Single Leg Hip Thrust",
+    "group": "Hip Thrust"
   },
   "bodyweight_pistol_squat": {
     "Primary": {
@@ -6055,7 +6623,8 @@
       "Hamstrings": 10
     },
     "type": "Bodyweight",
-    "name": "Bodyweight Pistol Squat"
+    "name": "Bodyweight Pistol Squat",
+    "group": "Pistol Squat"
   },
   "smith_calf_raise": {
     "Primary": {
@@ -6063,7 +6632,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Smith Calf Raise"
+    "name": "Smith Calf Raise",
+    "group": "Calf Raise"
   },
   "smith_machine_standing_overhead_press": {
     "Primary": {
@@ -6074,7 +6644,8 @@
       "Upper Chest": 10
     },
     "type": "Weighted",
-    "name": "Smith Machine Standing Overhead Press"
+    "name": "Smith Machine Standing Overhead Press",
+    "group": "Overhead Press"
   },
   "suspender_arm_curl": {
     "Primary": {
@@ -6084,7 +6655,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Suspender Arm Curl"
+    "name": "Suspender Arm Curl",
+    "group": "Biceps Curl"
   },
   "suspender_leg_curl": {
     "Primary": {
@@ -6094,7 +6666,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Suspender Leg Curl"
+    "name": "Suspender Leg Curl",
+    "group": "Leg Curl"
   },
   "suspender_straight_hip_leg_curl": {
     "Primary": {
@@ -6104,7 +6677,8 @@
       "Glutes": 30
     },
     "type": "Weighted",
-    "name": "Suspender Straight Hip Leg Curl"
+    "name": "Suspender Straight Hip Leg Curl",
+    "group": "Leg Curl"
   },
   "suspender_triceps_extension": {
     "Primary": {
@@ -6114,7 +6688,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Suspender Triceps Extension"
+    "name": "Suspender Triceps Extension",
+    "group": "Triceps Extension"
   },
   "walking_lunge": {
     "Primary": {
@@ -6125,7 +6700,8 @@
       "Hamstrings": 20
     },
     "type": "Bodyweight",
-    "name": "Walking Lunge"
+    "name": "Walking Lunge",
+    "group": "Lunge"
   },
   "weighted_crunch": {
     "Primary": {
@@ -6135,7 +6711,8 @@
       "Hip Flexors": 30
     },
     "type": "Bodyweight",
-    "name": "Weighted Crunch"
+    "name": "Weighted Crunch",
+    "group": "Crunch"
   },
   "weighted_push_up": {
     "Primary": {
@@ -6146,7 +6723,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Weighted Push Up"
+    "name": "Weighted Push Up",
+    "group": "Push Up"
   },
   "cable_seated_horizontal_shrug": {
     "Primary": {
@@ -6157,7 +6735,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Seated Horizontal Shrug"
+    "name": "Cable Seated Horizontal Shrug",
+    "group": "Shrug"
   },
   "dumbbell_shrug": {
     "Primary": {
@@ -6167,7 +6746,8 @@
       "Rhomboids": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Shrug"
+    "name": "Dumbbell Shrug",
+    "group": "Shrug"
   },
   "incline_shrug": {
     "Primary": {
@@ -6177,7 +6757,8 @@
       "Rhomboids": 20
     },
     "type": "Weighted",
-    "name": "Incline Shrug"
+    "name": "Incline Shrug",
+    "group": "Shrug"
   },
   "cable_triceps_pushdown_ez_bar": {
     "Primary": {
@@ -6187,7 +6768,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Cable Triceps Pushdown EZ Bar"
+    "name": "Cable Triceps Pushdown EZ Bar",
+    "group": "Triceps Pushdown"
   },
   "cable_triceps_pushdown_straight_bar": {
     "Primary": {
@@ -6197,7 +6779,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Cable Triceps Pushdown Straight Bar"
+    "name": "Cable Triceps Pushdown Straight Bar",
+    "group": "Triceps Pushdown"
   },
   "dumbbell_over_bench_neutral_wrist_curl": {
     "Primary": {
@@ -6207,7 +6790,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Over Bench Neutral Wrist Curl"
+    "name": "Dumbbell Over Bench Neutral Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_over_bench_wrist_curl": {
     "Primary": {
@@ -6217,7 +6801,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Over Bench Wrist Curl"
+    "name": "Dumbbell Over Bench Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_over_bench_reverse_wrist_curl": {
     "Primary": {
@@ -6227,7 +6812,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Over Bench Reverse Wrist Curl"
+    "name": "Dumbbell Over Bench Reverse Wrist Curl",
+    "group": "Wrist Curl"
   },
   "dumbbell_over_bench_one_arm_wrist_curl": {
     "Primary": {
@@ -6237,7 +6823,8 @@
       "Biceps": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Over Bench One Arm Wrist Curl"
+    "name": "Dumbbell Over Bench One Arm Wrist Curl",
+    "group": "Wrist Curl"
   },
   "machine_chest_fly": {
     "Primary": {
@@ -6247,7 +6834,8 @@
       "Front Delts": 20
     },
     "type": "Weighted",
-    "name": "Machine Chest Fly"
+    "name": "Machine Chest Fly",
+    "group": "Fly"
   },
   "cable_pullover": {
     "Primary": {
@@ -6258,7 +6846,8 @@
       "Triceps": 15
     },
     "type": "Weighted",
-    "name": "Cable Pullover"
+    "name": "Cable Pullover",
+    "group": "Pullover"
   },
   "dumbbell_incline_chest_supported_row": {
     "Primary": {
@@ -6270,7 +6859,8 @@
       "Biceps": 15
     },
     "type": "Weighted",
-    "name": "Dumbbell Incline Chest Supported Row"
+    "name": "Dumbbell Incline Chest Supported Row",
+    "group": "Bench Row"
   },
   "assault_bike": {
     "Primary": {
@@ -6285,7 +6875,8 @@
       "Abdominals": 10
     },
     "type": "Timed",
-    "name": "Assault Bike"
+    "name": "Assault Bike",
+    "group": "Assault Bike"
   },
   "barbell_behind_the_back_wrist_curls": {
     "Primary": {
@@ -6295,7 +6886,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Barbell Behind the Back Wrist Curls"
+    "name": "Barbell Behind the Back Wrist Curls",
+    "group": "Wrist Curl"
   },
   "cable_behind_the_back_wrist_curls": {
     "Primary": {
@@ -6305,7 +6897,8 @@
       "Biceps": 10
     },
     "type": "Weighted",
-    "name": "Cable Behind the Back Wrist Curls"
+    "name": "Cable Behind the Back Wrist Curls",
+    "group": "Wrist Curl"
   },
   "cable_one_arm_row": {
     "Primary": {
@@ -6320,7 +6913,8 @@
       "Abdominals": 5
     },
     "type": "Weighted",
-    "name": "Cable One Arm Row"
+    "name": "Cable One Arm Row",
+    "group": "Seated Row"
   },
   "cable_wide_grip_neutral_lat_pulldown": {
     "Primary": {
@@ -6335,7 +6929,8 @@
       "Obliques": 5
     },
     "type": "Weighted",
-    "name": "Cable Wide Grip Neutral Lat Pulldown"
+    "name": "Cable Wide Grip Neutral Lat Pulldown",
+    "group": "Lat Pulldown"
   },
   "captain_seat_leg_raise": {
     "Primary": {
@@ -6345,7 +6940,8 @@
     },
     "Secondary": {},
     "type": "Bodyweight",
-    "name": "Captain Seat Leg Raise"
+    "name": "Captain Seat Leg Raise",
+    "group": "Leg Raise"
   },
   "dead_hang": {
     "Primary": {
@@ -6358,7 +6954,8 @@
       "Rear Delts": 5
     },
     "type": "Timed",
-    "name": "Dead Hang"
+    "name": "Dead Hang",
+    "group": "Hang"
   },
   "farmer_walk": {
     "Primary": {
@@ -6372,7 +6969,8 @@
       "Glutes": 10
     },
     "type": "Distance",
-    "name": "Farmer Walk"
+    "name": "Farmer Walk",
+    "group": "Farmers Carry"
   },
   "smith_machine_bench_press": {
     "Primary": {
@@ -6383,7 +6981,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Smith Machine Bench Press"
+    "name": "Smith Machine Bench Press",
+    "group": "Bench Press"
   },
   "smith_machine_incline_bench_press": {
     "Primary": {
@@ -6394,7 +6993,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Smith Machine Incline Bench Press"
+    "name": "Smith Machine Incline Bench Press",
+    "group": "Incline Bench"
   },
   "stationary_bike": {
     "Primary": {
@@ -6407,7 +7007,8 @@
       "Abdominals": 10
     },
     "type": "Timed",
-    "name": "Stationary Bike"
+    "name": "Stationary Bike",
+    "group": "Stationary Bike"
   },
   "weighted_pull_up": {
     "Primary": {
@@ -6419,7 +7020,8 @@
       "Traps": 10
     },
     "type": "Weighted",
-    "name": "Weighted Pull Up"
+    "name": "Weighted Pull Up",
+    "group": "Pull Up"
   },
   "wide_grip_overhand_row": {
     "Primary": {
@@ -6431,7 +7033,8 @@
       "Lats": 10
     },
     "type": "Weighted",
-    "name": "Wide Grip Overhand Row"
+    "name": "Wide Grip Overhand Row",
+    "group": "Bent Over Row"
   },
   "stair_master": {
     "Primary": {
@@ -6444,7 +7047,8 @@
       "Abdominals": 3
     },
     "type": "Timed",
-    "name": "Stair Master"
+    "name": "Stair Master",
+    "group": "Stair Master"
   },
   "assisted_pull_up": {
     "Primary": {
@@ -6456,7 +7060,8 @@
       "Traps": 10
     },
     "type": "Assisted",
-    "name": "Assisted Pull Up"
+    "name": "Assisted Pull Up",
+    "group": "Pull Up"
   },
   "machine_hip_abductor": {
     "Primary": {
@@ -6466,7 +7071,8 @@
       "Hip Flexors": 20
     },
     "type": "Machine",
-    "name": "Machine Hip Abductor"
+    "name": "Machine Hip Abductor",
+    "group": "Hip Abduction"
   },
   "crunch": {
     "Primary": {
@@ -6476,7 +7082,8 @@
       "Obliques": 20
     },
     "type": "Bodyweight",
-    "name": "Crunch"
+    "name": "Crunch",
+    "group": "Crunch"
   },
   "dumbbell_seated_arnold_press": {
     "Primary": {
@@ -6487,7 +7094,8 @@
       "Triceps": 20
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Arnold Press"
+    "name": "Dumbbell Seated Arnold Press",
+    "group": "Arnold Press"
   },
   "dumbbell_seated_reverse_concentration_curl": {
     "Primary": {
@@ -6497,7 +7105,8 @@
       "Forearms": 30
     },
     "type": "Weighted",
-    "name": "Dumbbell Seated Reverse Concentration Curl"
+    "name": "Dumbbell Seated Reverse Concentration Curl",
+    "group": "Biceps Curl"
   },
   "running": {
     "Primary": {
@@ -6509,7 +7118,8 @@
       "Calves": 20
     },
     "type": "Timed",
-    "name": "Running"
+    "name": "Running",
+    "group": "Running"
   },
   "walking": {
     "Primary": {
@@ -6521,7 +7131,8 @@
       "Hamstrings": 20
     },
     "type": "Timed",
-    "name": "Walking"
+    "name": "Walking",
+    "group": "Walking"
   },
   "jumping_jack": {
     "Primary": {
@@ -6533,7 +7144,8 @@
       "Side Delts": 20
     },
     "type": "Timed",
-    "name": "Jumping Jack"
+    "name": "Jumping Jack",
+    "group": "Jumping Jack"
   },
   "plank": {
     "Primary": {
@@ -6545,7 +7157,8 @@
       "Glutes": 5
     },
     "type": "Bodyweight",
-    "name": "Plank"
+    "name": "Plank",
+    "group": "Plank"
   },
   "reverse_plank": {
     "Primary": {
@@ -6558,7 +7171,8 @@
       "Triceps": 5
     },
     "type": "Bodyweight",
-    "name": "Reverse Plank"
+    "name": "Reverse Plank",
+    "group": "Reverse Plank"
   },
   "side_plank": {
     "Primary": {
@@ -6569,7 +7183,8 @@
       "Side Delts": 20
     },
     "type": "Bodyweight",
-    "name": "Side Plank"
+    "name": "Side Plank",
+    "group": "Side Plank"
   },
   "cable_one_arm_preacher_curl": {
     "Primary": {
@@ -6580,7 +7195,8 @@
       "Forearms": 15
     },
     "type": "Weighted",
-    "name": "Cable One Arm Preacher Curl"
+    "name": "Cable One Arm Preacher Curl",
+    "group": "Preacher Curl"
   },
   "handstand_push_up": {
     "Primary": {
@@ -6592,7 +7208,8 @@
       "Traps": 5
     },
     "type": "Bodyweight",
-    "name": "Handstand Push Up"
+    "name": "Handstand Push Up",
+    "group": "Handstand Push Up"
   },
   "lever_seated_squat": {
     "Primary": {
@@ -6603,7 +7220,8 @@
       "Hamstrings": 10
     },
     "type": "Weighted",
-    "name": "Lever Seated Squat"
+    "name": "Lever Seated Squat",
+    "group": "Squat"
   },
   "wall_handstand": {
     "Primary": {
@@ -6615,7 +7233,8 @@
       "Traps": 10
     },
     "type": "Bodyweight",
-    "name": "Wall Handstand"
+    "name": "Wall Handstand",
+    "group": "Wall Handstand"
   },
   "weighted_wall_squat": {
     "Primary": {
@@ -6627,7 +7246,8 @@
       "Core": 5
     },
     "type": "Weighted",
-    "name": "Weighted Wall Squat"
+    "name": "Weighted Wall Squat",
+    "group": "Wall Squat"
   },
   "cable_close_grip_curl": {
     "Primary": {
@@ -6637,7 +7257,8 @@
       "Forearms": 20
     },
     "type": "Weighted",
-    "name": "Cable Close Grip Curl"
+    "name": "Cable Close Grip Curl",
+    "group": "Biceps Curl"
   },
   "bent_over_single_arm_rear_delt_fly": {
     "Primary": {
@@ -6647,7 +7268,8 @@
       "Rhomboids": 20
     },
     "type": "Weighted",
-    "name": "Bent Over Single Arm Rear Delt Fly"
+    "name": "Bent Over Single Arm Rear Delt Fly",
+    "group": "Reverse Fly"
   },
   "butterfly_pec_deck": {
     "Primary": {
@@ -6657,7 +7279,8 @@
       "Front Delts": 15
     },
     "type": "Weighted",
-    "name": "Butterfly Pec Deck"
+    "name": "Butterfly Pec Deck",
+    "group": "Fly"
   },
   "chest_supported_two_arm_rear_delt_fly": {
     "Primary": {
@@ -6667,7 +7290,8 @@
       "Rhomboids": 25
     },
     "type": "Weighted",
-    "name": "Chest Supported Two Arm Rear Delt Fly"
+    "name": "Chest Supported Two Arm Rear Delt Fly",
+    "group": "Reverse Fly"
   },
   "decline_pike_pushup": {
     "Primary": {
@@ -6678,7 +7302,8 @@
       "Upper Chest": 15
     },
     "type": "Bodyweight",
-    "name": "Decline Pike Push-Up"
+    "name": "Decline Pike Push-Up",
+    "group": "Pike Push Up"
   },
   "dumbbell_standing_single_leg_calf_raise": {
     "Primary": {
@@ -6688,7 +7313,8 @@
       "Glutes": 10
     },
     "type": "Weighted",
-    "name": "Dumbbell Standing Single Leg Calf Raise"
+    "name": "Dumbbell Standing Single Leg Calf Raise",
+    "group": "Calf Raise"
   },
   "kneeling_single_arm_cable_rear_delt_row": {
     "Primary": {
@@ -6698,7 +7324,8 @@
       "Rhomboids": 40
     },
     "type": "Weighted",
-    "name": "Kneeling Single Arm Cable Rear Delt Row"
+    "name": "Kneeling Single Arm Cable Rear Delt Row",
+    "group": "Rear Delt Row"
   },
   "pike_pushup": {
     "Primary": {
@@ -6709,7 +7336,8 @@
       "Upper Chest": 10
     },
     "type": "Bodyweight",
-    "name": "Pike Push-Up"
+    "name": "Pike Push-Up",
+    "group": "Pike Push Up"
   },
   "standing_single_arm_cable_rear_delt_fly": {
     "Primary": {
@@ -6719,7 +7347,8 @@
       "Rhomboids": 20
     },
     "type": "Weighted",
-    "name": "Standing Single Arm Cable Rear Delt Fly"
+    "name": "Standing Single Arm Cable Rear Delt Fly",
+    "group": "Reverse Fly"
   },
   "standing_single_arm_cable_rear_delt_row": {
     "Primary": {
@@ -6729,7 +7358,8 @@
       "Rhomboids": 45
     },
     "type": "Weighted",
-    "name": "Standing Single Arm Cable Rear Delt Row"
+    "name": "Standing Single Arm Cable Rear Delt Row",
+    "group": "Rear Delt Row"
   },
   "standing_two_arm_cable_rear_delt_fly": {
     "Primary": {
@@ -6739,7 +7369,8 @@
       "Rhomboids": 25
     },
     "type": "Weighted",
-    "name": "Standing Two Arm Cable Rear Delt Fly"
+    "name": "Standing Two Arm Cable Rear Delt Fly",
+    "group": "Reverse Fly"
   },
   "cable_single_arm_wrist_curl": {
     "Primary": {
@@ -6747,7 +7378,8 @@
     },
     "Secondary": {},
     "type": "Weighted",
-    "name": "Cable Single Arm Wrist Curl"
+    "name": "Cable Single Arm Wrist Curl",
+    "group": "Wrist Curl"
   },
   "weighted_decline_crunch": {
     "Primary": {
@@ -6757,7 +7389,8 @@
       "Hip Flexors": 15
     },
     "type": "Weighted",
-    "name": "Weighted Decline Crunch"
+    "name": "Weighted Decline Crunch",
+    "group": "Crunch"
   },
   "machine_hip_adduction": {
     "Primary": {
@@ -6768,7 +7401,8 @@
       "Glutes": 5
     },
     "type": "Weighted",
-    "name": "Machine Hip Adduction"
+    "name": "Machine Hip Adduction",
+    "group": "Hip Adduction"
   },
   "bench_side_bend": {
     "Primary": {
@@ -6778,7 +7412,8 @@
       "Hip Flexors": 15
     },
     "type": "Weighted",
-    "name": "Bench Side Bend"
+    "name": "Bench Side Bend",
+    "group": "Side Bend"
   },
   "cable_side_bend": {
     "Primary": {
@@ -6788,7 +7423,8 @@
       "Hip Flexors": 10
     },
     "type": "Weighted",
-    "name": "Cable Side Bend"
+    "name": "Cable Side Bend",
+    "group": "Side Bend"
   },
   "side_bend": {
     "Primary": {
@@ -6798,7 +7434,8 @@
       "Hip Flexors": 10
     },
     "type": "Bodyweight",
-    "name": "Side Bend"
+    "name": "Side Bend",
+    "group": "Side Bend"
   },
   "cable_overhead_triceps_extension_rope": {
     "Primary": {
@@ -6808,7 +7445,8 @@
       "Front Delts": 30
     },
     "type": "Weighted",
-    "name": "Cable Overhead Triceps Extension Rope"
+    "name": "Cable Overhead Triceps Extension Rope",
+    "group": "Triceps Extension"
   },
   "lat_pullover_rope": {
     "Primary": {
@@ -6819,7 +7457,8 @@
       "Front Delts": 10
     },
     "type": "Weighted",
-    "name": "Lat Pullover Rope"
+    "name": "Lat Pullover Rope",
+    "group": "Pullover"
   },
   "handstand_hold": {
     "Primary": {
@@ -6831,7 +7470,8 @@
       "Abdominals": 15
     },
     "type": "Bodyweight",
-    "name": "Handstand Hold"
+    "name": "Handstand Hold",
+    "group": "Handstand Hold"
   },
   "dumbbell_bent_over_reverse_fly": {
     "name": "Dumbbell Bent Over Reverse Fly",
@@ -6842,7 +7482,8 @@
       "Traps": 20,
       "Rhomboids": 10
     },
-    "type": "Weighted"
+    "type": "Weighted",
+    "group": "Reverse Fly"
   },
   "dumbbell_seated_neutral_flexors_wrist_curl": {
     "name": "Dumbbell Seated Neutral Flexors Wrist Curl",
@@ -6852,7 +7493,8 @@
     "Secondary": {
       "Grip Strength": 10
     },
-    "type": "Weighted"
+    "type": "Weighted",
+    "group": "Wrist Curl"
   },
   "cable_flexors_wrist_curl": {
     "name": "Cable Flexors Wrist Curl",
@@ -6862,7 +7504,8 @@
     "Secondary": {
       "Grip Strength": 10
     },
-    "type": "Weighted"
+    "type": "Weighted",
+    "group": "Wrist Curl"
   },
   "dumbbell_over_bench_one_arm_reverse_extensors_wrist_curl": {
     "name": "Dumbbell Over Bench One Arm Reverse Extensors Wrist Curl",
@@ -6872,7 +7515,8 @@
     "Secondary": {
       "Grip Strength": 10
     },
-    "type": "Weighted"
+    "type": "Weighted",
+    "group": "Wrist Curl"
   },
   "dumbbell_standing_lateral_raise": {
     "name": "Dumbbell Standing Lateral Raise",
@@ -6883,6 +7527,7 @@
       "Traps": 20,
       "Front Delts": 10
     },
-    "type": "Weighted"
+    "type": "Weighted",
+    "group": "Lateral Raise"
   }
 }
