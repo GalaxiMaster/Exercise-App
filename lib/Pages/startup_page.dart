@@ -2,15 +2,23 @@ import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final appReadyProvider = FutureProvider<void>((ref) async {
+  await Future.wait([
+    ref.watch(exercisesAsyncProvider.future),
+    ref.watch(exerciseGroupingAsyncProvider.future),
+    ref.watch(customExercisesAsyncProvider.future),
+  ]);
+});
+
 class AppStartup extends ConsumerWidget {
   final Widget child;
   const AppStartup({super.key, required this.child});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final exercisesAsync = ref.watch(exercisesAsyncProvider);
+    final appReady = ref.watch(appReadyProvider);
 
-    return exercisesAsync.when(
+    return appReady.when(
       data: (_) => child,
       loading: () => const _SplashScreen(),
       error: (err, stack) => _SplashScreen(error: err),
