@@ -76,7 +76,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 
   void _applyInitialData(Map data) {
-    sets = data['sets'] ?? {};
+    sets = parseSets(data['sets'].cast<String, dynamic>());    
     stats['notes'] = data['stats']?['notes'] ?? {};
     startTime = data['stats']?['startTime'] ?? startTime;
     stats['startTime'] = startTime;
@@ -102,9 +102,18 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     super.dispose();
   }
 
+  Map<String, List<Map<String, dynamic>>> parseSets(Map<String, dynamic>? raw) {
+    final map = raw ?? {};
+    return map.map((key, value) {
+      final list = (value as List<dynamic>? ?? [])
+          .map((e) => Map<String, dynamic>.from(e as Map))
+          .toList();
+      return MapEntry(key, list);
+    });
+  }
 
   void repopulateExerciseTypeAccess() {
-  final Map customExercisesData = ref.read(customExercisesProvider);
+    final Map customExercisesData = ref.read(customExercisesProvider);
     final exercises = ref.read(exercisesProvider);
     for (final exercise in sets.keys) {
       final type = exercises[exercise]?.type
@@ -317,6 +326,58 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
               ),
               Row(
                 children: [
+                  ElevatedButton(
+                    onPressed: (){
+                      final groups = ref.read(exerciseGroupingProvider);
+                      final Map? groupData = groups[exercises[exercise]?.group];
+                      if (groupData == null) return;
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                          child: ListView.builder(
+                            itemCount: groupData.length,
+                            itemBuilder: (context, index) {
+                              final MapEntry exerciseEntry = groupData.entries.toList()[index];
+                              return InkWell(
+                                onTap: (){
+                                  Navigator.pop(context, exerciseEntry.value);
+                                },
+                                child: SizedBox(
+                                  height: 60,
+                                  child: Row(
+                                    children: [
+                                      if (exerciseEntry.value == exercise)
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 20),
+                                        child: Container(
+                                          width: 2,
+                                          height: 60,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        child: Image.asset(
+                                          "assets/Exercises/${exerciseEntry.value}.png",
+                                          height: 50,
+                                          width: 50,
+                                        )
+                                      ),
+                                      Expanded(child: Text(exerciseEntry.key))
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                          ),
+                        )
+                      );
+                    }, 
+                    child: Text('test')
+                  ),
                   if (['Bodyweight', 'Assisted'].contains(exerciseTypeAccess[exercise]))
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
@@ -336,23 +397,24 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     onSelected: (value) async {
                       switch (value) {
                         case 'Swap':
-                          final newExerciseList = await Navigator.push<List>(
+                          final String? newExercise = (await Navigator.push<List>(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
                                   const WorkoutList(setting: 'choose', multiSelect: false),
                             ),
-                          );
+                          ))?.first;
 
                           if (!mounted) return;
 
-                          if (newExerciseList != null &&
-                              !sets.containsKey(newExerciseList.first)) {
-                            final newExercise = newExerciseList.first as String;
+                          if (
+                            newExercise != null &&
+                            !sets.containsKey(newExercise)
+                          ) {
                             final Map<String, List<Map<String, dynamic>>> newSets = {};
                             final Map<String, List<Map<String, FocusNode>>> newFocusNodes = {};
                             final Map<String, List<Map<String, TextEditingController>>>
-                                newControllers = {};
+                            newControllers = {};
                             final Map<String, List<bool>> newCheckBoxStates = {};
 
                             for (final entry in sets.keys) {
@@ -362,6 +424,13 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                               newControllers[key] = _controllers[entry]!;
                               newCheckBoxStates[key] = _checkBoxStates[entry]!;
                             }
+                            
+                            exerciseTypeAccess.remove(exercise);
+
+                            final type = exercises[exercise]?.type // todo consider consolidating all references to exerciseType access to functions
+                                ?? customExercisesData[exercise]?['type']
+                                ?? 'Weighted';
+                            exerciseTypeAccess[exercise] = type;
 
                             setState(() {
                               sets = newSets;

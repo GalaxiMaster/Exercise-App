@@ -22,7 +22,7 @@ class Exercise {
       type: json['type'] as String,
       primary: Map<String, int>.from(json['Primary'] as Map),
       secondary: Map<String, int>.from(json['Secondary'] as Map),
-      group: json['Group'] as String? ?? '',
+      group: json['group'] as String? ?? '',
     );
   }
 
