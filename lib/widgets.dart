@@ -580,3 +580,98 @@ class SwipeUpdateDetails {
 
   SwipeUpdateDetails({required this.progress, required this.direction});
 }
+
+class GroupedToggleSwitch extends StatelessWidget {
+  const GroupedToggleSwitch({
+    super.key,
+    required this.isGrouped,
+    required this.onChanged,
+    this.groupedIcon = Icons.category_outlined,
+    this.individualIcon = Icons.list_alt,
+  });
+ 
+  final bool isGrouped;
+  final ValueChanged<bool> onChanged;
+  final IconData groupedIcon;
+  final IconData individualIcon;
+ 
+  static const double _width = 64;
+  static const double _height = 32;
+  static const double _padding = 3;
+ 
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final knobSize = _height - _padding * 2;
+ 
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onChanged(!isGrouped),
+      child: Container(
+        width: _width,
+        height: _height,
+        padding: const EdgeInsets.all(_padding),
+        decoration: BoxDecoration(
+          color: scheme.shadow,
+          borderRadius: BorderRadius.circular(_height / 2),
+        ),
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            // Sliding knob
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              alignment:
+                  isGrouped ? Alignment.centerLeft : Alignment.centerRight,
+              child: Container(
+                width: knobSize,
+                height: knobSize,
+                decoration: BoxDecoration(
+                  color: scheme.primary,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: scheme.shadow.withValues(alpha: 0.2),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Static icons, one per side
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Icon(
+                      groupedIcon,
+                      size: 14,
+                      color: isGrouped
+                          ? scheme.onPrimary
+                          : scheme.onSurfaceVariant,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Icon(
+                      individualIcon,
+                      size: 14,
+                      color: !isGrouped
+                          ? scheme.onPrimary
+                          : scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

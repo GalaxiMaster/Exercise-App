@@ -3,6 +3,7 @@ import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,7 @@ enum ExerciseListType {
 
 class ListTypeNotifier extends Notifier<ExerciseListType> {
   @override
-  ExerciseListType build() => ExerciseListType.grouped;
+  ExerciseListType build() => ExerciseListType.individual;
 
   void set(ExerciseListType value) => state = value;
 }
@@ -235,6 +236,11 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       appBar: AppBar(
         title: const Text('Exercise List'),
         actions: [
+          
+          GroupedToggleSwitch(
+            isGrouped: ref.read(listTypeProvider) == ExerciseListType.grouped,
+            onChanged: (value) => setState(() => ref.read(listTypeProvider.notifier).set(value ? ExerciseListType.grouped : ExerciseListType.individual)),
+          ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {

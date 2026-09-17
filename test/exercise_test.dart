@@ -2,8 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:exercise_app/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> writeJsonFile(String path, dynamic data) async {
@@ -235,28 +233,5 @@ void main() {
       }
     }
     await writeJsonFile(scriptRelativePath('data/exercise_muscles.json'), muscleInfo);
-  });
-  test('rename types', () async {
-    Map<String, dynamic> groupedExercises = await readJsoncFile(scriptRelativePath('data/grouped_exercises.json'));
-    final Map toModify = {};
-    for (var entry in groupedExercises.entries) {
-      final value = entry.value;
-      for (var variantEntry in value.entries) {
-        final variantId = variantEntry.key;
-        final newId = capitalise(variantId.replaceAll('_', ' ').trim());
-
-        toModify[entry.key] ??= {};
-        toModify[entry.key][variantId] = newId;
-      }
-    }
-
-    for (var group in toModify.entries) {
-      for (var item in group.value.entries) {
-        groupedExercises[group.key][item.value] = groupedExercises[group.key][item.key];
-        groupedExercises[group.key].remove(item.key);
-      }
-    }
-
-    await writeJsonFile(scriptRelativePath('data/grouped_exercises.json'), groupedExercises);
   });
 }
