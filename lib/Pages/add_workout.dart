@@ -319,64 +319,84 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     ),
                   );
                 },
-                child: Text(
-                  exercises[exercise]?.name ?? exercise,
-                  style: const TextStyle(fontSize: 18),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/Exercises/$exercise.png",
+                      height: 50,
+                      width: 50,
+                    ),
+                    Text(
+                      exercises[exercise]?.name ?? exercise,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
                 ),
               ),
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: (){
-                      final groups = ref.read(exerciseGroupingProvider);
-                      final Map? groupData = groups[exercises[exercise]?.group];
-                      if (groupData == null) return;
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-                          child: ListView.builder(
-                            itemCount: groupData.length,
-                            itemBuilder: (context, index) {
-                              final MapEntry exerciseEntry = groupData.entries.toList()[index];
-                              return InkWell(
-                                onTap: (){
-                                  Navigator.pop(context, exerciseEntry.value);
-                                },
-                                child: SizedBox(
-                                  height: 60,
-                                  child: Row(
-                                    children: [
-                                      if (exerciseEntry.value == exercise)
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 20),
-                                        child: Container(
-                                          width: 2,
-                                          height: 60,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.blue,
-                                          ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final groups = ref.read(exerciseGroupingProvider);
+                        final Map? groupData = groups[exercises[exercise]?.group];
+                        if (groupData == null) return;
+                        final String? newExercise = await showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+                            child: ListView.builder(
+                              itemCount: groupData.length,
+                              itemBuilder: (context, index) {
+                                final MapEntry exerciseEntry = groupData.entries.toList()[index];
+                                final bool currentExercise = exerciseEntry.value == exercise;
+                                return InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context, exerciseEntry.value);
+                                  },
+                                  child: Container(
+                                    height: 60,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: currentExercise ? Colors.grey.withAlpha(50) : Colors.transparent),
+                                    child: Row(
+                                      children: [
+                                        // if (currentExercise) // taken out because i think its unnecessary here
+                                        // Padding(
+                                        //   padding: const EdgeInsets.only(left: 20),
+                                        //   child: Container( 
+                                        //     width: 2,
+                                        //     height: 60,
+                                        //     decoration: const BoxDecoration(
+                                        //       color: Colors.blue,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                                          child: Image.asset(
+                                            "assets/Exercises/${exerciseEntry.value}.png",
+                                            height: 50,
+                                            width: 50,
+                                          )
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        child: Image.asset(
-                                          "assets/Exercises/${exerciseEntry.value}.png",
-                                          height: 50,
-                                          width: 50,
-                                        )
-                                      ),
-                                      Expanded(child: Text(exerciseEntry.key))
-                                    ],
+                                        Expanded(child: Text(exerciseEntry.key))
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          ),
-                        )
-                      );
-                    }, 
-                    child: Text('test')
+                                );
+                              }
+                            ),
+                          )
+                        );
+                        if (
+                          newExercise != null &&
+                          !sets.containsKey(newExercise)
+                        ) {
+                          swapExercise(exercise, newExercise, exercises, customExercisesData);
+                        }
+                      },
+                      child: const Icon(Icons.compare_arrows, color: Colors.blueAccent),
+                    ),
                   ),
                   if (['Bodyweight', 'Assisted'].contains(exerciseTypeAccess[exercise]))
                     Padding(
@@ -411,35 +431,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                             newExercise != null &&
                             !sets.containsKey(newExercise)
                           ) {
-                            final Map<String, List<Map<String, dynamic>>> newSets = {};
-                            final Map<String, List<Map<String, FocusNode>>> newFocusNodes = {};
-                            final Map<String, List<Map<String, TextEditingController>>>
-                            newControllers = {};
-                            final Map<String, List<bool>> newCheckBoxStates = {};
-
-                            for (final entry in sets.keys) {
-                              final key = entry == exercise ? newExercise : entry;
-                              newSets[key] = sets[entry]!;
-                              newFocusNodes[key] = _focusNodes[entry]!;
-                              newControllers[key] = _controllers[entry]!;
-                              newCheckBoxStates[key] = _checkBoxStates[entry]!;
-                            }
-                            
-                            exerciseTypeAccess.remove(exercise);
-
-                            final type = exercises[exercise]?.type // todo consider consolidating all references to exerciseType access to functions
-                                ?? customExercisesData[exercise]?['type']
-                                ?? 'Weighted';
-                            exerciseTypeAccess[exercise] = type;
-
-                            setState(() {
-                              sets = newSets;
-                              _focusNodes = newFocusNodes;
-                              _controllers = newControllers;
-                              _checkBoxStates = newCheckBoxStates;
-                              _initializeFocusNodesAndControllers();
-                            });
-                            updateExercises();
+                            swapExercise(exercise, newExercise, exercises, customExercisesData);
                           }
                         case 'Delete':
                           setState(() {
@@ -503,6 +495,38 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         ),
       ],
     );
+  }
+
+  void swapExercise(String exercise, String newExercise, Map<String, Exercise> exercises, Map<dynamic, dynamic> customExercisesData) {
+    final Map<String, List<Map<String, dynamic>>> newSets = {};
+    final Map<String, List<Map<String, FocusNode>>> newFocusNodes = {};
+    final Map<String, List<Map<String, TextEditingController>>>
+    newControllers = {};
+    final Map<String, List<bool>> newCheckBoxStates = {};
+    
+    for (final entry in sets.keys) {
+      final key = entry == exercise ? newExercise : entry;
+      newSets[key] = sets[entry]!;
+      newFocusNodes[key] = _focusNodes[entry]!;
+      newControllers[key] = _controllers[entry]!;
+      newCheckBoxStates[key] = _checkBoxStates[entry]!;
+    }
+    
+    exerciseTypeAccess.remove(exercise);
+    
+    final type = exercises[exercise]?.type // todo consider consolidating all references to exerciseType access to functions
+        ?? customExercisesData[exercise]?['type']
+        ?? 'Weighted';
+    exerciseTypeAccess[exercise] = type;
+    
+    setState(() {
+      sets = newSets;
+      _focusNodes = newFocusNodes;
+      _controllers = newControllers;
+      _checkBoxStates = newCheckBoxStates;
+      _initializeFocusNodesAndControllers();
+    });
+    updateExercises();
   }
 
   Widget _buildSetTableHeader(String exercise, Map settings) {
