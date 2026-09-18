@@ -18,12 +18,22 @@ class Exercise {
   factory Exercise.fromJson(String id, Map<String, dynamic> json) {
     return Exercise(
       id: id,
-      name: json['name'] as String,
+      name: json['name'] as String? ??'',
       type: json['type'] as String,
       primary: Map<String, int>.from(json['Primary'] as Map),
       secondary: Map<String, int>.from(json['Secondary'] as Map),
       group: json['group'] as String? ?? '',
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'type': type,
+      'Primary': primary,
+      'Secondary': secondary,
+      'group': group
+    };
   }
 
   Exercise copyWith({

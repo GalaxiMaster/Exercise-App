@@ -30,19 +30,27 @@ final exercisesProvider = Provider<Map<String, Exercise>>((ref) {
   return ref.watch(exercisesAsyncProvider).value ?? {};
 });
 
-class CustomExercisesNotifier extends AsyncNotifier<Map<String, dynamic>> {
+class CustomExercisesNotifier extends AsyncNotifier<Map<String, Exercise>> {
   @override
-  Future<Map<String, dynamic>> build() async {
+  Future<Map<String, Exercise>> build() async {
     ref.keepAlive();
-    return await ref.read(storageServiceProvider).readData(path: 'customExercises');
+    final Map<String, dynamic> json =
+        await ref.read(storageServiceProvider).readData(path: 'customExercises');
+
+    return json.map(
+      (key, value) => MapEntry(
+        key,
+        Exercise.fromJson(key, Map<String, dynamic>.from(value as Map)),
+      ),
+    );
   }
 
-  void updateValue(String key, dynamic value) {
+  void updateValue(String key, Exercise value) {
     state = AsyncData({
       ...state.value ?? {},
       key: value,
     });
-    ref.read(storageServiceProvider).writeKey(key, value, path: 'customExercises');
+    ref.read(storageServiceProvider).writeKey(key, value.toJson(), path: 'customExercises');
   }
 
   Future<void> deleteExercise(String key) async {
@@ -52,11 +60,11 @@ class CustomExercisesNotifier extends AsyncNotifier<Map<String, dynamic>> {
   }
 }
 
-final customExercisesAsyncProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map<String, dynamic>>(
+final customExercisesAsyncProvider = AsyncNotifierProvider<CustomExercisesNotifier, Map<String, Exercise>>(
   CustomExercisesNotifier.new,
 );
 
-final customExercisesProvider = Provider<Map<String, dynamic>>((ref) {
+final customExercisesProvider = Provider<Map<String, Exercise>>((ref) {
   return ref.watch(customExercisesAsyncProvider).value ?? {};
 });
 

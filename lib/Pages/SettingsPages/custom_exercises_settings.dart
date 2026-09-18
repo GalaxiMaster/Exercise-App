@@ -167,9 +167,9 @@ class CustomExerciseSettingsState extends ConsumerState<CustomExerciseSettings> 
                     fontSize: 16
                   ),
                 ),
-                Text('Primary: ${exercise.value.primary.keys.toList().join(', ')}'),
-                if (exercise.value['Secondary'].length > 0)
-                Text('Secondary: ${exercise.value['Secondary'].keys.toList().join(', ')}')
+                Text('Primary: ${exercise.value.primary.keys.toList().join(', ')}'), // todo add stricter typing
+                if (exercise.value.secondary.length > 0)
+                Text('Secondary: ${exercise.value.secondary.keys.toList().join(', ')}')
               ],
             ),
             Spacer(),
