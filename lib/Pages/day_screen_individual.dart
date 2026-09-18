@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:exercise_app/Pages/add_workout.dart';
-import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
@@ -23,18 +21,8 @@ class IndividualDayScreen extends ConsumerStatefulWidget {
 }
 
 class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
-  final Map<String, bool> _imageExistsCache = {};
   late String dayKey;
-    // Cache the file existence check
-  Future<bool> _checkFileExists(String filePath) async {
-    if (_imageExistsCache.containsKey(filePath)) {
-      return _imageExistsCache[filePath]!;
-    }
-    
-    final exists = await fileExists(filePath);
-    _imageExistsCache[filePath] = exists;
-    return exists;
-  }
+
   @override
   void initState() {
     super.initState();
@@ -195,30 +183,20 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Row(
                           children: [
-                            FutureBuilder<bool>(
-                              future: _checkFileExists("assets/Exercises/$exerciseName.png"),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return const SizedBox(
-                                    width: 50,
-                                    height: 50,
-                                    child: Center(child: CircularProgressIndicator()),
-                                  );
-                                }
-                                return snapshot.hasData && snapshot.data! 
-                                  ? Image.asset(
-                                      "assets/Exercises/$exerciseName.png",
-                                      height: 50,
-                                      width: 50,
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: SvgPicture.asset(
-                                        "assets/profile.svg",
-                                        height: 35,
-                                        width: 35,
-                                      ),
-                                    );
+                            Image.asset(
+                              "assets/Exercises/$exerciseName.png",
+                              height: 50,
+                              width: 50,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: SvgPicture.asset(
+                                    "assets/profile.svg",
+                                    height: 35,
+                                    width: 35,
+                                    colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+                                  ),
+                                );
                               },
                             ),
                             Padding(

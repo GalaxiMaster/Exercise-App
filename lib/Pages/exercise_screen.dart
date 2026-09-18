@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/add_workout.dart';
-import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
@@ -1041,27 +1040,8 @@ class ExerciseHistory extends ConsumerStatefulWidget {
 
 class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
   late Future<Map<String, Map>> exerciseHistory;
-  Map<String, bool> assetExists = {}; // cache for asset existence
 
-  @override
-  initState(){
-    super.initState();
-    checkAssets();
-  }
-  void checkAssets() async {  // combine with the other one in choose exercises to make one single more dynamic function
-    for (String exercise in widget.targetExercises) {
-      String filePath = "assets/Exercises/$exercise.png";
-      bool exists = await fileExists(filePath);
-      assetExists[exercise] = exists;
-      if (mounted){
-        precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
-        setState(() {}); // ! Trigger rebuild after checking asset TODO optomise? 
-      }
-    }
-  }
   final exerciseHistoryProvider = FutureProvider.family<Map<String, Map>, List<String>>((ref, targetExercises) async {
-    // 1. Listen to the dependencies. 
-    // Using 'watch' ensures this provider recalculates when data changes.
     final Map customExercisesData = ref.read(customExercisesProvider);
     final workoutAsyncValue = ref.watch(workoutDataProvider);
     Map exercises = ref.watch(exercisesProvider);
@@ -1170,13 +1150,12 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         child: Row(
                           children: [
-                            assetExists[model.name] == true
-                              ? Image.asset(
-                                  "assets/Exercises/${model.name}.png",
-                                  height: 50,
-                                  width: 50,
-                                )
-                              : Padding(
+                            Image.asset(
+                              "assets/Exercises/${model.name}.png",
+                              height: 50,
+                              width: 50,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Padding(
                                   padding: const EdgeInsets.all(8),
                                   child: SvgPicture.asset(
                                     "assets/profile.svg",
@@ -1184,7 +1163,9 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
                                     width: 35,
                                     colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
                                   ),
-                                ),
+                                );
+                              },
+                            ),
                             Text(
                               model.name
                             )

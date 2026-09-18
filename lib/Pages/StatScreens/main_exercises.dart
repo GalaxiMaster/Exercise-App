@@ -1,5 +1,4 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
-import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
@@ -24,20 +23,6 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
   @override
   Widget build(BuildContext context) {
     final exerciseListProvider = ref.watch(mainExercisesProvider);
-    final assetExistsAsync = ref.watch(exercisesWithAssetsProvider);
-
-    ref.listen(exercisesWithAssetsProvider, (previous, next) {
-      next.whenData((assetMap) {
-        for (final entry in assetMap.entries) {
-          if (entry.value && context.mounted) {
-            precacheImage(
-              AssetImage("assets/Exercises/${entry.key}.png"),
-              context,
-            );
-          }
-        }
-      });
-    });
 
     return Scaffold(
       appBar: myAppBar(context, 'Exercises'),
@@ -45,17 +30,13 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (exerciseData) {
-          return assetExistsAsync.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, __) => _buildExerciseList(exerciseData, {}),
-            data: (assetExists) => _buildExerciseList(exerciseData, assetExists),
-          );
+          return _buildExerciseList(exerciseData);
         },
       ),
     );
   }
 
-  Widget _buildExerciseList(Map exerciseData, Map<String, bool> assetExists) {
+  Widget _buildExerciseList(Map exerciseData) {
     return Stack(
       children: [
         Column(
@@ -82,7 +63,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
                 itemCount: exerciseData.keys.length,
                 itemBuilder: (context, index) {
                   String exercise = exerciseData.keys.toList()[index];
-                  return _buildExerciseItem(exercise, exerciseData, assetExists);
+                  return _buildExerciseItem(exercise, exerciseData);
                 },
               ),
             )
@@ -93,7 +74,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
     );
   }
 
-  Widget _buildExerciseItem(String exercise, Map exerciseData, Map<String, bool> assetExists) {
+  Widget _buildExerciseItem(String exercise, Map exerciseData) {
     final isSelected = selectedItems.contains(exercise);
     final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
     return InkWell(
@@ -148,20 +129,22 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
                   ),
                 ),
               ),
-            assetExists[exercise] == true
-                ? Image.asset(
-                    "assets/Exercises/$exercise.png",
-                    height: 50,
-                    width: 50,
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      "assets/profile.svg",
-                      height: 35,
-                      width: 35,
-                    ),
+            Image.asset(
+              "assets/Exercises/$exercise.png",
+              height: 50,
+              width: 50,
+              errorBuilder: (context, error, stackTrace) {
+                return Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: SvgPicture.asset(
+                    "assets/profile.svg",
+                    height: 35,
+                    width: 35,
+                    colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
                   ),
+                );
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Column(
@@ -213,26 +196,6 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
     );
   }
 }
-
-final exercisesWithAssetsProvider = FutureProvider<Map<String, bool>>((ref) async {
-  final exerciseDataAsync = ref.watch(mainExercisesProvider);
-  
-  return exerciseDataAsync.when(
-    loading: () => <String, bool>{},
-    error: (_, __) => <String, bool>{},
-    data: (exerciseData) async {
-      final exercises = exerciseData.keys.toList();
-      final futures = exercises.map((e) => fileExists("assets/Exercises/$e.png")).toList();
-      final results = await Future.wait(futures);
-      
-      final assetMap = <String, bool>{};
-      for (int i = 0; i < exercises.length; i++) {
-        assetMap[exercises[i]] = results[i];
-      }
-      return assetMap;
-    },
-  );
-});
 
 final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);

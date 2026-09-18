@@ -533,29 +533,20 @@ class ExerciseBox extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Row(
           children: [
-            FutureBuilder<bool>(
-              future: fileExists("assets/Exercises/${exercise.key}.png"),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return const Icon(Icons.error);
-                } else if (snapshot.hasData && snapshot.data!) {
-                  return Image.asset(
-                    "assets/Exercises/${exercise.key}.png",
-                    height: 50,
-                    width: 50,
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.asset(
-                      "assets/profile.svg",
-                      height: 35,
-                      width: 35,
-                    ),
-                  );
-                }
+            Image.asset(
+              "assets/Exercises/${exercise.key}.png",
+              height: 50,
+              width: 50,
+              errorBuilder: (context, error, stackTrace) {
+                return Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: SvgPicture.asset(
+                    "assets/profile.svg",
+                    height: 35,
+                    width: 35,
+                    colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+                  ),
+                );
               },
             ),
             Column(

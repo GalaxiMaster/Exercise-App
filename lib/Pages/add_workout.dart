@@ -12,6 +12,7 @@ import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
 
@@ -118,7 +119,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     final exercises = ref.read(exercisesProvider);
     for (final exercise in sets.keys) {
       final type = exercises[exercise]?.type
-          ?? customExercisesData[exercise]?['type']
+          ?? customExercisesData[exercise].type
           ?? 'Weighted';
       exerciseTypeAccess[exercise] = type;
     }
@@ -326,6 +327,17 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                       "assets/Exercises/$exercise.png",
                       height: 50,
                       width: 50,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SvgPicture.asset(
+                            "assets/profile.svg",
+                            height: 35,
+                            width: 35,
+                            colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+                          ),
+                        );
+                      },
                     ),
                     Text(
                       exercises[exercise]?.name ?? exercise,

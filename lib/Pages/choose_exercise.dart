@@ -1,11 +1,9 @@
 import 'package:exercise_app/Pages/add_custom_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
-import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -46,40 +44,15 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   String query = '';
   final List<String> selectedItems = [];
   bool multiSelect = false;
-  bool loading = true;
 
-  final cacheProvider = NotifierProvider<CacheNotifier, Map<String, int>>(CacheNotifier.new);
   final listTypeProvider = NotifierProvider<ListTypeNotifier, ExerciseListType>(ListTypeNotifier.new);
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(()=>
-      fetchInitialData()
-    );
   }
 
-  void fetchInitialData() async{
-    if (!loading) return;
-    checkAssets();
-    setState(()=>loading = false);
-  }
-
-  Future<void> checkAssets() async {
-    final exerciseList = ref.read(exercisesProvider).keys.toList()..sort();
-
-    List exerciseCachedList = List.from(exerciseList);
-    for (String exercise in exerciseCachedList) {
-      String filePath = "assets/Exercises/$exercise.png";
-      bool exists = await fileExists(filePath);
-      if (mounted){
-        ref.read(cacheProvider.notifier).put(exercise, exists ? 1 : 0);
-        precacheImage(AssetImage("assets/Exercises/$exercise.png"), context);    
-      }
-    }
-  }
-
-  Widget _buildExerciseItem(Exercise exerciseData, bool isProblemExercise, {Map? customData}) {
+  Widget _buildExerciseItem(Exercise exerciseData, bool isProblemExercise, {Exercise? customData}) {
     return InkWell(
       onTap: (){
         if (multiSelect){
@@ -144,31 +117,22 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: isProblemExercise 
-                ? Padding(
+              child: Image.asset(
+                "assets/Exercises/${exerciseData.id}.png",
+                height: 50,
+                width: 50,
+                errorBuilder: (context, error, stackTrace) {
+                  return Padding(
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
                       "assets/profile.svg",
                       height: 35,
                       width: 35,
-                      colorFilter: ColorFilter.mode(Colors.red.shade400, BlendMode.srcATop),
+                      colorFilter: ColorFilter.mode(isProblemExercise ? Colors.redAccent : Colors.grey.shade900, BlendMode.srcATop),
                     ),
-                  )
-                  : ref.watch(cacheProvider.select((map) => map[exerciseData.id])) == 1
-                    ? Image.asset(
-                        "assets/Exercises/${exerciseData.id}.png",
-                        height: 50,
-                        width: 50,
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: SvgPicture.asset(
-                          "assets/profile.svg",
-                          height: 35,
-                          width: 35,
-                          colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
-                        ),
-                      ),
+                  );
+                },
+              )
             ),
             Expanded(
               child: Column(
@@ -178,7 +142,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
                   if (!isProblemExercise && customData == null)
                     Text(exerciseData.primary.keys.toList().join(', '))
                   else if (customData != null)
-                    Text('${customData['primary'].keys.toList().join(', ')}') // todo move custom exercises to Exercise class and consider merging the providers
+                    Text(customData.primary.keys.toList().join(', ')) // todo move custom exercises to Exercise class and consider merging the providers
                 ],
               ),
             ),
@@ -254,7 +218,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
           ),
         ],
       ),
-      body: loading ? CircularProgressIndicator() : Stack(
+      body: Stack(
         children: [
           CustomScrollView(
             slivers: [
@@ -394,14 +358,4 @@ bool containsAllCharacters(String exercise, String query) {
   }
 
   return true;
-}
-
-Future<bool> fileExists(String filePath) async {
-  try {
-    await rootBundle.load(filePath);
-    return true;
-  } catch (e) {
-    debugPrint('Asset does not exist: $filePath');
-    return false;
-  }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:exercise_app/Pages/SettingsPages/custom_exercises_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,27 +89,27 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
   }
 
   void _handleSubmit() {
-    Map<String, Map<String, num>> toPrimarySecondary(
+    ({Map<String, int> primary, Map<String, int> secondary}) toPrimarySecondary(
       Map<String, num> muscles, {
       num topCutoff = 10, // muscles within this value of the top are primary
     }) {
-      if (muscles.isEmpty) return {'Primary': {}, 'Secondary': {}};
+      if (muscles.isEmpty) return (primary: {}, secondary: {});
 
       final sorted = muscles.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
 
-      final result = {
-        'Primary': <String, num>{},
-        'Secondary': <String, num>{},
-      };
+      final result = (
+        primary: <String, int>{},
+        secondary: <String, int>{},
+      );
 
       final topValue = sorted.first.value;
 
       for (final entry in sorted) {
         if (topValue - entry.value <= topCutoff) {
-          result['Primary']![entry.key] = entry.value;
+          result.primary[entry.key] = entry.value.toInt();
         } else {
-          result['Secondary']![entry.key] = entry.value;
+          result.secondary[entry.key] = entry.value.toInt();
         }
       }
 
@@ -120,13 +121,17 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
     final String exerciseName = _exerciseNameController.text.trim();
     final Map<String, int> muscleGroups = _selectedMuscleGroups.map((k, v) => MapEntry(k, v!));
 
+    final muscles = toPrimarySecondary(muscleGroups);
     ref.read(customExercisesAsyncProvider.notifier).updateValue(
       exerciseName, 
-      {
-        ...toPrimarySecondary(muscleGroups), 
-        'type': selectedExerciseType,
-        'tags': ['custom']
-      }
+      Exercise(
+        id: exerciseName, 
+        name: exerciseName, 
+        type: selectedExerciseType, 
+        primary: muscles.primary, 
+        secondary: muscles.secondary, 
+        group: exerciseName, 
+      )
     );
 
     Navigator.pop(context);
