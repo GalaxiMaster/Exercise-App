@@ -1069,8 +1069,8 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
               
               // Logic improvement: Handle missing exercise definitions gracefully
               final String type = isCustom 
-                  ? customExercisesData[exercise]['type'] 
-                  : (exercises[exercise]?['type'] ?? 'Unknown');
+                  ? customExercisesData[exercise].type
+                  : (exercises[exercise].type ?? 'Unknown');
 
               history[day]!['data']!.add(
                 ExerciseHistoryNode(
@@ -1167,7 +1167,7 @@ class _ExerciseHistoryState extends ConsumerState<ExerciseHistory> {
                               },
                             ),
                             Text(
-                              model.name
+                              ref.read(exercisesProvider)[model.name]?.name ?? model.name
                             )
                           ],
                         ),

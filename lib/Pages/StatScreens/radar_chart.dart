@@ -324,7 +324,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
   Map exercises = ref.watch(exercisesProvider);
 
   Map<int, Map<String, double>> muscleData = {0: {}, 1: {}};
-  final Map customExercisesData = ref.read(customExercisesProvider).value ?? {};
+  final Map customExercisesData = ref.read(customExercisesProvider) ?? {};
 
   for (var day in data.keys){
     Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
