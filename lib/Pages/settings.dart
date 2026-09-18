@@ -140,7 +140,7 @@ class Settings extends ConsumerWidget {
                   icon: Icons.check,
                   label: 'Validate Exercises',
                   function: (){
-                    validateExercises(ref);
+                    validateExercises(ref, context);
                   },
                 ),
               ],
@@ -297,7 +297,10 @@ void resetDataButton(BuildContext context, WidgetRef ref){
     }
   );
 }
-void validateExercises(WidgetRef ref) {
+void validateExercises(WidgetRef ref, context) {
+  LoadingOverlay loadingOverlay = LoadingOverlay();
+  if (context.mounted) loadingOverlay.showLoadingOverlay(context);
+
   Map data = ref.read(workoutDataProvider).value ?? {};
   List correctionsNeeded = [];
   for (String day in data.keys){
@@ -318,6 +321,20 @@ void validateExercises(WidgetRef ref) {
     ref.read(workoutDataProvider.notifier).updateValue(day, data[day]);
     (data[day]['sets'] as Map).remove(exercise);
   }
+  loadingOverlay.removeLoadingOverlay();
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Validated Exercises'),
+      content: Text('${correctionsNeeded.length} exercises were corrected'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
 }
 void moveExercises(BuildContext context, WidgetRef ref) async{
   Map data = ref.read(workoutDataProvider).value ?? {};
