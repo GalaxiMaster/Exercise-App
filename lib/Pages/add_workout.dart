@@ -76,6 +76,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 
   void _applyInitialData(Map data) {
+    if (data['sets'] == null) return;
     sets = parseSets(data['sets'].cast<String, dynamic>());    
     stats['notes'] = data['stats']?['notes'] ?? {};
     startTime = data['stats']?['startTime'] ?? startTime;

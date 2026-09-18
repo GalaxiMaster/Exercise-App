@@ -16,7 +16,7 @@ enum ExerciseListType {
 
 class ListTypeNotifier extends Notifier<ExerciseListType> {
   @override
-  ExerciseListType build() => ExerciseListType.individual;
+  ExerciseListType build() => ExerciseListType.grouped;
 
   void set(ExerciseListType value) => state = value;
 }

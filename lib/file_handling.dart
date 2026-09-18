@@ -240,7 +240,7 @@ class DataImportExportService {
           'output': true,
           'records': true,
           'routines': true,
-          // 'settings': true
+          'customExercises': true
         };
         return StatefulBuilder(
           builder: (context, setState) {

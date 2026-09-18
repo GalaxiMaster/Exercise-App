@@ -35,8 +35,8 @@ class WorkoutDetails {
               .toList(),
         ),
       ),
-      notes: (json['stats']?['notes'] as Map<String, dynamic>?)
-          ?.map((key, value) => MapEntry(key, value as String)),
+      notes: (json['stats']?['notes'] as Map?)
+    ?.map((key, value) => MapEntry(key as String, value as String)),
     );
   }
 }

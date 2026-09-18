@@ -291,7 +291,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
                       Padding(
                         padding: const EdgeInsets.only(right: 50),
                         child: FractionallySizedBox(
-                          widthFactor: data.value / 100,
+                          widthFactor: (data.value / 100).clamp(0.0, 1.0),
                           child: Container(
                             height: 20,
                             decoration: BoxDecoration(
