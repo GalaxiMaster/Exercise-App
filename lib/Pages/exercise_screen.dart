@@ -202,13 +202,15 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                 const Divider(
                   thickness: .2,
                 ),
-                if ((exercises[exercise]?.type ?? 'Weighted') != 'Bodyweight')
-                Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
-                if ((exercises[exercise]?.type ?? 'Weighted') != 'Bodyweight')
-                Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
-                if ((exercises[exercise]?.type ?? 'weighted') == 'Bodyweight')
-                Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
-                Text('Increase: $increase%')
+                if (heaviestVolume[exercise]?['weight'] != null) ...[
+                  if ((exercises[exercise]?.type ?? 'Weighted') != 'Bodyweight')
+                  Text('Most weight : ${heaviestWeight[exercise]?['weight']}kg x ${heaviestWeight[exercise]?['reps']}'),
+                  if ((exercises[exercise]?.type ?? 'Weighted') != 'Bodyweight')
+                  Text('Most volume : ${heaviestVolume[exercise]?['weight']}kg x ${heaviestVolume[exercise]?['reps']}'),
+                  if ((exercises[exercise]?.type ?? 'weighted') == 'Bodyweight')
+                  Text('Highest reps: ${numParsething(heaviestVolume[exercise]?['reps'])}'),
+                  Text('Increase: $increase%')
+                ]
               ],
             ),
           ),
@@ -217,12 +219,10 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
     }
 
   double calculateInterval(num itemTotal, num itemCount) {
-    // If there is 0 or 1 item, return the total (nothing to divide)
     if (itemCount <= 1) {
       return itemTotal.toDouble();
     }
 
-    // Guard against zero total range
     if (itemTotal == 0) {
       itemTotal = 1;
     }
@@ -584,6 +584,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                         selectorBox('Weight', filters.chartTarget == 'weight'),
                         selectorBox('Volume', filters.chartTarget == 'volume'),
                         selectorBox('Reps', filters.chartTarget == 'reps'),
+                        selectorBox('1rm', filters.chartTarget == '1rm'),
                       ],
                     ),
                     const SizedBox(height: 5),
@@ -894,14 +895,17 @@ List getStats(Map data, List targets, int range) {
 
           startDate ??= dayDate;
           for (Map set in data[day]['sets'][exercise]) {
+            final double weight = double.parse(set['weight'].toString());
+            final double reps = double.parse(set['reps'].toString());
             set = {
-              'weight': double.parse(set['weight'].toString()),
-              'reps': double.parse(set['reps'].toString()),
+              'weight': weight,
+              'reps': reps, // todo consider if this needs to be double
               'type': set['type'],
               'date': day,
-              'volume': double.parse(set['reps'].toString()).abs() * double.parse(set['weight'].toString()).abs(),
+              'volume': reps.abs() * weight.abs(),
               'exercise': exercise,
               'x-value': dayDate.millisecondsSinceEpoch,
+              '1rm': weight * (36 / (37 - reps)),
             };
             dayHeaviestWeight[exercise] ??= set;
             if (set['weight'] > dayHeaviestWeight[exercise]?['weight'] 

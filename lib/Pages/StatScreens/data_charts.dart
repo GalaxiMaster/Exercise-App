@@ -271,7 +271,7 @@ class ChartDataViewModel {
 }
 
 class ChartFilters {
-  final String chartTarget;
+  final String chartTarget; // todo change to enum
   final int range;
   final String muscleSelected;
   final String timeLabel;
