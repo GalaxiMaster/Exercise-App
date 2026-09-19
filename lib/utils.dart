@@ -154,7 +154,7 @@ bool isBetter(Lift a, Lift b) {
 int weekNumber(DateTime date) {
   int dayOfYear = int.parse(DateFormat("D").format(date));
   int weekNumber = (dayOfYear - date.weekday + 10) ~/ 7;
-  return weekNumber;
+  return weekNumber + (date.year * 52);
 }
 
 class ButtonDetails {
