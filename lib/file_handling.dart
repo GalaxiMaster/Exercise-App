@@ -78,6 +78,9 @@ class StorageService {
           'Buffer1st': false,
         }
       },
+      'Multipliers': {
+        
+      }
     };
     // check if the settings file has all of the right fields
     for (String key in defaultSettings.keys){

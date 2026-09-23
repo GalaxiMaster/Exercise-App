@@ -179,3 +179,17 @@ String capitalise(String value) {
   final String fl = value[0];
   return '${fl.toUpperCase()}${value.substring(1, value.length)}';
 }
+
+extension ColorBrightness on Color {
+  Color brighten([double amount = 0.1]) {
+    final hsl = HSLColor.fromColor(this);
+    final lightness = (hsl.lightness + amount).clamp(0.0, 1.0);
+    return hsl.withLightness(lightness).toColor();
+  }
+
+  Color darken([double amount = 0.1]) {
+    final hsl = HSLColor.fromColor(this);
+    final lightness = (hsl.lightness - amount).clamp(0.0, 1.0);
+    return hsl.withLightness(lightness).toColor();
+  }
+}

@@ -17,6 +17,8 @@ class ListTypeNotifier extends Notifier<ExerciseListType> {
   ExerciseListType build() => ExerciseListType.grouped;
 
   void set(ExerciseListType value) => state = value;
+  
+  bool get isGrouped => state == ExerciseListType.grouped;
 }
 
 
@@ -200,7 +202,6 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
       appBar: AppBar(
         title: const Text('Exercise List'),
         actions: [
-          
           GroupedToggleSwitch(
             isGrouped: ref.read(listTypeProvider) == ExerciseListType.grouped,
             onChanged: (value) => setState(() => ref.read(listTypeProvider.notifier).set(value ? ExerciseListType.grouped : ExerciseListType.individual)),

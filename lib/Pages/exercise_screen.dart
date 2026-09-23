@@ -9,6 +9,7 @@ import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,9 +68,10 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     }
   }
   
-  Widget _buildPageContent() {
+  Widget _buildPageContent(AsyncValue dataProvider) {
+
     List<Widget> pages  = [
-      GraphBody(exercises: widget.exercises, scaleSetting: scaleSetting), 
+      GraphBody(exercises: widget.exercises, scaleSetting: scaleSetting, dataProvider: dataProvider), 
       ExerciseHistory(targetExercises: widget.exercises),
       InfoBody(exercises: widget.exercises)
     ];
@@ -90,6 +92,8 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
+    final dataProvider = ref.watch(graphDataProvider(widget.exercises));
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.exercises.length == 1 ?  exercises[widget.exercises[0]]?.name ?? widget.exercises[0] : 'Exercises Data'),
@@ -101,6 +105,8 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
               final result = await showSettingToggleDialog(
                 context,
                 scaleSetting,
+                dataProvider,
+                ref
               );
 
               if (result != null) {
@@ -112,7 +118,7 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           ),
         ],
       ),
-      body: _buildPageContent(),
+      body: _buildPageContent(dataProvider),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTab.index, // Convert enum to index
         onTap: (index) {
@@ -139,8 +145,9 @@ class ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
 class GraphBody extends ConsumerStatefulWidget {
   final List<String> exercises;
-  final ScaleSetting scaleSetting; 
-  const GraphBody({super.key, required this.exercises, required this.scaleSetting});
+  final ScaleSetting scaleSetting;
+  final AsyncValue dataProvider;
+  const GraphBody({super.key, required this.exercises, required this.scaleSetting, required this.dataProvider});
   @override
   // ignore: library_private_types_in_public_api
   _GraphBodyState createState() => _GraphBodyState();
@@ -272,10 +279,10 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
 
   @override
   Widget build(BuildContext context) {
-      final dataProvider = ref.watch(graphDataProvider(widget.exercises));
+      final settings = ref.watch(settingsProvider).value;
 
-      return dataProvider.when(
-        data: (data){
+      return widget.dataProvider.when(
+        data: (data) {
           ref.listen(chartFilterProvider.select((data) => data.chartTarget), (previous, next) {
             if (previous != next) {
               final exerciseData = data.stats;
@@ -295,6 +302,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
           });
           final filters = ref.watch(chartFilterProvider);
           final exerciseData = data.stats;
+          final Set exerciseList = data.stats.map((data)=>data['exercise']).toSet();
           final List dates = exerciseData.map((datas) => datas['date']).toList(); // .split(' ')[0]
           final List values = exerciseData.map((datas) => datas[filters.chartTarget]).toList();
           final Set things = exerciseData.map((datas) => datas['x-value']).toSet(); // todo rename
@@ -309,7 +317,6 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
           }
           final List groupedDates = datesByExercise.values.toList();
           // graphvalue = numParsething(value);
-          // week = weekt;
           activeColor = Colors.blue;
           if (dates.isNotEmpty){
             if (week == ''){
@@ -327,12 +334,12 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
 
             // Initialize the list for this exercise if it doesn't exist
             spots[exerciseName] ??= [];
-            
+            final double multiplier = double.tryParse(settings?['Multipliers'][exerciseName] ?? '') ?? 1.0;
             // Create and add the FlSpot for this entry
             spots[exerciseName]!.add(
               FlSpot(
                 widget.scaleSetting == ScaleSetting.equalIntervals ? things.toList().indexOf(entry.value['x-value']).toDouble() : entry.value['x-value'].toDouble(), // Use the index as the X value
-                (!isBodyWeight ? double.parse(entry.value[filters.chartTarget].toString()) : double.parse(entry.value['reps'].toString())),
+                (!isBodyWeight ? double.parse(entry.value[filters.chartTarget].toString()) * multiplier : double.parse(entry.value['reps'].toString())),
               ),
             );
           });
@@ -352,8 +359,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                 barWidth: 3,
                 belowBarData: BarAreaData(
                   show: true,
-                  color: graphColors[exercisesOrder.length]
-                      .withValues(alpha: 0.2),
+                  color: graphColors[exercisesOrder.length].withValues(alpha: 0.2),
                 ),
               ),
             );
@@ -365,7 +371,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                   isStrokeCapRound: false,
                   dotData: const FlDotData(show: false),
                   spots: calculateBestFitLine(entry.value),
-                  color: Colors.primaries[allLineBarsData.length % Colors.primaries.length].withRed(255), // Makes it a reddish version of the main line color
+                  color: graphColors[exercisesOrder.length].withRed(255), // Makes it a reddish version of the main line color
                   barWidth: 2,
                   dashArray: [5, 5],
                   belowBarData: BarAreaData(show: false),
@@ -377,7 +383,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
             exercisesOrder.add(entry.key);
           }
           final PageController pageController = PageController(
-            initialPage: widget.exercises.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
+            initialPage: exerciseList.length == 1 ? 1 : 1000, // Start in the middle to simulate infinite scrolling
           );
           return SingleChildScrollView(
             child: Padding(
@@ -592,12 +598,12 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                     SizedBox(
                       height: 160,
                       child: PageView.builder(
-                        physics: widget.exercises.length == 1 ? const NeverScrollableScrollPhysics() : null,
+                        physics: exerciseList.length == 1 ? const NeverScrollableScrollPhysics() : null,
                         scrollDirection: Axis.horizontal,
                         controller: pageController,
                         itemBuilder: (context, index){
-                          final itemIndex = index % widget.exercises.length;
-                          String exercise = widget.exercises[itemIndex];
+                          final itemIndex = index % exerciseList.length;
+                          String exercise = exerciseList.elementAt(itemIndex);
                           int orderPos = exercisesOrder.indexOf(exercise);
                           return exerciseTile(
                             exercise, 
@@ -612,7 +618,6 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                     ),
                     // if (widget.exercises.length == 1)
                     // exerciseTile(widget.exercises[0], 0)
-
                   ],
                 ),
             ),
@@ -937,11 +942,7 @@ List getStats(Map data, List targets, int range) {
       } 
     }
   }
-  for (Map set in targetData){
-    if (set['exercise'] == 'Dumbbell Incline Bench Press'){
-      debugPrint('yes');
-    }
-  }
+
   return [targetData, heaviestWeight, heaviestVolume];
 }
 
@@ -983,9 +984,13 @@ double percentageChange(List<FlSpot> points) {
 
 Future<ScaleSetting?> showSettingToggleDialog(
   BuildContext context,
-  ScaleSetting currentValue,
+  ScaleSetting scaleValue,
+  AsyncValue dataProvider,
+  WidgetRef ref,
 ) {
-  ScaleSetting selectedValue = currentValue;
+  ScaleSetting selectedValue = scaleValue;
+  final settingsAsync = ref.watch(settingsProvider);
+  final exercises = ref.read(exercisesProvider);
 
   return showDialog<ScaleSetting>(
     context: context,
@@ -993,28 +998,77 @@ Future<ScaleSetting?> showSettingToggleDialog(
       return AlertDialog(
         title: const Text('Select Scale Setting'),
         content: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SegmentedButton<ScaleSetting>(
-                segments: const [
-                  ButtonSegment(
-                    value: ScaleSetting.equalIntervals,
-                    label: Text('Equal Intervals'),
-                    icon: Icon(Icons.equalizer),
+          builder: (context, setState) {
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: SegmentedButton<ScaleSetting>(
+                      segments: const [
+                        ButtonSegment(
+                          value: ScaleSetting.equalIntervals,
+                          label: Text('Equal Intervals'),
+                          icon: Icon(Icons.equalizer),
+                        ),
+                        ButtonSegment(
+                          value: ScaleSetting.scaled,
+                          label: Text('Time scaled'),
+                          icon: Icon(Icons.scale),
+                        ),
+                      ],
+                      selected: {selectedValue},
+                      onSelectionChanged: (s) => setState(() => selectedValue = s.first),
+                    ),
                   ),
-                  ButtonSegment(
-                    value: ScaleSetting.scaled,
-                    label: Text('Time scaled'),
-                    icon: Icon(Icons.scale),
-                  ),
+                  dataProvider.maybeWhen(
+                    data: (data) {
+                      final Set exerciseList = data.stats.map((data)=>data['exercise']).toSet();
+
+                      return SizedBox(
+                        height: exerciseList.length * 50.0,
+                        width: 300,
+                        child: ListView.builder(
+                          itemCount: exerciseList.length,
+                          itemBuilder: (context, index) {
+                            final exercise = exerciseList.elementAt(index);
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    exercises[exercise]?.name ?? exercise, 
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  settingsAsync.maybeWhen(
+                                    data: (settings) {
+                                      final String? value = settings['Multipliers']?[exercise];
+                                      final TextEditingController textController = TextEditingController(text: value ?? '1.0');
+                                      return DecimalMultiplierField(
+                                        controller: textController,
+                                        borderColor: graphColors[index],
+                                        onChanged: (value) {
+                                          settings['Multipliers']?[exercise] = value; // todo make updating nested settings better
+                                          ref.read(settingsProvider.notifier).updateValue('Multipliers', settings['Multipliers']);
+                                        },
+                                      );
+                                    },
+                                    orElse: ()=> CircularProgressIndicator()
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    orElse: ()=>CircularProgressIndicator()
+                  )
                 ],
-                selected: {selectedValue},
-                onSelectionChanged: (Set<ScaleSetting> newSelection) {
-                  setState(() {
-                    selectedValue = newSelection.first;
-                  });
-                },
               ),
             );
           },

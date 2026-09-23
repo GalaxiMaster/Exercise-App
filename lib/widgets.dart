@@ -3,6 +3,7 @@ import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 
@@ -673,5 +674,65 @@ class GroupedToggleSwitch extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class DecimalMultiplierField extends StatelessWidget {
+  const DecimalMultiplierField({
+    super.key,
+    this.controller,
+    this.onChanged,
+    this.borderColor
+  });
+ 
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final Color? borderColor;
+ 
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 90,
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        textAlign: TextAlign.center,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+          _DecimalRangeFormatter(),
+        ],
+        decoration: InputDecoration(
+          suffixText: 'x',
+          suffixStyle: const TextStyle(fontWeight: FontWeight.bold),
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor ?? Colors.grey),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor?.brighten() ?? Colors.blue),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DecimalRangeFormatter extends TextInputFormatter {
+  static final RegExp _pattern = RegExp(r'^\d{0,2}(\.\d{0,2})?$');
+ 
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+ 
+    if (text.isEmpty) return newValue;
+    if ('.'.allMatches(text).length > 1) return oldValue;
+    if (!_pattern.hasMatch(text)) return oldValue;
+ 
+    return newValue;
   }
 }

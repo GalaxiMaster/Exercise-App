@@ -587,7 +587,7 @@ final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
         if (isCustom){
           exerciseData = customExercisesData[exercise];
         } else {
-          exerciseData = exercises[exercise] ?? {};
+          exerciseData = exercises[exercise];
         }
 
         if (exerciseData == null) continue;

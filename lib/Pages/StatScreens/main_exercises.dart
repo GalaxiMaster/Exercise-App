@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
+import 'package:exercise_app/Pages/choose_exercise.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
@@ -8,6 +9,15 @@ import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+
+
+class MainExerciseData {
+  final Map individual;
+  final Map grouped;
+
+  MainExerciseData({required this.individual, required this.grouped});
+}
+
 
 class MainExercisesPage extends ConsumerStatefulWidget {
   const MainExercisesPage({super.key});
@@ -19,13 +29,25 @@ class MainExercisesPage extends ConsumerStatefulWidget {
 class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
   bool multiSelect = false;
   List<String> selectedItems = [];
+  final listTypeProvider = NotifierProvider<ListTypeNotifier, ExerciseListType>(ListTypeNotifier.new);
 
   @override
   Widget build(BuildContext context) {
     final exerciseListProvider = ref.watch(mainExercisesProvider);
 
     return Scaffold(
-      appBar: myAppBar(context, 'Exercises'),
+      appBar: 
+      myAppBar(
+        context, 
+        'Exercises', 
+        button: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: GroupedToggleSwitch(
+            isGrouped: ref.read(listTypeProvider) == ExerciseListType.grouped,
+            onChanged: (value) => setState(() => ref.read(listTypeProvider.notifier).set(value ? ExerciseListType.grouped : ExerciseListType.individual)),
+          ),
+        ),
+      ),
       body: exerciseListProvider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
@@ -36,7 +58,8 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
     );
   }
 
-  Widget _buildExerciseList(Map exerciseData) {
+  Widget _buildExerciseList(MainExerciseData exerciseData) {
+    final Map usedData = ref.read(listTypeProvider) == ExerciseListType.grouped ? exerciseData.grouped : exerciseData.individual;
     return Stack(
       children: [
         Column(
@@ -60,10 +83,10 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
             ),
             Flexible(
               child: ListView.builder(
-                itemCount: exerciseData.keys.length,
+                itemCount: usedData.keys.length,
                 itemBuilder: (context, index) {
-                  String exercise = exerciseData.keys.toList()[index];
-                  return _buildExerciseItem(exercise, exerciseData);
+                  String exercise = usedData.keys.toList()[index];
+                  return _buildExerciseItem(exercise, usedData);
                 },
               ),
             )
@@ -77,6 +100,11 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
   Widget _buildExerciseItem(String exercise, Map exerciseData) {
     final isSelected = selectedItems.contains(exercise);
     final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
+    String exerciseId = exercise;
+    if (ref.read(listTypeProvider.notifier).isGrouped) {
+      exerciseId = ref.read(exerciseGroupingProvider)[exercise]?.values.first ?? exercise;
+    }
+
     return InkWell(
       onTap: () {
         if (multiSelect) {
@@ -94,7 +122,14 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ExerciseScreen(exercises: [exercise]),
+              builder: (context) => ExerciseScreen(
+                exercises: ref.read(listTypeProvider.notifier).isGrouped
+                    ? (ref.read(exerciseGroupingProvider)[exercise]?.values
+                            .cast<String>()
+                            .toList() ??
+                        [exercise])
+                    : [exercise],
+              ),
             ),
           );
         }
@@ -104,7 +139,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
           if (selectedItems.contains(exercise)) {
             selectedItems.remove(exercise);
             if (selectedItems.isEmpty) {
-              multiSelect = false; // Fixed: was == instead of =
+              multiSelect = false;
             }
           } else {
             if (!multiSelect) {
@@ -130,7 +165,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
                 ),
               ),
             Image.asset(
-              "assets/Exercises/$exercise.png",
+              "assets/Exercises/$exerciseId.png",
               height: 50,
               width: 50,
               errorBuilder: (context, error, stackTrace) {
@@ -197,7 +232,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
   }
 }
 
-final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
+final mainExercisesProvider = Provider.autoDispose<AsyncValue<MainExerciseData>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);
   final filters = ref.watch(chartFilterProvider);
 
@@ -205,6 +240,7 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
     Map<String, Exercise> exercises = ref.watch(exercisesProvider);
 
     Map exerciseMap = {};
+    Map groupedExerciseMap = {};
     for (var day in data.keys) {
       Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
       int diff = difference.inDays;
@@ -218,6 +254,10 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
               (exercises[exercise]?.type ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;
               sets.sort((a, b) => double.parse(a[target].toString()).compareTo(double.parse(b[target].toString())));
               exerciseMap[exercise] = (exerciseMap[exercise] ?? 0) + 1;
+              final String? group = exercises[exercise]?.group;
+              if (group != null && group.isNotEmpty) {
+                groupedExerciseMap[group] = (groupedExerciseMap[group] ?? 0) + 1;
+              }
               break;
             }
           }
@@ -227,7 +267,15 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<Map>>((ref) {
     List<MapEntry> entries = exerciseMap.entries.toList();
     entries.sort((a, b) => b.value.compareTo(a.value));
     exerciseMap = Map.fromEntries(entries);
-    return exerciseMap;
+
+    entries = groupedExerciseMap.entries.toList();
+    entries.sort((a, b) => b.value.compareTo(a.value));
+    groupedExerciseMap = Map.fromEntries(entries);
+
+    return MainExerciseData(
+      individual: exerciseMap,
+      grouped: groupedExerciseMap,
+    );
   });
 });
 
