@@ -116,8 +116,6 @@ class _AddCustomExerciseState extends ConsumerState<AddCustomExercise> with Tick
       return result;
     }
 
-
-
     final String exerciseName = _exerciseNameController.text.trim();
     final Map<String, int> muscleGroups = _selectedMuscleGroups.map((k, v) => MapEntry(k, v!));
 

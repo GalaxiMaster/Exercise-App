@@ -17,10 +17,9 @@ class ListTypeNotifier extends Notifier<ExerciseListType> {
   ExerciseListType build() => ExerciseListType.grouped;
 
   void set(ExerciseListType value) => state = value;
-  
+
   bool get isGrouped => state == ExerciseListType.grouped;
 }
-
 
 class WorkoutList extends ConsumerStatefulWidget {
   final String setting;
@@ -159,41 +158,16 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
     final exercises = ref.watch(exercisesProvider);
     final customExercises = ref.watch(customExercisesProvider);
     final groupedExercises = ref.watch(exerciseGroupingProvider);
+    final prefersGrouped =
+        ref.watch(listTypeProvider) == ExerciseListType.grouped;
 
-    final filteredExercises = [
-       ...(ref.read(listTypeProvider) == ExerciseListType.grouped ? groupedExercises.keys : exercises.keys), // pick between lists based on search style
-        ...customExercises.keys
-      ].where((exercise) => containsAllCharacters(exercise, query)).toList();
+    final hasGroupMatches =
+        groupedExercises.keys.any((e) => containsAllCharacters(e, query));
 
-    filteredExercises.sort();
+    final isGrouped = prefersGrouped && hasGroupMatches;
 
-    Map filteredExercisesMap = Map.fromEntries(
-      filteredExercises.map((value) => MapEntry(value, 0)),
-    );
-    if (widget.preData != null && query != ''){
-      for (String day in widget.preData!.keys){
-        for (String exercise in widget.preData![day]['sets'].keys){
-          if (filteredExercises.contains(exercise)){
-            filteredExercisesMap[exercise] += 1;
-          }
-        }
-      }
-      var sortedEntries = filteredExercisesMap.entries.toList();
-
-      sortedEntries.sort((a, b) {
-        if (a.value > 0 && b.value > 0) {
-          // Sort numerically where int > 0
-          return b.value.compareTo(a.value);
-        } else if (a.value == 0 && b.value == 0) {
-          // Sort alphabetically where int == 0
-          return a.key.compareTo(b.key);
-        } else {
-          // Keep sections separate: int > 0 before int == 0
-          return b.value.compareTo(a.value);
-        }
-      });
-      filteredExercisesMap = Map.fromEntries(sortedEntries);
-    }
+    final filteredExercisesMap = search(
+        groupedExercises, exercises, customExercises, isGrouped);
 
     final filteredProblemExercises = widget.problemExercises
         ?.where((exercise) => containsAllCharacters(exercise, query))
@@ -248,7 +222,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => _buildExerciseItem(
-                    getExerciseById(filteredExercisesMap.keys.toList()[index], exercises, customExercises, groupedExercises),
+                    getExerciseById(filteredExercisesMap.keys.toList()[index], exercises, customExercises, groupedExercises, isGrouped),
                     false,
                     customData: customExercises[filteredExercisesMap.keys.toList()[index]]
                   ),
@@ -300,25 +274,62 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
     );
   }
 
-  Exercise getExerciseById(String id, Map<String, Exercise> exercises, Map<String, dynamic> customExercises, Map<String, Map<dynamic, dynamic>> groupedExercises) {
-    Exercise? exercise;
-    switch (ref.read(listTypeProvider)) {
-      case ExerciseListType.grouped:
-        exercise = exercises[groupedExercises[id]?.values.first]?.copyWith(
-          name: id,
-        );
-      case ExerciseListType.individual:
-        exercise = exercises[id];
-    }
+  Map<dynamic, dynamic> search(
+    Map<String, Map<dynamic, dynamic>> groupedExercises, 
+    Map<String, Exercise> exercises, 
+    Map<String, Exercise> customExercises, 
+    bool grouped
+  ) {
+    List filteredExercises = [
+      ...exercises.keys,
+      ...customExercises.keys,
+    ].where((e) => containsAllCharacters(e, query)).toList();
 
-    return exercise ?? Exercise(
-      id: id,
-      name: id,
-      primary: {},
-      secondary: {},
-      type: '', 
-      group: '',
+    final groupFilteredExercises = groupedExercises.keys
+      .where((e) => containsAllCharacters(e, query))
+      .toList();
+
+    filteredExercises = grouped ? groupFilteredExercises : filteredExercises;
+    filteredExercises.sort();
+    
+    Map filteredExercisesMap = Map.fromEntries(
+      filteredExercises.map((value) => MapEntry(value, 0)),
     );
+    if (widget.preData != null && query != ''){
+      for (String day in widget.preData!.keys){
+        for (String exercise in widget.preData![day]['sets'].keys){
+          if (filteredExercises.contains(exercise)){
+            filteredExercisesMap[exercise] += 1;
+          }
+        }
+      }
+      var sortedEntries = filteredExercisesMap.entries.toList();
+    
+      sortedEntries.sort((a, b) {
+        if (a.value > 0 && b.value > 0) {
+          // Sort numerically where int > 0
+          return b.value.compareTo(a.value);
+        } else if (a.value == 0 && b.value == 0) {
+          // Sort alphabetically where int == 0
+          return a.key.compareTo(b.key);
+        } else {
+          // Keep sections separate: int > 0 before int == 0
+          return b.value.compareTo(a.value);
+        }
+      });
+      filteredExercisesMap = Map.fromEntries(sortedEntries);
+    }
+    return filteredExercisesMap;
+  }
+
+  Exercise getExerciseById(String id, Map<String, Exercise> exercises,
+      Map<String, dynamic> customExercises,
+      Map<String, Map<dynamic, dynamic>> groupedExercises, bool grouped) {
+    final exercise = grouped
+        ? exercises[groupedExercises[id]?.values.first]?.copyWith(name: id)
+        : exercises[id];
+
+    return exercise ?? Exercise(id: id, name: id, primary: {}, secondary: {}, type: '', group: '');
   }
 }
 
