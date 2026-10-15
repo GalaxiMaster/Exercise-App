@@ -275,36 +275,48 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   }
 
   Map<dynamic, dynamic> search(
-    Map<String, Map<dynamic, dynamic>> groupedExercises, 
-    Map<String, Exercise> exercises, 
-    Map<String, Exercise> customExercises, 
-    bool grouped
+    Map<String, Map<dynamic, dynamic>> groupedExercises,
+    Map<String, Exercise> exercises,
+    Map<String, Exercise> customExercises,
+    bool grouped,
   ) {
-    List filteredExercises = [
-      ...exercises.keys,
-      ...customExercises.keys,
-    ].where((e) => containsAllCharacters(e, query)).toList();
+    List filteredExercises = grouped
+        ? groupedExercises.keys
+            .where((e) => containsAllCharacters(e, query))
+            .toList()
+        : [
+            ...exercises.keys,
+            ...customExercises.keys,
+          ].where((e) => containsAllCharacters(e, query)).toList();
 
-    final groupFilteredExercises = groupedExercises.keys
-      .where((e) => containsAllCharacters(e, query))
-      .toList();
-
-    filteredExercises = grouped ? groupFilteredExercises : filteredExercises;
     filteredExercises.sort();
-    
+
     Map filteredExercisesMap = Map.fromEntries(
       filteredExercises.map((value) => MapEntry(value, 0)),
     );
-    if (widget.preData != null && query != ''){
-      for (String day in widget.preData!.keys){
-        for (String exercise in widget.preData![day]['sets'].keys){
-          if (filteredExercises.contains(exercise)){
-            filteredExercisesMap[exercise] += 1;
+
+    if (widget.preData != null && query != '') {
+      // exercise id -> group name (only needed in grouped mode)
+      final Map<String, String> exerciseToGroup = {};
+      if (grouped) {
+        groupedExercises.forEach((groupName, variants) {
+          for (final exerciseId in variants.values) {
+            exerciseToGroup[exerciseId.toString()] = groupName;
+          }
+        });
+      }
+
+      for (final day in widget.preData!.keys) {
+        for (final String exercise in widget.preData![day]['sets'].keys) {
+          // In grouped mode, count usage towards the exercise's group
+          final key = grouped ? exerciseToGroup[exercise] : exercise;
+          if (key != null && filteredExercisesMap.containsKey(key)) {
+            filteredExercisesMap[key] += 1;
           }
         }
       }
-      var sortedEntries = filteredExercisesMap.entries.toList();
-    
+
+      final sortedEntries = filteredExercisesMap.entries.toList();
       sortedEntries.sort((a, b) {
         if (a.value > 0 && b.value > 0) {
           // Sort numerically where int > 0
