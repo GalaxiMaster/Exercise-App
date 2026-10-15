@@ -7529,5 +7529,17 @@
     },
     "type": "Weighted",
     "group": "Lateral Raise"
+  },
+  "machine_lateral_raise": {
+    "name": "Machine Lateral Raise",
+    "Primary": {
+      "Side Delts": 70
+    },
+    "Secondary": {
+      "Traps": 20,
+      "Front Delts": 10
+    },
+    "type": "Weighted",
+    "group": "Lateral Raise"
   }
 }

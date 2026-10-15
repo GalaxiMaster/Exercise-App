@@ -193,7 +193,8 @@
     "Dumbbell one arm": "dumbbell_one_arm_lateral_raise",
     "Cable two arm": "cable_two_arm_lateral_raise",
     "Cable single arm": "cable_single_arm_lateral_raise",
-    "Dumbbell incline single arm": "dumbbell_incline_single_arm_lateral_raise"
+    "Dumbbell incline single arm": "dumbbell_incline_single_arm_lateral_raise",
+    "Machine": "machine_lateral_raise"
   },
   "Shoulder Internal Rotation": {
     "Cable seated": "cable_seated_shoulder_internal_rotation"
@@ -609,7 +610,8 @@
     "Smith": "smith_lunge",
     "Kettlebell goblet curtsey": "kettlebell_goblet_curtsey_lunge",
     "Landmine rear": "landmine_rear_lunge",
-    "Dumbbell walking": "dumbbell_walking_lunges"
+    "Dumbbell walking": "dumbbell_walking_lunges",
+    "Walking Lunge": "walking_lunge"
   },
   "Kickback": {
     "Cable": "cable_kickback",
