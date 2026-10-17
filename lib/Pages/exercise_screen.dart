@@ -594,7 +594,7 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                       ],
                     ),
                     const SizedBox(height: 5),
-                    // if (widget.exercises.length > 1)
+                    if (widget.exercises.length > 1)
                     SizedBox(
                       height: 160,
                       child: PageView.builder(
