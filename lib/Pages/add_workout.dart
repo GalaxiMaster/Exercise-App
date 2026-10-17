@@ -35,7 +35,7 @@ class AddWorkout extends ConsumerStatefulWidget {
 class AddWorkoutState extends ConsumerState<AddWorkout> {
   Map<String, List<Map<String, dynamic>>> sets = {};
   Map stats = {};
-  String startTime = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
+  String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
   Map<String, List<Map<String, FocusNode>>> _focusNodes = {};
   Map<String, List<Map<String, TextEditingController>>> _controllers = {};
@@ -54,14 +54,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     stats['notes'] = widget.initialData?.notes ?? {};
 
     if (widget.initialData == null) {
-      ref.read(currentWorkoutProvider).whenOrNull(
-        data: (data) {
-          if (mounted) setState(() => _applyInitialData(data));
-        },
-        error: (_, __) {
-          if (mounted) setState(() => loading = false);
-        },
-      );
+      _applyInitialData(ref.read(currentWorkoutProvider));
       loading = false;
     } else {
       sets = widget.initialData!.sets;
@@ -77,11 +70,11 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 
   void _applyInitialData(Map data) {
+    stats['startTime'] = startTime;
     if (data['sets'] == null) return;
     sets = parseSets(data['sets'].cast<String, dynamic>());    
     stats['notes'] = data['stats']?['notes'] ?? {};
     startTime = data['stats']?['startTime'] ?? startTime;
-    stats['startTime'] = startTime;
     repopulateExerciseTypeAccess();
     _initializeFocusNodesAndControllers();
     loading = false;
