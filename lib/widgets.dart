@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/theme_colors.dart';
@@ -734,5 +736,43 @@ class _DecimalRangeFormatter extends TextInputFormatter {
     if (!_pattern.hasMatch(text)) return oldValue;
  
     return newValue;
+  }
+}
+
+class StateFulTimeSinceText extends StatefulWidget {
+  final DateTime startTime;
+  const StateFulTimeSinceText({
+    required this.startTime,
+    super.key,
+  });
+  @override
+  StateFulTimeSinceTextState createState() => StateFulTimeSinceTextState();
+}
+
+class StateFulTimeSinceTextState extends State<StateFulTimeSinceText> {
+  late Timer tickTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    tickTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    tickTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final duration = DateTime.now().difference(widget.startTime);
+    final hours = duration.inHours.toString().padLeft(2, '0');
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+
+    return Text('$hours:$minutes:$seconds', style: const TextStyle(color: Colors.white));
   }
 }

@@ -19,6 +19,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  bool showExerciseInProgressTile = true;
   @override
   void initState() {
     super.initState();
@@ -33,6 +34,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final routineDataAsync = ref.watch(routineDataProvider);
+    bool workoutInProgress = ref.watch(currentWorkoutProvider).isNotEmpty;
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
         button: MyIconButton(
@@ -52,83 +54,101 @@ class _HomePageState extends ConsumerState<HomePage> {
           }
         ),
       ), // Pass context to appBar
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20,),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text(
-                  "Blank",
-                  style: TextStyle(
-                    fontSize: 18
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              MyTextButton(
-                text: "Start Workout", 
-                color: const Color(0xff9DCEFF),
-                pressedColor: Colors.blue, 
-                textColor: const Color.fromARGB(255, 0, 0, 0), 
-                borderRadius: 15, 
-                width: double.infinity, 
-                height: 50,
-                onTap: () async {
-                  attemptStartWorkout();
-                }
-              ),  
-              const SizedBox(height: 20,),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text(
-                  "Routines",
-                  style: TextStyle(
-                    fontSize: 18
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              MyTextButton(
-                text: "New routine", 
-                color: const Color(0xff9DCEFF),
-                pressedColor: Colors.blue, 
-                textColor: const Color.fromARGB(255, 0, 0, 0), 
-                borderRadius: 15, 
-                width: double.infinity, 
-                height: 50,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => 
-                      AddRoutine()
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20,),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Text(
+                        "Blank",
+                        style: TextStyle(
+                          fontSize: 18
+                        ),
+                      ),
                     ),
-                  );
-                }
-              ),
-              const SizedBox(height: 20),
-              routineDataAsync.when(
-                loading: () => const Text("No routines available"),
-                error: (e, _) => const Text("Error: No routines available"),
-                data: (routines) {
-                  return routines.isNotEmpty
-                    ? ListView.builder(
-                      itemCount: routines.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                      itemBuilder: (context, index) {
-                        MapEntry<String, dynamic> routine = routines.entries.toList()[index];
-                        return _buildRoutineBox(data: routine.value, id: routine.key);
+                    const SizedBox(height: 5),
+                    MyTextButton(
+                      text: "Start Workout", 
+                      color: const Color(0xff9DCEFF),
+                      pressedColor: Colors.blue, 
+                      textColor: const Color.fromARGB(255, 0, 0, 0), 
+                      borderRadius: 15, 
+                      width: double.infinity, 
+                      height: 50,
+                      onTap: () async {
+                        attemptStartWorkout(workoutInProgress);
+                      }
+                    ),
+                    const SizedBox(height: 20,),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Text(
+                        "Routines",
+                        style: TextStyle(
+                          fontSize: 18
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    MyTextButton(
+                      text: "New routine", 
+                      color: const Color(0xff9DCEFF),
+                      pressedColor: Colors.blue, 
+                      textColor: const Color.fromARGB(255, 0, 0, 0), 
+                      borderRadius: 15, 
+                      width: double.infinity, 
+                      height: 50,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => 
+                            AddRoutine()
+                          ),
+                        );
+                      }
+                    ),
+                    const SizedBox(height: 20),
+                    routineDataAsync.when(
+                      loading: () => const Text("No routines available"),
+                      error: (e, _) => const Text("Error: No routines available"),
+                      data: (routines) {
+                        return routines.isNotEmpty
+                          ? ListView.builder(
+                            itemCount: routines.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                            itemBuilder: (context, index) {
+                              MapEntry<String, dynamic> routine = routines.entries.toList()[index];
+                              return _buildRoutineBox(data: routine.value, id: routine.key);
+                            },
+                          )
+                          : const Text("No routines available");
                       },
                     )
-                    : const Text("No routines available");
+                  ],
+                ),
+              ),
+            ),
+            if (workoutInProgress && showExerciseInProgressTile)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: WorkoutInProgressWidget(
+                hideCallback: () {
+                  setState(() {
+                    showExerciseInProgressTile = false;
+                  });
                 },
               )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -267,6 +287,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: double.infinity,
                 height: 40,
                 onTap: () => attemptStartWorkout(
+                  false, // todo check if workout in progress
                   data: deepCopy(data),
                   metaData: WorkoutMetaData(routineId: id, color: color)
                 ),
@@ -279,8 +300,16 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void attemptStartWorkout({Map<String, dynamic>? data, WorkoutMetaData? metaData}) async{
-    bool workoutInProgress = (await ref.read(currentWorkoutProvider.future)).isNotEmpty;
+  void attemptStartWorkout(bool workoutInProgress, {Map<String, dynamic>? data, WorkoutMetaData? metaData}) async{
+    void pushExercisePage() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
+      );
+      setState(() {
+        showExerciseInProgressTile = true;
+      });
+    }
     if (workoutInProgress && mounted){
       showDialog(
         context: context,
@@ -294,20 +323,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                 onPressed: () {
                   ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
                   Navigator.of(context).pop(); // Dismiss the dialog
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
-                  );
+                  pushExercisePage();
                 },
               ),
               TextButton(
                 child: const Text('Resume'),
                 onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog 7
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
-                  );
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                  pushExercisePage();
                 },
               ),
             ],
@@ -316,10 +339,57 @@ class _HomePageState extends ConsumerState<HomePage> {
       );
     }else{
       if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
-      );
+      pushExercisePage();
     }
+  }
+}
+
+class WorkoutInProgressWidget extends ConsumerWidget {
+  final Function hideCallback;
+  const WorkoutInProgressWidget({
+    super.key, required this.hideCallback,
+  });
+
+  void onTap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddWorkout()),
+    );
+  }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final workoutData = ref.read(currentWorkoutProvider);
+    return Material(
+      color: Color.fromARGB(255, 21, 21, 21),
+      borderRadius: BorderRadius.circular(25),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => onTap(context),
+        splashColor: Colors.white24,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.75,
+          height: 50,
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.play_arrow, color: Colors.white),
+                onPressed: () => onTap(context),
+              ),
+              const Text(
+                'Workout in progress',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 10),
+              StateFulTimeSinceText(startTime: DateTime.tryParse(workoutData['stats']?['startTime'] ?? '') ?? DateTime.now()), // todo add stateful time since widget
+              Spacer(),
+              IconButton(
+                icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white),
+                onPressed: () => hideCallback(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

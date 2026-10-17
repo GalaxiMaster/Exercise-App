@@ -1,4 +1,5 @@
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +8,7 @@ final appReadyProvider = FutureProvider<void>((ref) async {
     ref.watch(exercisesAsyncProvider.future),
     ref.watch(exerciseGroupingAsyncProvider.future),
     ref.watch(customExercisesAsyncProvider.future),
+    ref.watch(currentWorkoutAsyncProvider.future),
   ]);
 });
 

@@ -384,24 +384,24 @@ void main() {
       final c = makeContainer(mockStorage);
       addTearDown(c.dispose);
 
-      await c.read(currentWorkoutProvider.future);
+      c.read(currentWorkoutProvider);
       await c
           .read(currentWorkoutProvider.notifier)
           .deleteExercise('Deadlift');
 
       expect(
-          c.read(currentWorkoutProvider).value?.containsKey('Deadlift'), false);
+          c.read(currentWorkoutProvider).containsKey('Deadlift'), false);
     });
 
     test('writeState() replaces state entirely', () async {
-      await container.read(currentWorkoutProvider.future);
+      container.read(currentWorkoutProvider);
       await container
           .read(currentWorkoutProvider.notifier)
           .writeState({'Squat': []});
 
-      final state = container.read(currentWorkoutProvider).value;
-      expect(state?.keys.length, 1);
-      expect(state?.containsKey('Squat'), true);
+      final state = container.read(currentWorkoutProvider);
+      expect(state.keys.length, 1);
+      expect(state.containsKey('Squat'), true);
     });
   });
 }

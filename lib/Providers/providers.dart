@@ -210,39 +210,45 @@ class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
 final recordsProvider = AsyncNotifierProvider<RecordsNotifier, Map<String, dynamic>>(RecordsNotifier.new);
 
 
-class CurrentWorkoutNotifier extends AsyncNotifier<Map<String, dynamic>> {
+final currentWorkoutAsyncProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final data = await ref.read(storageServiceProvider).readData(path: 'current');
+  return Map<String, dynamic>.from(data);
+});
+
+class CurrentWorkoutNotifier extends Notifier<Map<String, dynamic>> {
   @override
-  Future<Map<String, dynamic>> build() async {
-    ref.keepAlive();
-    return await ref.read(storageServiceProvider).readData(path: 'current');
+  Map<String, dynamic> build() {
+    return ref.watch(currentWorkoutAsyncProvider).value ?? {};
   }
 
   Future<void> updateValue(String key, dynamic value) async {
-    final currentState = state.value ?? {};
-    final updatedData = {
-      ...currentState,
-      key: value,
-    };
-    
-    state = AsyncValue.data(updatedData);
+    final updatedData = {...state, key: value};
+
+    state = updatedData;
     await ref.read(storageServiceProvider).writeData(updatedData, path: 'current');
   }
-  
+
   Future<void> writeState(Map<String, dynamic> data) async {
-    state = AsyncValue.data(data);
-    await ref.read(storageServiceProvider).writeData(data, path: 'current', append: false);
+    state = data;
+    await ref
+        .read(storageServiceProvider)
+        .writeData(data, path: 'current', append: false);
   }
 
   Future<void> deleteExercise(String key) async {
-    final currentState = Map<String, dynamic>.from(state.value ?? {});
-    currentState.remove(key);
-    
-    state = AsyncValue.data(currentState);
+    final updatedData = Map<String, dynamic>.from(state)..remove(key);
+
+    state = updatedData;
     await ref.read(storageServiceProvider).deleteKey(key, path: 'current');
   }
 }
 
-final currentWorkoutProvider = AsyncNotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(CurrentWorkoutNotifier.new);
+final currentWorkoutProvider =
+    NotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(
+  CurrentWorkoutNotifier.new,
+);
+
+
 
 class RoutineDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
   @override
