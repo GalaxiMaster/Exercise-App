@@ -173,7 +173,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           child: Column(
             children: [
-              Row(                
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(

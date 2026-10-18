@@ -16,6 +16,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'choose_exercise.dart';
 
+// something something cache and efficiency
+const Map _emptyMap = {};
+
 class AddWorkout extends ConsumerStatefulWidget {
   final WorkoutDetails? initialData;
   final bool editing;
@@ -46,7 +49,6 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   final Map<String, String> _previousCache = {};
   Map? _lastWorkoutData;
 
-  bool loading = true;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -56,13 +58,13 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
     if (widget.initialData == null) {
       _applyInitialData(ref.read(currentWorkoutProvider));
-      loading = false;
     } else {
       sets = widget.initialData!.sets;
+
+      startTime = widget.initialData?.startTime ?? startTime;
       stats['startTime'] = startTime;
       repopulateExerciseTypeAccess();
       _initializeFocusNodesAndControllers();
-      loading = false;
     }
 
     if (widget.metaData != null) {
@@ -71,14 +73,13 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 
   void _applyInitialData(Map data) {
+    startTime = data['stats']?['startTime'] ?? startTime;
     stats['startTime'] = startTime;
     if (data['sets'] == null) return;
-    sets = parseSets(data['sets'].cast<String, dynamic>());    
+    sets = parseSets(data['sets'].cast<String, dynamic>());
     stats['notes'] = data['stats']?['notes'] ?? {};
-    startTime = data['stats']?['startTime'] ?? startTime;
     repopulateExerciseTypeAccess();
     _initializeFocusNodesAndControllers();
-    loading = false;
   }
 
   @override
@@ -95,6 +96,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         setControllers['reps']!.dispose();
       }
     }
+    _scrollController.dispose(); // FIX #3
     super.dispose();
   }
 
@@ -113,10 +115,60 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     final exercises = ref.read(exercisesProvider);
     for (final exercise in sets.keys) {
       final type = exercises[exercise]?.type
-          ?? customExercisesData[exercise].type
+          ?? customExercisesData[exercise]?.type // FIX #7: was missing `?.`
           ?? 'Weighted';
       exerciseTypeAccess[exercise] = type;
     }
+  }
+
+  String _typeOf(String exercise) => exerciseTypeAccess[exercise] as String? ?? 'Weighted';
+
+  void _selectAll(TextEditingController controller) {
+    controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: controller.text.length,
+    );
+  }
+
+  void _disposeLater(
+    Iterable<Map<String, FocusNode>> nodes,
+    Iterable<Map<String, TextEditingController>> controllers,
+  ) {
+    final nodeList = nodes.toList();
+    final controllerList = controllers.toList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final n in nodeList) {
+        n['weight']?.dispose();
+        n['reps']?.dispose();
+      }
+      for (final c in controllerList) {
+        c['weight']?.dispose();
+        c['reps']?.dispose();
+      }
+    });
+  }
+
+  void _removeExerciseResources(String exercise) {
+    final nodes = _focusNodes.remove(exercise) ?? [];
+    final controllers = _controllers.remove(exercise) ?? [];
+    _checkBoxStates.remove(exercise);
+    _disposeLater(nodes, controllers);
+  }
+
+  void _removeSetResources(String exercise, int index) {
+    final nodes = _focusNodes[exercise];
+    final controllers = _controllers[exercise];
+    final disposedNodes = <Map<String, FocusNode>>[];
+    final disposedControllers = <Map<String, TextEditingController>>[];
+    if (nodes != null && index < nodes.length) {
+      disposedNodes.add(nodes.removeAt(index));
+    }
+    if (controllers != null && index < controllers.length) {
+      disposedControllers.add(controllers.removeAt(index));
+    }
+    final checks = _checkBoxStates[exercise];
+    if (checks != null && index < checks.length) checks.removeAt(index);
+    _disposeLater(disposedNodes, disposedControllers);
   }
 
   void _initializeFocusNodesAndControllers() {
@@ -127,17 +179,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
   void _ensureExerciseFocusNodesAndControllers(String exercise) {
     if (!sets.containsKey(exercise)) {
-      _focusNodes[exercise]?.forEach((nodeMap) {
-        nodeMap['weight']?.dispose();
-        nodeMap['reps']?.dispose();
-      });
-      _controllers[exercise]?.forEach((controllerMap) {
-        controllerMap['weight']?.dispose();
-        controllerMap['reps']?.dispose();
-      });
-      _focusNodes.remove(exercise);
-      _controllers.remove(exercise);
-      _checkBoxStates.remove(exercise);
+      _removeExerciseResources(exercise);
       return;
     }
 
@@ -148,42 +190,27 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     }
 
     while (_focusNodes[exercise]!.length < sets[exercise]!.length) {
-      final controllerIndex = _focusNodes[exercise]!.length;
+      final index = _focusNodes[exercise]!.length;
       final weightFocusNode = FocusNode();
       final repsFocusNode = FocusNode();
+      final weightController = TextEditingController(
+        text: sets[exercise]![index]['weight'].toString(),
+      );
+      final repsController = TextEditingController(
+        text: sets[exercise]![index]['reps'].toString(),
+      );
 
       weightFocusNode.addListener(() {
-        if (weightFocusNode.hasFocus &&
-            _controllers.containsKey(exercise) &&
-            _controllers[exercise]!.length > controllerIndex) {
-          final controller = _controllers[exercise]![controllerIndex]['weight'];
-          controller?.selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: controller.text.length,
-          );
-        }
+        if (weightFocusNode.hasFocus) _selectAll(weightController);
       });
-
       repsFocusNode.addListener(() {
-        if (repsFocusNode.hasFocus &&
-            _controllers.containsKey(exercise) &&
-            _controllers[exercise]!.length > controllerIndex) {
-          final controller = _controllers[exercise]![controllerIndex]['reps'];
-          controller?.selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: controller.text.length,
-          );
-        }
+        if (repsFocusNode.hasFocus) _selectAll(repsController);
       });
 
       _focusNodes[exercise]!.add({'weight': weightFocusNode, 'reps': repsFocusNode});
       _controllers[exercise]!.add({
-        'weight': TextEditingController(
-          text: sets[exercise]![controllerIndex]['weight'].toString(),
-        ),
-        'reps': TextEditingController(
-          text: sets[exercise]![controllerIndex]['reps'].toString(),
-        ),
+        'weight': weightController,
+        'reps': repsController,
       });
       _checkBoxStates[exercise]!.add(false);
     }
@@ -202,9 +229,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   @override
   Widget build(BuildContext context) {
     final customExerciseData = ref.watch(customExercisesProvider);
-    final Map settings = ref.watch(settingsProvider).value ?? {};
-    final Map workoutData = ref.watch(workoutDataProvider).value ?? {};
-    final Map records = ref.watch(recordsProvider).value ?? {};
+    final Map settings = ref.watch(settingsProvider).value ?? _emptyMap;
+    final Map workoutData = ref.watch(workoutDataProvider).value ?? _emptyMap;
+    final Map records = ref.watch(recordsProvider).value ?? _emptyMap;
     final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
 
     if (!identical(workoutData, _lastWorkoutData)) {
@@ -212,15 +239,11 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       _lastWorkoutData = workoutData;
     }
 
-    if (loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     final exerciseKeys = sets.keys.toList();
     for (final exercise in exerciseKeys) {
       _ensureExerciseFocusNodesAndControllers(exercise);
     }
-    
+
     return Scaffold(
       appBar: myAppBar(
         context,
@@ -259,9 +282,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                       builder: (context) => WorkoutList(setting: 'choose', preData: workoutData),
                     ),
                   );
-              
+
                   if (!mounted) return;
-              
+
                   if (result != null) {
                     for (final exercise in result.selectedExercises) {
                       if (!sets.containsKey(exercise)) {
@@ -395,9 +418,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                         case 'Delete':
                           setState(() {
                             sets.remove(exercise);
-                            _focusNodes.remove(exercise);
-                            _controllers.remove(exercise);
-                            _checkBoxStates.remove(exercise);
+                            exerciseTypeAccess.remove(exercise);
+                            _removeExerciseResources(exercise);
                           });
                           updateExercises();
                       }
@@ -448,7 +470,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         // Add set button
         Center(
           child: ElevatedButton(
-            onPressed: () => addNewSet(exercise, exerciseTypeAccess[exercise] as String),
+            onPressed: () => addNewSet(exercise, _typeOf(exercise)),
             child: const Text('Add Set'),
           ),
         ),
@@ -520,7 +542,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     final Map<String, List<Map<String, TextEditingController>>>
     newControllers = {};
     final Map<String, List<bool>> newCheckBoxStates = {};
-    
+
     for (final entry in sets.keys) {
       final key = entry == exercise ? newExercise : entry;
       if (sets.containsKey(entry)) {
@@ -536,14 +558,13 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         newCheckBoxStates[key] = _checkBoxStates[entry]!;
       }
     }
-    
+
     exerciseTypeAccess.remove(exercise);
-    
-    final type = exercises[exercise]?.type // todo consider consolidating all references to exerciseType access to functions
-        ?? customExercisesData[exercise]?['type']
+    final type = exercises[newExercise]?.type
+        ?? customExercisesData[newExercise]?.type
         ?? 'Weighted';
-    exerciseTypeAccess[exercise] = type;
-    
+    exerciseTypeAccess[newExercise] = type;
+
     setState(() {
       sets = newSets;
       _focusNodes = newFocusNodes;
@@ -579,11 +600,11 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     Map workoutData,
   ) {
     return SwipeDismissable(
-      key: ValueKey('$exercise-$i'),
+      key: ObjectKey(_controllers[exercise]![i]['weight']!),
       direction: DismissDirection.horizontal,
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
-          addNewSet(exercise, 'Bodyweight', data: sets[exercise]![i]);
+          addNewSet(exercise, _typeOf(exercise), data: sets[exercise]![i]);
         } else {
           removeSet(exercise, i);
         }
@@ -703,7 +724,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     Map records,
     Map workoutData,
   ) {
-    final type = exerciseTypeAccess[exercise] as String? ?? 'Weighted';
+    final type = _typeOf(exercise);
     final isPR = sets[exercise]![i]['PR'] != 'no' && sets[exercise]![i]['PR'] != null;
 
     if (type == 'Bodyweight') {
@@ -760,11 +781,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         }
       },
       onTap: () {
-        final controller = _controllers[exercise]![i]['weight']!;
-        controller.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: controller.text.length,
-        );
+        _selectAll(_controllers[exercise]![i]['weight']!);
       },
     );
   }
@@ -778,7 +795,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   ) {
     final hasError = boxErrors[exercise]?[i]?['reps'] ?? false;
     final isPR = sets[exercise]![i]['PR'] != 'no' && sets[exercise]![i]['PR'] != null;
-    final type = exerciseTypeAccess[exercise] as String? ?? 'Weighted';
+    final type = _typeOf(exercise);
 
     return Expanded(
       flex: 2,
@@ -828,11 +845,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                 }
               },
               onTap: () {
-                final controller = _controllers[exercise]![i]['reps']!;
-                controller.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: controller.text.length,
-                );
+                _selectAll(_controllers[exercise]![i]['reps']!);
               },
             ),
           ),
@@ -887,7 +900,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       setState(() {
         sets[exercise]?.add({
           'weight': type == 'Bodyweight' ? '1' : '',
-          'reps': '',
+          'reps': type == 'Timed' ? '1' : '',
           'type': 'Normal',
           ...data ?? {},
         });
@@ -919,10 +932,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           : _controllers[exercise]![lastIndex]['weight']!;
 
       FocusScope.of(context).requestFocus(focusNode);
-      controller.selection = TextSelection(
-        baseOffset: 0,
-        extentOffset: controller.text.length,
-      );
+      _selectAll(controller);
     });
   }
 
@@ -930,14 +940,11 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     setState(() {
       if (setIndex == 0 && sets[exercise]!.length == 1) {
         sets.remove(exercise);
-        _controllers.remove(exercise);
-        _focusNodes.remove(exercise);
-        _checkBoxStates.remove(exercise);
+        exerciseTypeAccess.remove(exercise);
+        _removeExerciseResources(exercise);
       } else {
         sets[exercise]?.removeAt(setIndex);
-        _controllers[exercise]!.removeAt(setIndex);
-        _focusNodes[exercise]!.removeAt(setIndex);
-        _checkBoxStates[exercise]!.removeAt(setIndex);
+        _removeSetResources(exercise, setIndex);
       }
     });
     updateExercises();
@@ -976,31 +983,30 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     }
   }
 
+  bool _isValidNumber(dynamic value) => double.tryParse(value.toString().trim()) != null;
+
   bool checkValidWorkout(Map sets) {
     bool isValid = true;
     for (final exercise in sets.keys) {
       for (int i = 0; i < sets[exercise].length; i++) {
         final set = sets[exercise][i];
 
-        if (set['reps'] == '') {
-          setState(() {
-            boxErrors[exercise] ??= {};
-            boxErrors[exercise][i] ??= {};
-            boxErrors[exercise][i]['reps'] = true;
-          });
+        if (!_isValidNumber(set['reps'])) {
+          boxErrors[exercise] ??= {};
+          boxErrors[exercise][i] ??= {};
+          boxErrors[exercise][i]['reps'] = true;
           isValid = false;
         }
 
-        if (set['weight'] == '') {
-          setState(() {
-            boxErrors[exercise] ??= {};
-            boxErrors[exercise][i] ??= {};
-            boxErrors[exercise][i]['weight'] = true;
-          });
+        if (!_isValidNumber(set['weight'])) {
+          boxErrors[exercise] ??= {};
+          boxErrors[exercise][i] ??= {};
+          boxErrors[exercise][i]['weight'] = true;
           isValid = false;
         }
       }
     }
+    if (!isValid) setState(() {}); // one rebuild instead of one per error
     return isValid;
   }
 
