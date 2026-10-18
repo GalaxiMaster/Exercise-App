@@ -7,6 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+class ChooseExerciseResponse {
+  final List<String> selectedExercises;
+  final ExerciseListType listType;
+  ChooseExerciseResponse(this.selectedExercises, this.listType);
+}
+
+
 enum ExerciseListType {
   grouped,
   individual,
@@ -72,7 +79,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
           });
         }else{
           if(widget.setting == 'choose' ){
-            Navigator.pop(context, [exerciseData.id]);
+            Navigator.pop(context, ChooseExerciseResponse([exerciseData.id], ref.read(listTypeProvider)));
           }
           else{
             Navigator.push(
@@ -158,16 +165,13 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
     final exercises = ref.watch(exercisesProvider);
     final customExercises = ref.watch(customExercisesProvider);
     final groupedExercises = ref.watch(exerciseGroupingProvider);
-    final prefersGrouped =
-        ref.watch(listTypeProvider) == ExerciseListType.grouped;
+    final prefersGrouped = ref.watch(listTypeProvider) == ExerciseListType.grouped;
 
-    final hasGroupMatches =
-        groupedExercises.keys.any((e) => containsAllCharacters(e, query));
+    final hasGroupMatches = groupedExercises.keys.any((e) => containsAllCharacters(e, query));
 
     final isGrouped = prefersGrouped && hasGroupMatches;
 
-    final filteredExercisesMap = search(
-        groupedExercises, exercises, customExercises, isGrouped);
+    final filteredExercisesMap = search(groupedExercises, exercises, customExercises, isGrouped);
 
     final filteredProblemExercises = widget.problemExercises
         ?.where((exercise) => containsAllCharacters(exercise, query))
@@ -239,14 +243,14 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               child: GestureDetector(
                 onTap: (){
                   if(widget.setting == 'choose' ){
-                    Navigator.pop(context, selectedItems);
+                    Navigator.pop(context, ChooseExerciseResponse(selectedItems, ref.read(listTypeProvider)));
                   }
                   else{
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExerciseScreen(exercises: selectedItems)
-                        )
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExerciseScreen(exercises: selectedItems)
+                      )
                     );
                   }
                 },

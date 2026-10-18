@@ -53,7 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             );
           }
         ),
-      ), // Pass context to appBar
+      ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(

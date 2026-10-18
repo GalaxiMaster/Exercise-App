@@ -250,8 +250,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
-                onPressed: () async {
-                  final result = await Navigator.push(
+                onPressed: () async { // AddExercise
+                  final ChooseExerciseResponse? result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => WorkoutList(setting: 'choose', preData: workoutData),
@@ -261,7 +261,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   if (!mounted) return;
               
                   if (result != null) {
-                    for (final exercise in result) {
+                    for (final exercise in result.selectedExercises) {
                       if (!sets.containsKey(exercise)) {
                         final type = exercises[exercise]?.type
                             ?? customExerciseData[exercise]?.type
@@ -275,6 +275,11 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                         ];
                         exerciseTypeAccess[exercise] = type;
                       }
+                    }
+                    final group = exercises[result.selectedExercises.first]?.group;
+                    final groupCount = ref.read(exerciseGroupingProvider)[group]?.length ?? 0;
+                    if (result.listType == ExerciseListType.grouped && result.selectedExercises.length == 1 && groupCount > 1) {
+                      await switchExerciseInGroup(exercises, result.selectedExercises.first, customExerciseData);
                     }
                     setState(() {});
                     updateExercises();
@@ -344,62 +349,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: GestureDetector(
-                      onTap: () async {
-                        final groups = ref.read(exerciseGroupingProvider);
-                        final Map? groupData = groups[exercises[exercise]?.group];
-                        if (groupData == null) return;
-                        final String? newExercise = await showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-                            child: ListView.builder(
-                              itemCount: groupData.length,
-                              itemBuilder: (context, index) {
-                                final MapEntry exerciseEntry = groupData.entries.toList()[index];
-                                final bool currentExercise = exerciseEntry.value == exercise;
-                                return InkWell(
-                                  onTap: (){
-                                    Navigator.pop(context, exerciseEntry.value);
-                                  },
-                                  child: Container(
-                                    height: 60,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: currentExercise ? Colors.grey.withAlpha(50) : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        // if (currentExercise) // taken out because i think its unnecessary here
-                                        // Padding(
-                                        //   padding: const EdgeInsets.only(left: 20),
-                                        //   child: Container( 
-                                        //     width: 2,
-                                        //     height: 60,
-                                        //     decoration: const BoxDecoration(
-                                        //       color: Colors.blue,
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                                          child: Image.asset(
-                                            "assets/Exercises/${exerciseEntry.value}.png",
-                                            height: 50,
-                                            width: 50,
-                                          )
-                                        ),
-                                        Expanded(child: Text(exerciseEntry.key))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                            ),
-                          )
-                        );
-                        if (
-                          newExercise != null &&
-                          !sets.containsKey(newExercise)
-                        ) {
-                          swapExercise(exercise, newExercise, exercises, customExercisesData);
-                        }
+                      onTap: () async { // switch exercise in group
+                        await switchExerciseInGroup(exercises, exercise, customExercisesData);
                       },
                       child: const Icon(Icons.compare_arrows, color: Colors.blueAccent),
                     ),
@@ -423,13 +374,12 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     onSelected: (value) async {
                       switch (value) {
                         case 'Swap':
-                          final String? newExercise = (await Navigator.push<List>(
+                          final String? newExercise = (await Navigator.push<ChooseExerciseResponse>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const WorkoutList(setting: 'choose', multiSelect: false),
+                              builder: (context) => const WorkoutList(setting: 'choose', multiSelect: false),
                             ),
-                          ))?.first;
+                          ))?.selectedExercises.first;
 
                           if (!mounted) return;
 
@@ -503,6 +453,64 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     );
   }
 
+  Future<void> switchExerciseInGroup(Map<String, Exercise> exercises, String exercise, Map<dynamic, dynamic> customExercisesData) async {
+    final groups = ref.read(exerciseGroupingProvider);
+    final Map? groupData = groups[exercises[exercise]?.group];
+    if (groupData == null) return;
+    final String? newExercise = await showModalBottomSheet(
+      context: context,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+        child: ListView.builder(
+          itemCount: groupData.length,
+          itemBuilder: (context, index) {
+            final MapEntry exerciseEntry = groupData.entries.toList()[index];
+            final bool currentExercise = exerciseEntry.value == exercise;
+            return InkWell(
+              onTap: () {
+                Navigator.pop(context, exerciseEntry.value);
+              },
+              child: Container(
+                height: 60,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: currentExercise ? Colors.grey.withAlpha(50) : Colors.transparent),
+                child: Row(
+                  children: [
+                    // if (currentExercise) // taken out because i think its unnecessary here
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 20),
+                    //   child: Container( 
+                    //     width: 2,
+                    //     height: 60,
+                    //     decoration: const BoxDecoration(
+                    //       color: Colors.blue,
+                    //     ),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Image.asset(
+                        "assets/Exercises/${exerciseEntry.value}.png",
+                        height: 50,
+                        width: 50,
+                      )
+                    ),
+                    Expanded(child: Text(exerciseEntry.key))
+                  ],
+                ),
+              ),
+            );
+          }
+        ),
+      )
+    );
+    if (
+      newExercise != null &&
+      !sets.containsKey(newExercise)
+    ) {
+      swapExercise(exercise, newExercise, exercises, customExercisesData);
+    }
+  }
+
   void swapExercise(String exercise, String newExercise, Map<String, Exercise> exercises, Map<dynamic, dynamic> customExercisesData) {
     final Map<String, List<Map<String, dynamic>>> newSets = {};
     final Map<String, List<Map<String, FocusNode>>> newFocusNodes = {};
@@ -512,10 +520,18 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     
     for (final entry in sets.keys) {
       final key = entry == exercise ? newExercise : entry;
-      newSets[key] = sets[entry]!;
-      newFocusNodes[key] = _focusNodes[entry]!;
-      newControllers[key] = _controllers[entry]!;
-      newCheckBoxStates[key] = _checkBoxStates[entry]!;
+      if (sets.containsKey(entry)) {
+        newSets[key] = sets[entry]!;
+      }
+      if (_focusNodes.containsKey(entry)) {
+        newFocusNodes[key] = _focusNodes[entry]!;
+      }
+      if (_controllers.containsKey(entry)) {
+        newControllers[key] = _controllers[entry]!;
+      }
+      if (_checkBoxStates.containsKey(entry)) {
+        newCheckBoxStates[key] = _checkBoxStates[entry]!;
+      }
     }
     
     exerciseTypeAccess.remove(exercise);
