@@ -47,6 +47,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   Map? _lastWorkoutData;
 
   bool loading = true;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -235,6 +236,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             for (final exercise in exerciseKeys)
@@ -283,6 +285,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                     }
                     setState(() {});
                     updateExercises();
+                    _scrollController.jumpTo(_scrollController.position.maxScrollExtent+300);
                   }
                 },
                 child: const Text('Select Exercise'),
