@@ -348,7 +348,7 @@ void moveExercises(BuildContext context, WidgetRef ref) async{
     }
   }
   problemExercises.isEmpty ? problemExercises = null : null;
-  List? resultFromList = await Navigator.push(
+  final ChooseExerciseResponse? resultFromList = await Navigator.push<ChooseExerciseResponse>(
     context,
     MaterialPageRoute(
       builder: (context) =>  WorkoutList(setting: 'choose', problemExercises: problemExercises, problemExercisesTitle: 'Invalid exercises',),
@@ -356,7 +356,7 @@ void moveExercises(BuildContext context, WidgetRef ref) async{
   );
   if (resultFromList == null) return;
 
-  String resultFrom = resultFromList.first;
+  String resultFrom = resultFromList.selectedExercises.first;
   if (!context.mounted) return;
   List? resultToList = await Navigator.push(
     context,

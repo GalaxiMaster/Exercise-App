@@ -202,16 +202,18 @@ class _ExerciseGoalsState extends ConsumerState<ExerciseGoals> {
   }
 
   void addExerciseGoal(Map<String, dynamic> settings) async{
-    List? result = await Navigator.push(
+    ChooseExerciseResponse? result = await Navigator.push<ChooseExerciseResponse>(
       context,
       MaterialPageRoute(builder: (context) => const WorkoutList(setting: 'choose'))
     );
     if (result == null) return;
 
-    String exercise = result[0];
+    String exercise = result.selectedExercises.first;
     int? currentValue = 0;
+    
+    if (!mounted) return;
+    
     showDialog(
-      // ignore: use_build_context_synchronously
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

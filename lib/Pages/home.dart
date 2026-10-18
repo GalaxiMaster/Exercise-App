@@ -158,9 +158,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     required Map data,
     required String id
   }) {
+    final allExercises = ref.watch(exercisesProvider);
     Color color = HexColor.fromHex(data['data']?['color'] ?? '#9DCEFF');
     String label =  data['data']?['name'] ?? 'Unknown Routine';
-    String exercises =  data['sets'].keys?.join('\n') ?? 'No exercises';
+    String exercises =  data['sets'].keys.map((key) => allExercises[key]?.name ?? key).join('\n') ?? 'No exercises';
     return Column(
       children: [
         Container(

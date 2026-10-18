@@ -87,7 +87,7 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            exercise,
+                            exercises[exercise]?.name ?? exercise,
                             style: const TextStyle(
                               fontSize: 18
                             ),
@@ -182,7 +182,7 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
             ElevatedButton(
               onPressed: () async {
                 // Navigate to WorkoutList and wait for the result
-                final result = await Navigator.push(
+                final ChooseExerciseResponse? result = await Navigator.push<ChooseExerciseResponse>(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const WorkoutList(setting: 'choose',),
@@ -191,15 +191,14 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
 
                 if (result != null) {
                   setState(() {
-                    for (String exercise in result){
+                    for (String exercise in result.selectedExercises){
                       if (!sets.containsKey(exercise)) {
                         sets[exercise] = [
-                          {'weight': exercises[exercise]?['type'] == 'Bodyweight' ? '1' : '', 'reps': exercises[exercise]?['type'] == 'Timed' ? '1' : '' , 'type': 'Normal'} // TODo fix up to account for cusotm exercises
+                          {'weight': exercises[exercise]?.type == 'Bodyweight' ? '1' : '', 'reps': exercises[exercise]?.type == 'Timed' ? '1' : '' , 'type': 'Normal'} // TODo fix up to account for cusotm exercises
                         ]; // Initialize sets list for the new exercise
                       }
                     }
                   });
-     
                 }
               },
               child: const Text('Select Exercise'),
