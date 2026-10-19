@@ -1,4 +1,4 @@
-import 'package:exercise_app/Pages/routines.dart';
+import 'package:exercise_app/Pages/Routines/routines.dart';
 import 'package:exercise_app/Pages/Add_Workout/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
@@ -161,10 +161,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     required Map data,
     required String id
   }) {
-    final allExercises = ref.watch(exercisesProvider);
     Color color = HexColor.fromHex(data['data']?['color'] ?? '#9DCEFF');
     String label =  data['data']?['name'] ?? 'Unknown Routine';
-    String exercises =  data['sets'].keys.map((key) => allExercises[key]?.name ?? key).join('\n') ?? 'No exercises';
+    String exercises =  data['slots'].map((slot) => slot['title']).join('\n') ?? 'No exercises';
     return Column(
       children: [
         Container(
@@ -205,7 +204,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               context,
                               MaterialPageRoute(builder: (context) => 
                                 AddRoutine( 
-                                  sets: data, 
+                                  routine: data, 
                                 )
                               ),
                             );

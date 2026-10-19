@@ -280,7 +280,8 @@ void resetDataButton(BuildContext context, WidgetRef ref){
                 'output': workoutDataProvider,
                 'settings': settingsProvider,
                 'current': currentWorkoutProvider,
-                'records': recordsProvider
+                'records': recordsProvider,
+                'routines': routineDataProvider,
               };
               for (MapEntry provider in providerKeys.entries){
                 try {

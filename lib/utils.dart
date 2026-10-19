@@ -193,3 +193,5 @@ extension ColorBrightness on Color {
     return hsl.withLightness(lightness).toColor();
   }
 }
+
+String getDisplayName(Map exercises, String id) => exercises[id]?.name ?? id;
