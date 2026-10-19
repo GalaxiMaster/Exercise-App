@@ -1,6 +1,7 @@
 // NOTE: Lift, liftFromSet, isBetter, PRResult and PRType already exist in your
 // project. If the analyzer says one is undefined, fix the imports below.
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
+import 'package:exercise_app/Pages/Routines/routines_draft_notifier.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
@@ -17,28 +18,40 @@ final workoutDraftProvider = NotifierProvider.autoDispose.family<WorkoutDraftNot
 
 /// What the page was opened with.
 class WorkoutSeed {
-  const WorkoutSeed({this.initialData, this.editing = false, this.metaData});
+  const WorkoutSeed({
+    this.initialData,
+    this.editing = false,
+    this.metaData,
+    this.routine,
+  });
 
   final WorkoutDetails? initialData;
   final bool editing;
   final WorkoutMetaData? metaData;
+
+  final Map? routine;
 }
+
 
 /// Snapshot of the workout. The entries inside hold TextEditingControllers and FocusNodes.
 class WorkoutDraft {
   WorkoutDraft({
-    required this.exercises,
+    required this.items,
     required this.startTime,
     required this.extraStats,
   });
 
-  final List<ExerciseEntry> exercises;
+  /// In display order: real exercises and routine slots still to be chosen.
+  final List<WorkoutItem> items;
   final String startTime;
 
   /// Extra stats merged into the saved stats (from `WorkoutMetaData`).
   final Map extraStats;
 
-  bool get isEmpty => exercises.isEmpty;
+  Iterable<ExerciseEntry> get exercises => items.whereType<ExerciseEntry>();
+  Iterable<PendingSlot> get pendingSlots => items.whereType<PendingSlot>();
+
+  bool get isEmpty => items.isEmpty;
 
   bool contains(String name) => exercises.any((e) => e.name == name);
 
@@ -51,11 +64,12 @@ class WorkoutDraft {
 
   // wrapper around the same entries, to trigger a rebuild.
   WorkoutDraft rebuilt() => WorkoutDraft(
-    exercises: exercises,
+    items: items,
     startTime: startTime,
     extraStats: extraStats,
   );
 
+  /// Only real exercises. Ignore slots
   Map<String, List<Map<String, dynamic>>> get setsJson => {
     for (final e in exercises) e.name: [for (final s in e.sets) s.toJson()],
   };
@@ -70,7 +84,31 @@ class WorkoutDraft {
   };
 
   /// to json for storage
-  Map<String, dynamic> toStorage() => {'stats': statsJson, 'sets': setsJson};
+  Map<String, dynamic> toStorage() {
+    final fromRoutine = items.any(
+      (i) => i is PendingSlot || (i is ExerciseEntry && i.slot != null),
+    );
+    return {
+      'stats': statsJson,
+      'sets': setsJson,
+      if (fromRoutine)
+        'routine': {
+          'items': [for (final i in items) _layoutJson(i)],
+        },
+    };
+  }
+
+  static Map<String, dynamic> _layoutJson(WorkoutItem item) {
+    switch (item) {
+      case ExerciseEntry():
+        return {
+          'exercise': item.name,
+          if (item.slot != null) 'slot': item.slot!.toJson(),
+        };
+      case PendingSlot():
+        return {'slot': item.slot.toJson()};
+    }
+  }
 
   /// What the confirm page expects.
   WorkoutDetails toDetails() => WorkoutDetails(sets: setsJson, startTime: startTime);
@@ -85,13 +123,20 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
 
   @override
   WorkoutDraft build() {
-    final exercises = <ExerciseEntry>[];
+    final items = <WorkoutItem>[];
     var startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
     final details = seed.initialData;
+    final routine = seed.routine;
+
     if (details != null) { // Editing an existing workout
       startTime = details.startTime;
-      _loadInto(exercises, details.sets, details.notes ?? const {});
+      _loadEntries(items, details.sets, details.notes ?? const {});
+    } else if (routine != null) {
+      items.addAll(_itemsFromRoutine(routine));
+      Future.microtask(() {
+        if (ref.mounted) _persist();
+      });
     } else { // Resume the in progress workout.
       final Map saved = ref.read(currentWorkoutProvider);
       final savedStart = saved['stats']?['startTime'];
@@ -100,38 +145,127 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
 
       if (rawSets != null) {
         final notes = saved['stats']?['notes'];
-        _loadInto(exercises, rawSets as Map, notes is Map ? notes : const {});
+        final routineInfo = saved['routine'];
+        final layout = routineInfo is Map ? routineInfo['items'] : null;
+        _loadEntries(
+          items,
+          rawSets as Map,
+          notes is Map ? notes : const {},
+          layout: layout is List ? layout : null,
+        );
       }
     }
 
     // Disposes every entry still in the list
     ref.onDispose(() {
-      for (final e in exercises) {
+      for (final e in items.whereType<ExerciseEntry>()) {
         e.dispose();
       }
     });
 
     return WorkoutDraft(
-      exercises: exercises,
+      items: items,
       startTime: startTime,
       extraStats: {if (seed.metaData != null) ...seed.metaData!.toMap()},
     );
   }
 
-  void _loadInto(List<ExerciseEntry> into, Map rawSets, Map notes) {
+  // loading
+
+  ExerciseEntry _entryFrom(
+    String name,
+    dynamic rawSets,
+    Map notes, {
+    RoutineSlot? slot,
+  }) {
+    final sets = [
+      for (final raw in (rawSets as List? ?? const []))
+        SetEntry.fromJson(Map<String, dynamic>.from(raw as Map)),
+    ];
+    return ExerciseEntry(
+      name: name,
+      type: _typeOf(name),
+      sets: sets.isEmpty ? null : sets, // null => one blank set
+      note: notes[name]?.toString() ?? '',
+      slot: slot,
+    );
+  }
+
+  void _loadEntries(
+    List<WorkoutItem> into,
+    Map rawSets,
+    Map notes, {
+    List? layout,
+  }) {
+    final placed = <String>{};
+
+    if (layout != null) {
+      for (final raw in layout) {
+        final item = raw as Map;
+        final slotJson = item['slot'];
+        final slot = slotJson is Map ? RoutineSlot.fromJson(slotJson) : null;
+        final name = item['exercise']?.toString();
+
+        if (name == null) {
+          if (slot != null) into.add(PendingSlot(slot));
+        } else if (rawSets.containsKey(name)) {
+          into.add(_entryFrom(name, rawSets[name], notes, slot: slot));
+          placed.add(name);
+        }
+      }
+    }
+
     for (final item in rawSets.entries) {
       final name = item.key.toString();
-      final sets = [
-        for (final raw in (item.value as List? ?? const []))
-          SetEntry.fromJson(Map<String, dynamic>.from(raw as Map)),
-      ];
-      into.add(ExerciseEntry(
-        name: name,
-        type: _typeOf(name),
-        sets: sets.isEmpty ? null : sets, // null => one blank set
-        note: notes[name]?.toString() ?? '',
-      ));
+      if (placed.contains(name)) continue;
+      into.add(_entryFrom(name, item.value, notes));
     }
+  }
+
+  /// Single slots auto filled in
+  List<WorkoutItem> _itemsFromRoutine(Map raw) {
+    final items = <WorkoutItem>[];
+    final used = <String>{};
+
+    for (final slot in RoutineDraft.fromRaw(raw).slots) {
+      if (slot.options.isEmpty) continue;
+      if (slot.options.length > 1) {
+        items.add(PendingSlot(slot));
+        continue;
+      }
+      final exercise = slot.options.single.exercise;
+      if (used.add(exercise)) items.add(_newEntry(exercise, slot));
+    }
+    return items;
+  }
+
+  ExerciseEntry _newEntry(String exercise, RoutineSlot slot) {
+    final type = _typeOf(exercise);
+    return ExerciseEntry(
+      name: exercise,
+      type: type,
+      slot: slot,
+      sets: [
+        for (var i = 0; i < initialSetCount(slot, exercise); i++)
+          SetEntry.blank(type),
+      ],
+    );
+  }
+
+  // routine slots
+  bool pickOption(PendingSlot pending, String exercise) {
+    final index = state.items.indexOf(pending);
+    if (index < 0 || state.contains(exercise)) return false;
+
+    state.items[index] = _newEntry(exercise, pending.slot);
+    _commit();
+    return true;
+  }
+
+  /// Drops an unfilled slot without doing anything for it.
+  void skipSlot(PendingSlot pending) {
+    if (!state.items.remove(pending)) return;
+    _commit();
   }
 
   // exercises
@@ -142,7 +276,7 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
     for (final name in names) {
       if (state.contains(name)) continue;
       final entry = ExerciseEntry(name: name, type: _typeOf(name));
-      state.exercises.add(entry);
+      state.items.add(entry);
       added.add(entry);
     }
     if (added.isNotEmpty) _commit();
@@ -150,7 +284,7 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
   }
 
   void removeExercise(ExerciseEntry entry) {
-    if (!state.exercises.remove(entry)) return;
+    if (!state.items.remove(entry)) return;
     entry.disposeAfterFrame();
     _commit();
   }
@@ -164,9 +298,11 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
     final newType = _typeOf(newName);
     if (newType != entry.type) {
       final oldSets = List<SetEntry>.of(entry.sets);
+      final slot = entry.slot;
+      final count = slot == null ? 1 : initialSetCount(slot, newName);
       entry.sets
         ..clear()
-        ..add(SetEntry.blank(newType));
+        ..addAll([for (var i = 0; i < count; i++) SetEntry.blank(newType)]);
       for (final s in oldSets) {
         s.disposeAfterFrame();
       }
@@ -184,6 +320,8 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
     _persist();
   }
 
+  // sets
+
   /// Adds a set (blank, or a copy of [copyOf]) and returns it.
   SetEntry addSet(ExerciseEntry entry, {SetEntry? copyOf}) {
     final set = copyOf == null
@@ -195,6 +333,7 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
     return set;
   }
 
+  /// Removing the only set of an exercise removes the exercise.
   void removeSet(ExerciseEntry entry, SetEntry set) {
     if (entry.sets.length == 1 && identical(entry.sets.first, set)) { // Removing the only set of an exercise removes the exercise.
       removeExercise(entry);
@@ -281,6 +420,13 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
           state.isEmpty ? <String, dynamic>{} : state.toStorage(),
         );
   }
+}
+
+int initialSetCount(RoutineSlot slot, String exercise) {
+  final option = slot.optionFor(exercise);
+  final text = option == null ? slot.defaultSets : slot.targetFor(option).sets;
+  final planned = int.tryParse(text.trim()) ?? 1;
+  return planned.clamp(1, 10).toInt();
 }
 
 ExerciseType exerciseTypeFor(

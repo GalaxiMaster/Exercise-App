@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/Add_Workout/achievement_popup.dart';
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
+import 'package:exercise_app/Pages/Add_Workout/slot_picker.dart';
 import 'package:exercise_app/Pages/Add_Workout/timer.dart';
 import 'package:exercise_app/Pages/Add_Workout/workout_draft_notifier.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
@@ -23,11 +24,14 @@ class AddWorkout extends ConsumerStatefulWidget {
   final bool editing;
   final WorkoutMetaData? metaData;
 
+  final Map? routine;
+
   const AddWorkout({
     super.key,
     this.initialData,
     this.editing = false,
     this.metaData,
+    this.routine,
   });
 
   @override
@@ -42,6 +46,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     initialData: widget.initialData,
     editing: widget.editing,
     metaData: widget.metaData,
+    routine: widget.routine,
   );
 
   /// Call methods on the draft (add set, swap, validate)
@@ -83,8 +88,8 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         controller: _scrollController,
         child: Column(
           children: [
-            for (final entry in draft.exercises)
-              _buildExerciseCard(entry, settings, history, exercises),
+            for (final item in draft.items)
+              _buildItem(item, settings, history, exercises),
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.center,
@@ -187,19 +192,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     _draft.swapExercise(entry, newName);
   }
 
-  void _confirm() {
-    if (_draft.validate()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ConfirmWorkout(
-            data: _state.toDetails(),
-            editing: widget.editing,
-          ),
-        ),
-      );
-    } else {
-      showDialog(
+  Future<void> _confirm() async {
+    if (!_draft.validate()) {
+      await showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Invalid Input'),
@@ -212,7 +207,45 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           ],
         ),
       );
+      return;
     }
+
+    // Unchosen routine slots are dropped from the saved workout.
+    final unfilled = _state.pendingSlots.length;
+    if (unfilled > 0) {
+      final finish = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Slots not filled'),
+          content: Text(
+            unfilled == 1
+                ? '1 routine slot has no exercise chosen. Finish without it?'
+                : '$unfilled routine slots have no exercise chosen. Finish without them?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Go back'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Finish anyway'),
+            ),
+          ],
+        ),
+      );
+      if (finish != true || !mounted) return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfirmWorkout(
+          data: _state.toDetails(),
+          editing: widget.editing,
+        ),
+      ),
+    );
   }
 
   /// Focus the first field the user needs to fill in on a new set.
@@ -260,6 +293,55 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
       subtitle: subtitle,
       icon: Icons.emoji_events,
     );
+  }
+
+  // routine slots
+
+  Widget _buildItem(
+    WorkoutItem item,
+    WorkoutSettings settings,
+    WorkoutHistory history,
+    Map<String, Exercise> exercises,
+  ) {
+    switch (item) {
+      case ExerciseEntry():
+        return _buildExerciseCard(item, settings, history, exercises);
+      case PendingSlot():
+        return PendingSlotCard(
+          key: ValueKey('slot-${item.slot.id}'),
+          slot: item.slot,
+          exercises: exercises,
+          onPick: (exercise) => _pickSlotOption(item, exercise),
+          onSkip: () => _draft.skipSlot(item),
+        );
+    }
+  }
+
+  void _pickSlotOption(PendingSlot pending, String exercise) {
+    if (_draft.pickOption(pending, exercise)) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('That exercise is already in this workout')),
+    );
+  }
+
+  /// Swap between the options of the routine slot this exercise came from.
+  Future<void> _switchWithinSlot(ExerciseEntry entry) async {
+    final slot = entry.slot;
+    if (slot == null) return;
+
+    final chosen = await showSlotOptionSheet(
+      context,
+      slot: slot,
+      exercises: ref.read(exercisesProvider),
+      current: entry.name,
+    );
+    if (!mounted || chosen == null || chosen == entry.name) return;
+
+    if (!_draft.swapExercise(entry, chosen)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('That exercise is already in this workout')),
+      );
+    }
   }
 
   // exercise card
@@ -317,7 +399,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: GestureDetector(
-                      onTap: () => _switchExerciseInGroup(entry),
+                      onTap: () => (entry.slot?.options.length ?? 0) > 1
+                          ? _switchWithinSlot(entry)
+                          : _switchExerciseInGroup(entry),
                       child: const Icon(Icons.compare_arrows, color: Colors.blueAccent),
                     ),
                   ),
@@ -361,6 +445,9 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           ),
         ),
 
+        // The routine's plan for this exercise
+        if (entry.slot != null) _buildRoutineInfo(entry),
+
         // Notes field
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -393,6 +480,45 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Slot name, planned target and the routine's note for this exercise.
+  /// Read-only: the editable [ExerciseEntry.note] below is what gets saved.
+  Widget _buildRoutineInfo(ExerciseEntry entry) {
+    final colors = Theme.of(context).colorScheme;
+    final target = entry.routineTarget;
+    final label = target == null ? '' : targetLabel(target);
+    final slotTitle = entry.slot!.title.trim();
+    final note = entry.routineNote;
+
+    final parts = [
+      if (slotTitle.isNotEmpty) slotTitle,
+      if (label.isNotEmpty) 'Target $label',
+    ];
+    if (parts.isEmpty && note.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (parts.isNotEmpty)
+            Text(
+              parts.join(' · '),
+              style: TextStyle(fontSize: 13, color: colors.primary),
+            ),
+          if (note.isNotEmpty)
+            Text(
+              note,
+              style: TextStyle(
+                fontSize: 13,
+                fontStyle: FontStyle.italic,
+                color: colors.onSurfaceVariant,
+              ),
+            ),
+        ],
+      ),
     );
   }
 

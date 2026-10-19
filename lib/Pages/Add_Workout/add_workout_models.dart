@@ -1,11 +1,5 @@
-import 'package:flutter/services.dart';
+import 'package:exercise_app/Pages/Routines/routines_draft_notifier.dart';
 import 'package:flutter/widgets.dart';
-
-// =============================================================================
-// Enums: replace the magic strings. Each keeps its original storage string so
-// saved workouts stay compatible. Convert at the boundary only: `parse()` on
-// the way in, `storageName` on the way out. Everywhere else, use the enum.
-// =============================================================================
 
 enum ExerciseType {
   weighted('Weighted'),
@@ -65,13 +59,6 @@ enum SetField {
   /// Allowed-input regex for the text field.
   final String inputPattern;
 }
-
-// =============================================================================
-// SetEntry / ExerciseEntry: one object per set / exercise. A set owns
-// everything that used to live in six parallel maps (controllers, focus nodes,
-// tick state, PR flag, error flags), so add/remove is one operation and
-// disposal lives in one place.
-// =============================================================================
 
 class SetEntry {
   SetEntry({
@@ -180,12 +167,12 @@ class SetEntry {
 
   /// for storage
   Map<String, dynamic> toJson() => {
-    ..._extra,
-    'weight': weightController.text,
-    'reps': repsController.text,
-    'type': type.storageName,
-    'PR': isPR ? 'yes' : 'no',
-  };
+        ..._extra,
+        'weight': weightController.text,
+        'reps': repsController.text,
+        'type': type.storageName,
+        'PR': isPR ? 'yes' : 'no',
+      };
 
   void dispose() {
     if (_disposed) return;
@@ -204,12 +191,22 @@ class SetEntry {
   static double? _parse(String text) => double.tryParse(text.trim());
 }
 
-class ExerciseEntry {
+sealed class WorkoutItem {
+  const WorkoutItem();
+}
+
+class PendingSlot extends WorkoutItem {
+  const PendingSlot(this.slot);
+  final RoutineSlot slot;
+}
+
+class ExerciseEntry extends WorkoutItem {
   ExerciseEntry({
     required this.name,
     required this.type,
     List<SetEntry>? sets,
     this.note = '',
+    this.slot,
   }) : sets = sets ?? [SetEntry.blank(type)];
 
   static int _nextId = 0;
@@ -222,7 +219,20 @@ class ExerciseEntry {
   String note;
   final List<SetEntry> sets;
 
-  /// The number shown for a normal set (discounts warmups)
+  /// The routine slot this exercise was chosen for
+  final RoutineSlot? slot;
+
+  ({String sets, String reps})? get routineTarget {
+    final s = slot;
+    if (s == null) return null;
+    final option = s.optionFor(name);
+    return option == null
+        ? (sets: s.defaultSets, reps: s.defaultReps)
+        : s.targetFor(option);
+  }
+
+  String get routineNote => slot?.optionFor(name)?.note ?? '';
+
   int normalNumberOf(SetEntry set) {
     var count = 0;
     for (final s in sets) {
@@ -244,6 +254,7 @@ class ExerciseEntry {
     }
   }
 }
+
 
 class WorkoutSettings { // todo move the entire settings to models like this instead of just parsing it here
   const WorkoutSettings({

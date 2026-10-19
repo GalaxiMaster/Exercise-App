@@ -291,8 +291,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                 height: 40,
                 onTap: () => attemptStartWorkout(
                   false, // todo check if workout in progress
-                  data: deepCopy(data),
-                  metaData: WorkoutMetaData(routineId: id, color: color)
+                  data: Map<String, dynamic>.from(deepCopy(data)),
+                  metaData: WorkoutMetaData(routineId: id, color: color),
+                  routineMode: true
                 ),
               ),
             ],
@@ -303,11 +304,16 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void attemptStartWorkout(bool workoutInProgress, {Map<String, dynamic>? data, WorkoutMetaData? metaData}) async{
+  void attemptStartWorkout(bool workoutInProgress, {Map<String, dynamic>? data, WorkoutMetaData? metaData, bool routineMode = false}) async{
     void pushExercisePage() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddWorkout(initialData: data != null ? WorkoutDetails.fromJson(data) : null, metaData: metaData,)),
+        MaterialPageRoute(builder: (context) => AddWorkout(
+          initialData: data != null && !routineMode ? 
+            WorkoutDetails.fromJson(data) : null, 
+          metaData: metaData,
+          routine: routineMode ? data : null,
+        )),
       );
       setState(() {
         showExerciseInProgressTile = true;
