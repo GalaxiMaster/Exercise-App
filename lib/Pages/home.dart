@@ -127,7 +127,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             physics: const NeverScrollableScrollPhysics(), // Disable scrolling
                             itemBuilder: (context, index) {
                               MapEntry<String, dynamic> routine = routines.entries.toList()[index];
-                              return _buildRoutineBox(data: routine.value, id: routine.key);
+                              return _buildRoutineBox(data: routine.value, id: routine.key, workoutInProgress: workoutInProgress);
                             },
                           )
                           : const Text("No routines available");
@@ -159,7 +159,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildRoutineBox({
     required Map data,
-    required String id
+    required String id,
+    required bool workoutInProgress,
   }) {
     Color color = HexColor.fromHex(data['data']?['color'] ?? '#9DCEFF');
     String label =  data['data']?['name'] ?? 'Unknown Routine';
@@ -290,7 +291,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: double.infinity,
                 height: 40,
                 onTap: () => attemptStartWorkout(
-                  false, // todo check if workout in progress
+                  workoutInProgress,
                   data: Map<String, dynamic>.from(deepCopy(data)),
                   metaData: WorkoutMetaData(routineId: id, color: color),
                   routineMode: true
