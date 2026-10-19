@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,6 +113,11 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
 }
 
 final workoutDataProvider = AsyncNotifierProvider<WorkoutDataNotifier, Map<String, dynamic>>(WorkoutDataNotifier.new);
+
+final workoutHistoryProvider = Provider<WorkoutHistory>((ref) { // todo split all these providers into different files or at least comment some seperations
+  final Map data = ref.watch(workoutDataProvider).value ?? const {};
+  return WorkoutHistory(data);
+});
 
 class RecordsNotifier extends AsyncNotifier<Map<String, dynamic>> {
   @override
@@ -243,10 +249,7 @@ class CurrentWorkoutNotifier extends Notifier<Map<String, dynamic>> {
   }
 }
 
-final currentWorkoutProvider =
-    NotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(
-  CurrentWorkoutNotifier.new,
-);
+final currentWorkoutProvider = NotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(CurrentWorkoutNotifier.new );
 
 
 

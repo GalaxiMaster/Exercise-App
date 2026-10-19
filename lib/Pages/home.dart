@@ -1,5 +1,5 @@
 import 'package:exercise_app/Pages/routines.dart';
-import 'package:exercise_app/Pages/add_workout.dart';
+import 'package:exercise_app/Pages/Add_Workout/add_workout.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
@@ -140,12 +140,15 @@ class _HomePageState extends ConsumerState<HomePage> {
             if (workoutInProgress && showExerciseInProgressTile)
             Align(
               alignment: Alignment.bottomCenter,
-              child: WorkoutInProgressWidget(
-                hideCallback: () {
-                  setState(() {
-                    showExerciseInProgressTile = false;
-                  });
-                },
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: WorkoutInProgressWidget(
+                  hideCallback: () {
+                    setState(() {
+                      showExerciseInProgressTile = false;
+                    });
+                  },
+                ),
               )
             )
           ],

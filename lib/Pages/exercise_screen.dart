@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:exercise_app/Pages/Add_Workout/timer.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
-import 'package:exercise_app/Pages/add_workout.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Pages/day_screen_individual.dart';
 import 'package:exercise_app/Pages/profile.dart';
