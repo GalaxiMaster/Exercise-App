@@ -9,11 +9,6 @@ String targetLabel(({String sets, String reps}) target) {
   return '${show(target.sets)} x ${show(target.reps)}';
 }
 
-/// A routine slot that has several exercises and none chosen yet. Tap the one
-/// you want and the card turns into that exercise's set table.
-///
-/// Styled like the routine editor's slot card: same fill, corners, divider and
-/// caption, no border.
 class PendingSlotCard extends StatelessWidget {
   const PendingSlotCard({
     super.key,
@@ -25,7 +20,6 @@ class PendingSlotCard extends StatelessWidget {
 
   final RoutineSlot slot;
 
-  /// The exercises map, used to show display names.
   final Map exercises;
   final ValueChanged<String> onPick;
   final VoidCallback onSkip;
@@ -86,9 +80,6 @@ class PendingSlotCard extends StatelessWidget {
   }
 }
 
-/// One exercise in a slot: image, name, routine note and planned target.
-/// Each half of the target is accented when this exercise overrides the slot
-/// default, same as in the routine editor.
 class SlotOptionTile extends StatelessWidget {
   const SlotOptionTile({
     super.key,
@@ -106,8 +97,6 @@ class SlotOptionTile extends StatelessWidget {
   final ({String sets, String reps}) target;
   final VoidCallback onTap;
 
-  /// Highlights the current choice with the same grey tint the group
-  /// switcher uses.
   final bool selected;
 
   @override
@@ -195,39 +184,154 @@ class SlotOptionTile extends StatelessWidget {
   }
 }
 
-/// Bottom sheet listing a slot's exercises, with [current] highlighted like
-/// the group switcher. Returns the chosen exercise id, or null if dismissed.
-Future<String?> showSlotOptionSheet(
+Future<String?> showExerciseSwitcher(
   BuildContext context, {
-  required RoutineSlot slot,
-  required Map exercises,
   required String current,
+  required Map exercises,
+  RoutineSlot? slot,
+  Map? groupMembers,
 }) {
+  final routine = (slot != null && slot.options.length > 1) ? slot : null;
+  final group = (groupMembers != null && groupMembers.length > 1) ? groupMembers : null;
+  if (routine == null && group == null) return Future.value(null);
+
   return showModalBottomSheet<String>(
     context: context,
-    builder: (sheetContext) => SafeArea(
+    builder: (sheetContext) => _ExerciseSwitcherSheet(
+      current: current,
+      exercises: exercises,
+      slot: routine,
+      groupMembers: group,
+    ),
+  );
+}
+
+enum _SwitchSource { routine, group }
+
+class _ExerciseSwitcherSheet extends StatefulWidget {
+  const _ExerciseSwitcherSheet({
+    required this.current,
+    required this.exercises,
+    this.slot,
+    this.groupMembers,
+  });
+
+  final String current;
+  final Map exercises;
+  final RoutineSlot? slot;
+  final Map? groupMembers;
+
+  @override
+  State<_ExerciseSwitcherSheet> createState() => _ExerciseSwitcherSheetState();
+}
+
+class _ExerciseSwitcherSheetState extends State<_ExerciseSwitcherSheet> {
+  late _SwitchSource _source = widget.slot != null ? _SwitchSource.routine : _SwitchSource.group;
+
+  @override
+  Widget build(BuildContext context) {
+    final slot = widget.slot;
+    final group = widget.groupMembers;
+    final hasBoth = slot != null && group != null;
+
+    return SafeArea(
       child: ListView(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Text(
-              slot.title.trim().isEmpty ? 'Switch exercise' : slot.title.trim(),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+            child: hasBoth
+                ? SegmentedButton<_SwitchSource>(
+                    showSelectedIcon: false,
+                    style: const ButtonStyle(visualDensity: VisualDensity.compact),
+                    segments: const [
+                      ButtonSegment(
+                        value: _SwitchSource.routine,
+                        label: Text('Routine options'),
+                      ),
+                      ButtonSegment(
+                        value: _SwitchSource.group,
+                        label: Text('Same group'),
+                      ),
+                    ],
+                    selected: {_source},
+                    onSelectionChanged: (selection) =>
+                        setState(() => _source = selection.first),
+                  )
+                : null
           ),
-          for (final option in slot.options)
-            SlotOptionTile(
-              exercise: option.exercise,
-              name: getDisplayName(exercises, option.exercise),
-              option: option,
-              target: slot.targetFor(option),
-              selected: option.exercise == current,
-              onTap: () => Navigator.pop(sheetContext, option.exercise),
-            ),
+          if (_source == _SwitchSource.routine && slot != null)
+            for (final option in slot.options)
+              SlotOptionTile(
+                exercise: option.exercise,
+                name: getDisplayName(widget.exercises, option.exercise),
+                option: option,
+                target: slot.targetFor(option),
+                selected: option.exercise == widget.current,
+                onTap: () => Navigator.pop(context, option.exercise),
+              )
+          else if (group != null)
+            for (final member in group.entries)
+              _GroupMemberTile(
+                exercise: member.value.toString(),
+                label: member.key.toString(),
+                selected: member.value == widget.current,
+                onTap: () => Navigator.pop(context, member.value.toString()),
+              ),
         ],
       ),
-    ),
-  );
+    );
+  }
+}
+
+/// One member of an exercise group (image and name), the same look the group
+/// switcher always had.
+class _GroupMemberTile extends StatelessWidget {
+  const _GroupMemberTile({
+    required this.exercise,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String exercise;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Material(
+      color: selected ? Colors.grey.withAlpha(50) : Colors.transparent,
+      borderRadius: BorderRadius.circular(10),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: 60,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(
+                  'assets/Exercises/$exercise.png',
+                  height: 50,
+                  width: 50,
+                  errorBuilder: (context, error, stackTrace) => SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Icon(Icons.fitness_center, size: 22, color: colors.onSurfaceVariant),
+                  ),
+                ),
+              ),
+              Expanded(child: Text(label)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

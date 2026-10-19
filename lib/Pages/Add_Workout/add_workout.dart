@@ -41,7 +41,6 @@ class AddWorkout extends ConsumerStatefulWidget {
 class AddWorkoutState extends ConsumerState<AddWorkout> {
   final ScrollController _scrollController = ScrollController();
 
-  /// Created once. The provider family keys on it, so it must not change between builds.
   late final WorkoutSeed _seed = WorkoutSeed(
     initialData: widget.initialData,
     editing: widget.editing,
@@ -118,7 +117,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
     _draft.addExercises(result.selectedExercises);
 
-    final first = result.selectedExercises.first;
+        final first = result.selectedExercises.first;
     final group = ref.read(exercisesProvider)[first]?.group;
     final groupCount = ref.read(exerciseGroupingProvider)[group]?.length ?? 0;
     if (result.listType == ExerciseListType.grouped &&
@@ -324,19 +323,20 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
     );
   }
 
-  /// Swap between the options of the routine slot this exercise came from.
-  Future<void> _switchWithinSlot(ExerciseEntry entry) async {
-    final slot = entry.slot;
-    if (slot == null) return;
-
-    final chosen = await showSlotOptionSheet(
+    Future<void> _openSwitcher(ExerciseEntry entry) async {
+    final exercises = ref.read(exercisesProvider);
+    final groups = ref.read(exerciseGroupingProvider);
+    final Map? members = groups[exercises[entry.name]?.group];
+ 
+    final chosen = await showExerciseSwitcher(
       context,
-      slot: slot,
-      exercises: ref.read(exercisesProvider),
       current: entry.name,
+      exercises: exercises,
+      slot: entry.slot,
+      groupMembers: members,
     );
     if (!mounted || chosen == null || chosen == entry.name) return;
-
+ 
     if (!_draft.swapExercise(entry, chosen)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('That exercise is already in this workout')),
@@ -399,9 +399,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: GestureDetector(
-                      onTap: () => (entry.slot?.options.length ?? 0) > 1
-                          ? _switchWithinSlot(entry)
-                          : _switchExerciseInGroup(entry),
+                      onTap: () => _openSwitcher(entry),
                       child: const Icon(Icons.compare_arrows, color: Colors.blueAccent),
                     ),
                   ),
