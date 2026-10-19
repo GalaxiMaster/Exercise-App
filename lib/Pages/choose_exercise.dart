@@ -53,6 +53,11 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
   final List<String> selectedItems = [];
   bool multiSelect = false;
 
+  // Effective list type for the current query. This can differ from the user's
+  // stored preference (e.g. auto-switches to individual when no groups match),
+  // and is what the toggle displays and what gets returned on pop.
+  ExerciseListType _effectiveListType = ExerciseListType.grouped;
+
   final listTypeProvider = NotifierProvider<ListTypeNotifier, ExerciseListType>(ListTypeNotifier.new);
 
   @override
@@ -79,7 +84,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
           });
         }else{
           if(widget.setting == 'choose' ){
-            Navigator.pop(context, ChooseExerciseResponse([exerciseData.id], ref.read(listTypeProvider)));
+            Navigator.pop(context, ChooseExerciseResponse([exerciseData.id], _effectiveListType));
           }
           else{
             Navigator.push(
@@ -171,6 +176,11 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
 
     final isGrouped = prefersGrouped && hasGroupMatches;
 
+    // Keep the effective type in sync with what's actually being shown.
+    // The stored preference (listTypeProvider) is never modified here, so the
+    // UI switches back automatically once the query matches groups again.
+    _effectiveListType = isGrouped ? ExerciseListType.grouped : ExerciseListType.individual;
+
     final filteredExercisesMap = search(groupedExercises, exercises, customExercises, isGrouped);
 
     final filteredProblemExercises = widget.problemExercises
@@ -181,8 +191,10 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
         title: const Text('Exercise List'),
         actions: [
           GroupedToggleSwitch(
-            isGrouped: ref.read(listTypeProvider) == ExerciseListType.grouped,
-            onChanged: (value) => setState(() => ref.read(listTypeProvider.notifier).set(value ? ExerciseListType.grouped : ExerciseListType.individual)),
+            isGrouped: isGrouped,
+            onChanged: (value) => ref
+                .read(listTypeProvider.notifier)
+                .set(value ? ExerciseListType.grouped : ExerciseListType.individual),
           ),
           IconButton(
             icon: const Icon(Icons.add),
@@ -243,7 +255,7 @@ class _WorkoutListState extends ConsumerState<WorkoutList> {
               child: GestureDetector(
                 onTap: (){
                   if(widget.setting == 'choose' ){
-                    Navigator.pop(context, ChooseExerciseResponse(selectedItems, ref.read(listTypeProvider)));
+                    Navigator.pop(context, ChooseExerciseResponse(selectedItems, _effectiveListType));
                   }
                   else{
                     Navigator.push(
