@@ -305,4 +305,14 @@ class WorkoutHistory {
     }
     return '0';
   }
+
+  int dayKeyCount(String day) {
+    int count = 1;
+    for (int i = 0; i < _data.keys.length; i++) {
+      if (_data.keys.toList()[i]?.split(' ')[0] == day) {
+        count++;
+      }
+    }
+    return count;
+  }
 }

@@ -34,8 +34,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
       stats['Exercises'] += 1;
       for (var set in widget.data.sets[exercise]!) {
         stats['Sets'] += 1;
-        stats['Volume'] += (double.parse(set['weight'].toString()).abs() *
-                double.parse(set['reps'].toString())).abs();
+        stats['Volume'] += (double.parse(set['weight'].toString()).abs() * double.parse(set['reps'].toString())).abs();
       }
     }
     Duration difference = endTime.difference(startTime);
@@ -271,6 +270,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
               minLines: 1,
               maxLines: 2,
               onChanged: (value) {
+                stats['notes'] ??= {};
                 stats['notes']['Workout'] = value;
               },
             ),
@@ -285,15 +285,15 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
               height: 48,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  saveExercises(widget.data.copyWith(
+                  final res = saveExercises(widget.data.copyWith(
                     startTime: startTime.toIso8601String(),
                     endTime: endTime.toIso8601String(),
-                  )).then((res){
-                    if (res != null && context.mounted) {
-                      Navigator.pop(context, res);
-                      Navigator.pop(context, res);
-                    }
-                  });
+                  ));
+                  
+                  if (res != null && context.mounted) {
+                    Navigator.pop(context, res);
+                    Navigator.pop(context, res);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -321,18 +321,14 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     );
   }
 
-  Future<Map<dynamic, dynamic>?> saveExercises(WorkoutDetails workoutStats) async {
+  Map<dynamic, dynamic>? saveExercises(WorkoutDetails workoutStats) {
     String day = DateFormat('yyyy-MM-dd').format(DateTime.parse(workoutStats.startTime));
     String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(workoutStats.startTime));
     String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(workoutStats.endTime!));
 
-    Map allData = await ref.read(workoutDataProvider.future);
-    int num = 1;
-    for (int i = 0; i < allData.keys.length; i++) {
-      if (allData.keys.toList()[i]?.split(' ')[0] == day) {
-        num++;
-      }
-    }
+    final history = ref.read(workoutHistoryProvider);
+
+
     Map<String, dynamic> combinedStats = {
       ...stats, // Spread existing values into a NEW map
       'startTime': startTimeStr,
@@ -344,7 +340,7 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     };
     if (!widget.editing) {
       ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);
-      ref.read(workoutDataProvider.notifier).updateValue('$day $num', data);
+      ref.read(workoutDataProvider.notifier).updateValue('$day ${history.dayKeyCount(day)}', data);
       ref.read(syncServiceProvider).syncData();
       ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
     }

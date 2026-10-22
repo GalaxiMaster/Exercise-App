@@ -4,7 +4,7 @@ import 'package:exercise_app/Pages/Add_Workout/slot_picker.dart';
 import 'package:exercise_app/Pages/Add_Workout/timer.dart';
 import 'package:exercise_app/Pages/Add_Workout/workout_draft_notifier.dart';
 import 'package:exercise_app/Pages/choose_exercise.dart';
-import 'package:exercise_app/Pages/confirm_workout.dart';
+import 'package:exercise_app/Pages/Add_Workout/confirm_workout.dart';
 import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Pages/settings.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
