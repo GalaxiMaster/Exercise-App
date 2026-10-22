@@ -112,15 +112,6 @@ class _AddRoutineState extends ConsumerState<AddRoutine> {
   }
 }
 
-/// One slot:
-///
-///   [drag] 1  Title ______________ [+]
-///   [tab ] ┌────────────────────┐ [tab]
-///          │ Default      3 x 10│ (multi-select)
-///          ├────────────────────┤
-///          │ pic Pushdown 3 x 10│
-///          │ pic Overhead 4 x 8 │
-///          └────────────────────┘
 class _SlotCard extends ConsumerWidget {
   const _SlotCard({
     super.key,
@@ -182,7 +173,6 @@ class _SlotCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header: number, title, "+"
           Row(
             children: [
               SizedBox(
@@ -341,8 +331,7 @@ class _DefaultTargetRow extends StatelessWidget {
   }
 }
 
-/// One exercise in a slot. Each half of the target is grey when inherited
-/// from the slot default and accented when this exercise overrides it.
+
 class _OptionRow extends StatelessWidget {
   const _OptionRow({
     required this.exercise,
@@ -445,8 +434,6 @@ class _OptionRow extends StatelessWidget {
   }
 }
 
-/// Bottom sheet for one exercise: its own sets and reps (empty = use the slot
-/// default), a note, reset and remove.
 class _OptionSheet extends ConsumerStatefulWidget {
   const _OptionSheet({
     required this.seed,
@@ -520,8 +507,7 @@ class _OptionSheetState extends ConsumerState<_OptionSheet> {
                       hintText: hint(slot.defaultSets),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                     ),
-                    onChanged: (v) =>
-                        notifier.setOptionSets(widget.slotId, widget.exercise, v),
+                    onChanged: (v) => notifier.setOptionSets(widget.slotId, widget.exercise, v),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -536,8 +522,7 @@ class _OptionSheetState extends ConsumerState<_OptionSheet> {
                       hintText: hint(slot.defaultReps),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                     ),
-                    onChanged: (v) =>
-                        notifier.setOptionReps(widget.slotId, widget.exercise, v),
+                    onChanged: (v) => notifier.setOptionReps(widget.slotId, widget.exercise, v),
                   ),
                 ),
               ],
@@ -556,8 +541,7 @@ class _OptionSheetState extends ConsumerState<_OptionSheet> {
                 hintText: 'e.g. elbows tucked, slow negative',
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              onChanged: (v) =>
-                  notifier.setOptionNote(widget.slotId, widget.exercise, v),
+              onChanged: (v) => notifier.setOptionNote(widget.slotId, widget.exercise, v),
             ),
             const SizedBox(height: 8),
             Row(

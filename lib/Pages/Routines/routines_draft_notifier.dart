@@ -1,14 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nanoid/nanoid.dart';
 
-// =============================================================================
-// Provider
-// =============================================================================
-
 /// One draft per [RoutineSeed], auto-disposed when the page closes.
 /// The page must create the seed ONCE and reuse it (the family keys on it).
-final routineDraftProvider = NotifierProvider.autoDispose
-    .family<RoutineDraftNotifier, RoutineDraft, RoutineSeed>(
+final routineDraftProvider = NotifierProvider.autoDispose.family<RoutineDraftNotifier, RoutineDraft, RoutineSeed>(
   RoutineDraftNotifier.new,
 );
 
@@ -19,10 +14,6 @@ class RoutineSeed {
 
   final Map? raw;
 }
-
-// =============================================================================
-// Models (immutable)
-// =============================================================================
 
 String? _clean(String? value) {
   final trimmed = value?.trim();
@@ -179,6 +170,7 @@ class RoutineDraft {
   const RoutineDraft({
     required this.id,
     required this.name,
+    required this.color,
     required this.slots,
   });
 
@@ -215,12 +207,14 @@ class RoutineDraft {
     return RoutineDraft(
       id: dataMap['id']?.toString() ?? nanoid(),
       name: dataMap['name']?.toString() ?? '',
+      color: dataMap['color']?.toString(),
       slots: slots,
     );
   }
 
   final String id;
   final String name;
+  final String? color;
   final List<RoutineSlot> slots;
 
   RoutineSlot? slotById(String slotId) {
@@ -230,34 +224,29 @@ class RoutineDraft {
     return null;
   }
 
-  /// Every exercise used anywhere in the routine. An exercise can appear only
-  /// once, because the workout page can't hold the same exercise twice.
+  /// Every exercise used anywhere in the routine. An exercise can appear only once, because the workout page can't hold the same exercise twice.
   Set<String> get usedExercises => {
-        for (final s in slots)
-          for (final o in s.options) o.exercise,
-      };
+    for (final s in slots)
+      for (final o in s.options) o.exercise,
+  };
 
-  RoutineDraft copyWith({String? name, List<RoutineSlot>? slots}) =>
+  RoutineDraft copyWith({String? name, String? color, List<RoutineSlot>? slots}) =>
       RoutineDraft(
         id: id,
         name: name ?? this.name,
+        color: color ?? this.color,
         slots: slots ?? this.slots,
       );
 
-  /// Same outer shape as before (`data` + payload) so `routineDataProvider`
-  /// keeps working. Blank slots are dropped.
+  // Blank slots are dropped.
   Map<String, dynamic> toJson() => {
-        'data': {'name': name.trim()},
-        'slots': [
-          for (final s in slots)
-            if (!s.isBlank) s.toJson(),
-        ],
-      };
+    'data': {'name': name.trim(), 'id': id, 'color': color},
+    'slots': [
+      for (final s in slots)
+        if (!s.isBlank) s.toJson(),
+    ],
+  };
 }
-
-// =============================================================================
-// Notifier
-// =============================================================================
 
 class RoutineDraftNotifier extends Notifier<RoutineDraft> {
   RoutineDraftNotifier(this.seed);
@@ -269,14 +258,13 @@ class RoutineDraftNotifier extends Notifier<RoutineDraft> {
 
   void setName(String name) => state = state.copyWith(name: name);
 
-  // ------------------------------------------------------------------ slots
 
   void addSlot() =>
       state = state.copyWith(slots: [...state.slots, RoutineSlot.empty()]);
 
   void removeSlot(String slotId) => state = state.copyWith(
-        slots: [for (final s in state.slots) if (s.id != slotId) s],
-      );
+    slots: [for (final s in state.slots) if (s.id != slotId) s],
+  );
 
   /// [newIndex] follows Flutter's ReorderableListView convention.
   void moveSlot(int oldIndex, int newIndex) {
@@ -295,11 +283,6 @@ class RoutineDraftNotifier extends Notifier<RoutineDraft> {
   void setDefaultReps(String slotId, String value) =>
       _updateSlot(slotId, (s) => s.copyWith(defaultReps: value));
 
-  // ---------------------------------------------------------------- options
-
-  /// Adds each exercise to the slot as an option that inherits the slot
-  /// default. Exercises already used anywhere in the routine are skipped and
-  /// returned, so the page can tell the user.
   List<String> addExercises(String slotId, Iterable<String> names) {
     final used = {...state.usedExercises};
     final added = <RoutineOption>[];
@@ -338,8 +321,6 @@ class RoutineDraftNotifier extends Notifier<RoutineDraft> {
 
   void resetOption(String slotId, String exercise) =>
       _updateOption(slotId, exercise, (o) => o.withoutOverrides());
-
-  // ---------------------------------------------------------------- private
 
   void _updateSlot(String slotId, RoutineSlot Function(RoutineSlot) change) {
     state = state.copyWith(slots: [

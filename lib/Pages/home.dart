@@ -164,7 +164,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }) {
     Color color = HexColor.fromHex(data['data']?['color'] ?? '#9DCEFF');
     String label =  data['data']?['name'] ?? 'Unknown Routine';
-    String exercises =  data['slots'].map((slot) => slot['title']).join('\n') ?? 'No exercises';
+    String exercises =  data['slots']?.map((slot) => slot['title']).join('\n') ?? 'No exercises';
     return Column(
       children: [
         Container(
