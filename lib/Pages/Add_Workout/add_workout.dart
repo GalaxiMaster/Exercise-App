@@ -583,7 +583,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
                   height: 50,
                   child: Center(
                     child: Text(
-                      set.type.badge ?? '${entry.normalNumberOf(set)}',
+                      set.type.badge ?? '${entry.normalSetNumber(set)}',
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
@@ -684,7 +684,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         color: set.isPR ? colors.primary : colors.onSurface,
       ),
       decoration: InputDecoration(
-        hintText: history.previous(entry.name, index + 1, field, set.type),
+        hintText: history.previous(entry.name, entry.practicalSetNumber(set), field, set.type),
         border: InputBorder.none,
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
       ),
@@ -698,7 +698,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
   }
 
   void _showSetTypeMenu(ExerciseEntry entry, SetEntry set) {
-    final setNumber = entry.sets.indexOf(set) + 1;
+    final setNumber = entry.normalSetNumber(set);
     showModalBottomSheet(
       context: context,
       builder: (sheetContext) => Container(

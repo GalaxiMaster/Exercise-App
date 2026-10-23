@@ -110,6 +110,7 @@ num calculateDifference(num current, num? previous) {
   return current - previous;
 }
 
+// ! Getting depreciated soon
 int getNormalSetNumber(String exercise, int currentIndex, List sets) {
   int normalSetCount = 0;
   

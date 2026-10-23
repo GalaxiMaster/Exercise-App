@@ -233,10 +233,23 @@ class ExerciseEntry extends WorkoutItem {
 
   String get routineNote => slot?.optionFor(name)?.note ?? '';
 
-  int normalNumberOf(SetEntry set) {
+  int normalSetNumber(SetEntry set) {
+    var count = 1;
+    for (final s in sets) {
+      if (identical(s, set)) break;
+      if (s.type != SetType.warmup) count++;
+    }
+    return count;
+  }
+  // counts warmups as their own and the rest of the set types under a different number
+  // name subject to change
+  int practicalSetNumber(SetEntry set) {
     var count = 0;
     for (final s in sets) {
-      if (s.type != SetType.warmup) count++;
+      if (s.type == SetType.warmup && set.type == SetType.warmup // if the set is a warmup, count all warmups
+      || s.type != SetType.warmup && s.type == set.type) {
+        count++;
+      }
       if (identical(s, set)) break;
     }
     return count;
@@ -289,21 +302,51 @@ class WorkoutHistory {
     SetType type,
   ) {
     final key = '$exercise|$setNumber|${field.name}|${type.name}';
-    return _cache.putIfAbsent(key, () => _lookup(exercise, setNumber, field, type));
+    return _cache.putIfAbsent(key, () => _lookupSet(exercise, setNumber, field, type));
   }
 
-  String _lookup(String exercise, int setNumber, SetField field, SetType type) {
+  String _lookupSet(String exercise, int setNumber, SetField field, SetType type) {
     for (final day in _daysNewestFirst) {
       final exerciseSets = _data[day]['sets'];
       if (!exerciseSets.containsKey(exercise)) continue;
       final sets = exerciseSets[exercise] as List;
       if (setNumber - 1 >= sets.length) continue;
-      final set = sets[setNumber - 1];
-      if (set['type'] == type.storageName) {
+      // behaviour: if warmup: return last warmup set, fallback on normal if no warmup found?
+      // fallback not added right now but could be added if needed
+      final segregated = segregateSets(sets);
+      Map? set;
+      switch (type) {
+        case SetType.warmup:
+          if (segregated.warmupSets.isNotEmpty) {
+            set = segregated.warmupSets.elementAtOrNull(setNumber - 1);
+          }
+          break;
+        default:
+          if (segregated.normalSets.isNotEmpty) {
+            set = segregated.normalSets.elementAtOrNull(setNumber - 1);
+          }
+          break;
+      }
+      if (set != null) {
         return (field == SetField.weight ? set['weight'] : set['reps']).toString();
       }
     }
     return '0';
+  }
+
+  ({List warmupSets, List normalSets}) segregateSets(List sets) {
+    final warmupSets = <Map>[];
+    final normalSets = <Map>[];
+
+    for (final set in sets) {
+      if (set['type'] == SetType.warmup.storageName) {
+        warmupSets.add(set);
+      } else {
+        normalSets.add(set);
+      }
+    }
+
+    return (warmupSets: warmupSets, normalSets: normalSets);
   }
 
   int dayKeyCount(String day) {
