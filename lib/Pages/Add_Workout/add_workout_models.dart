@@ -243,11 +243,11 @@ class ExerciseEntry extends WorkoutItem {
   }
   // counts warmups as their own and the rest of the set types under a different number
   // name subject to change
-  int practicalSetNumber(SetEntry set) {
+  int practicalSetCount(SetEntry set) {
     var count = 0;
     for (final s in sets) {
       if (s.type == SetType.warmup && set.type == SetType.warmup // if the set is a warmup, count all warmups
-      || s.type != SetType.warmup && s.type == set.type) {
+      || s.type != SetType.warmup) {
         count++;
       }
       if (identical(s, set)) break;
@@ -276,9 +276,9 @@ class WorkoutSettings { // todo move the entire settings to models like this ins
   });
 
   factory WorkoutSettings.fromMap(Map raw) => WorkoutSettings(
-        tickBoxes: raw['Tick Boxes'] == true,
-        bodyweightText: raw['Bodyweight']?.toString() ?? '0',
-      );
+    tickBoxes: raw['Tick Boxes'] == true,
+    bodyweightText: raw['Bodyweight']?.toString() ?? '0',
+  );
 
   final bool tickBoxes;
   final String bodyweightText;
@@ -334,6 +334,7 @@ class WorkoutHistory {
     return '0';
   }
 
+  // seperates sets into a distinct warmup and normal set list
   ({List warmupSets, List normalSets}) segregateSets(List sets) {
     final warmupSets = <Map>[];
     final normalSets = <Map>[];

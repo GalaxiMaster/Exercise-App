@@ -684,7 +684,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
         color: set.isPR ? colors.primary : colors.onSurface,
       ),
       decoration: InputDecoration(
-        hintText: history.previous(entry.name, entry.practicalSetNumber(set), field, set.type),
+        hintText: history.previous(entry.name, entry.practicalSetCount(set), field, set.type),
         border: InputBorder.none,
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
       ),
