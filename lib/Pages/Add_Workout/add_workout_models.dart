@@ -247,7 +247,7 @@ class ExerciseEntry extends WorkoutItem {
     var count = 0;
     for (final s in sets) {
       if (s.type == SetType.warmup && set.type == SetType.warmup // if the set is a warmup, count all warmups
-      || s.type != SetType.warmup) {
+      || s.type != SetType.warmup && set.type != SetType.warmup) { // if the set is not a warmup, count all non-warmups
         count++;
       }
       if (identical(s, set)) break;
