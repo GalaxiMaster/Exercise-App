@@ -27,15 +27,15 @@ class LoggedSet {
   });
 
   factory LoggedSet.fromJson(Map json) => LoggedSet(
-        type: _parseSetType(json['type']),
-        weightText: json['weight']?.toString() ?? '',
-        repsText: json['reps']?.toString() ?? '',
-        isPR: json['PR'] == 'yes',
-      );
+    type: _parseSetType(json['type']),
+    weightText: json['weight']?.toString() ?? '',
+    repsText: json['reps']?.toString() ?? '',
+    isPR: json['PR'] == 'yes',
+  );
 
   final SetType type;
 
-  /// The text exactly as the user entered it (for display).
+  /// The text exactly as the user entered it (display).
   final String weightText;
   final String repsText;
   final bool isPR;

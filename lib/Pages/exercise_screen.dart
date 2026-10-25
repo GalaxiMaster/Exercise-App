@@ -594,13 +594,13 @@ class _GraphBodyState extends ConsumerState<GraphBody> {
                       ],
                     ),
                     const SizedBox(height: 5),
-                    if (widget.exercises.length > 1)
                     SizedBox(
                       height: 160,
                       child: PageView.builder(
                         physics: exerciseList.length == 1 ? const NeverScrollableScrollPhysics() : null,
                         scrollDirection: Axis.horizontal,
                         controller: pageController,
+                        itemCount: exerciseList.length,
                         itemBuilder: (context, index){
                           final itemIndex = index % exerciseList.length;
                           String exercise = exerciseList.elementAt(itemIndex);
