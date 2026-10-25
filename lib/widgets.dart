@@ -6,6 +6,7 @@ import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 
@@ -774,5 +775,35 @@ class StateFulTimeSinceTextState extends State<StateFulTimeSinceText> {
     final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
 
     return Text('$hours:$minutes:$seconds', style: const TextStyle(color: Colors.white));
+  }
+}
+
+/// An exercise's picture (`assets/Exercises/<id>.png`)
+/// fallback back to the generic profile icon when it has none
+class ExerciseAvatar extends StatelessWidget {
+  const ExerciseAvatar({super.key, required this.exerciseId, this.size = 50});
+
+  final String exerciseId;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/Exercises/$exerciseId.png',
+      height: size,
+      width: size,
+      errorBuilder: (context, error, stackTrace) => SizedBox(
+        height: size,
+        width: size,
+        child: Center(
+          child: SvgPicture.asset(
+            'assets/profile.svg',
+            height: size * 0.7,
+            width: size * 0.7,
+            colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+          ),
+        ),
+      ),
+    );
   }
 }

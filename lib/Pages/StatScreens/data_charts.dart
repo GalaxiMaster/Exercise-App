@@ -17,11 +17,6 @@ class DataCharts extends ConsumerStatefulWidget {
 class _DataChartsState extends ConsumerState<DataCharts> {
   String selectedGraph = 'Pie Chart';
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _updateAndReload(VoidCallback fn) => fn();
 
   @override
