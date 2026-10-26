@@ -148,10 +148,14 @@ class CalendarWidgetState extends ConsumerState<CalendarWidget> {
 
                 if (!widget.exerciseData.containsKey(dayKey)) break;
 
-                String? hex = widget.exerciseData[dayKey]?['stats']?['color'];
 
-                if (hex != null) {
-                  highlightedColors.add(HexColor.fromHex(hex));
+                String? routineId = widget.exerciseData[dayKey]?['stats']?['routineId'];
+
+                if (routineId != null) {
+                  Color? color = ref.read(routineDataProvider.notifier).getColorForRoutine(routineId);
+                  if (color != null) {
+                    highlightedColors.add(color);
+                  }
                 } else {
                   highlightedColors.add(Colors.blue);
                 }
@@ -204,7 +208,7 @@ class CalendarWidgetState extends ConsumerState<CalendarWidget> {
                         '${date.day}',
                         style: TextStyle(
                           fontSize: 19,
-                          color: ((highlightedColors.isNotEmpty ? highlightedColors.first : null)?.computeLuminance() ?? 0) > 0.5
+                          color: averageLuminance(highlightedColors) > 0.4
                             ? Colors.black
                             : Colors.white
                         ),
@@ -219,6 +223,13 @@ class CalendarWidgetState extends ConsumerState<CalendarWidget> {
       ],
     );
   }
+
+  double averageLuminance(List<Color> colors) {
+    if (colors.isEmpty) return 0.0;
+    double totalLuminance = colors.fold(0.0, (sum, color) => sum + color.computeLuminance());
+    return totalLuminance / colors.length;
+  }
+
   Map<String, dynamic> generateHardSweep(List<Color> inputColors) {
     if (inputColors.isEmpty) return {'colors': [Colors.transparent, Colors.transparent], 'stops': [0.0, 1.0]};
     if (inputColors.length == 1) return {'colors': [inputColors[0], inputColors[0]], 'stops': [0.0, 1.0]};

@@ -318,7 +318,7 @@ void main() {
   // ROUTINE DATA PROVIDER
   group('RoutineDataNotifier', () {
     test('updateValue() persists to routines path', () async {
-      await container.read(routineDataProvider.future);
+      container.read(routineDataProvider);
       container
           .read(routineDataProvider.notifier)
           .updateValue('routine_1', {'name': 'Push Day'});
@@ -333,11 +333,11 @@ void main() {
       final c = makeContainer(mockStorage);
       addTearDown(c.dispose);
 
-      await c.read(routineDataProvider.future);
+      c.read(routineDataProvider);
       c.read(routineDataProvider.notifier).deleteRoutine('routine_1');
 
-      final state = c.read(routineDataProvider).value;
-      expect(state?.containsKey('routine_1'), false);
+      final state = c.read(routineDataProvider);
+      expect(state.containsKey('routine_1'), false);
     });
 
     test('updateColor() propagates color to matching workout days', () async {
@@ -362,13 +362,13 @@ void main() {
       addTearDown(c.dispose);
 
       // Read both providers so both build() calls complete
-      await c.read(routineDataProvider.future);
+      await c.read(routineDataProvider);
       await c.read(workoutDataProvider.future);
 
       await c.read(routineDataProvider.notifier).updateColor('routine_1', 'red');
 
-      final routineState = c.read(routineDataProvider).value;
-      expect(routineState?['routine_1']?['data']?['color'], 'red');
+      final routineState = c.read(routineDataProvider);
+      expect(routineState['routine_1']?['data']?['color'], 'red');
 
       final workoutState = c.read(workoutDataProvider).value;
       expect(workoutState?['2024-01-01 A']?['stats']?['color'], 'red');

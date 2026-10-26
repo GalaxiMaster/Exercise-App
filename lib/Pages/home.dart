@@ -33,7 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final routineDataAsync = ref.watch(routineDataProvider);
+    final routines = ref.watch(routineDataProvider);
     bool workoutInProgress = ref.watch(currentWorkoutProvider).isNotEmpty;
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
@@ -116,23 +116,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                       }
                     ),
                     const SizedBox(height: 20),
-                    routineDataAsync.when(
-                      loading: () => const Text("No routines available"),
-                      error: (e, _) => const Text("Error: No routines available"),
-                      data: (routines) {
-                        return routines.isNotEmpty
-                          ? ListView.builder(
-                            itemCount: routines.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-                            itemBuilder: (context, index) {
-                              MapEntry<String, dynamic> routine = routines.entries.toList()[index];
-                              return _buildRoutineBox(data: routine.value, id: routine.key, workoutInProgress: workoutInProgress);
-                            },
-                          )
-                          : const Text("No routines available");
-                      },
-                    )
+                    routines.isNotEmpty
+                      ? ListView.builder(
+                        itemCount: routines.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                        itemBuilder: (context, index) {
+                          MapEntry<String, dynamic> routine = routines.entries.toList()[index];
+                          return _buildRoutineBox(data: routine.value, id: routine.key, workoutInProgress: workoutInProgress);
+                        },
+                      )
+                      : const Text("No routines available")
                   ],
                 ),
               ),

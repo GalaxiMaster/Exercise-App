@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/file_handling.dart';
 import 'package:exercise_app/utils.dart';
@@ -252,31 +254,32 @@ class CurrentWorkoutNotifier extends Notifier<Map<String, dynamic>> {
 final currentWorkoutProvider = NotifierProvider<CurrentWorkoutNotifier, Map<String, dynamic>>(CurrentWorkoutNotifier.new );
 
 
+final routineAsyncProvider = FutureProvider<Map<String, dynamic>>((ref) async {
+  final data = await ref.read(storageServiceProvider).readData(path: 'routines');
+  return Map<String, dynamic>.from(data);
+});
 
-class RoutineDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
+class RoutineDataNotifier extends Notifier<Map<String, dynamic>> {
   @override
-  Future<Map<String, dynamic>> build() async {
-    final storage = ref.read(storageServiceProvider);
-    return await storage.readData(path: 'routines');
+  Map<String, dynamic> build() {
+    return ref.watch(routineAsyncProvider).value ?? {};
   }
 
   void updateValue(String key, dynamic value) {
-    state = AsyncData({
-      ...state.value ?? {},
+    state = {
+      ...state,
       key: value,
-    });
-    state.whenData((data){
-      ref.read(storageServiceProvider).writeData(data, path: 'routines');
-    });
+    };
+    ref.read(storageServiceProvider).writeData(state, path: 'routines');
   }
   
   Future<void> writeState(Map<String, dynamic> data) async {
-    state = AsyncData(data);
+    state = data;
     await ref.read(storageServiceProvider).writeData(data, path: 'routines', append: false);
   }
 
   Future<void> updateColor(String id, String color) async {
-    final currentValue = Map<String, dynamic>.from(state.value ?? {})[id];
+    final currentValue = Map<String, dynamic>.from(state)[id];
     currentValue['data'] = {
       ...Map<String, dynamic>.from(currentValue['data'] ?? {}),
       'color': color,
@@ -293,16 +296,22 @@ class RoutineDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
   }
 
   void deleteRoutine(String key) {
-    Map stateVal = state.value ?? {};
+    Map<String, dynamic> stateVal = state;
     stateVal.remove(key);
-    state = AsyncData({
-      ...stateVal
-    });
+    state = stateVal;
     ref.read(storageServiceProvider).deleteKey(key, path: 'routines');
+  }
+
+  Color? getColorForRoutine(String routineId) {
+    final routineData = state[routineId];
+    if (routineData != null && routineData['data'] != null && routineData['data']['color'] != null) {
+      return HexColor.fromHex(routineData['data']['color']);
+    }
+    return null;
   }
 }
 
-final routineDataProvider = AsyncNotifierProvider<RoutineDataNotifier, Map<String, dynamic>>(RoutineDataNotifier.new);
+final routineDataProvider = NotifierProvider<RoutineDataNotifier, Map<String, dynamic>>(RoutineDataNotifier.new);
 
 class CacheNotifier extends Notifier<Map<String, int>> {
   @override
