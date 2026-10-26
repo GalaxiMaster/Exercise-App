@@ -323,21 +323,11 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
 
   Map<dynamic, dynamic>? saveExercises(WorkoutDetails workoutStats) {
     String day = DateFormat('yyyy-MM-dd').format(DateTime.parse(workoutStats.startTime));
-    String startTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(workoutStats.startTime));
-    String endTimeStr = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(workoutStats.endTime!));
 
     final history = ref.read(workoutHistoryProvider);
+    
+    final data = workoutStats.toJson();
 
-
-    Map<String, dynamic> combinedStats = {
-      ...stats, // Spread existing values into a NEW map
-      'startTime': startTimeStr,
-      'endTime': endTimeStr,
-    };
-    Map<String, dynamic> data = {
-      'stats': combinedStats,
-      'sets': workoutStats.sets
-    };
     if (!widget.editing) {
       ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);
       ref.read(workoutDataProvider.notifier).updateValue('$day ${history.dayKeyCount(day)}', data);

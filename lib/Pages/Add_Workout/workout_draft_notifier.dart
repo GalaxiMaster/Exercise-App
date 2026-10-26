@@ -111,7 +111,7 @@ class WorkoutDraft {
   }
 
   /// What the confirm page expects.
-  WorkoutDetails toDetails() => WorkoutDetails(sets: setsJson, startTime: startTime);
+  WorkoutDetails toDetails() => WorkoutDetails(sets: setsJson, startTime: startTime, routineId: extraStats['routineId']);
 }
 
 
