@@ -38,7 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: myAppBar(context, 'Workout', 
         button: MyIconButton(
-          icon: Icons.person,
+          icon: Icons.person, 
           width: 37,
           height: 37,
           borderRadius: 10,

@@ -43,7 +43,7 @@ class WorkoutDetails {
       ),
       notes: (json['stats']?['notes'] as Map?)
     ?.map((key, value) => MapEntry(key as String, value as String)),
-      routineId: json['stats']?['routineId'] as String,
+      routineId: json['stats']?['routineId'] as String?,
     );
   }
 

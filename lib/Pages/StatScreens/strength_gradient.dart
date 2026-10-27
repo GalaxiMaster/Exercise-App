@@ -1,5 +1,6 @@
+import 'package:exercise_app/Pages/Exercise_screen/exercise_screen.dart';
+import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
-import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';

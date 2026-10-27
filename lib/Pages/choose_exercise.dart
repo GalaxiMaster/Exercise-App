@@ -1,5 +1,5 @@
+import 'package:exercise_app/Pages/Exercise_screen/exercise_screen.dart';
 import 'package:exercise_app/Pages/add_custom_exercise.dart';
-import 'package:exercise_app/Pages/exercise_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/widgets.dart';
