@@ -1,3 +1,4 @@
+import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ final appReadyProvider = FutureProvider<void>((ref) async {
     ref.watch(customExercisesAsyncProvider.future),
     ref.watch(currentWorkoutAsyncProvider.future),
   ]);
+  ref.read(syncServiceProvider).startAutoSync();
 });
 
 class AppStartup extends ConsumerWidget {

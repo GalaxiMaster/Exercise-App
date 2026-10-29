@@ -2,7 +2,6 @@ import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/models/workout_stats.dart';
-import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -331,7 +330,6 @@ class ConfirmWorkoutState extends ConsumerState<ConfirmWorkout> {
     if (!widget.editing) {
       ref.read(recordsProvider.notifier).writeNewRecords(data['sets']);
       ref.read(workoutDataProvider.notifier).updateValue('$day ${history.dayKeyCount(day)}', data);
-      ref.read(syncServiceProvider).syncData();
       ref.read(currentWorkoutProvider.notifier).writeState(<String, dynamic>{});
     }
     return data;

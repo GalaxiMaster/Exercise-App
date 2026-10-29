@@ -90,6 +90,11 @@ class StorageService {
     }
     return settings;
   }
+
+  Future<Box> getBox(String path) {
+    return Hive.openBox(path);
+  }
+
 }
 
 final storageServiceProvider = Provider((ref) => StorageService());

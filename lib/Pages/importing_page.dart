@@ -4,7 +4,6 @@ import 'package:csv/csv.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/Functions/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
-import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +59,6 @@ void _importData(ImportOption option, BuildContext context, WidgetRef ref){
     case ImportOption.strong: 
       _importDataStrong(context, storageProvider);
   }
-  ref.read(syncServiceProvider).syncData();
   ref.invalidate(workoutDataProvider);
 }
 
