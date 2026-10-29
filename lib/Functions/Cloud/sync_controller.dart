@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Functions/file_handling.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +41,7 @@ class SyncService {
       }
     }
   }
+  
   Future<bool?> restoreDataFromCloud(WidgetRef ref) async{
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null){

@@ -5,7 +5,7 @@ import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/Pages/SettingsPages/workout_settings.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/file_handling.dart';
+import 'package:exercise_app/Functions/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';

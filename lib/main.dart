@@ -1,7 +1,7 @@
 import 'package:exercise_app/Pages/nav_shell.dart';
 import 'package:exercise_app/Pages/startup_page.dart';
-import 'package:exercise_app/encryption_controller.dart';
-import 'package:exercise_app/firebase_options.dart';
+import 'package:exercise_app/Functions/encryption_controller.dart';
+import 'package:exercise_app/Functions/Cloud/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

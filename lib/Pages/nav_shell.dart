@@ -34,7 +34,7 @@ class _NavShellState extends State<NavShell> {
         if (nav.canPop()) {
           nav.pop();
         } else {
-          SystemNavigator.pop(); // import 'package:flutter/services.dart'
+          SystemNavigator.pop();
         }
       },
       child: Scaffold(
@@ -43,12 +43,11 @@ class _NavShellState extends State<NavShell> {
           onPageChanged: (i) => _index.value = i,
           children: [
             for (var i = 0; i < 3; i++)
-              KeepAlivePage(
-                child: Navigator(
-                  key: _navKeys[i],
-                  onGenerateRoute: (_) =>
-                      MaterialPageRoute(builder: (_) => roots[i]),
-                ),
+            // KeepAlivePage(
+              Navigator(
+                key: _navKeys[i],
+                onGenerateRoute: (_) =>
+                    MaterialPageRoute(builder: (_) => roots[i]),
               ),
           ],
         ),
@@ -57,6 +56,7 @@ class _NavShellState extends State<NavShell> {
           builder: (_, index, __) => NavigationBar(
             height: 60,
             selectedIndex: index,
+            backgroundColor: Color.fromARGB(255, 13, 13, 13),
             onDestinationSelected: (i) => _controller.animateToPage(i,
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOut),
@@ -73,22 +73,23 @@ class _NavShellState extends State<NavShell> {
 }
 
 /// Keeps each page's state (scroll position, form input) alive when swiped away.
-class KeepAlivePage extends StatefulWidget {
-  final Widget child;
-  const KeepAlivePage({super.key, required this.child});
+/// ! Currently left out, not sure if i want it. Will decide later
+// class KeepAlivePage extends StatefulWidget {
+//   final Widget child;
+//   const KeepAlivePage({super.key, required this.child});
 
-  @override
-  State<KeepAlivePage> createState() => _KeepAlivePageState();
-}
+//   @override
+//   State<KeepAlivePage> createState() => _KeepAlivePageState();
+// }
 
-class _KeepAlivePageState extends State<KeepAlivePage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+// class _KeepAlivePageState extends State<KeepAlivePage>
+//     with AutomaticKeepAliveClientMixin {
+//   @override
+//   bool get wantKeepAlive => true;
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context); // required
-    return widget.child;
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     super.build(context); // required
+//     return widget.child;
+//   }
+// }

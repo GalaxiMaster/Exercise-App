@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/Account/sign_up.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/encryption_controller.dart';
-import 'package:exercise_app/sync_controller.dart';
+import 'package:exercise_app/Functions/encryption_controller.dart';
+import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

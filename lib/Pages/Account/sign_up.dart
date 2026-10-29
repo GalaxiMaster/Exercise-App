@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
-import 'package:exercise_app/encryption_controller.dart';
+import 'package:exercise_app/Functions/encryption_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
