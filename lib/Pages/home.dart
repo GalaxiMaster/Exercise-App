@@ -36,24 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final routines = ref.watch(routineDataProvider);
     bool workoutInProgress = ref.watch(currentWorkoutProvider).isNotEmpty;
     return Scaffold(
-      appBar: myAppBar(context, 'Workout', 
-        button: MyIconButton(
-          icon: Icons.person, 
-          width: 37,
-          height: 37,
-          borderRadius: 10,
-          iconHeight: 20,
-          iconWidth: 20,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => 
-                const Profile()
-              ),
-            );
-          }
-        ),
-      ),
+      appBar: myAppBar(context, 'Workout'),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Stack(

@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/nav_shell.dart';
 import 'package:exercise_app/Pages/startup_page.dart';
 import 'package:exercise_app/encryption_controller.dart';
 import 'package:exercise_app/firebase_options.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'Pages/home.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(fontFamily: 'Poppins'),
-      home: const AppStartup(child: HomePage()),
+      home: const AppStartup(child: NavShell()),
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
         colorScheme: const ColorScheme.dark(
@@ -37,7 +37,7 @@ class MainApp extends StatelessWidget {
         )
       ),
       routes: {
-        '/home': (context) => const HomePage(),
+        '/home': (context) => const NavShell(),
       },
     );
   }
