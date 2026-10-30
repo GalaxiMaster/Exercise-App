@@ -1,10 +1,8 @@
 import 'dart:math';
-
 import 'package:exercise_app/Pages/SettingsPages/calendar_settings.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Providers/providers.dart';
-import 'package:exercise_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
@@ -256,7 +254,7 @@ class CalendarWidgetState extends ConsumerState<CalendarWidget> {
   }
 }
 
-class StreakRestRow extends StatefulWidget {
+class StreakRestRow extends ConsumerStatefulWidget {
   final Map exerciseData;
 
   const StreakRestRow({super.key, required this.exerciseData});
@@ -265,48 +263,20 @@ class StreakRestRow extends StatefulWidget {
   StreakRestRowState createState() => StreakRestRowState();
 }
 
-class StreakRestRowState extends State<StreakRestRow> {
-  late List stats;
-
-  @override
-  void initState() {
-    super.initState();
-    stats = getStats();
-  }
-
-  @override
-  void didUpdateWidget(covariant StreakRestRow oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.exerciseData != widget.exerciseData) {
-      stats = getStats();
-    }
-  }
-
-  List getStats() {
-    if (widget.exerciseData.keys.isEmpty) {
-      return [0, 0];
-    }
-    var rest = DateTime.now().difference(DateTime.parse(widget.exerciseData.keys.toList().last.split(' ')[0])).inDays;
-    int streaks = 0;
-    int week = weekNumber(DateTime.now());
-    List<int> counted = [];
-    for (final day in widget.exerciseData.keys.toList().reversed) { // todo move streaks to the provider
-      final weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
-      if (counted.contains(weekNum)) continue;
-      counted.add(weekNum);
-
-      if (week - weekNum <= 1) {
-        streaks++;
-        week = weekNum;
-      } else {
-        break;
-      }
-    }
-    return [streaks, rest];
-  }
-
+class StreakRestRowState extends ConsumerState<StreakRestRow> {
   @override
   Widget build(BuildContext context) {
+    final restDays = ref.watch(
+      workoutDataProvider.select(
+        (_) => ref.read(workoutDataProvider.notifier).restDays,
+      ),
+    );
+    final streak = ref.watch(
+      workoutDataProvider.select(
+        (_) => ref.read(workoutDataProvider.notifier).streak,
+      ),
+    );
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Row(
@@ -314,13 +284,13 @@ class StreakRestRowState extends State<StreakRestRow> {
         children: [
           _buildStreakRestBox(
             icon: Icons.local_fire_department,
-            label: '${stats[0]} weeks',
+            label: '$streak weeks',
             subLabel: 'Streak',
             color: Colors.orange,
           ),
           _buildStreakRestBox(
             icon: Icons.nights_stay,
-            label: '${stats[1]} days',
+            label: '$restDays days',
             subLabel: 'Rest',
             color: Colors.blue,
           ),

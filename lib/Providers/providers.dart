@@ -56,6 +56,7 @@ final settingsProvider = AsyncNotifierProvider<SettingsNotifier, Map<String, dyn
 class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
   int sessions = 0;
   int streak = 0;
+  int restDays = 0;
   @override
   Future<Map<String, dynamic>> build() async {
     ref.keepAlive();
@@ -96,9 +97,17 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
     int tempStreak = 0;
     List counted = [];
     int week = weekNumber(DateTime.now());
-    List dayKeys = data.keys.toList();
-    dayKeys.sort((a, b) => a.compareTo(b));
-    for (final day in dayKeys.reversed) {
+
+    List dayKeys = data.keys.toList()..sort((b, a) { // custom sort as the trailing number has the potential to be double digits and break standard sort
+      final pa = a.split(' ');
+      final pb = b.split(' ');
+      final byDate = pa[0].compareTo(pb[0]);
+      if (byDate != 0) return byDate;
+      return (int.tryParse(pa.elementAtOrNull(1) ?? '') ?? 1)
+        .compareTo(int.tryParse(pb.elementAtOrNull(1) ?? '') ?? 1);
+    });
+
+    for (final day in dayKeys) { // calculate streak
       final weekNum = weekNumber(DateTime.parse(day.split(' ')[0]));
       if (counted.contains(weekNum)) continue;
       counted.add(weekNum);
@@ -110,6 +119,7 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
         break;
       }
     }
+    restDays = DateTime.now().difference(DateTime.parse(dayKeys.first.split(' ').first)).inDays;
     sessions = data.keys.length;
     streak = tempStreak;
   }

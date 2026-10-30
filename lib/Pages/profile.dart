@@ -65,7 +65,16 @@ class _ProfileState extends ConsumerState<Profile> {
     final allDataAsync = ref.watch(profileChartProvider);
     
     final account = ref.watch(currentUserProvider);
-
+    final streak = ref.watch(
+      workoutDataProvider.select(
+        (_) => ref.read(workoutDataProvider.notifier).streak,
+      ),
+    );
+    final sessions = ref.watch(
+      workoutDataProvider.select(
+        (_) => ref.read(workoutDataProvider.notifier).sessions,
+      ),
+    );
     return Scaffold(
       appBar: myAppBar(context, 'Profile', 
         button: MyIconButton(
@@ -135,7 +144,7 @@ class _ProfileState extends ConsumerState<Profile> {
                                   style: quickStatStyle,
                                   children: [
                                     TextSpan(
-                                      text: ref.watch(workoutDataProvider.notifier.select((notifier)=> notifier.sessions.toString())),
+                                      text: sessions.toString(),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold
                                       )
@@ -154,7 +163,7 @@ class _ProfileState extends ConsumerState<Profile> {
                                   style: quickStatStyle,
                                   children: [
                                     TextSpan(
-                                      text: ref.watch(workoutDataProvider.notifier.select((notifier)=> notifier.streak.toString())),
+                                      text: streak.toString(),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold
                                       )
