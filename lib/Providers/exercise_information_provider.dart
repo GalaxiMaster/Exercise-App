@@ -34,9 +34,12 @@ class CustomExercisesNotifier extends AsyncNotifier<Map<String, Exercise>> {
   @override
   Future<Map<String, Exercise>> build() async {
     ref.keepAlive();
-    final Map<String, dynamic> json =
-        await ref.read(storageServiceProvider).readData(path: 'customExercises');
+    final Map<String, dynamic> json = await ref.read(storageServiceProvider).readData(path: 'customExercises');
 
+    return _fromJson(json);
+  }
+
+  Map<String, Exercise> _fromJson(Map json) {
     return json.map(
       (key, value) => MapEntry(
         key,
@@ -57,6 +60,11 @@ class CustomExercisesNotifier extends AsyncNotifier<Map<String, Exercise>> {
     final updated = {...state.value ?? {}}..remove(key);
     state = AsyncData(updated);
     await ref.read(storageServiceProvider).deleteKey(key, path: 'customExercises');
+  }
+
+  Future<void> writeState(Map<String, dynamic> data) async {
+    await ref.read(storageServiceProvider).writeData(data, path: 'customExercises', append: false);
+    state = AsyncData(_fromJson(data));
   }
 }
 

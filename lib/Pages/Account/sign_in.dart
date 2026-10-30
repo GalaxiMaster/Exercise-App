@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Pages/Account/sign_up.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/Functions/encryption_controller.dart';
@@ -49,13 +50,27 @@ class SignInPageState extends ConsumerState<SignInPage> {
               bool isNew = userCredential.additionalUserInfo?.isNewUser ?? false;
               _encryptionService.writeToSecureStorage(key: 'authIdToken', value: _encryptionService.encrypt(authentication.idToken ?? ''));
               if (isNew) {
-                // TODO createDefaultPermissions(userCredential);
+                // TODO createDefaultPermissions(userCredential); // what
               }
-              await ref.read(syncServiceProvider).restoreDataFromCloud(ref);
-              ref.invalidate(workoutDataProvider);
+
+              /// Sync, merge or overwrite cloud data
+              User? userAccount = FirebaseAuth.instance.currentUser;
+              if (userAccount != null) {
+                bool dataExists = (await FirebaseFirestore.instance
+                  .collection('User Data')
+                  .doc(userAccount.uid).get()).exists;
+
+                if (dataExists) { // show popup...
+                  debugPrint('grabbing and syncing data from cloud');
+                  await ref.read(syncServiceProvider).restoreDataFromCloud(ref);
+                } else {
+                  await ref.read(syncServiceProvider).syncAllData();
+                }
+              }
+
 
               if (mounted) {
-                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.of(context).popUntil((route) => route.isFirst);
               }
             } catch (e, st) {
               errorSnackBar('Error handling authentication event: $e');

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/Functions/file_handling.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -87,10 +88,12 @@ class SyncService {
       Map? data = (await FirebaseFirestore.instance
           .collection('User Data')
           .doc(uuid).get()).data();
-      if (data != null){
+      if (data != null){ // this does activate sync again since its writing to the boxes, idk if thats considered a problem, probably not
         await Future.wait([
-          ref.read(workoutDataProvider.notifier).writeState(data['output']),
-          ref.read(settingsProvider.notifier).writeState(data['settings'])
+          if (data['output'] != null) ref.read(workoutDataProvider.notifier).writeState(data['output']),
+          if (data['settings'] != null) ref.read(settingsProvider.notifier).writeState(data['settings']),
+          if (data['routines'] != null) ref.read(routineDataProvider.notifier).writeState(data['routines']),
+          if (data['customExercises'] != null) ref.read(customExercisesAsyncProvider.notifier).writeState(data['customExercises'])
         ]);
       }
     }
