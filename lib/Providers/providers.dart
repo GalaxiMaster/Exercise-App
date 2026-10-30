@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/Functions/file_handling.dart';
 import 'package:exercise_app/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsNotifier extends AsyncNotifier<Map<String, dynamic>> {
@@ -332,3 +333,15 @@ class CacheNotifier extends Notifier<Map<String, int>> {
 
   void clear() => state = {};
 }
+
+class CurrentUserNotifier extends Notifier<User?> {
+  @override
+  User? build() {
+    final auth = FirebaseAuth.instance;
+    final sub = auth.userChanges().listen((user) => state = user);
+    ref.onDispose(sub.cancel);
+    return auth.currentUser;
+  }
+}
+
+final currentUserProvider = NotifierProvider<CurrentUserNotifier, User?>(CurrentUserNotifier.new);

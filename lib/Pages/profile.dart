@@ -7,7 +7,6 @@ import 'package:exercise_app/Pages/StatScreens/stats.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,13 +25,6 @@ class _ProfileState extends ConsumerState<Profile> {
   num? selectedBarValue;
   String selectedBarWeekDistance = 'This week';
   String unit = 'days';
-  late User? account;
-
-  @override
-  void initState() {
-    super.initState();
-    account = FirebaseAuth.instance.currentUser; // Doesnt refresh after the user signs out, could move to provider
-  }
 
   void alterHeadingBar(double value, String week){
     DateTime te = DateFormat('yyyy MMM dd').parse(week);
@@ -43,9 +35,11 @@ class _ProfileState extends ConsumerState<Profile> {
       selectedBarWeekDistance = distanceInWeeks == 0 ? 'This week' : '$distanceInWeeks weeks ago';
     });
   }
+
   final TextStyle quickStatStyle = TextStyle(
     fontSize: 16
   );
+
   @override
   Widget build(BuildContext context) {
     List<ButtonDetails> buttonDetails = [
@@ -66,10 +60,11 @@ class _ProfileState extends ConsumerState<Profile> {
       case 'weight': unit = 'kg';
       case 'reps': unit = 'reps';
       case 'sets': unit = 'sets';
-
     }
     
     final allDataAsync = ref.watch(profileChartProvider);
+    
+    final account = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: myAppBar(context, 'Profile', 
@@ -104,12 +99,12 @@ class _ProfileState extends ConsumerState<Profile> {
                   children: [
                      CircleAvatar(
                       radius: 35,
-                      foregroundImage: account!.photoURL != null 
-                        ? NetworkImage(account!.photoURL!) 
+                      foregroundImage: account.photoURL != null 
+                        ? NetworkImage(account.photoURL!) 
                         : null,
                       backgroundColor: Colors.blue[700],
                       child: Text(
-                        (account!.email?.substring(0, 1).toUpperCase() ?? 'U'),
+                        (account.email?.substring(0, 1).toUpperCase() ?? 'U'),
                         style: const TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
@@ -126,7 +121,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
-                              account!.displayName ?? '',
+                              account.displayName ?? '',
                               style: TextStyle(
                                 fontSize: 20
                               ),
@@ -140,7 +135,7 @@ class _ProfileState extends ConsumerState<Profile> {
                                   style: quickStatStyle,
                                   children: [
                                     TextSpan(
-                                      text: ref.watch(workoutDataProvider.notifier).sessions.toString(),
+                                      text: ref.watch(workoutDataProvider.notifier.select((notifier)=> notifier.sessions.toString())),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold
                                       )
@@ -159,7 +154,7 @@ class _ProfileState extends ConsumerState<Profile> {
                                   style: quickStatStyle,
                                   children: [
                                     TextSpan(
-                                      text: ref.watch(workoutDataProvider.notifier).streak.toString(),
+                                      text: ref.watch(workoutDataProvider.notifier.select((notifier)=> notifier.streak.toString())),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold
                                       )
