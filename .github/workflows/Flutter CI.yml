@@ -1,43 +1,44 @@
 name: Flutter CI (Off)
 
 on:
-  # push:
-    # branches: [ main ]
+  push:
+    branches: [ main ]
   pull_request:
 
 jobs:
   test-and-build:
+    if: false
     runs-on: ubuntu-latest
 
     # steps:
-#       - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
-#       - name: Setup Flutter
-#         uses: subosito/flutter-action@v2
+      # - name: Setup Flutter
+      #   uses: subosito/flutter-action@v2
 
-#       - name: Install deps
-#         run: flutter pub get
+      # - name: Install deps
+      #   run: flutter pub get
 
-#       - name: Create and decode google-services.json
-#         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > android/app/google-services.json
+      # - name: Create and decode google-services.json
+      #   run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > android/app/google-services.json
         
-#       - name: Create and decode uplaod key
-#         run: echo "${{ secrets.UPLOAD_KEYSTORE_JKS }}" | base64 --decode > android/app/upload-keystore.jks
+      # - name: Create and decode uplaod key
+      #   run: echo "${{ secrets.UPLOAD_KEYSTORE_JKS }}" | base64 --decode > android/app/upload-keystore.jks
         
-#       - name: Create key properties
-#         run: echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+      # - name: Create key properties
+      #   run: echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
         
-#       - name: Create .env
-#         run: echo "${{ secrets.ENV }}" > .env
+      # - name: Create .env
+      #   run: echo "${{ secrets.ENV }}" > .env
 
-#       - name: Run tests
-#         run: flutter test
+      # - name: Run tests
+      #   run: flutter test
 
-#       - name: Build AAB
-#         run: flutter build aab --release
+      # - name: Build AAB
+      #   run: flutter build aab --release
         
-#       - name: Upload bundle
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: app-release
-#           path: build/app/outputs/bundle/release/app-release.aab
+      # - name: Upload bundle
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: app-release
+      #     path: build/app/outputs/bundle/release/app-release.aab

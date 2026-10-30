@@ -1,6 +1,5 @@
 import 'package:exercise_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class Options {
   Map<String, int> timeOptions = {
@@ -154,9 +153,9 @@ bool isBetter(Lift a, Lift b) {
 }
 
 int weekNumber(DateTime date) {
-  int dayOfYear = int.parse(DateFormat("D").format(date));
-  int weekNumber = (dayOfYear - date.weekday + 10) ~/ 7;
-  return weekNumber + (date.year * 52);
+  final d = DateTime.utc(date.year, date.month, date.day);
+  final epochMonday = DateTime.utc(1970, 1, 5);
+  return (d.difference(epochMonday).inDays / 7).floor();
 }
 
 class ButtonDetails {

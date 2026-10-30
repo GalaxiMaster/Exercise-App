@@ -105,7 +105,7 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
 
 class CalendarWidget extends ConsumerStatefulWidget {
   final List<DateTime> highlightedDays;
-  final Map exerciseData;
+  final Map<String, dynamic> exerciseData;
 
   const CalendarWidget({super.key, required this.highlightedDays, required this.exerciseData});
 
@@ -141,13 +141,13 @@ class CalendarWidgetState extends ConsumerState<CalendarWidget> {
 
               List<Color> highlightedColors = [];
 
-              for (int i = 1; i < 10; i++) {
-                String dayKey = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} $i';
+              final String dayPrefix = DateFormat('yyyy-MM-dd').format(date);
+              final List<String> dayKeys = widget.exerciseData.keys.where(
+                (key)=> key.startsWith(dayPrefix)
+              ).toList();
 
-                if (!widget.exerciseData.containsKey(dayKey)) break;
-
-
-                String? routineId = widget.exerciseData[dayKey]?['stats']?['routineId'];
+              for (String key in dayKeys) {
+                String? routineId = widget.exerciseData[key]?['stats']?['routineId'];
 
                 if (routineId != null) {
                   Color? color = ref.read(routineDataProvider.notifier).getColorForRoutine(routineId);
@@ -158,7 +158,6 @@ class CalendarWidgetState extends ConsumerState<CalendarWidget> {
                   highlightedColors.add(Colors.blue);
                 }
               }
-
               final sweepData = generateHardSweep(highlightedColors);
               return GestureDetector(
                 onTap: () {
