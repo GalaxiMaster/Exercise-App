@@ -20,6 +20,8 @@ void main() async{
   runApp(ProviderScope(child: const MainApp()));
 }
 
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -27,8 +29,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(fontFamily: 'Poppins'),
       home: const AppStartup(child: NavShell()),
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
         colorScheme: const ColorScheme.dark(

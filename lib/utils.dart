@@ -1,3 +1,4 @@
+import 'package:exercise_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -196,3 +197,9 @@ extension ColorBrightness on Color {
 }
 
 String getDisplayName(Map exercises, String id) => exercises[id]?.name ?? id;
+
+void showSnackBar(SnackBar snackBar) {
+  scaffoldMessengerKey.currentState
+    ?..hideCurrentSnackBar()
+    ..showSnackBar(snackBar);
+}

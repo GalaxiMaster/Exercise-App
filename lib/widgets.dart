@@ -807,3 +807,15 @@ class ExerciseAvatar extends StatelessWidget {
     );
   }
 }
+
+SnackBar errorSnackBar(String text) => SnackBar(
+  backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
+  content: Text(
+    text,
+    style: const TextStyle(
+      color: Colors.red,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
+  )
+);

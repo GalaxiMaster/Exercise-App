@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exercise_app/Functions/account_functions.dart';
 import 'package:exercise_app/Pages/Account/sign_up.dart';
-import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/Functions/encryption_controller.dart';
-import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,50 +31,9 @@ class SignInPageState extends ConsumerState<SignInPage> {
     ).then((_) {
       _authSub = GoogleSignIn.instance.authenticationEvents.listen(
         (event) async {
-          if (event is GoogleSignInAuthenticationEventSignIn) {
-            final GoogleSignInAccount user = event.user;
-            try {
-              // The API surface for the plugin exposes a synchronous
-              // `authentication` object on the account in this version.
-              final GoogleSignInAuthentication authentication = user.authentication;
-
-              final credential = GoogleAuthProvider.credential(
-                idToken: authentication.idToken,
-              );
-
-              UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-              debugPrint(authentication.idToken);
-              debugPrint('Firebase sign-in complete for ${user.email}');
-              bool isNew = userCredential.additionalUserInfo?.isNewUser ?? false;
-              _encryptionService.writeToSecureStorage(key: 'authIdToken', value: _encryptionService.encrypt(authentication.idToken ?? ''));
-              if (isNew) {
-                // TODO createDefaultPermissions(userCredential); // what
-              }
-
-              /// Sync, merge or overwrite cloud data
-              User? userAccount = FirebaseAuth.instance.currentUser;
-              if (userAccount != null) {
-                bool dataExists = (await FirebaseFirestore.instance
-                  .collection('User Data')
-                  .doc(userAccount.uid).get()).exists;
-
-                if (dataExists) { // show popup...
-                  debugPrint('grabbing and syncing data from cloud');
-                  await ref.read(syncServiceProvider).restoreDataFromCloud(ref);
-                } else {
-                  await ref.read(syncServiceProvider).syncAllData();
-                }
-              }
-
-
-              if (mounted) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              }
-            } catch (e, st) {
-              errorSnackBar('Error handling authentication event: $e');
-              debugPrint('Error handling authentication event: $e');
-              debugPrint('$st');
-            }
+          final ok = await googleSignIn(event, ref, _encryptionService);
+          if (ok && mounted) {
+            Navigator.of(context).popUntil((r) => r.isFirst);
           }
         },
         onError: (e) => debugPrint('Authentication event error: $e'),
@@ -162,63 +119,15 @@ class SignInPageState extends ConsumerState<SignInPage> {
                       width: double.infinity,
                       child: FilledButton(
                         onPressed: () async {
-                          if (_emailController.text.isEmpty ||
-                              _passwordController.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              errorSnackBar('Please fill in all fields'),
-                            );
-                            return;
-                          }
-
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text)) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              errorSnackBar('Invalid email format'),
-                            );
-                            return;
-                          }
-                          try {
-                            await _auth.signInWithEmailAndPassword(
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text,
-                            );
-                            await ref.read(syncServiceProvider).restoreDataFromCloud(ref);
-                            
-                            ref.invalidate(workoutDataProvider);
-
-                            if (!context.mounted) return;
-                            Navigator.popUntil(context, (route) => route.isFirst);
-
-                            _encryptionService.writeToSecureStorage(
-                              key: 'password',
-                              value: _encryptionService.encrypt(_passwordController.text)
-                            );
-                          } on FirebaseAuthException catch (e) {
-                            String message;
-                            switch (e.code) {
-                              case 'invalid-credential':
-                                message = 'Invalid Email or Password';
-                                break;
-                              case 'user-not-found':
-                                message = 'Invalid Email or Password';
-                                break;
-                              case 'invalid-email':
-                                message = 'Invalid email format';
-                                break;
-                              case 'user-disabled':
-                                message = 'This account has been disabled';
-                                break;
-                              default:
-                                message = 'An error occurred: ${e.message}';
-                            }
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              errorSnackBar(message),
-                            );
-                          } catch (e) {
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              errorSnackBar('An unexpected error occurred: $e'),
-                            );
+                          final ok = await emailPassSignIn(
+                            auth: _auth,
+                            emailController: _emailController,
+                            passwordController: _passwordController,
+                            encryptionService: _encryptionService,
+                            ref: ref
+                          );
+                          if (ok && context.mounted) {
+                            Navigator.of(context).popUntil((r) => r.isFirst);
                           }
                         },
                         style: FilledButton.styleFrom(
@@ -319,15 +228,3 @@ class SignInPageState extends ConsumerState<SignInPage> {
     );
   }
 }
-
-SnackBar errorSnackBar(String text) => SnackBar(
-  backgroundColor: const Color.fromRGBO(21, 21, 21, 1),
-  content: Text(
-    text,
-    style: const TextStyle(
-      color: Colors.red,
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-    ),
-  )
-);

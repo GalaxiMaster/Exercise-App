@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/Functions/encryption_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
