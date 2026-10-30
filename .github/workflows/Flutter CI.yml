@@ -1,8 +1,8 @@
 name: Flutter CI (Off)
 
 on:
-  push:
-    branches: [ main ]
+  # push:
+    # branches: [ main ]
   pull_request:
 
 jobs:
