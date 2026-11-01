@@ -119,7 +119,7 @@ class WorkoutDataNotifier extends AsyncNotifier<Map<String, dynamic>> {
         break;
       }
     }
-    restDays = DateTime.now().difference(DateTime.parse(dayKeys.first.split(' ').first)).inDays;
+    restDays = dayKeys.isNotEmpty ? DateTime.now().difference(DateTime.parse(dayKeys.first.split(' ').first)).inDays : 0;
     sessions = data.keys.length;
     streak = tempStreak;
   }

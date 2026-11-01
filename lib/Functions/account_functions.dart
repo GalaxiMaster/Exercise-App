@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:exercise_app/Functions/encryption_controller.dart';
+import 'package:exercise_app/Pages/Account/username_popup.dart';
+import 'package:exercise_app/Pages/Social_Pages/socail_services.dart';
+import 'package:exercise_app/main.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,11 +45,22 @@ Future<bool> googleSignIn(
 }
 
 Future<void> handleCloudData(WidgetRef ref) async {
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  if (uid != null) {
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    final social = SocialService(); // temporarily thrown this in here
+    final profile = await social.getProfile(user.uid);
+    if (profile == null) {
+      final BuildContext? ctx = navigatorKey.currentContext;
+      if (ctx == null && !ctx!.mounted) return; // todo make safer because this sucks
+      String? username = await showUsernameDialog(ctx, required: true);
+      if (username == null) return;
+      await social.setUsernameAndProfile(username, photoUrl: user.photoURL);
+    }
+
     final exists = (await FirebaseFirestore.instance
       .collection('User Data')
-      .doc(uid)
+      .doc(user.uid)
       .get())
     .exists;
 

@@ -21,6 +21,7 @@ void main() async{
 }
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -31,6 +32,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const AppStartup(child: NavShell()),
       scaffoldMessengerKey: scaffoldMessengerKey,
+      navigatorKey: navigatorKey,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
         colorScheme: const ColorScheme.dark(

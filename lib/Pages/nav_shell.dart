@@ -1,3 +1,4 @@
+import 'package:exercise_app/Pages/Social_Pages/feed_page.dart';
 import 'package:exercise_app/Pages/home.dart';
 import 'package:exercise_app/Pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _NavShellState extends State<NavShell> {
 
   @override
   Widget build(BuildContext context) {
-    final roots = [const SizedBox(), const HomePage(),  const Profile()];
+    final roots = [const FeedScreen(), const HomePage(),  const Profile()];
 
     return PopScope(
       canPop: false,
