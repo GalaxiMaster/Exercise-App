@@ -1,5 +1,6 @@
 import 'package:exercise_app/Pages/Add_Workout/add_workout.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart';
+import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_providers.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
@@ -9,6 +10,57 @@ import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
+class WorkoutDetailView extends StatelessWidget {
+  const WorkoutDetailView({
+    super.key,
+    required this.fallbackTitle,
+    required this.summary,
+    required this.exercises,
+    this.workout,       // null while the full workout is still loading
+    this.split = const [],
+    this.onEdit,        // null hides "Edit workout" (friend's workout)
+  });
+
+  final String fallbackTitle;
+  final DaySummary summary;
+  final Map<String, Exercise> exercises;
+  final DayWorkout? workout;
+  final List<MuscleShare> split;
+  final VoidCallback? onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final w = workout;
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (workout != null) ...[_DayHeader(workout: workout!,)],
+          _SummaryRow(summary: summary),
+          const _SectionDivider(),
+          if (w == null)
+            const Padding(
+              padding: EdgeInsets.all(40),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else ...[
+            _MuscleSplitSection(split: split),
+            const _SectionDivider(),
+            _WorkoutTitleRow(onEdit: onEdit),
+            for (final exercise in w.exercises)
+              _ExerciseSection(
+                key: ValueKey(exercise.id),
+                exercise: exercise,
+                name: getDisplayName(exercises, exercise.id),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 
 class IndividualDayScreen extends ConsumerStatefulWidget {
   const IndividualDayScreen({super.key, required this.dayKey});
@@ -58,6 +110,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
     }
 
     final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
+    final split = ref.watch(muscleSplitProvider(_dayKey));
 
     return Scaffold(
       appBar: myAppBar(context, 'Workout Details'),
@@ -68,7 +121,7 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
             _DayHeader(workout: workout),
             _SummaryRow(summary: DaySummary.of(workout)),
             const _SectionDivider(),
-            _MuscleSplitSection(dayKey: _dayKey),
+            _MuscleSplitSection(split: split),
             const _SectionDivider(),
             _WorkoutTitleRow(onEdit: _edit),
             for (final exercise in workout.exercises)
@@ -199,13 +252,12 @@ class _InfoBox extends StatelessWidget {
 }
 
 class _MuscleSplitSection extends ConsumerWidget {
-  const _MuscleSplitSection({required this.dayKey});
+  const _MuscleSplitSection({required this.split});
 
-  final String dayKey;
+  final List<MuscleShare> split;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final split = ref.watch(muscleSplitProvider(dayKey));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +355,7 @@ class _MuscleBar extends StatelessWidget {
 class _WorkoutTitleRow extends StatelessWidget {
   const _WorkoutTitleRow({required this.onEdit});
 
-  final VoidCallback onEdit;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -313,6 +365,7 @@ class _WorkoutTitleRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text('Workout', style: TextStyle(fontSize: 20)),
+          if (onEdit != null)
           InkWell(
             onTap: onEdit,
             child: const Padding(

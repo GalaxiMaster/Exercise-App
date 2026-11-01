@@ -1,10 +1,6 @@
-import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
-import 'package:exercise_app/Providers/exercise_information_provider.dart';
-import 'package:exercise_app/Providers/providers.dart';
+ import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/models/workout_stats.dart';
-import 'package:exercise_app/muscleinformation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 double? _number(String text) => double.tryParse(text.trim());
 
@@ -113,7 +109,29 @@ class DayWorkout {
       ],
     );
   }
-
+  
+  factory DayWorkout.fromMap(
+    String key, Map<String, 
+    dynamic> map, {
+    required ExerciseType Function(String exerciseId) typeOf,
+    }
+  ) {
+    final start = map['stats']['startTime'] as String?;
+    final end = map['stats']['endTime'] as String?;
+    return DayWorkout(
+      key: key,
+      start: start == null ? null : DateTime.tryParse(start),
+      end: end == null ? null : DateTime.tryParse(end),
+            exercises: [
+        for (final item in map['sets'].entries)
+          DayExercise(
+            id: item.key,
+            type: typeOf(item.key),
+            sets: [for (final s in item.value) LoggedSet.fromJson(s)],
+          ),
+      ],
+    );
+  }
 
   final String key;
 
@@ -258,50 +276,3 @@ Exercise? findExerciseById(
   final newKey = newStartTime.split(' ').first;
   return (key: newKey, replacesOld: newKey != oldKey.split(' ').first);
 }
-
-
-/// The stored details for one day, parsed once. Rebuilds only when that day's stored entry changes.
-final dayDetailsProvider = Provider.autoDispose.family<WorkoutDetails?, String>((ref, dayKey) {
-  final raw = ref.watch(workoutDataProvider.select((a) => a.value?[dayKey]));
-  if (raw == null) return null;
-  return WorkoutDetails.fromJson(Map<String, dynamic>.from(raw));
-});
-
-final dayWorkoutProvider =
-    Provider.autoDispose.family<DayWorkout?, String>((ref, dayKey) {
-  final details = ref.watch(dayDetailsProvider(dayKey));
-  if (details == null) return null;
-
-  final exercises = ref.watch(exercisesProvider);
-  final Map custom = ref.watch(customExercisesProvider);
-
-  return DayWorkout.fromDetails(
-    dayKey,
-    details,
-    typeOf: (id) => ExerciseType.parse(
-      findExerciseById(id, exercises: exercises, custom: custom)?.type,
-    ),
-  );
-});
-
-final muscleSplitProvider =
-    Provider.autoDispose.family<List<MuscleShare>, String>((ref, dayKey) {
-  final workout = ref.watch(dayWorkoutProvider(dayKey));
-  if (workout == null) return const [];
-
-  final exercises = ref.watch(exercisesProvider);
-  final Map custom = ref.watch(customExercisesProvider);
-
-  return computeMuscleSplit(
-    setsPerExercise: {
-      for (final e in workout.exercises) e.id: e.sets.length,
-    },
-    profileOf: (id) {
-      final exercise = findExerciseById(id, exercises: exercises, custom: custom);
-      return exercise == null
-          ? null
-          : (primary: exercise.primary, secondary: exercise.secondary);
-    },
-    groups: muscleGroups,
-  );
-});
