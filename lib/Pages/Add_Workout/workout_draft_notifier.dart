@@ -128,7 +128,8 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
 
     final details = seed.initialData;
     final routine = seed.routine;
-
+    final extraStats = seed.metaData?.toMap() ?? {};
+    
     if (details != null) { // Editing an existing workout
       startTime = details.startTime;
       _loadEntries(items, details.sets, details.notes ?? const {});
@@ -154,6 +155,9 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
           layout: layout is List ? layout : null,
         );
       }
+      final stats = Map.of(saved['stats'])..remove('startTime');
+
+      extraStats.addAll(stats);      
     }
 
     // Disposes every entry still in the list
@@ -166,7 +170,7 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
     return WorkoutDraft(
       items: items,
       startTime: startTime,
-      extraStats: {if (seed.metaData != null) ...seed.metaData!.toMap()},
+      extraStats: extraStats,
     );
   }
 
@@ -412,13 +416,12 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
     if (persist) _persist();
   }
 
-  /// Saves the in-progress workout. Editing an old workout isn't saved as a
-  /// draft.
+  /// Saves the in-progress workout. Editing an old workout isn't saved as a draft.
   void _persist() {
     if (seed.editing) return;
     ref.read(currentWorkoutProvider.notifier).writeState(
-          state.isEmpty ? <String, dynamic>{} : state.toStorage(),
-        );
+      state.isEmpty ? <String, dynamic>{} : state.toStorage(),
+    );
   }
 }
 
