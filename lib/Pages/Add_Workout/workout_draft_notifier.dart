@@ -155,7 +155,7 @@ class WorkoutDraftNotifier extends Notifier<WorkoutDraft> {
           layout: layout is List ? layout : null,
         );
       }
-      final stats = Map.of(saved['stats'])..remove('startTime');
+      final stats = Map.of(saved['stats'] ?? {})..remove('startTime');
 
       extraStats.addAll(stats);      
     }
