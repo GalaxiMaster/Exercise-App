@@ -117,7 +117,7 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
 
     _draft.addExercises(result.selectedExercises);
 
-        final first = result.selectedExercises.first;
+    final first = result.selectedExercises.first;
     final group = ref.read(exercisesProvider)[first]?.group;
     final groupCount = ref.read(exerciseGroupingProvider)[group]?.length ?? 0;
     if (result.listType == ExerciseListType.grouped &&
@@ -360,38 +360,42 @@ class AddWorkoutState extends ConsumerState<AddWorkout> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExerciseScreen(exercises: [entry.name]),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/Exercises/${entry.name}.png",
-                      height: 50,
-                      width: 50,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: SvgPicture.asset(
-                            "assets/profile.svg",
-                            height: 35,
-                            width: 35,
-                            colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                      exercises[entry.name]?.name ?? entry.name,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ],
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExerciseScreen(exercises: [entry.name]),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        "assets/Exercises/${entry.name}.png",
+                        height: 50,
+                        width: 50,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: SvgPicture.asset(
+                              "assets/profile.svg",
+                              height: 35,
+                              width: 35,
+                              colorFilter: ColorFilter.mode(Colors.grey.shade900, BlendMode.srcATop),
+                            ),
+                          );
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          exercises[entry.name]?.name ?? entry.name,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Row(
