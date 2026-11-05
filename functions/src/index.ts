@@ -38,9 +38,16 @@ function summarize(authorId: string, workoutId: string, w: any) {
     }
   }
 
-  const { startTime, endTime, ...otherStats } = w.stats ?? {};
+  const { startTime, endTime, exerciseOrder, ...otherStats } = w.stats ?? {};
   const start = parseTime(startTime);
   const end = parseTime(endTime);
+
+  const sets = w.sets ?? {};
+  const order: string[] = exerciseOrder ?? [];
+  const ordered = [
+    ...order.filter((k) => k in sets),
+    ...Object.keys(sets).filter((k) => !order.includes(k)), // fallback for old docs
+  ];
 
   return {
     authorId,
@@ -51,7 +58,7 @@ function summarize(authorId: string, workoutId: string, w: any) {
     setCount,
     prCount,
     data: otherStats,
-    exercises: Object.keys(w.sets ?? {}).map(pretty),
+    exercises: ordered.map(pretty),
   };
 }
 

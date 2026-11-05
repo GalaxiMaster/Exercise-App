@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
@@ -65,8 +66,8 @@ final friendWorkoutProvider = FutureProvider.autoDispose.family<DayWorkout?, ({S
   final Map<String, Exercise> custom = ref.watch(customExercisesProvider);
 
   return data == null ? null : DayWorkout.fromMap(
-    args.key, 
-    data,
+    args.key,
+    fromCloud(data),
     typeOf: (id) => ExerciseType.parse(
       findExerciseById(id, exercises: exercises, custom: custom)?.type,
     ),

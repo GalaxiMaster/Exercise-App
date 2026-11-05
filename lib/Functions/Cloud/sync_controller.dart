@@ -8,6 +8,39 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Firebase doesnt store maps with key order so added a key to preserve exercise order
+Map<String, dynamic> toCloud(Map w) {
+  final m = Map<String, dynamic>.from(w);
+  final sets = m['sets'];
+  if (sets is Map) {
+    final stats = m['stats'] is Map
+        ? Map<String, dynamic>.from(m['stats'] as Map)
+        : <String, dynamic>{};
+    stats['exerciseOrder'] = sets.keys.map((k) => k.toString()).toList();
+    m['stats'] = stats;
+  }
+  return m;
+}
+
+Map<String, dynamic> fromCloud(Map<String, dynamic> w) {
+  final m = Map<String, dynamic>.from(w);
+  final stats = m['stats'] is Map
+      ? Map<String, dynamic>.from(m['stats'] as Map)
+      : null;
+  final order = (stats?.remove('exerciseOrder') as List?)?.cast<String>();
+  if (stats != null) m['stats'] = stats;
+
+  final sets = m['sets'];
+  if (sets is Map && order != null) {
+    final s = Map<String, dynamic>.from(sets);
+    m['sets'] = {
+      for (final k in order) if (s.containsKey(k)) k: s[k],
+      for (final e in s.entries) if (!order.contains(e.key)) e.key: e.value, // safety net
+    };
+  }
+  return m;
+}
+
 class SyncService {
   final StorageService _storage;
   SyncService(this._storage);
@@ -82,7 +115,7 @@ class SyncService {
       for (final id in toPush) {
         final value = box.get(id);
         if (value == null) continue;
-        ops.add((b) => b.set(col.doc(id), Map<String, dynamic>.from(value as Map)));
+        ops.add((b) => b.set(col.doc(id), toCloud(value as Map)));
       }
       for (final id in toDelete) {
         ops.add((b) => b.delete(col.doc(id)));
@@ -129,8 +162,7 @@ class SyncService {
           final col = _workoutsCol(user);
           final ops = <void Function(WriteBatch)>[
             for (final key in box.keys)
-              (b) => b.set(col.doc(key.toString()),
-                  Map<String, dynamic>.from(box.get(key) as Map)),
+              (b) => b.set(col.doc(key.toString()), toCloud(box.get(key) as Map)),
           ];
           await _commitInChunks(ops);
         } else {
@@ -159,7 +191,7 @@ class SyncService {
 
       Map<String, dynamic>? workouts;
       if (workoutSnap.docs.isNotEmpty) {
-        workouts = {for (final d in workoutSnap.docs) d.id: d.data()};
+        workouts = {for (final d in workoutSnap.docs) d.id: fromCloud(d.data())};
       }
 
       _restoring = true;

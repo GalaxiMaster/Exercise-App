@@ -40,6 +40,8 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     super.initState();
 
+    if (_social.me == null) return;
+    
     _scroll.addListener(() {
       if (_scroll.hasClients &&
           _scroll.position.pixels > _scroll.position.maxScrollExtent - 300) {
@@ -199,18 +201,22 @@ Future<void> _load({bool refresh = false}) async {
     ) : Scaffold(
       appBar: AppBar(title: const Text('Feed')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('You must be signed in to view your feed.'),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignInPage())
+        child: SizedBox(
+          height: 200,
+          width: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('You must be signed in to view your feed.'),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInPage())
+                ),
+                child: const Text('Sign in'),
               ),
-              child: const Text('Sign in'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
