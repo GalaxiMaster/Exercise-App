@@ -25,7 +25,7 @@ class FeedService {
 
 class SocialService {
   final _db = FirebaseFirestore.instance;
-  String get me => FirebaseAuth.instance.currentUser!.uid;
+  String? get me => FirebaseAuth.instance.currentUser?.uid;
 
   static String pairId(String a, String b) =>
     a.compareTo(b) < 0 ? '${a}_$b' : '${b}_$a';
@@ -111,7 +111,7 @@ class SocialService {
 
   Future<void> acceptRequest(String fromUid) async {
     final batch = _db.batch();
-    batch.set(_db.collection('friendships').doc(pairId(me, fromUid)), {
+    batch.set(_db.collection('friendships').doc(pairId(me!, fromUid)), {
       'members': [me, fromUid],
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -120,7 +120,7 @@ class SocialService {
   }
 
   Future<void> removeFriend(String uid) =>
-    _db.collection('friendships').doc(pairId(me, uid)).delete();
+    _db.collection('friendships').doc(pairId(me!, uid)).delete();
 
   // Streams
 

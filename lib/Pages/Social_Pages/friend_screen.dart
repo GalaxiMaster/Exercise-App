@@ -38,7 +38,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
   }
 
   Future<void> _loadMyProfile() async {
-    final p = await _social.getProfile(_social.me);
+    if (_social.me == null) return;
+    final p = await _social.getProfile(_social.me!);
     if (mounted) setState(() => _myProfile = p);
   }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen.dart';
 import 'package:exercise_app/Pages/Social_Pages/socail_services.dart';
 import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
@@ -85,9 +86,9 @@ Future<void> _load({bool refresh = false}) async {
   final first = _last == null;
   _loading = true;
   if (mounted) setState(() {});
-
+  if (_social.me == null) return; // user signed out while loading
   try {
-    final snap = await _feed.page(_social.me, after: _last);
+    final snap = await _feed.page(_social.me!, after: _last);
     if (!mounted || gen != _gen) return;
     setState(() {
       if (first) _posts.clear();
@@ -109,7 +110,7 @@ Future<void> _load({bool refresh = false}) async {
   }
 }
 
-  // ---------- Search ----------
+  // Search
 
   void _onSearchChanged(String term) {
     _debounce?.cancel();
@@ -158,11 +159,12 @@ Future<void> _load({bool refresh = false}) async {
     );
   }
 
-  // ---------- UI ----------
+  // UI
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    bool isSignedIn = _social.me != null;
+    return isSignedIn ? Scaffold(
       appBar: AppBar(
         title: _searching
             ? TextField(
@@ -194,6 +196,23 @@ Future<void> _load({bool refresh = false}) async {
         ],
       ),
       body: _searching ? _buildSearchResults() : _buildFeed(),
+    ) : Scaffold(
+      appBar: AppBar(title: const Text('Feed')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('You must be signed in to view your feed.'),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignInPage())
+              ),
+              child: const Text('Sign in'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
