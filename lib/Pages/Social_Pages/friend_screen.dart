@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Pages/Account/username_popup.dart';
-import 'package:exercise_app/Pages/Social_Pages/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/socail_services.dart';
 import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
+import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'workout_card.dart';
 
@@ -231,6 +232,7 @@ class FriendWorkoutsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final routines = SocialService().friendRoutines(uid);
     return Scaffold(
       appBar: AppBar(title: Text(name)),
       body: FutureBuilder<List<FeedWorkout>>(
@@ -246,10 +248,82 @@ class FriendWorkoutsScreen extends StatelessWidget {
           if (workouts.isEmpty) {
             return const Center(child: Text('No workouts yet'));
           }
-          return ListView.builder(
-            itemCount: workouts.length,
-            itemBuilder: (_, i) =>
-                WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Routines',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: ThemeColors.text.withAlpha(150)
+                    )
+                  ),
+                  FutureBuilder<Map<String, dynamic>?>( // tyodo move to provider
+                    future: routines,
+                    builder: (context, routineSnap) {
+                      if (routineSnap.connectionState != ConnectionState.done) {
+                        return const SizedBox.shrink();
+                      }
+                      if (routineSnap.hasError) {
+                        return Center(child: Text('Could not load routines\n${routineSnap.error}'));
+                      }
+                      if (routineSnap.data == null || routineSnap.data!.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      
+                      return SizedBox(
+                        height: 75,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          itemCount: routineSnap.data!.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final routine = routineSnap.data!.values.toList()[index];
+                            return Container(
+                              width: 200,
+                              height: 75,
+                              decoration: BoxDecoration(
+                                color: ThemeColors.container,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(routine['data']['name']),
+                                    Text(routine['slots'].map((slot) => slot['title']).join(', '), style: const TextStyle(fontSize: 10)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        ),
+                      );
+                    },
+                  ),
+                  Text(
+                    'Recent Workouts',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: ThemeColors.text.withAlpha(150)
+                    )
+                  ),
+                  ListView.builder(
+                    itemCount: workouts.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (_, i) =>
+                        WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

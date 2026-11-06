@@ -166,4 +166,9 @@ class SocialService {
     .doc(friendUid)
     .collection('workouts')
     .orderBy('startTime', descending: true);
+
+  Future<Map<String, dynamic>?> friendRoutines(String friendUid) => _db
+    .collection('User Data')
+    .doc(friendUid)
+    .get().then((data)=>data['routines']);
 }

@@ -1,9 +1,9 @@
 import 'package:exercise_app/Pages/Day_Screen_Individual/friend_workout_screen.dart';
-import 'package:exercise_app/Pages/Social_Pages/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/socail_services.dart';
 import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
 import 'package:flutter/material.dart';
 
-class WorkoutCard extends StatelessWidget {
+class WorkoutCard extends StatelessWidget { // todo disable click from friend profile
   final FeedWorkout post;
   final FeedService feed;
   final bool showAuthor;
@@ -49,7 +49,7 @@ class WorkoutCard extends StatelessWidget {
         ),
       ),
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        margin: const EdgeInsets.symmetric(vertical: 6),
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
