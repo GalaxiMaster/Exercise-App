@@ -24,180 +24,183 @@ class RadarChartPage extends ConsumerWidget {
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (data) {
           String timeLabel = ref.watch(chartFilterProvider).timeLabel;
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                child: GestureDetector(
-                  onTap: () async{
-                    var entry = await showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return SelectorPopupMap(options: Options().timeOptions);
-                      },
-                    );
-                    if (entry != null) {
-                      ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key);
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: HexColor.fromHex('151515'),
-                      borderRadius: BorderRadius.circular(50)
-                    ),
-                    height: 50,
-                    width: double.infinity,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            timeLabel,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.white
-                            ),
-                          ),
-                          const Icon(Icons.keyboard_arrow_down, color: Colors.white,)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 352,
-                child: RadarChart(
-                  RadarChartData(
-                    dataSets: [
-                      if (data.length > 1)
-                      RadarDataSet(
-                        fillColor: Colors.grey.withValues(alpha: 0.2),
-                        borderColor: Colors.grey.withValues(alpha: 0.5),
-                        borderWidth: 2,
-                        entryRadius: 3,
-                        dataEntries: data[1]
-                      ),
-                      if (data.isNotEmpty)
-                      RadarDataSet(
-                        fillColor: Colors.blue.withValues(alpha: 0.2),
-                        borderColor: Colors.blue,
-                        borderWidth: 2,
-                        entryRadius: 3,
-                        dataEntries: data[0],
-                      ),
-                    ],
-                    // radarBackgroundColor: Colors.transparent,
-                    radarBorderData: const BorderSide(color: Colors.transparent),
-                    titlePositionPercentageOffset: 0.1,
-                    gridBorderData: const BorderSide(color: Colors.grey),
-                    tickBorderData: const BorderSide(color: Colors.transparent),
-                    ticksTextStyle: const TextStyle(color: Colors.transparent),
-                    tickCount: 200,
-
-                    radarShape: RadarShape.polygon,
-                    getTitle: (index, angle) {
-                      switch (index) {
-                        case 0:
-                          return const RadarChartTitle(text: 'Back');
-                        case 1:
-                          return const RadarChartTitle(text: 'Chest');
-                        case 2:
-                          return const RadarChartTitle(text: 'Shoulders');
-                        case 3:
-                          return const RadarChartTitle(text: 'Arms');
-                        case 4:
-                          return const RadarChartTitle(text: 'Legs');
-                        case 5:
-                          return const RadarChartTitle(text: 'Core');
-                        default:
-                          return const RadarChartTitle(text: '');
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  child: GestureDetector(
+                    onTap: () async{
+                      var entry = await showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SelectorPopupMap(options: Options().timeOptions);
+                        },
+                      );
+                      if (entry != null) {
+                        ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key);
                       }
                     },
-                  ),
-                ),
-              ),
-              statBoxDataProvider.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(child: Text('Error loading data $err')),
-                data: (statTiles) => Wrap(
-                  spacing: 10,
-                  alignment: WrapAlignment.center,
-                  children: statTiles.map<Widget>((element){
-                    return SizedBox(
-                      width: 200,
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                element.title,
-                                style: const TextStyle(color: Colors.white),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HexColor.fromHex('151515'),
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                      height: 50,
+                      width: double.infinity,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              timeLabel,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white
                               ),
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: element.value.toStringAsFixed(0),
-                                    ),
-                                    TextSpan(
-                                      text: element.unit,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    )
-                                  ]
-                                )
-                              ),
-                            
-                              if (timeLabel != 'All Time')
-                              Builder(
-                                builder: (context) {
-                                  Color color = element.change > 0
-                                    ? Colors.green
-                                    : element.change < 0
-                                      ? Colors.red
-                                      : Colors.grey;
-                                  return Row(
-                                    children: [
-                                      Icon(
-                                        element.change > 0
-                                          ? Icons.arrow_upward
-                                          : element.change < 0
-                                            ? Icons.arrow_downward
-                                            : Icons.remove,
-                                        color: color,
-                                        size: 18,
-                                      ),
-                                      if (element.change != 0)
-                                      Text(
-                                        '${element.change.toStringAsFixed(0)} ${element.unit}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: color,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }
-                              ),
-                            ],
-                          ),
+                            ),
+                            const Icon(Icons.keyboard_arrow_down, color: Colors.white,)
+                          ],
                         ),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 352,
+                  child: RadarChart(
+                    RadarChartData(
+                      dataSets: [
+                        if (data.length > 1)
+                        RadarDataSet(
+                          fillColor: Colors.grey.withValues(alpha: 0.2),
+                          borderColor: Colors.grey.withValues(alpha: 0.5),
+                          borderWidth: 2,
+                          entryRadius: 0,
+                          dataEntries: data[1],
+                        ),
+                        if (data.isNotEmpty)
+                        RadarDataSet(
+                          fillColor: Colors.blue.withValues(alpha: 0.2),
+                          borderColor: Colors.blue,
+                          borderWidth: 2,
+                          entryRadius: 0,
+                          dataEntries: data[0],
+                        ),
+                      ],
+
+                      tickCount: 6,
+                      tickBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
+                      ticksTextStyle: const TextStyle(color: Colors.transparent),
+                      radarBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.35), width: 1),
+                      gridBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
+
+                      titlePositionPercentageOffset: 0.1,
+            
+                      radarShape: RadarShape.polygon,
+                      getTitle: (index, angle) {
+                        switch (index) {
+                          case 0:
+                            return const RadarChartTitle(text: 'Back');
+                          case 1:
+                            return const RadarChartTitle(text: 'Chest');
+                          case 2:
+                            return const RadarChartTitle(text: 'Shoulders');
+                          case 3:
+                            return const RadarChartTitle(text: 'Arms');
+                          case 4:
+                            return const RadarChartTitle(text: 'Legs');
+                          case 5:
+                            return const RadarChartTitle(text: 'Core');
+                          default:
+                            return const RadarChartTitle(text: '');
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                statBoxDataProvider.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Center(child: Text('Error loading data $err')),
+                  data: (statTiles) => Wrap(
+                    spacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: statTiles.map<Widget>((element){
+                      return SizedBox(
+                        width: 200,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  element.title,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: element.value.toStringAsFixed(0),
+                                      ),
+                                      TextSpan(
+                                        text: element.unit,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    ]
+                                  )
+                                ),
+                              
+                                if (timeLabel != 'All Time')
+                                Builder(
+                                  builder: (context) {
+                                    Color color = element.change > 0
+                                      ? Colors.green
+                                      : element.change < 0
+                                        ? Colors.red
+                                        : Colors.grey;
+                                    return Row(
+                                      children: [
+                                        Icon(
+                                          element.change > 0
+                                            ? Icons.arrow_upward
+                                            : element.change < 0
+                                              ? Icons.arrow_downward
+                                              : Icons.remove,
+                                          color: color,
+                                          size: 18,
+                                        ),
+                                        if (element.change != 0)
+                                        Text(
+                                          '${element.change.toStringAsFixed(0)} ${element.unit}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: color,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                )
+              ],
+            ),
           );
         }
       )
