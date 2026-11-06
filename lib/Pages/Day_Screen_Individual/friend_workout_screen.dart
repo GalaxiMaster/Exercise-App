@@ -1,7 +1,7 @@
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual.dart';
-import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart';
+import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_providers.dart';
-import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
+import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/widgets.dart';

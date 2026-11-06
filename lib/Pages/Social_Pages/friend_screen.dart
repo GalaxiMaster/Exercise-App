@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Pages/Account/username_popup.dart';
 import 'package:exercise_app/Functions/Cloud/socail_services.dart';
-import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
+import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
+import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'workout_card.dart';
 
 class FriendsScreen extends StatefulWidget {
@@ -213,119 +214,99 @@ class _PersonTile extends StatelessWidget {
 }
 
 /// A single friend's recent workouts.
-class FriendWorkoutsScreen extends StatelessWidget {
+class FriendWorkoutsScreen extends ConsumerWidget {
   final String uid, name;
   final FeedService feed;
   const FriendWorkoutsScreen(
       {super.key, required this.uid, required this.name, required this.feed});
 
-  Future<List<FeedWorkout>> _load() async {
-    final snap = await FirebaseFirestore.instance
-        .collection('User Data')
-        .doc(uid)
-        .collection('workouts')
-        .orderBy('stats.startTime', descending: true)
-        .limit(50)
-        .get();
-    return snap.docs.map((d) => FeedWorkout.fromDoc(uid, d)).toList();
-  }
-
   @override
-  Widget build(BuildContext context) {
-    final routines = SocialService().friendRoutines(uid);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userWorkouts = ref.watch(friendWorkoutsProvider(uid));
+    final routines = ref.watch(friendRoutinesProvider(uid));
     return Scaffold(
       appBar: AppBar(title: Text(name)),
-      body: FutureBuilder<List<FeedWorkout>>(
-        future: _load(),
-        builder: (_, snap) {
-          if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snap.hasError) {
-            return Center(child: Text('Could not load workouts\n${snap.error}'));
-          }
-          final workouts = snap.data ?? [];
-          if (workouts.isEmpty) {
-            return const Center(child: Text('No workouts yet'));
-          }
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Routines',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: ThemeColors.text.withAlpha(150)
-                    )
-                  ),
-                  FutureBuilder<Map<String, dynamic>?>( // tyodo move to provider
-                    future: routines,
-                    builder: (context, routineSnap) {
-                      if (routineSnap.connectionState != ConnectionState.done) {
-                        return const SizedBox.shrink();
-                      }
-                      if (routineSnap.hasError) {
-                        return Center(child: Text('Could not load routines\n${routineSnap.error}'));
-                      }
-                      if (routineSnap.data == null || routineSnap.data!.isEmpty) {
-                        return const SizedBox.shrink();
-                      }
-                      
-                      return SizedBox(
+      body: userWorkouts.when(data: (workouts) {
+        return _buildWorkoutsList(workouts, routines);
+      }, error: (error, stackTrace) {
+        return Center(child: Text('Could not load workouts\n$error'));
+      }, loading: () {
+        return const Center(child: CircularProgressIndicator());
+      })
+    );
+  }
+
+  Widget _buildWorkoutsList(List<FeedWorkout> workouts, AsyncValue<Map<String, dynamic>?> routines) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Routines',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: ThemeColors.text.withAlpha(150)
+              )
+            ),
+            routines.when(
+              data: (data) {
+                if (data == null || data.isEmpty) {
+                  return const Center(child: Text('No routines found'));
+                }
+                return SizedBox(
+                  height: 75,
+                  child: ListView.builder(
+                    itemCount: data.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final routine = data.values.toList()[index];
+                      return Container(
+                        width: 200,
                         height: 75,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                          itemCount: routineSnap.data!.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            final routine = routineSnap.data!.values.toList()[index];
-                            return Container(
-                              width: 200,
-                              height: 75,
-                              decoration: BoxDecoration(
-                                color: ThemeColors.container,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(routine['data']['name']),
-                                    Text(routine['slots'].map((slot) => slot['title']).join(', '), style: const TextStyle(fontSize: 10)),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
+                        decoration: BoxDecoration(
+                          color: ThemeColors.container,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(routine['data']['name']),
+                              Text(routine['slots'].map((slot) => slot['title']).join(', '), style: const TextStyle(fontSize: 10)),
+                            ],
+                          ),
                         ),
                       );
-                    },
+                    }
                   ),
-                  Text(
-                    'Recent Workouts',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: ThemeColors.text.withAlpha(150)
-                    )
-                  ),
-                  ListView.builder(
-                    itemCount: workouts.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (_, i) =>
-                        WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
-                  ),
-                ],
-              ),
+                );
+              }, error: (error, stackTrace) {
+                return Center(child: Text('Could not load routines\n$error'));
+              }, loading: () {
+                return const SizedBox.shrink();
+              }
             ),
-          );
-        },
+            Text(
+              'Recent Workouts',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: ThemeColors.text.withAlpha(150)
+              )
+            ),
+            ListView.builder(
+              itemCount: workouts.length,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (_, i) =>
+                  WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,9 +1,9 @@
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
-import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart'; 
 import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {

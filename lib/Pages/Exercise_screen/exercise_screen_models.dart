@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart'; // ExerciseType
-import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart'; // DayWorkout, DayExercise, MuscleProfile
+import 'package:exercise_app/models/day_screen_individual_models.dart'; // DayWorkout, DayExercise, MuscleProfile
 import 'package:exercise_app/models/workout_stats.dart'; // WorkoutDetails
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';

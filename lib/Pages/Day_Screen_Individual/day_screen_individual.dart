@@ -1,5 +1,5 @@
 import 'package:exercise_app/Pages/Add_Workout/add_workout.dart';
-import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart';
+import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_providers.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';

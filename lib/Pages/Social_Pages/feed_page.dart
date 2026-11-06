@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Pages/Account/sign_in.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen.dart';
 import 'package:exercise_app/Functions/Cloud/socail_services.dart';
-import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
+import 'package:exercise_app/models/social_models.dart';
 import 'package:flutter/material.dart';
 import 'workout_card.dart';
 

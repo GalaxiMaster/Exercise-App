@@ -1,6 +1,6 @@
 import 'package:exercise_app/Pages/Day_Screen_Individual/friend_workout_screen.dart';
 import 'package:exercise_app/Functions/Cloud/socail_services.dart';
-import 'package:exercise_app/Pages/Social_Pages/social_models.dart';
+import 'package:exercise_app/models/social_models.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutCard extends StatelessWidget { // todo disable click from friend profile

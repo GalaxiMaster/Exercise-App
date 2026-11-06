@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
-import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual_models.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/models/workout_stats.dart';
 import 'package:exercise_app/muscleinformation.dart';
