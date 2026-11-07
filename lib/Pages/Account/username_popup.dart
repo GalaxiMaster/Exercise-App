@@ -1,4 +1,4 @@
-import 'package:exercise_app/Functions/Cloud/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:flutter/material.dart';
 
 /// Shows the username dialog.

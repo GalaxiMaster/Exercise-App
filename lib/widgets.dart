@@ -819,3 +819,57 @@ SnackBar errorSnackBar(String text) => SnackBar(
     ),
   )
 );
+
+class OverlappingAvatars extends StatelessWidget {
+  final ImageProvider? photo;
+  final ImageProvider? secondaryPhoto;
+  final double radius;
+  final double overlap;
+  final Color backgroundColor;
+
+  const OverlappingAvatars({
+    super.key,
+    this.photo,
+    this.secondaryPhoto,
+    this.radius = 20,
+    this.overlap = 12,
+    this.backgroundColor = Colors.black,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final diameter = radius * 2;
+
+    return SizedBox(
+      width: diameter * 2 - overlap,
+      height: diameter,
+      child: Stack(
+        children: [
+          // Bottom avatar (photo)
+          Positioned(
+            left: 0,
+            child: CircleAvatar(
+              radius: radius,
+              backgroundImage: photo,
+            ),
+          ),
+          // Top avatar (initial), with a border to create the gap
+          Positioned(
+            left: diameter - overlap,
+            child: Container(
+              padding: const EdgeInsets.all(2), // gap thickness
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                shape: BoxShape.circle,
+              ),
+              child: CircleAvatar(
+                radius: radius - 2,
+                backgroundImage: secondaryPhoto,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

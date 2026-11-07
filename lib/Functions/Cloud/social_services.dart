@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedService {
   static const pageSize = 20;
@@ -172,3 +173,7 @@ class SocialService {
     .doc(friendUid)
     .get().then((data)=>data['routines']);
 }
+
+final feedServiceProvider = Provider((ref) {
+  return FeedService();
+});

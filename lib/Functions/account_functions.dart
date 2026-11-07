@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Functions/Cloud/sync_controller.dart';
 import 'package:exercise_app/Functions/encryption_controller.dart';
 import 'package:exercise_app/Pages/Account/username_popup.dart';
-import 'package:exercise_app/Functions/Cloud/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/main.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';

@@ -1,9 +1,12 @@
 import 'package:exercise_app/Pages/Day_Screen_Individual/friend_workout_screen.dart';
-import 'package:exercise_app/Functions/Cloud/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/social_services.dart';
+import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/social_models.dart';
+import 'package:exercise_app/theme_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WorkoutCard extends StatelessWidget { // todo disable click from friend profile
+class WorkoutCard extends ConsumerWidget { // todo disable click from friend profile
   final FeedWorkout post;
   final FeedService feed;
   final bool showAuthor;
@@ -26,7 +29,7 @@ class WorkoutCard extends StatelessWidget { // todo disable click from friend pr
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final mins = post.duration?.inMinutes;
     final stats = [
@@ -36,6 +39,7 @@ class WorkoutCard extends StatelessWidget { // todo disable click from friend pr
       if (post.prCount > 0) '${post.prCount} PRs',
     ].join('  ·  ');
 
+    final friendProfileAsync = ref.watch(friendProfileProvider(post.authorId));
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -54,34 +58,10 @@ class WorkoutCard extends StatelessWidget { // todo disable click from friend pr
           padding: const EdgeInsets.all(14),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             if (showAuthor)
-              FutureBuilder<Map<String, dynamic>?>(
-                future: feed.profile(post.authorId),
-                builder: (_, snap) {
-                  final p = snap.data;
-                  final name = (p?['displayName'] ?? p?['username'] ?? '') as String;
-                  final photo = p?['photoUrl'] as String?;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(children: [
-                      CircleAvatar(
-                        backgroundImage: photo != null ? NetworkImage(photo) : null,
-                        child: photo == null
-                            ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
-                            : null,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(name,
-                                  style: const TextStyle(fontWeight: FontWeight.w600)),
-                              Text(_ago(post.start), style: theme.textTheme.bodySmall),
-                            ]),
-                      ),
-                    ]),
-                  );
-                },
+              friendProfileAsync.when(
+                data: (profile) => _authorHeader(theme, profile: profile),
+                loading: () => _authorHeader(theme, loading: true),
+                error: (_, __) => _authorHeader(theme), // shows '?' avatar and the time, same height
               )
             else
               Padding(
@@ -96,6 +76,54 @@ class WorkoutCard extends StatelessWidget { // todo disable click from friend pr
                   style: theme.textTheme.bodySmall),
           ]),
         ),
+      ),
+    );
+  }
+  Widget _authorHeader(ThemeData theme, {Map<String, dynamic>? profile, bool loading = false}) {
+    final placeholder = ThemeColors.text.withAlpha(50);
+    final name = (profile?['displayName'] ?? profile?['username'] ?? '') as String;
+    final photo = profile?['photoUrl'] as String?;
+
+    Widget bar(double width, double height) => Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: placeholder,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: loading ? placeholder : null,
+            backgroundImage: (!loading && photo != null) ? NetworkImage(photo) : null,
+            child: (!loading && photo == null)
+                ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
+                : null,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: loading
+                ? [
+                    bar(110, 14),
+                    const SizedBox(height: 6),
+                    bar(60, 10),
+                  ]
+                : [
+                    Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
+                    Text(_ago(post.start), style: theme.textTheme.bodySmall),
+                  ],
+            ),
+          ),
+        ],
       ),
     );
   }

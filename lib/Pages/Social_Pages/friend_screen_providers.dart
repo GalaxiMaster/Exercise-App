@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:exercise_app/Functions/Cloud/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/models/social_models.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final friendWorkoutsProvider = FutureProvider.family<List<FeedWorkout>, String>((ref, uid) async {
@@ -16,4 +17,15 @@ final friendWorkoutsProvider = FutureProvider.family<List<FeedWorkout>, String>(
 
 final friendRoutinesProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
   return SocialService().friendRoutines(uid);
+});
+
+final friendProfileProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
+  final feed = ref.read(feedServiceProvider);
+  return feed.profile(uid);
+});
+
+final myProfileProvider = FutureProvider<Map<String, dynamic>?>((ref) async { // move elsewhere perhaps
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+  if (uid == null) return null;
+  return ref.watch(feedServiceProvider).profile(uid);
 });

@@ -1,22 +1,22 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/Account/username_popup.dart';
-import 'package:exercise_app/Functions/Cloud/socail_services.dart';
+import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/theme_colors.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'workout_card.dart';
 
-class FriendsScreen extends StatefulWidget {
+class FriendsScreen extends ConsumerStatefulWidget {
   const FriendsScreen({super.key});
   @override
-  State<FriendsScreen> createState() => _FriendsScreenState();
+  ConsumerState<FriendsScreen> createState() => _FriendsScreenState();
 }
 
-class _FriendsScreenState extends State<FriendsScreen> {
+class _FriendsScreenState extends ConsumerState<FriendsScreen> {
   final _social = SocialService();
-  final _feed = FeedService();
 
   Set<String> _friends = {}, _incoming = {}, _outgoing = {};
   Map<String, dynamic>? _myProfile;
@@ -76,13 +76,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
   }
 
   Widget _header(String text) => Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 4, left: 4),
-        child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold)),
-      );
+    padding: const EdgeInsets.only(top: 20, bottom: 4, left: 4),
+    child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold)),
+  );
 
   @override
   Widget build(BuildContext context) {
     final username = _myProfile?['username'] as String?;
+    final feed = ref.read(feedServiceProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Friends')),
@@ -107,7 +108,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
             for (final uid in _incoming)
               _PersonTile(
                 uid: uid,
-                feed: _feed,
+                feed: feed,
                 trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                   IconButton(
                     tooltip: 'Accept',
@@ -128,7 +129,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
             for (final uid in _outgoing)
               _PersonTile(
                 uid: uid,
-                feed: _feed,
+                feed: feed,
                 trailing: TextButton(
                   onPressed: () => _social.cancelRequest(uid).catchError(_snack),
                   child: const Text('Cancel'),
@@ -145,14 +146,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
           for (final uid in _friends)
             _PersonTile(
               uid: uid,
-              feed: _feed,
+              feed: feed,
               onTap: (name) => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => FriendWorkoutsScreen(uid: uid, name: name, feed: _feed),
+                  builder: (_) => FriendWorkoutsScreen(uid: uid, name: name, feed: feed),
                 ),
               ),
-              trailing: _RemoveMenu(onRemove: (name) => _confirmRemove(uid, name), feed: _feed, uid: uid),
+              trailing: _RemoveMenu(onRemove: (name) => _confirmRemove(uid, name), feed: feed, uid: uid),
             ),
         ],
       ),
@@ -224,10 +225,26 @@ class FriendWorkoutsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userWorkouts = ref.watch(friendWorkoutsProvider(uid));
     final routines = ref.watch(friendRoutinesProvider(uid));
+    final friendProfile = ref.watch(friendProfileProvider(uid));
+    final myProfile = ref.watch(myProfileProvider);
     return Scaffold(
       appBar: AppBar(title: Text(name)),
       body: userWorkouts.when(data: (workouts) {
-        return _buildWorkoutsList(workouts, routines);
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8,
+              children: [
+                _buildPersonHeader(friendProfile.value, workouts),
+                _buildComparisonSection(friendProfile.value, myProfile.value),
+                _buildRoutineList(routines),
+                _buildWorkoutsList(workouts),
+              ],
+            ),
+          ),
+        );
       }, error: (error, stackTrace) {
         return Center(child: Text('Could not load workouts\n$error'));
       }, loading: () {
@@ -235,79 +252,170 @@ class FriendWorkoutsScreen extends ConsumerWidget {
       })
     );
   }
-
-  Widget _buildWorkoutsList(List<FeedWorkout> workouts, AsyncValue<Map<String, dynamic>?> routines) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Routines',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: ThemeColors.text.withAlpha(150)
-              )
+  Widget _buildPersonHeader(Map<String, dynamic>? p, List<FeedWorkout> workouts) {
+    final name = (p?['displayName'] ?? p?['username'] ?? this.name) as String;
+    final photo = p?['photoUrl'] as String?;
+    return  Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: photo != null ? NetworkImage(photo) : null,
+            child: photo == null
+              ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
+              : null,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 18)),
+                Row(
+                  spacing: 20,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Workouts', style: TextStyle(color: ThemeColors.text.withAlpha(125), fontSize: 12)),
+                        Text('${p?['workoutCount'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Sets', style: TextStyle(color: ThemeColors.text.withAlpha(125), fontSize: 12)),
+                        Text('${p?['setCount'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                      ],
+                    )
+                  ]
+                )
+              ],
             ),
-            routines.when(
-              data: (data) {
-                if (data == null || data.isEmpty) {
-                  return const Center(child: Text('No routines found'));
-                }
-                return SizedBox(
-                  height: 75,
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final routine = data.values.toList()[index];
-                      return Container(
-                        width: 200,
-                        height: 75,
-                        decoration: BoxDecoration(
-                          color: ThemeColors.container,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(routine['data']['name']),
-                              Text(routine['slots'].map((slot) => slot['title']).join(', '), style: const TextStyle(fontSize: 10)),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                  ),
-                );
-              }, error: (error, stackTrace) {
-                return Center(child: Text('Could not load routines\n$error'));
-              }, loading: () {
-                return const SizedBox.shrink();
-              }
-            ),
-            Text(
-              'Recent Workouts',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: ThemeColors.text.withAlpha(150)
-              )
-            ),
-            ListView.builder(
-              itemCount: workouts.length,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (_, i) =>
-                  WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
+    );
+  }
+  
+  Widget _buildComparisonSection(Map<String, dynamic>? friendProfileData, Map<String, dynamic>? myProfileData) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Comparison',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: ThemeColors.text.withAlpha(150)
+          )
+        ),
+        Container(
+          height: 60,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: ThemeColors.container,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                OverlappingAvatars(
+                  photo: friendProfileData?['photoUrl'] != null ? NetworkImage(friendProfileData!['photoUrl']) : null, 
+                  secondaryPhoto: myProfileData?['photoUrl'] != null ? NetworkImage(myProfileData!['photoUrl']) : null, 
+                  radius: 15,
+                ),
+                SizedBox(width: 5),
+                Text('Compare'),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, size: 16),
+              ],
+            ),
+          )
+        )
+      ]
+    );
+  }
+
+  Widget _buildRoutineList(AsyncValue<Map<String, dynamic>?> routines) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+                Text(
+          'Routines',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: ThemeColors.text.withAlpha(150)
+          )
+        ),
+        routines.when(
+          data: (data) {
+            if (data == null || data.isEmpty) {
+              return const Center(child: Text('No routines found'));
+            }
+            return SizedBox(
+              height: 75,
+              child: ListView.builder(
+                itemCount: data.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final routine = data.values.toList()[index];
+                  return Container(
+                    width: 200,
+                    height: 75,
+                    decoration: BoxDecoration(
+                      color: ThemeColors.container,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(routine['data']['name']),
+                          Text(routine['slots'].map((slot) => slot['title']).join(', '), style: const TextStyle(fontSize: 10)),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              ),
+            );
+          }, error: (error, stackTrace) {
+            return Center(child: Text('Could not load routines\n$error'));
+          }, loading: () {
+            return const SizedBox.shrink();
+          }
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWorkoutsList(List<FeedWorkout> workouts) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Recent Workouts',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: ThemeColors.text.withAlpha(150)
+          )
+        ),
+        ListView.builder(
+          itemCount: workouts.length,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (_, i) =>
+              WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
+        ),
+      ],
     );
   }
 }
