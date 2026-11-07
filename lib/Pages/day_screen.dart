@@ -24,12 +24,12 @@ class _DayScreenState extends ConsumerState<DayScreen> {
     super.initState();
     date = widget.date;
   }
-  Map<dynamic, dynamic> parseDayKeys(Map workoutData, List dayKeys) {
-    Map data = {};
+  Map<String, Map<String, dynamic>> parseDayKeys(Map<String, dynamic> workoutData, List<String> dayKeys) {
+    Map<String, Map<String, dynamic>> data = {};
     for (String key in dayKeys){
       if (!workoutData.containsKey(key)) continue;
 
-      data[key] = workoutData[key];
+      data[key] = Map<String, dynamic>.from(workoutData[key] as Map);
     }
 
     return data;
@@ -45,7 +45,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
       ),
       body: workoutProvider.when(
         data: (data){
-          Map dayData = parseDayKeys(data, widget.dayKeys);
+          Map<String, Map<String, dynamic>> dayData = parseDayKeys(data, widget.dayKeys);
           return Column(
             children: [
               Flexible(
@@ -72,7 +72,7 @@ class _DayScreenState extends ConsumerState<DayScreen> {
       )
     );
   }
-  Widget dayBox(MapEntry day){
+  Widget dayBox(MapEntry<String, Map<String, dynamic>> day){
     Map exercises = ref.watch(exercisesProvider);
 
     return Padding(
@@ -170,9 +170,11 @@ class _DayScreenState extends ConsumerState<DayScreen> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                  child: Text(
-                    exercises[day.value['sets'].keys.toList()[i]]?.name ?? day.value['sets'].keys.toList()[i]
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5).subtract(const EdgeInsets.only(right: 15)),
+                  child: Expanded( // todo - intention here is to allow the exercise name to wrap but not sure if it does it. havnt tested
+                    child: Text(
+                      exercises[day.value['sets'].keys.toList()[i]]?.name ?? day.value['sets'].keys.toList()[i]
+                    ),
                   ),
                 ),
                 const Spacer(),
