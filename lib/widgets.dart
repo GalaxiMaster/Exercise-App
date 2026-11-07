@@ -873,3 +873,12 @@ class OverlappingAvatars extends StatelessWidget {
     );
   }
 }
+
+Widget bar(double width, double height, {Color? placeholderColor}) => Container(
+  width: width,
+  height: height,
+  decoration: BoxDecoration(
+    color: placeholderColor ?? ThemeColors.text.withAlpha(50),
+    borderRadius: BorderRadius.circular(4),
+  ),
+);

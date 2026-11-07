@@ -182,7 +182,7 @@ class _RemoveMenu extends StatelessWidget {
 }
 
 /// Loads a profile from a uid and shows it as a list tile.
-class _PersonTile extends StatelessWidget {
+class _PersonTile extends ConsumerWidget {
   final String uid;
   final FeedService feed;
   final Widget? trailing;
@@ -190,26 +190,32 @@ class _PersonTile extends StatelessWidget {
   const _PersonTile({required this.uid, required this.feed, this.trailing, this.onTap});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>?>(
-      future: feed.profile(uid),
-      builder: (_, snap) {
-        final p = snap.data;
-        final name = (p?['displayName'] ?? p?['username'] ?? '...') as String;
-        final photo = p?['photoUrl'] as String?;
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundImage: photo != null ? NetworkImage(photo) : null,
-            child: photo == null
-              ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
-              : null,
-          ),
-          title: Text(name),
-          subtitle: p?['username'] != null ? Text('@${p!['username']}') : null,
-          trailing: trailing,
-          onTap: onTap == null ? null : () => onTap!(name),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final friendProfileAsync = ref.watch(friendProfileProvider(uid));
+
+    return friendProfileAsync.when(
+      data: (profile) => _friendTile(profile: profile),
+      loading: () => _friendTile(loading: true),
+      error: (_, __) => _friendTile(), // shows '?' avatar and the time, same height
+    );
+  }
+  Widget _friendTile({Map<String, dynamic>? profile, bool loading = false}) {
+    final name = (profile?['displayName'] ?? profile?['username'] ?? '') as String;
+    final photo = profile?['photoUrl'] as String?;
+    final username = profile?['username'] as String?;
+
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: photo != null ? NetworkImage(photo) : null,
+        backgroundColor: loading ? ThemeColors.text.withAlpha(50) : null,
+        child: photo == null
+          ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
+          : null,
+      ),
+      title: loading ? bar(50, 14) : Text(name),
+      subtitle: username != null ? Text('@$username') : null,
+      trailing: trailing,
+      onTap: onTap == null ? null : () => onTap!(name),
     );
   }
 }

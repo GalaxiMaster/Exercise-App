@@ -3,6 +3,7 @@ import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/theme_colors.dart';
+import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -83,15 +84,6 @@ class WorkoutCard extends ConsumerWidget { // todo disable click from friend pro
     final placeholder = ThemeColors.text.withAlpha(50);
     final name = (profile?['displayName'] ?? profile?['username'] ?? '') as String;
     final photo = profile?['photoUrl'] as String?;
-
-    Widget bar(double width, double height) => Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: placeholder,
-        borderRadius: BorderRadius.circular(4),
-      ),
-    );
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
