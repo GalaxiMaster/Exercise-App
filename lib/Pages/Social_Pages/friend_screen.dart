@@ -191,7 +191,7 @@ class _PersonTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final friendProfileAsync = ref.watch(friendProfileProvider(uid));
+    final friendProfileAsync = ref.watch(userProfileProvider(uid));
 
     return friendProfileAsync.when(
       data: (profile) => _friendTile(profile: profile),
@@ -231,7 +231,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userWorkouts = ref.watch(friendWorkoutsProvider(uid));
     final routines = ref.watch(friendRoutinesProvider(uid));
-    final friendProfile = ref.watch(friendProfileProvider(uid));
+    final friendProfile = ref.watch(userProfileProvider(uid));
     final myProfile = ref.watch(myProfileProvider);
     return Scaffold(
       appBar: AppBar(title: Text(name)),

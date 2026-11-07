@@ -52,7 +52,7 @@ class LoggedSet {
         return '${weightText}s';
       case ExerciseType.weighted:
       case ExerciseType.assisted:
-        return '$weightText x $repsText';
+        return '$weightText kg x $repsText';
     }
   }
 }

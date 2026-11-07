@@ -40,7 +40,7 @@ class WorkoutCard extends ConsumerWidget { // todo disable click from friend pro
       if (post.prCount > 0) '${post.prCount} PRs',
     ].join('  ·  ');
 
-    final friendProfileAsync = ref.watch(friendProfileProvider(post.authorId));
+    final friendProfileAsync = ref.watch(userProfileProvider(post.authorId));
     return GestureDetector(
       onTap: () => Navigator.push(
         context,

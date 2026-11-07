@@ -61,22 +61,21 @@ class FriendWorkoutScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: myAppBar(context, friendName),
-      body: WorkoutDetailView(
-        fallbackTitle: dayKey,
+      appBar: myAppBar(context, 'Workout Details'),
+      body: WorkoutDetailView( 
         summary: workout != null
-            ? DaySummary.of(workout)
-            : DaySummary(
-                duration: preview.duration ?? Duration.zero,
-                volume: preview.volume,
-                prs: preview.prCount,
-                sets: preview.setCount,
-                exercises: preview.exercises.length,
-              ),
+          ? DaySummary.of(workout)
+          : DaySummary(
+              duration: preview.duration ?? Duration.zero,
+              volume: preview.volume,
+              prs: preview.prCount,
+              sets: preview.setCount,
+              exercises: preview.exercises.length,
+            ),
         workout: workout,
         split: split,
         exercises: exercises,
-        // no onEdit: you can't edit a friend's workout
+        authorId: friendUid,
       ),
     );
   }

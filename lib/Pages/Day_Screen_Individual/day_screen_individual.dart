@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/Add_Workout/add_workout.dart';
+import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_providers.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
@@ -7,6 +8,7 @@ import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -14,17 +16,17 @@ import 'package:intl/intl.dart';
 class WorkoutDetailView extends StatelessWidget {
   const WorkoutDetailView({
     super.key,
-    required this.fallbackTitle,
     required this.summary,
     required this.exercises,
+    this.authorId, // owner of the workout
     this.workout,       // null while the full workout is still loading
     this.split = const [],
     this.onEdit,        // null hides "Edit workout" (friend's workout)
   });
 
-  final String fallbackTitle;
   final DaySummary summary;
   final Map<String, Exercise> exercises;
+  final String? authorId;
   final DayWorkout? workout;
   final List<MuscleShare> split;
   final VoidCallback? onEdit;
@@ -36,7 +38,7 @@ class WorkoutDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (workout != null) ...[_DayHeader(workout: workout!,)],
+          if (workout != null) ...[_DayHeader(workout: workout!, authorId: authorId)],
           _SummaryRow(summary: summary),
           const _SectionDivider(),
           if (w == null)
@@ -111,14 +113,14 @@ class _IndividualDayScreenState extends ConsumerState<IndividualDayScreen> {
 
     final Map<String, Exercise> exercises = ref.watch(exercisesProvider);
     final split = ref.watch(muscleSplitProvider(_dayKey));
-
+  
     return Scaffold(
       appBar: myAppBar(context, 'Workout Details'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _DayHeader(workout: workout),
+            _DayHeader(workout: workout, authorId: FirebaseAuth.instance.currentUser?.uid),
             _SummaryRow(summary: DaySummary.of(workout)),
             const _SectionDivider(),
             _MuscleSplitSection(split: split),
@@ -166,47 +168,77 @@ class _SectionDivider extends StatelessWidget {
 }
 
 /// Date and start - end time.
-class _DayHeader extends StatelessWidget {
-  const _DayHeader({required this.workout});
+class _DayHeader extends ConsumerWidget {
+  const _DayHeader({required this.workout, this.authorId});
 
   final DayWorkout workout;
+  final String? authorId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final start = workout.start;
     final end = workout.end;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text(
-            // Falls back to the stored key if the start time can't be read.
-            start == null ? workout.key : DateFormat('EEEE dd MMM yyyy').format(start),
-            style: const TextStyle(fontSize: 28),
-          ),
-        ),
-        if (start != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
-            child: Row(
-              children: [
-                Text(
-                  DateFormat('h:mm a').format(start),
-                  style: const TextStyle(fontSize: 17),
-                ),
-                if (end != null) ...[
-                  const Text('  -  '),
+    final profile = authorId != null ? ref.watch(userProfileProvider(authorId!)).value : null;
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        spacing: 8,
+        children: [
+          if (profile != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 8),
+              child: CircleAvatar(
+                backgroundImage: profile['photoUrl'] != null ? NetworkImage(profile['photoUrl']) : null,
+                radius: 24,
+                child: profile['photoUrl'] == null
+                    ? Text(
+                        (profile['displayName'] ?? profile['username'] ?? '?').toString().isNotEmpty
+                            ? (profile['displayName'] ?? profile['username'] ?? '?').toString()[0].toUpperCase()
+                            : '?',
+                      )
+                    : null,
+              ),
+            )
+          else SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (profile != null)
+              Text(
+                profile['displayName'] ?? profile['username'],
+                style: const TextStyle(fontSize: 20),
+              ),
+              Row(
+                children: [
                   Text(
-                    DateFormat('h:mm a').format(end),
-                    style: const TextStyle(fontSize: 17),
+                    start == null ? workout.key : DateFormat('EEEE, MMM d, yyyy').format(start),
+                    style: TextStyle(
+                      fontSize: profile != null ? 14 : 18
+                    ),
                   ),
+                  SizedBox(width: 8),
+                  if (start != null)
+                  Text(
+                    DateFormat('h:mm a').format(start),
+                    style: TextStyle(
+                      fontSize: profile != null ? 14 : 18
+                    ),
+                  ),
+                  if (end != null) ...[
+                    const Text('  -  '),
+                    Text(
+                      DateFormat('h:mm a').format(end),
+                      style: TextStyle(
+                        fontSize: profile != null ? 14 : 18
+                      ),
+                  ),
+                  ],
                 ],
-              ],
-            ),
+              ),
+            ],
           ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -271,7 +303,7 @@ class _MuscleSplitSection extends ConsumerWidget {
               // Placeholder until other chart types exist.
               Row(
                 children: [
-                  Text('Bar Chart', style: TextStyle(fontSize: 16)),
+                  Text('Bar Chart', style: TextStyle(fontSize: 16, color: Colors.grey)),
                   Icon(Icons.keyboard_arrow_down),
                 ],
               ),
@@ -408,6 +440,27 @@ class _ExerciseSection extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 5),
+          Row (
+            children: [
+              SizedBox(width: 16), // space for the avatar
+              Text(
+                'SET',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: ThemeColors.text.withAlpha(75),
+                ),
+              ),
+              SizedBox(width: 22), // space for the avatar
+              Text(
+                'WEIGHT & REPS',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: ThemeColors.text.withAlpha(75),
+                ),
+              )
+            ],
+          ),
           for (var i = 0; i < exercise.sets.length; i++)
             _SetRow(exercise: exercise, index: i),
         ],
@@ -427,19 +480,24 @@ class _SetRow extends StatelessWidget {
     final set = exercise.sets[index];
 
     return Container(
-      color: index.isOdd ? ThemeColors.bg : ThemeColors.accent,
-      padding: const EdgeInsets.all(20),
+      color: index.isEven ? ThemeColors.bg : ThemeColors.accent.withAlpha(200),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       child: Row(
         children: [
-          Text(
-            set.type.badge ?? '${exercise.normalNumberOf(index)}',
-            style: const TextStyle(fontSize: 24),
+          SizedBox(
+            width: 20,
+            child: Center(
+              child: Text(
+                set.type.badge ?? '${exercise.normalNumberOf(index)}',
+                style: const TextStyle(fontSize: 16),
+              ),
+            )
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Text(
               set.describe(exercise.type),
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         ],

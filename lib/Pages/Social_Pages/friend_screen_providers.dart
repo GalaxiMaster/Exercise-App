@@ -19,7 +19,7 @@ final friendRoutinesProvider = FutureProvider.family<Map<String, dynamic>?, Stri
   return SocialService().friendRoutines(uid);
 });
 
-final friendProfileProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
+final userProfileProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
   final feed = ref.read(feedServiceProvider);
   return feed.profile(uid);
 });
