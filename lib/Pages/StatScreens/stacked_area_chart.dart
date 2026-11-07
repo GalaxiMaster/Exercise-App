@@ -92,7 +92,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<
 
 
           addMuscles(exerciseData.primary ?? {});
-          addMuscles(exerciseData['Secondary'] ?? {});
+          addMuscles(exerciseData.secondary ?? {});
         }
       }
 

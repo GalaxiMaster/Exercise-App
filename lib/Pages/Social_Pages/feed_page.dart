@@ -324,7 +324,10 @@ Future<void> _load({bool refresh = false}) async {
             ),
           );
         }
-        return WorkoutCard(post: _posts[i], feed: _feed);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: WorkoutCard(post: _posts[i], feed: _feed),
+        );
       },
     );
   }
