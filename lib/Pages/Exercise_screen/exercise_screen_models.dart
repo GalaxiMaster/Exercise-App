@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart'; // ExerciseType
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/models/day_screen_individual_models.dart'; // DayWorkout, DayExercise, MuscleProfile
 import 'package:exercise_app/models/workout_stats.dart'; // WorkoutDetails
 import 'package:fl_chart/fl_chart.dart';
@@ -9,24 +10,6 @@ import 'package:intl/intl.dart';
 enum ScaleSetting {
   equalIntervals,
   scaled,
-}
-
-/// What the chart plots. [key] is the string the chart filter stores.
-enum ChartMetric {
-  weight('weight', 'Weight'),
-  volume('volume', 'Volume'),
-  reps('reps', 'Reps'),
-  oneRepMax('1rm', '1rm');
-
-  const ChartMetric(this.key, this.label);
-
-  final String key;
-  final String label;
-
-  static ChartMetric fromKey(String? key) => ChartMetric.values.firstWhere(
-    (m) => m.key == key,
-    orElse: () => ChartMetric.weight,
-  );
 }
 
 /// The exercises a screen contains
@@ -117,11 +100,12 @@ class SetStat {
   /// Brzycki estimate. The formula breaks down at 37 reps (division by zero)
   double get oneRepMax => reps >= 37 ? weight : weight * (36 / (37 - reps)); // todo consider adding another formula as fallback
 
-  double valueFor(ChartMetric metric) => switch (metric) {
-    ChartMetric.weight => weight,
-    ChartMetric.volume => volume,
-    ChartMetric.reps => reps,
-    ChartMetric.oneRepMax => oneRepMax,
+  double valueFor(TargetFilter metric) => switch (metric) {
+    TargetFilter.weight => weight,
+    TargetFilter.volume => volume,
+    TargetFilter.reps => reps,
+    TargetFilter.oneRm => oneRepMax,
+    _ => 0
   };
 
   /// The map shape the old `getStats` returned.
@@ -306,7 +290,7 @@ class ExerciseChart {
     required this.latest,
   });
 
-  final ChartMetric metric;
+  final TargetFilter metric;
 
   final bool bodyweight;
   final ScaleSetting scale;
@@ -319,7 +303,7 @@ class ExerciseChart {
   /// The most recent point, shown until the user touches the chart.
   final ExercisePoint? latest;
 
-  String get unit => (bodyweight || metric == ChartMetric.reps) ? '' : 'kg';
+  String get unit => (bodyweight || metric == TargetFilter.reps) ? '' : 'kg';
 
   ExercisePoint? pointAt(String exercise, String dayKey) {
     for (final line in lines) {
@@ -346,7 +330,7 @@ class ExerciseChart {
 /// spaced evenly, one step per distinct day across all exercises.
 ExerciseChart buildExerciseChart({
   required ExerciseStats stats,
-  required ChartMetric metric,
+  required TargetFilter metric,
   required ScaleSetting scale,
   required Map<String, double> multipliers,
   required ExerciseType Function(String exercise) typeOf,

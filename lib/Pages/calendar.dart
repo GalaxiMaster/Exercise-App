@@ -8,6 +8,13 @@ import 'package:intl/intl.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+enum CalendarTimeOptions {
+  month('Month'), year('Year'), multiYear('Multi year');
+
+  const CalendarTimeOptions(this.label);
+  final String label;
+}
+
 class CalenderScreen extends ConsumerStatefulWidget {
   const CalenderScreen({super.key});
   @override
@@ -16,7 +23,7 @@ class CalenderScreen extends ConsumerStatefulWidget {
 }
 
 class _CalenderScreenState extends ConsumerState<CalenderScreen> {
-  MapEntry selection = MapEntry('Month', 'month');
+  CalendarTimeOptions selection = CalendarTimeOptions.month;
 
   List<DateTime> highlightedDays = [];
   Map exerciseData = {};
@@ -36,10 +43,10 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
         centerTitle: true,
         title: TextButton.icon(
           onPressed: () async {
-            final MapEntry? newCal = await showModalBottomSheet(
+            final CalendarTimeOptions? newCal = await showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return SelectorPopupMap(options: {'Month': 'month', 'Year': 'year', 'Multi Year': 'multiYear'});
+                return SelectorPopupMap(options: CalendarTimeOptions.values);
               },
             );
             if (newCal != null){
@@ -49,7 +56,7 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
             }
           },
           label: Text(
-            selection.key,
+            selection.label,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16
@@ -59,7 +66,7 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
           iconAlignment: IconAlignment.end, 
         ),
         actions: [
-          if (selection.value == 'multiYear')
+          if (selection == CalendarTimeOptions.multiYear)
           IconButton(
             onPressed: () async {
               await Navigator.push(
@@ -83,17 +90,16 @@ class _CalenderScreenState extends ConsumerState<CalenderScreen> {
                   .map((x) => DateTime.parse(x.split(' ')[0]))
                   .toList();
 
-              return switch (selection.value) {
-                'month' => CalendarWidget(
+              return switch (selection) {
+                CalendarTimeOptions.month => CalendarWidget(
                     highlightedDays: highlightedDays,
                     exerciseData: workoutData,
                   ),
-                'year' => buildMonthCalendar(highlightedDays),
-                'multiYear' => MultiYearCalendar(
+                CalendarTimeOptions.year => buildMonthCalendar(highlightedDays),
+                CalendarTimeOptions.multiYear => MultiYearCalendar(
                     activeDates: highlightedDays,
                     settings: settings['CalendarSettings']['MultiYear'],
                   ),
-                _ => const SizedBox.shrink(),
               };
             },
           );

@@ -68,15 +68,15 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 selectorBox(
-                  ref.watch(chartFilterProvider).muscleSelected,
-                  'muscles',
+                  ref.watch(chartFilterProvider).muscleSelected.label,
+                  MuscleFilter.values,
                   (entry) => ref.read(chartFilterProvider.notifier).setMuscle(entry.key),
                   context,
                 ),
                 selectorBox(
-                  ref.watch(chartFilterProvider).timeLabel,
-                  'time',
-                  (entry) => ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key),
+                  ref.watch(chartFilterProvider).timeFilter.label,
+                  TimeFilter.values,
+                  (entry) => ref.read(chartFilterProvider.notifier).setTime(entry),
                   context,
                 ),
               ],
@@ -244,11 +244,11 @@ final mainExercisesProvider = Provider.autoDispose<AsyncValue<MainExerciseData>>
     for (var day in data.keys) {
       Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0]));
       int diff = difference.inDays;
-      if (diff <= filters.range || filters.range == -1) {
+      if (diff <= filters.timeFilter.range || filters.timeFilter.range == -1) {
         for (var exercise in data[day]['sets'].keys) {
-          for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])) {
+          for (String muscle in (muscleGroups[filters.muscleSelected.label] ?? ['muscle'])) { // todo check what the fuck ['muscle'] is
             if ((exercises[exercise]?.primary.containsKey(muscle) ?? false) ||
-                filters.muscleSelected == 'All Muscles') {
+                filters.muscleSelected == MuscleFilter.allMuscles) {
               List sets = data[day]['sets'][exercise];
               String target = 'weight';
               (exercises[exercise]?.type ?? 'Weighted') != 'Weighted' ? target = 'reps' : null;

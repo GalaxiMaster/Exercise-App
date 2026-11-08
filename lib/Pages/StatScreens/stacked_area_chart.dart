@@ -7,11 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TimeCharts extends ConsumerWidget {
-  final int range;
-  final String musclesSelected;
-  final String target;
-  final String selectedGraph;
-  const TimeCharts({super.key, required this.range, required this.musclesSelected, required this.target, required this.selectedGraph});
+  final SelectedGraph selectedGraph;
+  const TimeCharts({super.key, required this.selectedGraph});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,7 +57,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<
       final dateRaw = DateTime.parse(day.split(' ').first);
       final date = DateTime(dateRaw.year, dateRaw.month);
       final diff = DateTime.now().difference(date).inDays;
-      if (diff > filters.range && filters.range != -1) continue;
+      if (diff > filters.timeFilter.range && filters.timeFilter.range != -1) continue;
 
       final Map<String, double> dayData = {};
 
@@ -73,11 +70,11 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<
         for (final set in data[day]['sets'][exercise]) {
           double selector = 0;
           switch (filters.chartTarget) {
-            case 'Volume':
+            case TargetFilter.volume:
               selector = double.parse(set['weight'].toString()) * double.parse(set['reps'].toString());
-            case 'kg':
+            case TargetFilter.weight:
               selector = double.parse(set['weight'].toString());
-            case 'Sets':
+            case TargetFilter.sets:
               selector = 1;
             default:
               selector = 1;
@@ -136,7 +133,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<Map<String, List<
 });
 
 CartesianSeries<ChartData, DateTime> buildSeries(
-  String type,
+  SelectedGraph type,
   MapEntry<String, List<ChartData>> e,
 ) {
   final common = _CommonSeries(
@@ -146,7 +143,7 @@ CartesianSeries<ChartData, DateTime> buildSeries(
   );
 
   return switch (type) {
-    '100p Area Chart' => StackedArea100Series(
+    SelectedGraph.areaChart => StackedArea100Series(
       dataSource: common.data,
       xValueMapper: common.x,
       yValueMapper: common.y,
@@ -154,41 +151,48 @@ CartesianSeries<ChartData, DateTime> buildSeries(
       color: common.color,
     ),
 
-    'Spline Area' => SplineAreaSeries(
+    SelectedGraph.splineArea => SplineAreaSeries(
       dataSource: common.data,
       xValueMapper: common.x,
       yValueMapper: common.y,
       name: common.name,
       color: common.color,
     ),
-    'Spline Line' => SplineSeries(
+    SelectedGraph.splineLine => SplineSeries(
       dataSource: common.data,
       xValueMapper: common.x,
       yValueMapper: common.y,
       name: common.name,
       color: common.color,
     ),
-    'Stacked Line' => StackedLineSeries(
+    SelectedGraph.stackedLine => StackedLineSeries(
       dataSource: common.data,
       xValueMapper: common.x,
       yValueMapper: common.y,
       name: common.name,
       color: common.color,
     ),
-    'Step Area' => StepAreaSeries(
+    SelectedGraph.stepArea => StepAreaSeries(
       dataSource: common.data,
       xValueMapper: common.x,
       yValueMapper: common.y,
       name: common.name,
       color: common.color,
     ),
-    _ => StackedColumnSeries(
+    SelectedGraph.stackedColumn => StackedColumnSeries(
       dataSource: common.data,
       xValueMapper: common.x,
       yValueMapper: common.y,
       name: common.name,
       color: common.color,
     ),
+    _ => StackedArea100Series( // fallback on 100p. not exhaustively covered due to not having pie chart
+      dataSource: common.data,
+      xValueMapper: common.x,
+      yValueMapper: common.y,
+      name: common.name,
+      color: common.color,
+    ),  
   };
 }
 

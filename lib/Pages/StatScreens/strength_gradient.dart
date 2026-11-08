@@ -61,15 +61,15 @@ class _StrengthGradiantState extends ConsumerState<StrengthGradiant> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   selectorBox(
-                    ref.watch(chartFilterProvider).muscleSelected, 
-                    'muscles', 
+                    ref.watch(chartFilterProvider).muscleSelected.label, 
+                    MuscleFilter.values, 
                     (entry) => ref.read(chartFilterProvider.notifier).setMuscle(entry.key), 
                     context
                   ),
                   selectorBox(
-                    ref.watch(chartFilterProvider).timeLabel, 
-                    'time', 
-                    (entry) => ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key), 
+                    ref.watch(chartFilterProvider).timeFilter.label, 
+                    TimeFilter.values, 
+                    (entry) => ref.read(chartFilterProvider.notifier).setTime(entry), 
                     context
                   ),
                 ],
@@ -155,10 +155,10 @@ final strengthGradientProvider = Provider.autoDispose.family<AsyncValue<List>, G
     for (String day in data.keys){
       Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
       int diff = difference.inDays;
-      if (diff <= filters.range || filters.range == -1){
+      if (diff <= filters.timeFilter.range || filters.timeFilter.range == -1){
         for (String exercise in data[day]['sets'].keys){
-          for (String muscle in (muscleGroups[filters.muscleSelected] ?? ['muscle'])){
-            if ((exercises[exercise]?.primary.containsKey(muscle) ?? false) || filters.muscleSelected == 'All Muscles'){ //  || (exercises[exercise]?['Secondary'].containsKey(muscle) ?? false)
+          for (String muscle in (muscleGroups[filters.muscleSelected.label] ?? ['muscle'])){
+            if ((exercises[exercise]?.primary.containsKey(muscle) ?? false) || filters.muscleSelected == MuscleFilter.allMuscles){ //  || (exercises[exercise]?['Secondary'].containsKey(muscle) ?? false)
               // for (Map set in data[day]['sets'][exercise]){
               List sets = data[day]['sets'][exercise];
               String target = 'weight';

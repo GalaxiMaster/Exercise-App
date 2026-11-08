@@ -1,26 +1,6 @@
 import 'package:exercise_app/main.dart';
 import 'package:flutter/material.dart';
 
-class Options {
-  Map<String, int> timeOptions = {
-    'Past Week': 7,
-    'Past Month': 30,
-    'Past 8 weeks': 56,
-    'Past 3 months': 90,
-    'Past 6 months': 180,
-    'Past year': 365,
-    'All Time': -1,
-  };
-  Map<String, String> muscleOptions = {
-    'Chest': 'Chest',
-    'Back': 'Back',
-    'Legs': 'Legs',
-    'Core': 'Core',
-    'Shoulders': 'Shoulders',
-    'All Muscles': 'All Muscles',
-  };
-}
-
 Color getColor(String key) {
   var colors = {
     'Chest': Colors.red,

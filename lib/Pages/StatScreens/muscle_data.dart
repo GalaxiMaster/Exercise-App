@@ -146,7 +146,7 @@ final chartDataProvider = Provider<AsyncValue<ChartDataViewModel>>((ref) {
   final workoutAsyncValue = ref.watch(workoutDataProvider);
 
   return workoutAsyncValue.whenData((data){
-      final PercentageDataRecords percentageData = getPercentageData(data, 'Sets', 30, ref);
+      final PercentageDataRecords percentageData = getPercentageData(data, TargetFilter.sets, TimeFilter.pastMonth, ref);
       Map<String, double> unscaledData = percentageData.current;
 
       // final Map<String, double> scaledMuscleData = Map<String, double>.from(percentageData[0]);

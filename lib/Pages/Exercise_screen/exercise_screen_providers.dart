@@ -12,7 +12,7 @@ final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, C
 
 /// Best set per exercise per day, for the chosen time range.
 final exerciseStatsProvider = Provider.autoDispose.family<AsyncValue<ExerciseStats>, ExerciseKey>((ref, key) {
-  final range = ref.watch(chartFilterProvider.select((f) => f.range));
+  final range = ref.watch(chartFilterProvider.select((f) => f.timeFilter.range));
   return ref.watch(workoutDataProvider).whenData(
     (data) => buildExerciseStats(
       rawData: data,
@@ -38,7 +38,7 @@ final exerciseChartProvider = Provider.autoDispose.family<AsyncValue<ExerciseCha
 
   final ids = request.exercises.ids;
   final bodyweight = ids.isNotEmpty && ids.every((id) => typeOf(id) == ExerciseType.bodyweight);
-  final metric = bodyweight ? ChartMetric.reps : ChartMetric.fromKey(target);
+  final metric = bodyweight ? TargetFilter.reps : target;
 
   return stats.whenData(
     (data) => buildExerciseChart(

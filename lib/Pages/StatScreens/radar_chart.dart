@@ -23,7 +23,7 @@ class RadarChartPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (data) {
-          String timeLabel = ref.watch(chartFilterProvider).timeLabel;
+          String timeLabel = ref.watch(radarChartFilterProvider).timeFilter.label;
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -34,11 +34,11 @@ class RadarChartPage extends ConsumerWidget {
                       var entry = await showModalBottomSheet(
                         context: context,
                         builder: (context) {
-                          return SelectorPopupMap(options: Options().timeOptions);
+                          return SelectorPopupMap(options: TimeFilter.values);
                         },
                       );
                       if (entry != null) {
-                        ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key);
+                        ref.read(radarChartFilterProvider.notifier).setTime(entry);
                       }
                     },
                     child: Container(
@@ -66,59 +66,7 @@ class RadarChartPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 352,
-                  child: RadarChart(
-                    RadarChartData(
-                      dataSets: [
-                        if (data.length > 1)
-                        RadarDataSet(
-                          fillColor: Colors.grey.withValues(alpha: 0.2),
-                          borderColor: Colors.grey.withValues(alpha: 0.5),
-                          borderWidth: 2,
-                          entryRadius: 0,
-                          dataEntries: data[1],
-                        ),
-                        if (data.isNotEmpty)
-                        RadarDataSet(
-                          fillColor: Colors.blue.withValues(alpha: 0.2),
-                          borderColor: Colors.blue,
-                          borderWidth: 2,
-                          entryRadius: 0,
-                          dataEntries: data[0],
-                        ),
-                      ],
-
-                      tickCount: 6,
-                      tickBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
-                      ticksTextStyle: const TextStyle(color: Colors.transparent),
-                      radarBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.35), width: 1),
-                      gridBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
-
-                      titlePositionPercentageOffset: 0.1,
-            
-                      radarShape: RadarShape.polygon,
-                      getTitle: (index, angle) {
-                        switch (index) {
-                          case 0:
-                            return const RadarChartTitle(text: 'Back');
-                          case 1:
-                            return const RadarChartTitle(text: 'Chest');
-                          case 2:
-                            return const RadarChartTitle(text: 'Shoulders');
-                          case 3:
-                            return const RadarChartTitle(text: 'Arms');
-                          case 4:
-                            return const RadarChartTitle(text: 'Legs');
-                          case 5:
-                            return const RadarChartTitle(text: 'Core');
-                          default:
-                            return const RadarChartTitle(text: '');
-                        }
-                      },
-                    ),
-                  ),
-                ),
+                radarChartWidget(data),
                 statBoxDataProvider.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Center(child: Text('Error loading data $err')),
@@ -209,7 +157,7 @@ class RadarChartPage extends ConsumerWidget {
 }
 
 class SelectorPopupMap extends StatefulWidget {
-  final Map options;
+  final List options;
   const SelectorPopupMap({super.key, required this.options});
 
   @override
@@ -219,8 +167,8 @@ class SelectorPopupMap extends StatefulWidget {
 
 class _SelectorPopupMapState extends State<SelectorPopupMap> {
 
-  void selectTime(MapEntry days) {
-    Navigator.pop(context, days);
+  void selectTime(dynamic filter) {
+    Navigator.pop(context, filter);
   }
 
   @override
@@ -230,7 +178,7 @@ class _SelectorPopupMapState extends State<SelectorPopupMap> {
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
-          children: widget.options.entries.map((entry) {
+          children: widget.options.map((entry) {
             return boxThing(entry);
           }).toList(),
         ),
@@ -238,7 +186,7 @@ class _SelectorPopupMapState extends State<SelectorPopupMap> {
     );
   }
 
-  Widget boxThing(MapEntry entry) {
+  Widget boxThing(dynamic entry) { // TimeFilter or MuscleFilter?
     return GestureDetector(
       onTap: () {
         selectTime(entry); // Trigger selectTime with the corresponding days
@@ -253,7 +201,7 @@ class _SelectorPopupMapState extends State<SelectorPopupMap> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(15),
-              child: Text(entry.key),
+              child: Text(entry.label),
             ),
           ),
         ),
@@ -272,8 +220,8 @@ class SelectorPopupList extends StatefulWidget {
 
 class _SelectorPopupListState extends State<SelectorPopupList> {
 
-  void selectTime(dynamic days) {
-    Navigator.pop(context, days);
+  void selectEntry(dynamic entry) {
+    Navigator.pop(context, entry);
   }
 
   @override
@@ -297,7 +245,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
   Widget boxThing(dynamic entry) {
     return GestureDetector(
       onTap: () {
-        selectTime(entry);
+        selectEntry(entry);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
@@ -309,7 +257,7 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(15),
-              child: Text(entry),
+              child: Text(entry.label ?? entry),
             ),
           ),
         ),
@@ -323,7 +271,7 @@ class PercentageDataRecords {
   PercentageDataRecords({required this.current, this.previous});
 }
 
-PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target, int range, dynamic ref, {String? targetMuscleGroup}) {
+PercentageDataRecords getPercentageData(Map<String, dynamic> data, TargetFilter target, TimeFilter timeFilter, Ref ref, {MuscleFilter? targetMuscleGroup}) {
   Map exercises = ref.watch(exercisesProvider);
 
   Map<int, Map<String, double>> muscleData = {0: {}, 1: {}};
@@ -334,9 +282,9 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
     int diff = difference.inDays;
 
     int? inRange;
-    if (diff <= range || range == -1){
+    if (diff <= timeFilter.range || timeFilter.range == -1){
       inRange = 0;
-    } else if (diff <= range*2) {
+    } else if (diff <= timeFilter.range*2) {
       inRange = 1;
     }
 
@@ -356,8 +304,8 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
           ...exerciseData.primary,
           ...exerciseData.secondary,
         };
-        if (targetMuscleGroup != null && targetMuscleGroup != 'All Muscles'){ // todo DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
-          List muscleGroupMembers = muscleGroups[targetMuscleGroup] ?? [];
+        if (targetMuscleGroup != null && targetMuscleGroup != MuscleFilter.allMuscles){ // todo DO I WANT TO DO IT SO It picks up any exercise with chest muscle groups in them or only diplays muscles in the chest group
+          List muscleGroupMembers = muscleGroups[targetMuscleGroup.label] ?? [];
           bool muscleExists = muscleGroupMembers.any((muscle){
             return musclesInExercise.containsKey(muscle);
           });
@@ -367,8 +315,8 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, String target
         for (var set in data[day]['sets'][exercise]){
           double selector = 0;
           switch(target){
-            case 'Volume': selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
-            case 'Sets' : selector = 1;
+            case TargetFilter.volume: selector = double.parse(set['weight'].toString())*double.parse(set['reps'].toString());
+            default : selector = 1; // only covers volume and sets targets
           }
           for (var muscle in musclesInExercise.keys){
             muscleData[inRange]?[muscle] = (muscleData[inRange]?[muscle] ?? 0) + selector*(musclesInExercise[muscle]/100);
@@ -438,29 +386,29 @@ List<ComparisonStatTile> getStatBoxData(Map data, int range) {
 }
 
 final statBoxModelProvider = Provider.autoDispose<AsyncValue<List<ComparisonStatTile>>>((ref) {
-  final filters = ref.watch(chartFilterProvider);
+  final filters = ref.watch(radarChartFilterProvider);
   final rawDataAsync = ref.watch(workoutDataProvider);
 
   return rawDataAsync.whenData((data) {
-    final List<ComparisonStatTile> boxData = getStatBoxData(data, filters.range);
+    final List<ComparisonStatTile> boxData = getStatBoxData(data, filters.timeFilter.range);
 
     return boxData;
   });
 });
 
-final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
+final radarChartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
   return ChartFiltersNotifier();
 });
 
 final radarModelProvider = Provider.autoDispose<AsyncValue<List<List<RadarEntry>>>>((ref) {
-  final filters = ref.watch(chartFilterProvider);
+  final filters = ref.watch(radarChartFilterProvider);
   final rawDataAsync = ref.watch(workoutDataProvider);
 
   return rawDataAsync.whenData((data) {
     final PercentageDataRecords percentageData = getPercentageData(
       data, 
       filters.chartTarget, 
-      filters.range, 
+      filters.timeFilter, 
       ref, // Try to remove this dependency if possible
       targetMuscleGroup: filters.muscleSelected
     );
@@ -482,3 +430,59 @@ final radarModelProvider = Provider.autoDispose<AsyncValue<List<List<RadarEntry>
     return radarSections;
   });
 });
+
+Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // name under subjection
+  return SizedBox(
+    height: size,
+    child: RadarChart(
+      RadarChartData(
+        dataSets: [
+          if (data.length > 1)
+          RadarDataSet(
+            fillColor: Colors.grey.withValues(alpha: 0.2),
+            borderColor: Colors.grey.withValues(alpha: 0.5),
+            borderWidth: 2,
+            entryRadius: 0,
+            dataEntries: data[1],
+          ),
+          if (data.isNotEmpty)
+          RadarDataSet(
+            fillColor: Colors.blue.withValues(alpha: 0.2),
+            borderColor: Colors.blue,
+            borderWidth: 2,
+            entryRadius: 0,
+            dataEntries: data[0],
+          ),
+        ],
+
+        tickCount: 6,
+        tickBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
+        ticksTextStyle: const TextStyle(color: Colors.transparent),
+        radarBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.35), width: 1),
+        gridBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
+
+        titlePositionPercentageOffset: 0.1,
+
+        radarShape: RadarShape.polygon,
+        getTitle: (index, angle) {
+          switch (index) {
+            case 0:
+              return const RadarChartTitle(text: 'Back');
+            case 1:
+              return const RadarChartTitle(text: 'Chest');
+            case 2:
+              return const RadarChartTitle(text: 'Shoulders');
+            case 3:
+              return const RadarChartTitle(text: 'Arms');
+            case 4:
+              return const RadarChartTitle(text: 'Legs');
+            case 5:
+              return const RadarChartTitle(text: 'Core');
+            default:
+              return const RadarChartTitle(text: '');
+          }
+        },
+      ),
+    ),
+  );
+}

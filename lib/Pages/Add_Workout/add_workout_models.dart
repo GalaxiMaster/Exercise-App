@@ -13,9 +13,9 @@ enum ExerciseType {
 
   /// Unknown or missing values fall back to [weighted].
   static ExerciseType parse(String? raw) => ExerciseType.values.firstWhere(
-        (t) => t.storageName == raw,
-        orElse: () => ExerciseType.weighted,
-      );
+    (t) => t.storageName == raw,
+    orElse: () => ExerciseType.weighted,
+  );
 
   bool get isTimed => this == timed;
 
@@ -358,5 +358,17 @@ class WorkoutHistory {
       }
     }
     return count;
+  }
+
+  List flattenToSetList() {
+    final setList = [];
+    for (MapEntry day in _data.entries) {
+      for (MapEntry exercise in day.value['sets'].entries) {
+        for (Map set in exercise.value) {
+          setList.add(set);
+        }
+      }
+    }
+    return setList;
   }
 }

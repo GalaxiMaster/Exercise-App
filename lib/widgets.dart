@@ -20,7 +20,7 @@ double autoRoundUp(double value) {
   return (value / step).ceil() * step;
 }
 
-Widget selectorBox(String text, String type, Function onSubmit, BuildContext context) {
+Widget selectorBox(String text, List options, Function onSubmit, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
@@ -28,11 +28,7 @@ Widget selectorBox(String text, String type, Function onSubmit, BuildContext con
         var entry = await showModalBottomSheet(
           context: context,
           builder: (context) {
-            if (type == 'time'){
-              return SelectorPopupMap(options: Options().timeOptions);
-            }else{
-              return SelectorPopupMap(options: Options().muscleOptions); 
-            }
+            return SelectorPopupMap(options: options);
           },
         );
         if (entry != null){

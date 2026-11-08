@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:exercise_app/Pages/Account/username_popup.dart';
 import 'package:exercise_app/Functions/Cloud/social_services.dart';
+import 'package:exercise_app/Pages/Social_Pages/compare_page.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/theme_colors.dart';
@@ -229,7 +230,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userWorkouts = ref.watch(friendWorkoutsProvider(uid));
+    final userWorkouts = ref.watch(friendWorkoutFeedProvider(uid));
     final routines = ref.watch(friendRoutinesProvider(uid));
     final friendProfile = ref.watch(userProfileProvider(uid));
     final myProfile = ref.watch(myProfileProvider);
@@ -244,7 +245,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
               spacing: 8,
               children: [
                 _buildPersonHeader(friendProfile.value, workouts),
-                _buildComparisonSection(friendProfile.value, myProfile.value),
+                _buildComparisonSection(friendProfile.value, myProfile.value, context), // todo figure out the best way to not need to pass in context
                 _buildRoutineList(routines),
                 _buildWorkoutsList(workouts),
               ],
@@ -306,7 +307,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
     );
   }
   
-  Widget _buildComparisonSection(Map<String, dynamic>? friendProfileData, Map<String, dynamic>? myProfileData) {
+  Widget _buildComparisonSection(Map<String, dynamic>? friendProfileData, Map<String, dynamic>? myProfileData, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -318,30 +319,36 @@ class FriendWorkoutsScreen extends ConsumerWidget {
             color: ThemeColors.text.withAlpha(150)
           )
         ),
-        Container(
-          height: 60,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: ThemeColors.container,
-            borderRadius: BorderRadius.circular(12),
+        GestureDetector(
+          onTap: ()=> Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ComparePage(friendId: uid,))
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                OverlappingAvatars(
-                  photo: friendProfileData?['photoUrl'] != null ? NetworkImage(friendProfileData!['photoUrl']) : null, 
-                  secondaryPhoto: myProfileData?['photoUrl'] != null ? NetworkImage(myProfileData!['photoUrl']) : null, 
-                  radius: 15,
-                ),
-                SizedBox(width: 5),
-                Text('Compare'),
-                Spacer(),
-                Icon(Icons.arrow_forward_ios, size: 16),
-              ],
+          child: Container(
+            height: 60,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: ThemeColors.container,
+              borderRadius: BorderRadius.circular(12),
             ),
-          )
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  OverlappingAvatars(
+                    photo: friendProfileData?['photoUrl'] != null ? NetworkImage(friendProfileData!['photoUrl']) : null, 
+                    secondaryPhoto: myProfileData?['photoUrl'] != null ? NetworkImage(myProfileData!['photoUrl']) : null, 
+                    radius: 15,
+                  ),
+                  SizedBox(width: 5),
+                  Text('Compare'),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios, size: 16),
+                ],
+              ),
+            )
+          ),
         )
       ]
     );

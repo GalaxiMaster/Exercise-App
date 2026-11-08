@@ -7,6 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'radar_chart.dart';
 
+enum SelectedGraph {
+  pieChart('Pie chart'), 
+  areaChart('100p area chart'), 
+  splineArea('Spline area'),
+  splineLine('Spline line'),
+  stackedColumn('Stacked column'),
+  stackedLine('Stacked line'),
+  stepArea('Step area');
+  const SelectedGraph(this.label); 
+
+  final String label;
+}
+
 class DataCharts extends ConsumerStatefulWidget {
   const DataCharts({super.key});
 
@@ -15,15 +28,14 @@ class DataCharts extends ConsumerStatefulWidget {
 }
 
 class _DataChartsState extends ConsumerState<DataCharts> {
-  String selectedGraph = 'Pie Chart';
+  SelectedGraph selectedGraph = SelectedGraph.pieChart;
 
   void _updateAndReload(VoidCallback fn) => fn();
 
   @override
   Widget build(BuildContext context) {
     final dataProvider = ref.watch(chartViewModelProvider);
-    final timeLabel = ref.watch(chartFilterProvider).timeLabel;
-    final range = ref.watch(chartFilterProvider).range;
+    final timeFilter = ref.watch(chartFilterProvider).timeFilter;
     final muscleSelected = ref.watch(chartFilterProvider).muscleSelected;
     final chartTarget = ref.watch(chartFilterProvider).chartTarget;
 
@@ -33,18 +45,10 @@ class _DataChartsState extends ConsumerState<DataCharts> {
         actions: [
           TextButton.icon(
             onPressed: () async {
-              final result = await showModalBottomSheet<String>(
+              final SelectedGraph? result = await showModalBottomSheet<SelectedGraph>(
                 context: context,
                 builder: (_) => const SelectorPopupList(
-                  options: [
-                    'Pie Chart',
-                    '100p Area Chart',
-                    'Spline Area',
-                    'Spline Line',
-                    'Stacked Column',
-                    'Stacked Line',
-                    'Step Area',
-                  ],
+                  options: SelectedGraph.values,
                 ),
               );
               if (result != null) {
@@ -52,7 +56,7 @@ class _DataChartsState extends ConsumerState<DataCharts> {
               }
             },
             label: Text(
-              selectedGraph,
+              selectedGraph.label,
               style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
             icon: const Icon(Icons.arrow_drop_down, size: 30, color: Colors.white),
@@ -70,15 +74,15 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   selectorBox(
-                    muscleSelected,
-                    'muscles',
-                    (entry) => _updateAndReload(() => ref.read(chartFilterProvider.notifier).setMuscle(entry.key)),
+                    muscleSelected.label,
+                    MuscleFilter.values,
+                    (entry) => _updateAndReload(() => ref.read(chartFilterProvider.notifier).setMuscle(entry)),
                     context,
                   ),
                   selectorBox(
-                    timeLabel,
-                    'time',
-                    (entry) => _updateAndReload(() => ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key)),
+                    timeFilter.label,
+                    TimeFilter.values,
+                    (entry) => _updateAndReload(() => ref.read(chartFilterProvider.notifier).setTime(entry)),
                     context,
                   ),
                 ],
@@ -86,7 +90,7 @@ class _DataChartsState extends ConsumerState<DataCharts> {
               SizedBox(
                 width: double.infinity,
                 height: 270,
-                child: selectedGraph == 'Pie Chart'
+                child: selectedGraph == SelectedGraph.pieChart
                   ? PieChart(
                       PieChartData(
                         sections: data.sections,
@@ -96,9 +100,6 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                       ),
                     )
                   : TimeCharts(
-                      range: range,
-                      musclesSelected: muscleSelected,
-                      target: chartTarget,
                       selectedGraph: selectedGraph,
                     ),
               ),
@@ -106,16 +107,16 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                 children: [
                   _SelectorBox(
                     text: 'Sets',
-                    selected: chartTarget == 'Sets',
+                    selected: chartTarget == TargetFilter.sets,
                     onTap: () => _updateAndReload(() {
-                      ref.read(chartFilterProvider.notifier).setTarget('Sets');
+                      ref.read(chartFilterProvider.notifier).setTarget(TargetFilter.sets);
                     }),
                   ),
                   _SelectorBox(
                     text: 'Volume',
-                    selected: chartTarget == 'Volume',
+                    selected: chartTarget == TargetFilter.volume,
                     onTap: () => _updateAndReload(() {
-                      ref.read(chartFilterProvider.notifier).setTarget('Volume');
+                      ref.read(chartFilterProvider.notifier).setTarget(TargetFilter.volume);
                     }),
                   ),
                 ],
@@ -180,7 +181,7 @@ class _DataChartsState extends ConsumerState<DataCharts> {
                               ),
                               Text(
                                 '${data.unscaledValues[index].toStringAsFixed(1)} '
-                                '${chartTarget == 'Volume' ? 'kg' : chartTarget} '
+                                '${chartTarget.metric} '
                                 ': ${data.scaledValues?[index]}%',
                                 style: const TextStyle(fontSize: 20),
                               ),
@@ -212,7 +213,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
     final percentageData = getPercentageData(
       data, 
       filters.chartTarget, 
-      filters.range, 
+      filters.timeFilter, 
       ref, // Try to remove this dependency if possible
       targetMuscleGroup: filters.muscleSelected
     );
@@ -266,36 +267,65 @@ class ChartDataViewModel {
 }
 
 class ChartFilters {
-  final String chartTarget; // todo change to enum
-  final int range;
-  final String muscleSelected;
-  final String timeLabel;
+  final TargetFilter chartTarget; // todo change to enum
+  final TimeFilter timeFilter;
+  final MuscleFilter muscleSelected;
 
   ChartFilters({
-    this.chartTarget = 'Sets',
-    this.range = 365,
-    this.timeLabel = 'Past Year',
-    this.muscleSelected = 'All Muscles', 
+    this.chartTarget = TargetFilter.sets,
+    this.timeFilter = TimeFilter.pastYear,
+    this.muscleSelected = MuscleFilter.allMuscles, 
   });
   ChartFilters.weight({
-    this.range = 365,
-    this.timeLabel = 'Past Year',
-  }) : chartTarget = 'weight',
-       muscleSelected = '';
+    this.timeFilter = TimeFilter.pastYear,
+  }) : chartTarget = TargetFilter.weight,
+       muscleSelected = MuscleFilter.allMuscles;
 
   ChartFilters copyWith({
-    String? chartTarget,
-    int? range,
-    String? muscleSelected,
-    String? timeLabel,
+    TargetFilter? chartTarget,
+    MuscleFilter? muscleSelected,
+    TimeFilter? timeFilter,
   }) {
     return ChartFilters(
       chartTarget: chartTarget ?? this.chartTarget,
-      range: range ?? this.range,
       muscleSelected: muscleSelected ?? this.muscleSelected,
-      timeLabel: timeLabel ?? this.timeLabel,
+      timeFilter: timeFilter ?? this.timeFilter,
     );
   }
+}
+
+enum TargetFilter {
+  sets('Sets', ''), weight('Weight', 'kg'), volume('Volume', 'kg'), oneRm('1rm', 'kg'), reps('Reps', '');
+
+  const TargetFilter(this.label, this.metric);
+  final String label;
+  final String metric;
+}
+
+enum TimeFilter {
+  pastWeek(range: 7, label: 'Past week'),
+  pastMonth(range: 30, label: 'Past month'),
+  past8Weeks(range: 56, label: 'Past 8 weeks'),
+  past3Months(range: 90, label: 'Past 3 months'),
+  past6Months(range: 180, label: 'Past 6 months'),
+  pastYear(range: 365, label: 'Past year'),
+  allTime(range: -1, label: 'All time');
+
+  const TimeFilter({required this.range, required this.label});
+  final int range;
+  final String label;
+}
+
+enum MuscleFilter {
+  chest(label: 'Chest'),
+  back(label: 'Back'),
+  legs(label: 'Legs'),
+  core(label: 'Core'),
+  shoulders(label: 'Shoulders'),
+  allMuscles(label: 'All muscles');
+
+  const MuscleFilter({required this.label});
+  final String label;
 }
 
 class ChartFiltersNotifier extends Notifier<ChartFilters> {
@@ -308,15 +338,15 @@ class ChartFiltersNotifier extends Notifier<ChartFilters> {
     return initialFilters ?? ChartFilters();
   }
 
-  void setTarget(String target) {
+  void setTarget(TargetFilter target) {
     state = state.copyWith(chartTarget: target);
   }
 
-  void setRange(int range, String timeLabel) {
-    state = state.copyWith(range: range, timeLabel: timeLabel);
+  void setTime(TimeFilter timeFilter) {
+    state = state.copyWith(timeFilter: timeFilter);
   }
 
-  void setMuscle(String muscle) {
+  void setMuscle(MuscleFilter muscle) {
     state = state.copyWith(muscleSelected: muscle);
   }
 }

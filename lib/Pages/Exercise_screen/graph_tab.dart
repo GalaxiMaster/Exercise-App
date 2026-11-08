@@ -2,7 +2,8 @@ import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual.dart';
 import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/Exercise_Screen/exercise_screen_providers.dart';
-import 'package:exercise_app/Pages/StatScreens/radar_chart.dart' hide chartFilterProvider;
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart' hide chartFilterProvider;
+import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
@@ -106,16 +107,16 @@ class _ChartHeading extends ConsumerWidget {
   Future<void> _pickRange(BuildContext context, WidgetRef ref) async {
     final entry = await showModalBottomSheet(
       context: context,
-      builder: (context) => SelectorPopupMap(options: Options().timeOptions),
+      builder: (context) => SelectorPopupMap(options: TimeFilter.values),
     );
     if (!context.mounted || entry == null) return;
-    ref.read(chartFilterProvider.notifier).setRange(entry.value, entry.key);
+    ref.read(chartFilterProvider.notifier).setTime(entry);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final primary = Theme.of(context).colorScheme.primary;
-    final rangeLabel = ref.watch(chartFilterProvider.select((f) => f.timeLabel));
+    final rangeLabel = ref.watch(chartFilterProvider.select((f) => f.timeFilter.label));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -305,11 +306,11 @@ class _MetricSelector extends ConsumerWidget {
 
     return Row(
       children: [
-        for (final metric in ChartMetric.values)
+        for (final metric in TargetFilter.values)
           _MetricChip(
             label: metric.label,
-            selected: selected == metric.key,
-            onTap: () => ref.read(chartFilterProvider.notifier).setTarget(metric.key),
+            selected: selected == metric,
+            onTap: () => ref.read(chartFilterProvider.notifier).setTarget(metric),
           ),
       ],
     );
