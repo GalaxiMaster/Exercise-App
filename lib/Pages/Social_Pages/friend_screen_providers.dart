@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
+import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/social_models.dart';
@@ -65,8 +66,8 @@ class ComparisonData {
     final comparisons = <String, UserFriendVals>{};
     // flattenMaps
 
-    // getPercentageData(userData, '', range, ref)
-    // getPercentageData(friendData, target, range, ref)
+    getPercentageData(userData, TargetFilter.sets, TimeFilter.pastMonth, ref, depth: 1);
+    getPercentageData(friendData, TargetFilter.sets, TimeFilter.pastMonth, ref, depth: 1);
 
     final radar = <List<RadarEntry>>[];
 
