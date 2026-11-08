@@ -301,21 +301,12 @@ final radarModelProvider = Provider.autoDispose.family<AsyncValue<List<List<Rada
 
 // Widgets
 Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // name under subjection
-  const axisCount = 6;
-  RadarDataSet scaleSet(double v) => RadarDataSet(
-    fillColor: Colors.transparent,
-    borderColor: Colors.transparent,
-    borderWidth: 0,
-    entryRadius: 0,
-    dataEntries: List.generate(axisCount, (_) => RadarEntry(value: v)),
-  );
   return SizedBox(
     height: size,
     child: RadarChart(
       RadarChartData(
+        isMinValueAtCenter: true,
         dataSets: [
-          scaleSet(0),
-          scaleSet(100),
           if (data.length > 1)
           RadarDataSet(
             fillColor: Colors.grey.withValues(alpha: 0.2),
@@ -339,7 +330,6 @@ Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // n
         ticksTextStyle: const TextStyle(color: Colors.transparent),
         radarBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.35), width: 1),
         gridBorderData: BorderSide(color: Colors.grey.withValues(alpha: 0.25), width: 1),
-
         titlePositionPercentageOffset: 0.1,
 
         radarShape: RadarShape.polygon,

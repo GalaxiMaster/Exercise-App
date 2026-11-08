@@ -266,9 +266,9 @@ class _ExerciseLineChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   interval: chart.xInterval,
                   showTitles: true,
-                  getTitlesWidget: (value, _) {
+                  getTitlesWidget: (value, meta) {
                     return SideTitleWidget(
-                      axisSide: AxisSide.bottom,
+                      meta: meta,
                       child: Text(
                         chart.dateLabel(value),
                         style: const TextStyle(fontSize: 12),

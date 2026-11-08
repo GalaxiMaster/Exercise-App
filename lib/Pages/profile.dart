@@ -470,7 +470,7 @@ class DataBarChart extends StatelessWidget {
                     final index = value.toInt();
                     if (index >= 0 && index < data.keys.length) {
                       return SideTitleWidget(
-                        axisSide: meta.axisSide,
+                        meta: meta,
                         angle: -0.3,
                         child: Text( 
                           data.keys.toList()[index].split(' ').sublist(1, 3).join(' '),
