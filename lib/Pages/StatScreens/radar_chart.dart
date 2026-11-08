@@ -300,7 +300,7 @@ final radarModelProvider = Provider.autoDispose.family<AsyncValue<List<List<Rada
 
 
 // Widgets
-Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // name under subjection
+Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // name subject to change
   return SizedBox(
     height: size,
     child: RadarChart(
