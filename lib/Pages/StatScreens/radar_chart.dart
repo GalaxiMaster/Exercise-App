@@ -1,3 +1,6 @@
+import 'package:equatable/equatable.dart';
+import 'package:exercise_app/Functions/chart_calculations.dart';
+import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
@@ -9,12 +12,23 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+class RadarParams extends Equatable {
+  const RadarParams({required this.userId, required this.filters, this.depth});
+  final String userId;
+  final ChartFilters filters;
+  final int? depth;
+
+  @override
+  List<Object?> get props => [userId, filters, depth];
+}
+
 class RadarChartPage extends ConsumerWidget {
   const RadarChartPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final radarSectionsProvider = ref.watch(radarModelProvider);
+    final filters = ref.watch(radarChartFilterProvider);
+    final radarSectionsProvider = ref.watch(radarModelProvider(RadarParams(userId: '', filters: filters)));
     final statBoxDataProvider = ref.watch(statBoxModelProvider);
 
     return Scaffold(
@@ -23,7 +37,6 @@ class RadarChartPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading data $err')),
         data: (data) {
-          String timeLabel = ref.watch(radarChartFilterProvider).timeFilter.label;
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -53,7 +66,7 @@ class RadarChartPage extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              timeLabel,
+                              filters.timeFilter.label,
                               style: const TextStyle(
                                 fontSize: 18,
                                 color: Colors.white
@@ -108,7 +121,7 @@ class RadarChartPage extends ConsumerWidget {
                                   )
                                 ),
                               
-                                if (timeLabel != 'All Time')
+                                if (filters.timeFilter.label != 'All Time')
                                 Builder(
                                   builder: (context) {
                                     Color color = element.change > 0
@@ -155,117 +168,6 @@ class RadarChartPage extends ConsumerWidget {
     );
   }
 }
-
-class SelectorPopupMap extends StatefulWidget {
-  final List options;
-  const SelectorPopupMap({super.key, required this.options});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _SelectorPopupMapState createState() => _SelectorPopupMapState();
-}
-
-class _SelectorPopupMapState extends State<SelectorPopupMap> {
-
-  void selectTime(dynamic filter) {
-    Navigator.pop(context, filter);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: widget.options.map((entry) {
-            return boxThing(entry);
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget boxThing(dynamic entry) { // TimeFilter or MuscleFilter?
-    return GestureDetector(
-      onTap: () {
-        selectTime(entry); // Trigger selectTime with the corresponding days
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
-        child: Container(
-          decoration: BoxDecoration(
-            color: HexColor.fromHex('262626'),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(entry.label),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class SelectorPopupList extends StatefulWidget {
-  final List options;
-  const SelectorPopupList({super.key, required this.options});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _SelectorPopupListState createState() => _SelectorPopupListState();
-}
-
-class _SelectorPopupListState extends State<SelectorPopupList> {
-
-  void selectEntry(dynamic entry) {
-    Navigator.pop(context, entry);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: ListView.builder(
-          itemCount: widget.options.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return boxThing(widget.options[index]);
-          },
-        )
-      ),
-    );
-  }
-
-  Widget boxThing(dynamic entry) {
-    return GestureDetector(
-      onTap: () {
-        selectEntry(entry);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
-        child: Container(
-          decoration: BoxDecoration(
-            color: HexColor.fromHex('262626'),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(entry.label ?? entry),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 
 Map<int, Map<String, double>> getPercentageData(Map<String, dynamic> data, TargetFilter target, TimeFilter timeFilter, Ref ref, {MuscleFilter? targetMuscleGroup, int depth = 1}) {
   Map exercises = ref.watch(exercisesProvider);
@@ -325,7 +227,7 @@ Map<int, Map<String, double>> getPercentageData(Map<String, dynamic> data, Targe
   return muscleData;
 }
 
-
+// Calculations
 List<ComparisonStatTile> getStatBoxData(Map data, int range) {
   Map stats = {
     'Workouts': {0: 0, 1: 0},
@@ -373,6 +275,7 @@ List<ComparisonStatTile> getStatBoxData(Map data, int range) {
   return statTileList;
 }
 
+// Providers
 final statBoxModelProvider = Provider.autoDispose<AsyncValue<List<ComparisonStatTile>>>((ref) {
   final filters = ref.watch(radarChartFilterProvider);
   final rawDataAsync = ref.watch(workoutDataProvider);
@@ -384,48 +287,35 @@ final statBoxModelProvider = Provider.autoDispose<AsyncValue<List<ComparisonStat
   });
 });
 
+
 final radarChartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
   return ChartFiltersNotifier();
 });
 
-final radarModelProvider = Provider.autoDispose<AsyncValue<List<List<RadarEntry>>>>((ref) {
-  final filters = ref.watch(radarChartFilterProvider);
-  final rawDataAsync = ref.watch(workoutDataProvider);
-
-  return rawDataAsync.whenData((data) {
-    final Map<int, Map<String, double>> percentageData = getPercentageData(
-      data, 
-      filters.chartTarget, 
-      filters.timeFilter, 
-      ref, // Try to remove this dependency if possible
-      targetMuscleGroup: filters.muscleSelected,
-      depth: 2
-    );
-
-    List<List<RadarEntry>> radarSections = [];
-    final List<Map<String, double>> sectionSources = percentageData.values.toList();
-    for (int i = 0; i < sectionSources.length; i++) {
-      if (sectionSources[i].isEmpty) continue;
-      radarSections.add([]);
-      for (String group in muscleGroups.keys){
-        double total = 0;
-        for (String muscle in muscleGroups[group]!) {
-          double muscleNum = (sectionSources[i][muscle] ?? 0);
-            total += muscleNum;
-        }
-        radarSections[i].add(RadarEntry(value: total));
-      }
-    }
-    return radarSections;
-  });
+final radarModelProvider = Provider.autoDispose.family<AsyncValue<List<List<RadarEntry>>>, RadarParams>((ref, params) {
+  final dataAsync = params.userId.isEmpty ? ref.watch(workoutDataProvider) : ref.watch(friendWorkoutHistoryProvider(params.userId));
+  return dataAsync.whenData((data) => buildRadarSections(data, params.filters, ref, depth: params.depth));
 });
 
+
+
+// Widgets
 Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // name under subjection
+  const axisCount = 6;
+  RadarDataSet scaleSet(double v) => RadarDataSet(
+    fillColor: Colors.transparent,
+    borderColor: Colors.transparent,
+    borderWidth: 0,
+    entryRadius: 0,
+    dataEntries: List.generate(axisCount, (_) => RadarEntry(value: v)),
+  );
   return SizedBox(
     height: size,
     child: RadarChart(
       RadarChartData(
         dataSets: [
+          scaleSet(0),
+          scaleSet(100),
           if (data.length > 1)
           RadarDataSet(
             fillColor: Colors.grey.withValues(alpha: 0.2),
@@ -475,3 +365,116 @@ Widget radarChartWidget(List<List<RadarEntry>> data, {double size = 350}) { // n
     ),
   );
 }
+
+
+class SelectorPopupMap extends StatefulWidget {
+  final List options;
+  const SelectorPopupMap({super.key, required this.options});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SelectorPopupMapState createState() => _SelectorPopupMapState();
+}
+
+class _SelectorPopupMapState extends State<SelectorPopupMap> {
+
+  void selectTime(dynamic filter) {
+    Navigator.pop(context, filter);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: widget.options.map((entry) {
+            return boxThing(entry);
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget boxThing(dynamic entry) { // TimeFilter or MuscleFilter?
+    return GestureDetector(
+      onTap: () {
+        selectTime(entry); // Trigger selectTime with the corresponding days
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: HexColor.fromHex('262626'),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Text(entry.label),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SelectorPopupList extends StatefulWidget {
+  final List options;
+  const SelectorPopupList({super.key, required this.options});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SelectorPopupListState createState() => _SelectorPopupListState();
+}
+
+class _SelectorPopupListState extends State<SelectorPopupList> {
+
+  void selectEntry(dynamic entry) {
+    Navigator.pop(context, entry);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: ListView.builder(
+          itemCount: widget.options.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return boxThing(widget.options[index]);
+          },
+        )
+      ),
+    );
+  }
+
+  Widget boxThing(dynamic entry) {
+    return GestureDetector(
+      onTap: () {
+        selectEntry(entry);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: HexColor.fromHex('262626'),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Text(entry.label ?? entry),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+

@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Functions/Cloud/social_services.dart';
-import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
-import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
-import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +17,7 @@ final friendWorkoutFeedProvider = FutureProvider.family<List<FeedWorkout>, Strin
   return snap.docs.map((d) => FeedWorkout.fromDoc(uid, d)).toList();
 });
 
-final friendWorkoutHistoryProvider = FutureProvider.family<WorkoutHistory, String>((ref, uid) async {
+final friendWorkoutHistoryProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, uid) async {
   final snap = await FirebaseFirestore.instance
       .collection('User Data')
       .doc(uid)
@@ -29,9 +26,9 @@ final friendWorkoutHistoryProvider = FutureProvider.family<WorkoutHistory, Strin
       .limit(50)
       .get();
 
-  return WorkoutHistory({
+  return {
     for (final doc in snap.docs) doc.id: doc.data(),
-  });
+  };
 });
 
 final friendRoutinesProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
@@ -66,9 +63,6 @@ class ComparisonData {
     final comparisons = <String, UserFriendVals>{};
     // flattenMaps
 
-    getPercentageData(userData, TargetFilter.sets, TimeFilter.pastMonth, ref, depth: 1);
-    getPercentageData(friendData, TargetFilter.sets, TimeFilter.pastMonth, ref, depth: 1);
-
     final radar = <List<RadarEntry>>[];
 
     return ComparisonData(exerciseComparisons: comparisons, radarVals: radar);
@@ -80,7 +74,7 @@ final comparisonProvider = Provider.family<ComparisonData, String>((ref, friendI
   final friend = ref.watch(friendWorkoutHistoryProvider(friendId)).value;
 
   final userData = user ?? const <String, dynamic>{};
-  final friendData = (friend as Map<String, dynamic>?) ?? const <String, dynamic>{};
+  final friendData = friend ?? const <String, dynamic>{};
 
   return ComparisonData.fromRaw(userData, friendData, ref);
 });

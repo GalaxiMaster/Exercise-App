@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:exercise_app/Pages/StatScreens/stacked_area_chart.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/utils.dart';
@@ -267,17 +268,17 @@ class ChartDataViewModel {
   });
 }
 
-class ChartFilters {
-  final TargetFilter chartTarget; // todo change to enum
+class ChartFilters extends Equatable{
+  final TargetFilter chartTarget;
   final TimeFilter timeFilter;
   final MuscleFilter muscleSelected;
 
-  ChartFilters({
+  const ChartFilters({
     this.chartTarget = TargetFilter.sets,
     this.timeFilter = TimeFilter.pastYear,
     this.muscleSelected = MuscleFilter.allMuscles, 
   });
-  ChartFilters.weight({
+  const ChartFilters.weight({
     this.timeFilter = TimeFilter.pastYear,
   }) : chartTarget = TargetFilter.weight,
        muscleSelected = MuscleFilter.allMuscles;
@@ -293,6 +294,9 @@ class ChartFilters {
       timeFilter: timeFilter ?? this.timeFilter,
     );
   }
+
+  @override
+  List<Object?> get props => [chartTarget, timeFilter, muscleSelected];
 }
 
 enum TargetFilter {
