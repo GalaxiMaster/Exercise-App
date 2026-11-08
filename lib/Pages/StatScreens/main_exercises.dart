@@ -70,7 +70,7 @@ class _MainExercisesPageState extends ConsumerState<MainExercisesPage> {
                 selectorBox(
                   ref.watch(chartFilterProvider).muscleSelected.label,
                   MuscleFilter.values,
-                  (entry) => ref.read(chartFilterProvider.notifier).setMuscle(entry.key),
+                  (entry) => ref.read(chartFilterProvider.notifier).setMuscle(entry),
                   context,
                 ),
                 selectorBox(

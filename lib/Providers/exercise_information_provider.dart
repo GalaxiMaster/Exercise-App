@@ -27,7 +27,12 @@ final exercisesAsyncProvider = FutureProvider<Map<String, Exercise>>((ref) async
 });
 
 final exercisesProvider = Provider<Map<String, Exercise>>((ref) {
-  return ref.watch(exercisesAsyncProvider).value ?? {};
+  final customExercises = ref.watch(customExercisesProvider);
+  final exercises = ref.watch(exercisesAsyncProvider).value ?? {};
+  return {
+    ...exercises,
+    ...customExercises
+  };
 });
 
 class CustomExercisesNotifier extends AsyncNotifier<Map<String, Exercise>> {

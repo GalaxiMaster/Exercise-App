@@ -421,7 +421,6 @@ class WeeklyProgressChart extends ConsumerWidget {
 
 final weeklyMuscleDataProvider = Provider<Map>((ref) {
   final dataAsync = ref.watch(workoutDataProvider);
-  final Map customExercisesData = ref.read(customExercisesProvider);
   Map exercises = ref.watch(exercisesProvider);
 
   return dataAsync.maybeWhen(
@@ -434,14 +433,8 @@ final weeklyMuscleDataProvider = Provider<Map>((ref) {
 
         groupedWeeklyData[weekRef] ??= {};
         for (var exercise in data[day]['sets'].keys){
-          bool isCustom = customExercisesData.containsKey(exercise);
-          Exercise? exerciseData;
-
-          if (isCustom){
-            exerciseData = customExercisesData[exercise];
-          } else {
-            exerciseData = exercises[exercise] ?? {};
-          }
+          Exercise? exerciseData = exercises[exercise];
+          
           String dayName = DateFormat('EEE').format(DateTime.parse(day.split(' ')[0]));
 
           if (exerciseData == null) continue;
@@ -567,7 +560,6 @@ class SpeedometerPainter extends CustomPainter {
 
 final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
   final rawDataAsync = ref.watch(workoutDataProvider);
-  final Map customExercisesData = ref.read(customExercisesProvider);
   Map exercises = ref.watch(exercisesProvider);
 
   return rawDataAsync.whenData((data) {
@@ -581,14 +573,7 @@ final chartViewModelProvider = Provider<AsyncValue<List>>((ref) {
 
       muscleData[weekRef] ??= {};
       for (var exercise in data[day]['sets'].keys){
-        bool isCustom = customExercisesData.containsKey(exercise);
-        Exercise? exerciseData;
-
-        if (isCustom){
-          exerciseData = customExercisesData[exercise];
-        } else {
-          exerciseData = exercises[exercise];
-        }
+        Exercise? exerciseData = exercises[exercise];
 
         if (exerciseData == null) continue;
 

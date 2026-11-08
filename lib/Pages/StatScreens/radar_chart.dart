@@ -265,39 +265,27 @@ class _SelectorPopupListState extends State<SelectorPopupList> {
     );
   }
 }
-class PercentageDataRecords {
-  final Map<String, double> current;
-  final Map<String, double>? previous;
-  PercentageDataRecords({required this.current, this.previous});
-}
 
-PercentageDataRecords getPercentageData(Map<String, dynamic> data, TargetFilter target, TimeFilter timeFilter, Ref ref, {MuscleFilter? targetMuscleGroup}) {
+
+Map<int, Map<String, double>> getPercentageData(Map<String, dynamic> data, TargetFilter target, TimeFilter timeFilter, Ref ref, {MuscleFilter? targetMuscleGroup, int depth = 1}) {
   Map exercises = ref.watch(exercisesProvider);
 
-  Map<int, Map<String, double>> muscleData = {0: {}, 1: {}};
-  final Map customExercisesData = ref.read(customExercisesProvider) ?? {};
+  Map<int, Map<String, double>> muscleData = {
+    for (int i = 0; i < depth; i++) i: {},
+  };
 
   for (var day in data.keys){
     Duration difference = DateTime.now().difference(DateTime.parse(day.split(' ')[0])); // Calculate the difference
     int diff = difference.inDays;
 
     int? inRange;
-    if (diff <= timeFilter.range || timeFilter.range == -1){
-      inRange = 0;
-    } else if (diff <= timeFilter.range*2) {
-      inRange = 1;
+    if (diff <= timeFilter.range * (depth) || timeFilter.range == -1){
+      inRange = (diff/timeFilter.range).floor();
     }
 
     if (inRange != null){
       for (var exercise in data[day]['sets'].keys){
-        bool isCustom = customExercisesData.containsKey(exercise);
-        Exercise? exerciseData;
-
-        if (isCustom && customExercisesData.containsKey(exercise)){
-          exerciseData = customExercisesData[exercise];
-        } else {
-          exerciseData = exercises[exercise];
-        }
+        Exercise? exerciseData = exercises[exercise];
         
         if (exerciseData == null) continue;
         final Map<String, dynamic> musclesInExercise = {
@@ -334,7 +322,7 @@ PercentageDataRecords getPercentageData(Map<String, dynamic> data, TargetFilter 
   }
 
 
-  return PercentageDataRecords(current: muscleData[0]!, previous: muscleData[1]);
+  return muscleData;
 }
 
 
@@ -405,23 +393,24 @@ final radarModelProvider = Provider.autoDispose<AsyncValue<List<List<RadarEntry>
   final rawDataAsync = ref.watch(workoutDataProvider);
 
   return rawDataAsync.whenData((data) {
-    final PercentageDataRecords percentageData = getPercentageData(
+    final Map<int, Map<String, double>> percentageData = getPercentageData(
       data, 
       filters.chartTarget, 
       filters.timeFilter, 
       ref, // Try to remove this dependency if possible
-      targetMuscleGroup: filters.muscleSelected
+      targetMuscleGroup: filters.muscleSelected,
+      depth: 2
     );
 
     List<List<RadarEntry>> radarSections = [];
-    final List sectionSources = [percentageData.current, percentageData.previous ?? {}];
+    final List<Map<String, double>> sectionSources = percentageData.values.toList();
     for (int i = 0; i < sectionSources.length; i++) {
       if (sectionSources[i].isEmpty) continue;
       radarSections.add([]);
       for (String group in muscleGroups.keys){
         double total = 0;
         for (String muscle in muscleGroups[group]!) {
-          double muscleNum = (sectionSources[i]?[muscle] ?? 0);
+          double muscleNum = (sectionSources[i][muscle] ?? 0);
             total += muscleNum;
         }
         radarSections[i].add(RadarEntry(value: total));

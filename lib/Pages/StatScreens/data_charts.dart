@@ -219,7 +219,7 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
     );
 
     // final Map<String, double> scaledData = percentageData[0];
-    final Map<String, double> unscaledData = percentageData.current;
+    final Map<String, double> unscaledData = percentageData.values.first;
     
     final List<String> keys = unscaledData.keys.toList().reversed.toList();
     // final List<double> scaledValues = scaledData.values.toList().reversed.toList();
@@ -246,10 +246,11 @@ final chartViewModelProvider = Provider.autoDispose<AsyncValue<ChartDataViewMode
       keys: keys,
       scaledValues: scaledMuscleData.values.toList().reversed.toList(),
       unscaledValues: unscaledData.values.toList().reversed.toList(),
-      previousValues: (percentageData.previous?.length ?? 0) > 0 ? percentageData.previous?.values.toList().reversed.toList() : null
+      previousValues: (percentageData.values.elementAtOrNull(1)?.length ?? 0) > 0 ? percentageData.values.elementAtOrNull(1)?.values.toList().reversed.toList() : null
     );
   });
 });
+
 class ChartDataViewModel {
   final List<PieChartSectionData> sections;
   final List<String>? keys;
