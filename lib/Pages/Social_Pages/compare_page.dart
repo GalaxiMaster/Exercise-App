@@ -1,6 +1,7 @@
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
+import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,11 +53,12 @@ class ComparePageState extends ConsumerState<ComparePage> {
     );
   }
 
-  Row versusSection(double radius, Map<String, dynamic>? myProfile, Map<String, dynamic>? friendProfile) {
+  Row versusSection(double radius, ExerciseUser? myProfile, ExerciseUser? friendProfile) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 30,
       children: [
+        if (myProfile != null) // todo add loading placeholders
         Column(
           children: [
             Container(
@@ -67,10 +69,10 @@ class ComparePageState extends ConsumerState<ComparePage> {
               ),
               child: CircleAvatar(
                 radius: radius - 2,
-                backgroundImage: myProfile?['photoUrl'] != null ? NetworkImage(myProfile!['photoUrl']) : null,
+                backgroundImage: myProfile.photoUrl != null ? NetworkImage(myProfile.photoUrl!) : null,
               ),
             ),
-            Text(myProfile?['displayName'] ?? myProfile?['username'])
+            Text(myProfile.displayName)
           ],
         ),
         Container(
@@ -88,6 +90,7 @@ class ComparePageState extends ConsumerState<ComparePage> {
           ),
           child: Center(child: Text('Vs')),
         ),
+        if (friendProfile != null)
         Column(
           children: [
             Container(
@@ -97,11 +100,11 @@ class ComparePageState extends ConsumerState<ComparePage> {
                 shape: BoxShape.circle,
               ),
               child: CircleAvatar(
-                backgroundImage: friendProfile?['photoUrl'] != null ? NetworkImage(friendProfile!['photoUrl']) : null, 
+                backgroundImage: friendProfile.photoUrl != null ? NetworkImage(friendProfile.photoUrl!) : null, 
                 radius: radius,
               ),
             ),
-            Text(friendProfile?['displayName'] ?? friendProfile?['username'])
+            Text(friendProfile.displayName)
           ],
         )
       ],

@@ -151,7 +151,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
               onTap: (name) => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => FriendWorkoutsScreen(uid: uid, name: name, feed: feed),
+                  builder: (_) => FriendWorkoutsScreen(uid: uid, name: name),
                 ),
               ),
               trailing: _RemoveMenu(onRemove: (name) => _confirmRemove(uid, name), feed: feed, uid: uid),
@@ -200,10 +200,10 @@ class _PersonTile extends ConsumerWidget {
       error: (_, __) => _friendTile(), // shows '?' avatar and the time, same height
     );
   }
-  Widget _friendTile({Map<String, dynamic>? profile, bool loading = false}) {
-    final name = (profile?['displayName'] ?? profile?['username'] ?? '') as String;
-    final photo = profile?['photoUrl'] as String?;
-    final username = profile?['username'] as String?;
+  Widget _friendTile({ExerciseUser? profile, bool loading = false}) {
+    final name = profile?.displayName ?? '';
+    final photo = profile?.photoUrl;
+    final username = profile?.username;
 
     return ListTile(
       leading: CircleAvatar(
@@ -224,9 +224,8 @@ class _PersonTile extends ConsumerWidget {
 /// A single friend's recent workouts.
 class FriendWorkoutsScreen extends ConsumerWidget {
   final String uid, name;
-  final FeedService feed;
   const FriendWorkoutsScreen(
-      {super.key, required this.uid, required this.name, required this.feed});
+      {super.key, required this.uid, required this.name});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -259,9 +258,9 @@ class FriendWorkoutsScreen extends ConsumerWidget {
       })
     );
   }
-  Widget _buildPersonHeader(Map<String, dynamic>? p, List<FeedWorkout> workouts) {
-    final name = (p?['displayName'] ?? p?['username'] ?? this.name) as String;
-    final photo = p?['photoUrl'] as String?;
+  Widget _buildPersonHeader(ExerciseUser? p, List<FeedWorkout> workouts) {
+    final name = p?.displayName ?? this.name;
+    final photo = p?.photoUrl;
     return  Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -287,14 +286,14 @@ class FriendWorkoutsScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Workouts', style: TextStyle(color: ThemeColors.text.withAlpha(125), fontSize: 12)),
-                        Text('${p?['workoutCount'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                        Text('${0}', style: const TextStyle(fontWeight: FontWeight.w600)), // todo add values in
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Sets', style: TextStyle(color: ThemeColors.text.withAlpha(125), fontSize: 12)),
-                        Text('${p?['setCount'] ?? 0}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                        Text('${0}', style: const TextStyle(fontWeight: FontWeight.w600)), // todo add values in
                       ],
                     )
                   ]
@@ -307,7 +306,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
     );
   }
   
-  Widget _buildComparisonSection(Map<String, dynamic>? friendProfileData, Map<String, dynamic>? myProfileData, BuildContext context) {
+  Widget _buildComparisonSection(ExerciseUser? friendProfileData, ExerciseUser? myProfileData, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -337,8 +336,8 @@ class FriendWorkoutsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   OverlappingAvatars(
-                    photo: friendProfileData?['photoUrl'] != null ? NetworkImage(friendProfileData!['photoUrl']) : null, 
-                    secondaryPhoto: myProfileData?['photoUrl'] != null ? NetworkImage(myProfileData!['photoUrl']) : null, 
+                    photo: friendProfileData?.photoUrl != null ? NetworkImage(friendProfileData!.photoUrl!) : null, 
+                    secondaryPhoto: myProfileData?.photoUrl != null ? NetworkImage(myProfileData!.photoUrl!) : null, 
                     radius: 15,
                   ),
                   SizedBox(width: 5),
@@ -426,7 +425,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (_, i) =>
-              WorkoutCard(post: workouts[i], feed: feed, showAuthor: false),
+              WorkoutCard(post: workouts[i], showAuthor: false),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:exercise_app/Pages/Add_Workout/add_workout.dart';
+import 'package:exercise_app/Pages/Social_Pages/friend_screen.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_providers.dart';
@@ -185,18 +186,26 @@ class _DayHeader extends ConsumerWidget {
         spacing: 8,
         children: [
           if (profile != null)
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 8),
-              child: CircleAvatar(
-                backgroundImage: profile['photoUrl'] != null ? NetworkImage(profile['photoUrl']) : null,
-                radius: 24,
-                child: profile['photoUrl'] == null
-                    ? Text(
-                        (profile['displayName'] ?? profile['username'] ?? '?').toString().isNotEmpty
-                            ? (profile['displayName'] ?? profile['username'] ?? '?').toString()[0].toUpperCase()
-                            : '?',
-                      )
-                    : null,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FriendWorkoutsScreen(uid: profile.uid, name: ''))
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 8),
+                child: CircleAvatar(
+                  backgroundImage: profile.photoUrl != null ? NetworkImage(profile.photoUrl!) : null,
+                  radius: 24,
+                  child: profile.photoUrl == null
+                      ? Text(
+                          (profile.displayName).toString().isNotEmpty
+                              ? (profile.displayName).toString()[0].toUpperCase()
+                              : '?',
+                        )
+                      : null,
+                ),
               ),
             )
           else SizedBox(width: 8),
@@ -205,7 +214,7 @@ class _DayHeader extends ConsumerWidget {
             children: [
               if (profile != null)
               Text(
-                profile['displayName'] ?? profile['username'],
+                profile.displayName,
                 style: const TextStyle(fontSize: 20),
               ),
               Row(

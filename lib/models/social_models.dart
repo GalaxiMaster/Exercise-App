@@ -1,5 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class ExerciseUser {
+  final String uid;
+  final String? photoUrl;
+  final String username;
+  final String? _displayName;
+
+  ExerciseUser({
+    required this.uid,
+    required this.photoUrl,
+    required this.username,
+    required String? displayName,
+  }) : _displayName = displayName;
+
+  String get displayName => _displayName ?? username;
+
+  /// [uid] field required to be passed in if not in the json
+  factory ExerciseUser.fromMap(Map<String, dynamic> json, {String? uid}) {
+    if (json['uid'] == null && uid == null) {
+      throw Exception('uid not found in user');
+    }
+    
+    return ExerciseUser(
+      uid: uid ?? json['uid'],
+      photoUrl: json['photoUrl'] as String?,
+      username: json['username'] as String? ?? '',
+      displayName: json['displayName'] as String?,
+    );
+  }
+}
+
 class FeedWorkout {
   final String id, authorId, startKey;
   final DateTime? start, end;

@@ -35,15 +35,17 @@ final friendRoutinesProvider = FutureProvider.family<Map<String, dynamic>?, Stri
   return SocialService().friendRoutines(uid);
 });
 
-final userProfileProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
+final userProfileProvider = FutureProvider.family<ExerciseUser, String>((ref, uid) async {
   final feed = ref.read(feedServiceProvider);
-  return feed.profile(uid);
+  final profile = await feed.profile(uid);
+  return ExerciseUser.fromMap(profile ?? const <String, dynamic>{}, uid: uid);
 });
 
-final myProfileProvider = FutureProvider<Map<String, dynamic>?>((ref) async { // move elsewhere perhaps
+final myProfileProvider = FutureProvider<ExerciseUser?>((ref) async { // move elsewhere perhaps
   final uid = FirebaseAuth.instance.currentUser?.uid;
   if (uid == null) return null;
-  return ref.watch(feedServiceProvider).profile(uid);
+  final profile = await ref.watch(feedServiceProvider).profile(uid);
+  return ExerciseUser.fromMap(profile ?? const <String, dynamic>{}, uid: uid);
 });
 
 // Comparison notifier + provider

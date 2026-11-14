@@ -1,5 +1,4 @@
 import 'package:exercise_app/Pages/Day_Screen_Individual/friend_workout_screen.dart';
-import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/theme_colors.dart';
@@ -9,13 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WorkoutCard extends ConsumerWidget { // todo disable click from friend profile
   final FeedWorkout post;
-  final FeedService feed;
   final bool showAuthor;
 
   const WorkoutCard({
     super.key,
     required this.post,
-    required this.feed,
     this.showAuthor = true,
   });
 
@@ -80,10 +77,10 @@ class WorkoutCard extends ConsumerWidget { // todo disable click from friend pro
       ),
     );
   }
-  Widget _authorHeader(ThemeData theme, {Map<String, dynamic>? profile, bool loading = false}) {
+  Widget _authorHeader(ThemeData theme, {ExerciseUser? profile, bool loading = false}) {
     final placeholder = ThemeColors.text.withAlpha(50);
-    final name = (profile?['displayName'] ?? profile?['username'] ?? '') as String;
-    final photo = profile?['photoUrl'] as String?;
+    final name = profile?.displayName ?? '';
+    final photo = profile?.photoUrl;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),

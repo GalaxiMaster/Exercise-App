@@ -31,7 +31,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   // Search state
   bool _searching = false;
-  List<Map<String, dynamic>> _results = [];
+  List<ExerciseUser> _results = [];
   Timer? _debounce;
 
   DocumentSnapshot<Map<String, dynamic>>? _last;
@@ -122,7 +122,7 @@ Future<void> _load({bool refresh = false}) async {
     }
     _debounce = Timer(const Duration(milliseconds: 300), () async {
       final r = await _social.searchUsers(term);
-      if (mounted) setState(() => _results = r);
+      if (mounted) setState(() => _results = r.map((el) => ExerciseUser.fromMap(el, uid: '')).toList());
     });
   }
 
@@ -233,17 +233,17 @@ Future<void> _load({bool refresh = false}) async {
       itemCount: _results.length,
       itemBuilder: (_, i) {
         final p = _results[i];
-        final name = (p['displayName'] ?? p['username'] ?? '') as String;
+        final name = p.displayName;
         return ListTile(
           leading: CircleAvatar(
-            backgroundImage: p['photoUrl'] != null ? NetworkImage(p['photoUrl']) : null,
-            child: p['photoUrl'] == null
+            backgroundImage: p.photoUrl != null ? NetworkImage(p.photoUrl!) : null,
+            child: p.photoUrl == null
                 ? Text(name.isNotEmpty ? name[0].toUpperCase() : '?')
                 : null,
           ),
           title: Text(name),
-          subtitle: Text('@${p['username'] ?? ''}'),
-          trailing: _actionFor(p['uid']),
+          subtitle: Text('@${p.username}'),
+          trailing: _actionFor(p.uid),
         );
       },
     );
@@ -326,7 +326,7 @@ Future<void> _load({bool refresh = false}) async {
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: WorkoutCard(post: _posts[i], feed: _feed),
+          child: WorkoutCard(post: _posts[i]),
         );
       },
     );
