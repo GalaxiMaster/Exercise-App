@@ -1,5 +1,8 @@
+import 'package:exercise_app/Providers/exercise_information_provider.dart';
+import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/misc.dart';
 
 Color getColor(String key) {
   var colors = {
@@ -28,6 +31,12 @@ Color getColor(String key) {
   return colors[key] ?? Colors.grey;
 }
 
+final Map<String, List<ProviderOrFamily>> storageKeyToProviders = {
+  'customExercises': [customExercisesAsyncProvider],
+  'output': [workoutDataProvider, workoutHistoryProvider],
+  'routines': [routineAsyncProvider],
+  'settings': [settingsProvider]
+};
 
 class ComparisonStatTile{
   final String title;

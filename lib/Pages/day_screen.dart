@@ -169,19 +169,24 @@ class _DayScreenState extends ConsumerState<DayScreen> {
             for (int i = 0; i < (day.value['sets']?.length ?? 0); i++)
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5).subtract(const EdgeInsets.only(right: 15)),
-                  child: Expanded( // todo - intention here is to allow the exercise name to wrap but not sure if it does it. havnt tested
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5)
+                      .subtract(const EdgeInsets.only(right: 15)),
                     child: Text(
-                      exercises[day.value['sets'].keys.toList()[i]]?.name ?? day.value['sets'].keys.toList()[i]
+                      exercises[day.value['sets'].keys.toList()[i]]?.name ?? day.value['sets'].keys.toList()[i],
                     ),
                   ),
                 ),
-                const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                  child: Text(getBestSet(day.value['sets'][day.value['sets'].keys.toList()[i]], exercises[day.value['sets'].keys.toList()[i]]?.type ?? 'Weighted')),
-                )
+                  child: Text(
+                    getBestSet(
+                      day.value['sets'][day.value['sets'].keys.toList()[i]],
+                      exercises[day.value['sets'].keys.toList()[i]]?.type ?? 'Weighted',
+                    ),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 10),

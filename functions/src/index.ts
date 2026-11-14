@@ -34,7 +34,7 @@ function summarize(authorId: string, workoutId: string, w: any) {
       setCount++;
       if (s.PR === "yes") prCount++;
       if (s.type === "Warmup") continue;
-      volume += (Number(s.weight) || 0) * (Number(s.reps) || 0);
+      volume += Math.abs(Number(s.weight) || 0) * Math.abs(Number(s.reps) || 0);
     }
   }
 

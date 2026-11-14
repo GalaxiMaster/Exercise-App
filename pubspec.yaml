@@ -1,7 +1,7 @@
 name: exercise_app
 description: "A new Flutter project."
 publish_to: 'none'
-version: 1.9.2+49
+version: 1.9.4+51
 
 environment:
   sdk: ^3.5.0

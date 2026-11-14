@@ -4,6 +4,7 @@ import 'package:csv/csv.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/Functions/file_handling.dart';
 import 'package:exercise_app/muscleinformation.dart';
+import 'package:exercise_app/utils.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ void _importData(ImportOption option, BuildContext context, WidgetRef ref){
   final storageProvider = ref.read(storageServiceProvider);
   switch (option) {
     case ImportOption.thisApp:
-      _importDataThis(context, storageProvider);
+      _importDataThis(context, storageProvider, ref);
     case ImportOption.hevy:
       _importDataHevy(context, storageProvider);
     case ImportOption.strong: 
@@ -62,7 +63,8 @@ void _importData(ImportOption option, BuildContext context, WidgetRef ref){
   ref.invalidate(workoutDataProvider);
 }
 
-void _importDataThis(BuildContext context, StorageService storageProvider) async{
+void _importDataThis(BuildContext context, StorageService storageProvider, WidgetRef ref) async{
+  LoadingOverlay loadingOverlay = LoadingOverlay();
   try {
     // Open file picker and allow the user to select a JSON file
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -76,6 +78,7 @@ void _importDataThis(BuildContext context, StorageService storageProvider) async
 
       // Read the content of the file
       if (filePath == null) return; // TODO clean slightly and add  validation
+      if (context.mounted) loadingOverlay.showLoadingOverlay(context);
 
       File file = File(filePath);
       String content = await file.readAsString();
@@ -86,7 +89,11 @@ void _importDataThis(BuildContext context, StorageService storageProvider) async
       for (String key in jsonData.keys){
         storageProvider.writeData(jsonData[key], append: true, path: key);
       }
-
+      for (final key in jsonData.keys) {
+        for (final p in storageKeyToProviders[key] ?? const []) {
+          ref.invalidate(p);
+        }
+      }
       // Map data = await readData();
       showDialog(
         // ignore: use_build_context_synchronously
@@ -114,7 +121,8 @@ void _importDataThis(BuildContext context, StorageService storageProvider) async
   } catch (e) {
     debugPrint("Error picking or reading file: $e");
   }
-  }
+  loadingOverlay.removeLoadingOverlay();
+}
 
 void _importDataHevy(BuildContext context, StorageService storageProvider) async{
   try {
