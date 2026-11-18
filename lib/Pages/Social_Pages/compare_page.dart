@@ -123,7 +123,11 @@ class ComparePageState extends ConsumerState<ComparePage> {
                 return InkWell(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ExerciseComparisonPage(friendId: widget.friendId, stats: item!,))
+                    MaterialPageRoute(builder: (context) => ExerciseComparisonPage(
+                      friendId: widget.friendId, 
+                      stats: item!,
+                      exercise: exercise,
+                    ))
                   ),
                   child: SizedBox(
                     height: 60,

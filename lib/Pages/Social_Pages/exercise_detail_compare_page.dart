@@ -1,9 +1,12 @@
+import 'package:exercise_app/Pages/Exercise_screen/exercise_screen.dart';
 import 'package:exercise_app/Pages/Social_Pages/compare_page.dart';
 import 'package:exercise_app/Pages/Social_Pages/friend_screen_providers.dart';
+import 'package:exercise_app/models/exercise.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 const _myBarColor = Color(0xFF0A84FF);
 const _friendBarColor = Color(0xFF2C2C2E);
@@ -12,11 +15,13 @@ const _downColor = Color(0xFFFF453A);
 
 class ExerciseComparisonPage extends ConsumerWidget {
   final String friendId;
+  final Exercise? exercise;
   final UserFriendVals<ExerciseStats> stats;
   const ExerciseComparisonPage({
     super.key,
     required this.friendId,
-    required this.stats,
+    required this.stats, 
+    required this.exercise,
   });
 
   @override
@@ -36,6 +41,8 @@ class ExerciseComparisonPage extends ConsumerWidget {
           children: [
             versusSection(40, myProfile, friendProfile),
             const SizedBox(height: 16),
+            if (exercise != null)
+            ExerciseSection(exercise: exercise!,),
             const Text(
               'Comparison',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -256,6 +263,68 @@ class _Avatar extends StatelessWidget {
               fallbackLetter.length > 1 ? fallbackLetter[0] : fallbackLetter,
               style: const TextStyle(fontSize: 10, color: Colors.white),
             ),
+    );
+  }
+}
+
+class ExerciseSection extends StatelessWidget {
+  final Exercise exercise;
+  const ExerciseSection({super.key, required this.exercise});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
+      children: [
+        const Text(
+          'Exercise',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ExerciseScreen(exercises: [exercise.id]))
+          ),
+          child: SizedBox(
+            height: 60,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Image.asset(
+                    "assets/Exercises/${exercise.id}.png",
+                    height: 50,
+                    width: 50,
+                    cacheWidth: 100,
+                    cacheHeight: 100,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: SvgPicture.asset(
+                          "assets/profile.svg",
+                          height: 35,
+                          width: 35,
+                        ),
+                      );
+                    },
+                  )
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(exercise.name),
+                      Text(exercise.primary.keys.toList().join(', '))
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 20,)
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
