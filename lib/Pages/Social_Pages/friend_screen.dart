@@ -245,6 +245,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
               children: [
                 _buildPersonHeader(friendProfile.value, workouts),
                 _buildComparisonSection(friendProfile.value, myProfile.value, context), // todo figure out the best way to not need to pass in context
+                if (routines.value != null && routines.value!.isNotEmpty)
                 _buildRoutineList(routines),
                 _buildWorkoutsList(workouts),
               ],
