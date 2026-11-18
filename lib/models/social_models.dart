@@ -111,3 +111,150 @@ class FeedWorkout {
     );
   }
 }
+
+class UserFriendVals<T> {
+  final T userVal;
+  final T friendVal;
+
+  const UserFriendVals({
+    required this.userVal,
+    required this.friendVal,
+  });
+}
+
+class ExerciseStats {
+  final double? best1RM;
+  final DateTime best1RMDate;
+  final int? best1RMReps;
+  final double? best1RMWeight;
+  final String? best1RMWorkoutId;
+  final int bestReps;
+  final DateTime bestRepsDate;
+  final String bestRepsWorkoutId;
+  final double bestSessionVolume;
+  final DateTime bestSessionVolumeDate;
+  final String? bestSessionVolumeWorkoutId;
+  final double bestSetVolume;
+  final DateTime bestSetVolumeDate;
+  final int bestSetVolumeReps;
+  final double bestSetVolumeWeight;
+  final String? bestSetVolumeWorkoutId;
+  final double bestWeight;
+  final DateTime bestWeightDate;
+  final int bestWeightReps;
+  final String bestWeightWorkoutId;
+  final String exerciseKey;
+  final DateTime firstPerformed;
+  final DateTime lastPerformed;
+  final String lastWorkoutId;
+  final int totalSessions;
+  final int totalSets;
+  final double totalVolume;
+  final DateTime updatedAt;
+
+  const ExerciseStats({
+    required this.best1RM,
+    required this.best1RMDate,
+    required this.best1RMReps,
+    required this.best1RMWeight,
+    required this.best1RMWorkoutId,
+    required this.bestReps,
+    required this.bestRepsDate,
+    required this.bestRepsWorkoutId,
+    required this.bestSessionVolume,
+    required this.bestSessionVolumeDate,
+    required this.bestSessionVolumeWorkoutId,
+    required this.bestSetVolume,
+    required this.bestSetVolumeDate,
+    required this.bestSetVolumeReps,
+    required this.bestSetVolumeWeight,
+    required this.bestSetVolumeWorkoutId,
+    required this.bestWeight,
+    required this.bestWeightDate,
+    required this.bestWeightReps,
+    required this.bestWeightWorkoutId,
+    required this.exerciseKey,
+    required this.firstPerformed,
+    required this.lastPerformed,
+    required this.lastWorkoutId,
+    required this.totalSessions,
+    required this.totalSets,
+    required this.totalVolume,
+    required this.updatedAt,
+  });
+
+  factory ExerciseStats.fromMap(Map<String, dynamic> map) {
+    return ExerciseStats(
+      best1RM: (map['best1RM'] as num).toDouble(),
+      best1RMDate: _parseTimestamp(map['best1RMDate']),
+      best1RMReps: (map['best1RMReps'] as num).toInt(),
+      best1RMWeight: (map['best1RMWeight'] as num).toDouble(),
+      best1RMWorkoutId: map['best1RMWorkoutId'] as String?,
+      bestReps: (map['bestReps'] as num).toInt(),
+      bestRepsDate: _parseTimestamp(map['bestRepsDate']),
+      bestRepsWorkoutId: map['bestRepsWorkoutId'] as String,
+      bestSessionVolume: (map['bestSessionVolume'] as num).toDouble(),
+      bestSessionVolumeDate: _parseTimestamp(map['bestSessionVolumeDate']),
+      bestSessionVolumeWorkoutId: map['bestSessionVolumeWorkoutId'] as String?,
+      bestSetVolume: (map['bestSetVolume'] as num).toDouble(),
+      bestSetVolumeDate: _parseTimestamp(map['bestSetVolumeDate']),
+      bestSetVolumeReps: (map['bestSetVolumeReps'] as num).toInt(),
+      bestSetVolumeWeight: (map['bestSetVolumeWeight'] as num).toDouble(),
+      bestSetVolumeWorkoutId: map['bestSetVolumeWorkoutId'] as String?,
+      bestWeight: (map['bestWeight'] as num).toDouble(),
+      bestWeightDate: _parseTimestamp(map['bestWeightDate']),
+      bestWeightReps: (map['bestWeightReps'] as num).toInt(),
+      bestWeightWorkoutId: map['bestWeightWorkoutId'] as String,
+      exerciseKey: map['exerciseKey'] as String,
+      firstPerformed: _parseTimestamp(map['firstPerformed']),
+      lastPerformed: _parseTimestamp(map['lastPerformed']),
+      lastWorkoutId: map['lastWorkoutId'] as String,
+      totalSessions: (map['totalSessions'] as num).toInt(),
+      totalSets: (map['totalSets'] as num).toInt(),
+      totalVolume: (map['totalVolume'] as num).toDouble(),
+      updatedAt: _parseTimestamp(map['updatedAt']),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'best1RM': best1RM,
+      'best1RMDate': Timestamp.fromDate(best1RMDate),
+      'best1RMReps': best1RMReps,
+      'best1RMWeight': best1RMWeight,
+      'best1RMWorkoutId': best1RMWorkoutId,
+      'bestReps': bestReps,
+      'bestRepsDate': Timestamp.fromDate(bestRepsDate),
+      'bestRepsWorkoutId': bestRepsWorkoutId,
+      'bestSessionVolume': bestSessionVolume,
+      'bestSessionVolumeDate': Timestamp.fromDate(bestSessionVolumeDate),
+      'bestSessionVolumeWorkoutId': bestSessionVolumeWorkoutId,
+      'bestSetVolume': bestSetVolume,
+      'bestSetVolumeDate': Timestamp.fromDate(bestSetVolumeDate),
+      'bestSetVolumeReps': bestSetVolumeReps,
+      'bestSetVolumeWeight': bestSetVolumeWeight,
+      'bestSetVolumeWorkoutId': bestSetVolumeWorkoutId,
+      'bestWeight': bestWeight,
+      'bestWeightDate': Timestamp.fromDate(bestWeightDate),
+      'bestWeightReps': bestWeightReps,
+      'bestWeightWorkoutId': bestWeightWorkoutId,
+      'exerciseKey': exerciseKey,
+      'firstPerformed': Timestamp.fromDate(firstPerformed),
+      'lastPerformed': Timestamp.fromDate(lastPerformed),
+      'lastWorkoutId': lastWorkoutId,
+      'totalSessions': totalSessions,
+      'totalSets': totalSets,
+      'totalVolume': totalVolume,
+      'updatedAt': Timestamp.fromDate(updatedAt),
+    };
+  }
+
+  static DateTime _parseTimestamp(dynamic value) {
+    if (value == null) return DateTime.now();
+    if (value is Timestamp) return value.toDate();
+    if (value is DateTime) return value;
+    if (value is String) return DateTime.parse(value);
+    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+    throw ArgumentError('Unsupported timestamp format: $value');
+  }
+}

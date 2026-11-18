@@ -20,7 +20,7 @@ double autoRoundUp(double value) {
   return (value / step).ceil() * step;
 }
 
-Widget selectorBox(String text, List options, Function onSubmit, BuildContext context) {
+Widget selectorBox(String text, List options, Function onSubmit, BuildContext context, {double? width}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
@@ -36,7 +36,7 @@ Widget selectorBox(String text, List options, Function onSubmit, BuildContext co
         }
       },
       child: Container(
-        width:  MediaQuery.of(context).size.width / 2-16,
+        width: width ?? MediaQuery.of(context).size.width / 2-16,
         decoration: BoxDecoration(
           color: ThemeColors.accent,
           borderRadius: BorderRadius.circular(10)

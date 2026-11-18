@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exercise_app/Functions/Cloud/social_services.dart';
-import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/social_models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final friendWorkoutFeedProvider = FutureProvider.family<List<FeedWorkout>, String>((ref, uid) async {
@@ -31,6 +29,20 @@ final friendWorkoutHistoryProvider = FutureProvider.family<Map<String, dynamic>,
   };
 });
 
+final userExerciseStatsProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, uid) async {
+  final snap = await FirebaseFirestore.instance
+      .collection('User Data')
+      .doc(uid)
+      .collection('exerciseStats')
+      .orderBy('lastPerformed', descending: true)
+      .limit(50)
+      .get();
+
+  return {
+    for (final doc in snap.docs) doc.id: ExerciseStats.fromMap(doc.data()),
+  };
+});
+
 final friendRoutinesProvider = FutureProvider.family<Map<String, dynamic>?, String>((ref, uid) async {
   return SocialService().friendRoutines(uid);
 });
@@ -48,35 +60,20 @@ final myProfileProvider = FutureProvider<ExerciseUser?>((ref) async { // move el
   return ExerciseUser.fromMap(profile ?? const <String, dynamic>{}, uid: uid);
 });
 
-// Comparison notifier + provider
-class UserFriendVals {
-  final double userVal;
-  final double friendVal;
+final comparisonProvider = Provider.family<Map<String, UserFriendVals<ExerciseStats>>, String>((ref, friendId) {
+final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null) return {};
 
-  UserFriendVals({required this.userVal, required this.friendVal});
-}
+  final user = ref.watch(userExerciseStatsProvider(currentUser.uid)).value;
+  final friend = ref.watch(userExerciseStatsProvider(friendId)).value;
 
-class ComparisonData {
-  final Map<String, UserFriendVals> exerciseComparisons;
-  final List<List<RadarEntry>> radarVals;
-  const ComparisonData({required this.exerciseComparisons, required this.radarVals});
+  if (user == null || friend == null) return {};
 
-  factory ComparisonData.fromRaw(Map<String, dynamic> userData, Map<String, dynamic> friendData, Ref ref) { // todo remove widget ref pass in
-    final comparisons = <String, UserFriendVals>{};
-    // flattenMaps
-
-    final radar = <List<RadarEntry>>[];
-
-    return ComparisonData(exerciseComparisons: comparisons, radarVals: radar);
-  }
-}
-
-final comparisonProvider = Provider.family<ComparisonData, String>((ref, friendId) {
-  final user = ref.watch(workoutDataProvider).value;
-  final friend = ref.watch(friendWorkoutHistoryProvider(friendId)).value;
-
-  final userData = user ?? const <String, dynamic>{};
-  final friendData = friend ?? const <String, dynamic>{};
-
-  return ComparisonData.fromRaw(userData, friendData, ref);
+  return {
+    for (final exercise in user.keys.where(friend.containsKey))
+      exercise: UserFriendVals(
+        userVal: user[exercise]!,
+        friendVal: friend[exercise]!,
+      ),
+  };
 });
