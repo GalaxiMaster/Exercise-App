@@ -8,6 +8,7 @@ import { setGlobalOptions } from "firebase-functions/v2";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore, QueryDocumentSnapshot, Timestamp, WriteBatch } from "firebase-admin/firestore";
 import { Query } from "firebase-admin/firestore";
+export { syncExerciseStats } from "./exerciseStats";
 
 initializeApp();
 setGlobalOptions({ region: "australia-southeast1" });
