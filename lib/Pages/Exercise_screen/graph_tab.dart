@@ -306,7 +306,12 @@ class _MetricSelector extends ConsumerWidget {
 
     return Row(
       children: [
-        for (final metric in TargetFilter.values)
+        for (final metric in [
+          TargetFilter.weight, 
+          TargetFilter.volume, 
+          TargetFilter.reps, 
+          TargetFilter.oneRm
+        ]) // shortened list as sets wasnt available as a selector
           _MetricChip(
             label: metric.label,
             selected: selected == metric,
