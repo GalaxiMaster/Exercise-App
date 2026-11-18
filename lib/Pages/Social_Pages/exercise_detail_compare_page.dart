@@ -41,15 +41,17 @@ class ExerciseComparisonPage extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
-            ComparisonMetric(
-              title: 'One Rep Max',
-              myValue: me.best1RMWeight ?? 0,
-              friendValue: friend.best1RMWeight ?? 0,
-              myPhotoUrl: myProfile?.photoUrl,
-              friendPhotoUrl: friendProfile?.photoUrl,
-              friendInitial: _initial(friendProfile?.displayName),
-            ),
-            const SizedBox(height: 20),
+            if (me.best1RMWeight != null && me.best1RMWeight != 0.0) ...[
+              ComparisonMetric(
+                title: 'One Rep Max',
+                myValue: me.best1RM ?? 0,
+                friendValue: friend.best1RM ?? 0,
+                myPhotoUrl: myProfile?.photoUrl,
+                friendPhotoUrl: friendProfile?.photoUrl,
+                friendInitial: _initial(friendProfile?.displayName),
+              ),
+              const SizedBox(height: 20),
+            ],
             ComparisonMetric(
               title: 'Heaviest Weight',
               myValue: me.bestWeight,
@@ -100,7 +102,7 @@ class ComparisonMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxValue = [myValue, friendValue, 1.0].reduce((a, b) => a > b ? a : b);
+    final maxValue = [myValue, friendValue].reduce((a, b) => a > b ? a : b);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,7 +194,7 @@ class _BarRow extends StatelessWidget {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final fraction = (value / maxValue).clamp(0.0, 1.0);
+              final fraction = (value / maxValue).abs().clamp(0.0, 1.0);
               return Stack(
                 children: [
                   // Track
