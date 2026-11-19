@@ -286,6 +286,7 @@ class ExerciseSection extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => ExerciseScreen(exercises: [exercise.id]))
           ),
+          behavior: HitTestBehavior.opaque,
           child: SizedBox(
             height: 60,
             child: Row(
