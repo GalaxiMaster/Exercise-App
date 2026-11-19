@@ -151,7 +151,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
               onTap: (name) => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => FriendWorkoutsScreen(uid: uid, name: name),
+                  builder: (_) => FriendWorkoutsScreen(uid: uid),
                 ),
               ),
               trailing: _RemoveMenu(onRemove: (name) => _confirmRemove(uid, name), feed: feed, uid: uid),
@@ -223,9 +223,9 @@ class _PersonTile extends ConsumerWidget {
 
 /// A single friend's recent workouts.
 class FriendWorkoutsScreen extends ConsumerWidget {
-  final String uid, name;
+  final String uid;
   const FriendWorkoutsScreen(
-      {super.key, required this.uid, required this.name});
+      {super.key, required this.uid});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -234,7 +234,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
     final friendProfile = ref.watch(userProfileProvider(uid));
     final myProfile = ref.watch(myProfileProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(name)),
+      appBar: AppBar(title: Text(friendProfile.value?.displayName ?? '')),
       body: userWorkouts.when(data: (workouts) {
         return SingleChildScrollView(
           child: Padding(
@@ -260,7 +260,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
     );
   }
   Widget _buildPersonHeader(ExerciseUser? p, List<FeedWorkout> workouts) {
-    final name = p?.displayName ?? this.name;
+    final name = p?.displayName ?? '';
     final photo = p?.photoUrl;
     return  Padding(
       padding: const EdgeInsets.only(bottom: 10),

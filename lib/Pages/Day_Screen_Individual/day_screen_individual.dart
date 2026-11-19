@@ -190,7 +190,7 @@ class _DayHeader extends ConsumerWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FriendWorkoutsScreen(uid: profile.uid, name: ''))
+                  MaterialPageRoute(builder: (context) => FriendWorkoutsScreen(uid: profile.uid))
                 );
               },
               child: Padding(
@@ -213,9 +213,17 @@ class _DayHeader extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (profile != null)
-              Text(
-                profile.displayName,
-                style: const TextStyle(fontSize: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendWorkoutsScreen(uid: profile.uid))
+                  );
+                },
+                child: Text(
+                  profile.displayName,
+                  style: const TextStyle(fontSize: 20),
+                ),
               ),
               Row(
                 children: [
