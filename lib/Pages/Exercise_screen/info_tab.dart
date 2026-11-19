@@ -1,6 +1,6 @@
 import 'package:exercise_app/Pages/Exercise_screen/body_heat_map.dart';
-import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_providers.dart';
+import 'package:exercise_app/models/exercise_screen_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

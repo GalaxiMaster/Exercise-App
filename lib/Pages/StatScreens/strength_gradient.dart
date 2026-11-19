@@ -1,9 +1,9 @@
 import 'package:exercise_app/Pages/Exercise_screen/exercise_screen.dart';
-import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/exercise.dart';
+import 'package:exercise_app/models/exercise_screen_models.dart';
 import 'package:exercise_app/widgets.dart';
 import 'package:exercise_app/muscleinformation.dart';
 import 'package:exercise_app/theme_colors.dart';

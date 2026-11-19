@@ -130,8 +130,7 @@ class SocialService {
     .where('members', arrayContains: me)
     .snapshots()
     .map((s) => s.docs
-      .map((d) =>
-          (d.data()['members'] as List).cast<String>().firstWhere((m) => m != me))
+      .map((d) => (d.data()['members'] as List).cast<String>().firstWhere((m) => m != me))
       .toSet());
 
   Stream<Set<String>> incomingRequestUids() => _db

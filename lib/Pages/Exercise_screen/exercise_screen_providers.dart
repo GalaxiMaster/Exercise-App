@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:exercise_app/Functions/Cloud/social_services.dart';
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
-import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/day_screen_individual_models.dart';
+import 'package:exercise_app/models/exercise_screen_models.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final chartFilterProvider = NotifierProvider.autoDispose<ChartFiltersNotifier, ChartFilters>(() {
@@ -66,6 +69,34 @@ final exerciseHistoryProvider = Provider.autoDispose.family<AsyncValue<List<Exer
     ),
   );
 });
+
+final exerciseLeaderboardProvider = FutureProvider.autoDispose.family<Map<String, Map<String, dynamic>>, ExerciseKey>((ref, key) async {
+  final exercise = key.ids.first;
+  
+  final friendIds = await SocialService().friendIds().first;
+
+  final myId = FirebaseAuth.instance.currentUser?.uid; // could use local records instead to avoid hitting the database an extra time?
+  if (myId == null) return {};
+  friendIds.add(myId);
+
+  final entries = await Future.wait(
+    friendIds.map((id) async {
+      final doc = await FirebaseFirestore.instance
+          .collection('User Data')
+          .doc(id)
+          .collection('exerciseStats')
+          .doc(exercise)
+          .get();
+
+      final data = doc.data();
+      return data != null ? MapEntry(id, data) : null;
+    }),
+  );  
+
+  return Map.fromEntries(entries.nonNulls);
+});
+
+
 
 final muscleBreakdownProvider = Provider.autoDispose.family<MuscleBreakdown, ExerciseKey>((ref, key) {
   final exercises = ref.watch(exercisesProvider);

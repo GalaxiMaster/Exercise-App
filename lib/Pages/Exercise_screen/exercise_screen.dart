@@ -1,9 +1,10 @@
-import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/Exercise_screen/graph_tab.dart';
 import 'package:exercise_app/Pages/Exercise_screen/history_tab.dart';
 import 'package:exercise_app/Pages/Exercise_screen/info_tab.dart';
 import 'package:exercise_app/Pages/Exercise_screen/chart_settings_dialog.dart';
+import 'package:exercise_app/Pages/Exercise_screen/leaderboard_tab.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
+import 'package:exercise_app/models/exercise_screen_models.dart';
 import 'package:exercise_app/utils.dart'; // getDisplayName
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,12 +47,12 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     if (fromTap) {
       _animating = true;
       _pageController
-          .animateToPage(
-            index,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-          )
-          .then((_) => _animating = false);
+        .animateToPage(
+          index,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+        )
+        .then((_) => _animating = false);
     }
   }
 
@@ -94,15 +95,19 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         children: [
           ExerciseGraphTab(exercises: widget.exercises, scale: _scale),
           ExerciseHistoryTab(exercises: widget.exercises),
+          ExerciseLeaderboardTab(exercises: widget.exercises),
           ExerciseInfoTab(exercises: widget.exercises),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _tab.index,
         onTap: (index) => _selectTab(index, fromTap: true),
+        iconSize: 20,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.auto_graph), label: 'Graph'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+          BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: 'Leaderboard'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Info'),
         ],
       ),

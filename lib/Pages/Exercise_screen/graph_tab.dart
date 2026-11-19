@@ -1,12 +1,12 @@
 import 'package:exercise_app/Pages/Add_Workout/add_workout_models.dart';
 import 'package:exercise_app/Pages/Day_Screen_Individual/day_screen_individual.dart';
-import 'package:exercise_app/Pages/Exercise_screen/exercise_screen_models.dart';
 import 'package:exercise_app/Pages/Exercise_Screen/exercise_screen_providers.dart';
 import 'package:exercise_app/Pages/StatScreens/data_charts.dart' hide chartFilterProvider;
 import 'package:exercise_app/Pages/StatScreens/radar_chart.dart';
 import 'package:exercise_app/Pages/day_screen.dart';
 import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
+import 'package:exercise_app/models/exercise_screen_models.dart';
 import 'package:exercise_app/theme_colors.dart';
 import 'package:exercise_app/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -48,7 +48,7 @@ class _ExerciseGraphTabState extends ConsumerState<ExerciseGraphTab> {
     );
 
     return chart.when(
-      data: (data) => _GraphContent(chart: data, selection: _selection),
+      data: (ExerciseChart data) => _GraphContent(chart: data, selection: _selection),
       error: (error, stack) => Center(child: Text('Error fetching data: $error')),
       loading: () => const Center(child: CircularProgressIndicator()),
     );

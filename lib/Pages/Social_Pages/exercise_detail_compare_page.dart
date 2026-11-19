@@ -47,7 +47,7 @@ class ExerciseComparisonPage extends ConsumerWidget {
               'Comparison',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             if (me.best1RMWeight != null && me.best1RMWeight != 0.0) ...[
               ComparisonMetric(
                 title: 'One Rep Max',

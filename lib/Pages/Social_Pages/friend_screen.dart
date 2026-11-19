@@ -358,7 +358,7 @@ class FriendWorkoutsScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-                Text(
+        Text(
           'Routines',
           style: TextStyle(
             fontSize: 16,
