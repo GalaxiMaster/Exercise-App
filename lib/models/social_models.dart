@@ -122,7 +122,7 @@ class UserFriendVals<T> {
   });
 }
 
-class ExerciseStats {
+class UserExerciseStats {
   final double? best1RM;
   final DateTime best1RMDate;
   final int? best1RMReps;
@@ -152,7 +152,7 @@ class ExerciseStats {
   final double totalVolume;
   final DateTime updatedAt;
 
-  const ExerciseStats({
+  const UserExerciseStats({
     required this.best1RM,
     required this.best1RMDate,
     required this.best1RMReps,
@@ -183,8 +183,8 @@ class ExerciseStats {
     required this.updatedAt,
   });
 
-  factory ExerciseStats.fromMap(Map<String, dynamic> map) {
-    return ExerciseStats(
+  factory UserExerciseStats.fromMap(Map<String, dynamic> map) {
+    return UserExerciseStats(
       best1RM: (map['best1RM'] as num).toDouble(),
       best1RMDate: _parseTimestamp(map['best1RMDate']),
       best1RMReps: (map['best1RMReps'] as num).toInt(),

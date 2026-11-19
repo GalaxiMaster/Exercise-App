@@ -6,6 +6,7 @@ import 'package:exercise_app/Providers/exercise_information_provider.dart';
 import 'package:exercise_app/Providers/providers.dart';
 import 'package:exercise_app/models/day_screen_individual_models.dart';
 import 'package:exercise_app/models/exercise_screen_models.dart';
+import 'package:exercise_app/models/social_models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -70,7 +71,7 @@ final exerciseHistoryProvider = Provider.autoDispose.family<AsyncValue<List<Exer
   );
 });
 
-final exerciseLeaderboardProvider = FutureProvider.autoDispose.family<Map<String, Map<String, dynamic>>, ExerciseKey>((ref, key) async {
+final exerciseLeaderboardProvider = FutureProvider.autoDispose.family<Map<String, UserExerciseStats>, ExerciseKey>((ref, key) async {
   final exercise = key.ids.first;
   
   final friendIds = await SocialService().friendIds().first;
@@ -89,11 +90,13 @@ final exerciseLeaderboardProvider = FutureProvider.autoDispose.family<Map<String
           .get();
 
       final data = doc.data();
-      return data != null ? MapEntry(id, data) : null;
+      return data != null ? MapEntry(id, UserExerciseStats.fromMap(data)) : null;
     }),
   );  
 
-  return Map.fromEntries(entries.nonNulls);
+  final validEntries = entries.nonNulls.toList()
+    ..sort((a, b) => b.value.bestWeight.compareTo(a.value.bestWeight));
+  return Map.fromEntries(validEntries);
 });
 
 

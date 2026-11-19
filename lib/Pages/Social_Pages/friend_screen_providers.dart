@@ -39,7 +39,7 @@ final userExerciseStatsProvider = FutureProvider.family<Map<String, dynamic>, St
       .get();
 
   return {
-    for (final doc in snap.docs) doc.id: ExerciseStats.fromMap(doc.data()),
+    for (final doc in snap.docs) doc.id: UserExerciseStats.fromMap(doc.data()),
   };
 });
 
@@ -60,7 +60,7 @@ final myProfileProvider = FutureProvider<ExerciseUser?>((ref) async { // move el
   return ExerciseUser.fromMap(profile ?? const <String, dynamic>{}, uid: uid);
 });
 
-final comparisonProvider = Provider.family<Map<String, UserFriendVals<ExerciseStats>>, String>((ref, friendId) {
+final comparisonProvider = Provider.family<Map<String, UserFriendVals<UserExerciseStats>>, String>((ref, friendId) {
 final currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser == null) return {};
 

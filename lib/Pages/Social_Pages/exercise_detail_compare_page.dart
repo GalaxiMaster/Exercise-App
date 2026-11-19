@@ -16,7 +16,7 @@ const _downColor = Color(0xFFFF453A);
 class ExerciseComparisonPage extends ConsumerWidget {
   final String friendId;
   final Exercise? exercise;
-  final UserFriendVals<ExerciseStats> stats;
+  final UserFriendVals<UserExerciseStats> stats;
   const ExerciseComparisonPage({
     super.key,
     required this.friendId,
